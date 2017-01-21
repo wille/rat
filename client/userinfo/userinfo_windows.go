@@ -22,7 +22,7 @@ func GetUser() user.User {
 
 	C.GetComputerName((*C.CHAR)(ptr), &lpnSize)
 
-	u.Username = string(lpBuffer)
+	u.Username = string(lpBuffer[:lpnSize])
 
 	return u
 }
