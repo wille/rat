@@ -1,4 +1,4 @@
-package client
+package main
 
 import (
 	"encoding/binary"
@@ -7,23 +7,12 @@ import (
 	"rat/common"
 )
 
-type Writer interface {
-	WriteVar(i interface{}) error
-	WriteInt(int) error
-	WriteString(string) error
-}
-
-type Reader interface {
-	// Can't pass built in types here
-	//ReadVar(i *interface{}) error
-	ReadInt() (int, error)
-	ReadString() (string, error)
-}
-
 type Client struct {
 	net.Conn
-	Writer
-	Reader
+	common.Writer
+	common.Reader
+
+	Username string
 }
 
 func (c *Client) WriteVar(i interface{}) error {
@@ -84,4 +73,14 @@ func (c *Client) ReadHeader() (common.PacketHeader, error) {
 
 func (c *Client) WriteHeader(header common.PacketHeader) error {
 	return binary.Write(c.Conn, common.ByteOrder, header)
+}
+
+func (c *Client) WritePacket(packet OutgoingPacket) error {
+	err := c.WriteHeader(packet.GetHeader())
+
+	if err != nil {
+		return err
+	}
+
+	return packet.Write(c)
 }

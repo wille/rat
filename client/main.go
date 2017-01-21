@@ -1,13 +1,10 @@
 package main
 
-import (
-	"crypto/tls"
-	"encoding/binary"
-	"fmt"
-	"os/user"
-)
+import "crypto/tls"
 
 func main() {
+	InitPackets()
+
 	service := "localhost:9999"
 
 	conn, err := tls.Dial("tcp", service, &tls.Config{
@@ -18,18 +15,23 @@ func main() {
 		panic(err)
 	}
 
-	u, err := user.Current()
-
-	if err != nil {
-		fmt.Println(err.Error())
+	con := Connection{
+		Conn: conn,
 	}
 
-	username := u.Name
+	for {
+		header, err := con.ReadHeader()
 
-	fmt.Println(u)
+		if err != nil {
+			panic(err)
+		}
 
-	err = binary.Write(conn, binary.LittleEndian, int16(5))
-	binary.Write(conn, binary.LittleEndian, int32(len(username)))
-	fmt.Fprint(conn, username)
+		packet := GetIncomingPacket(header)
+		err = packet.Read(&con)
+
+		if err != nil {
+			panic(err)
+		}
+	}
 
 }

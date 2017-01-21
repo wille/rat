@@ -1,19 +1,14 @@
 package main
 
-import (
-	"rat/command/networking"
-	"rat/command/packets/incoming"
-)
-
 func main() {
 	setConstants()
 
-	config := networking.Server{
+	config := Server{
 		Address: "localhost:9999",
 	}
-	networking.Listen(&config)
+	Listen(&config)
 }
 
 func setConstants() {
-	incoming.Init()
+	InitPackets()
 }

