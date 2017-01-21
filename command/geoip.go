@@ -3,8 +3,6 @@ package main
 import (
 	"net"
 
-	"strings"
-
 	geoip2 "github.com/oschwald/geoip2-golang"
 )
 
@@ -36,5 +34,5 @@ func GetCountry(ip string) (string, string) {
 		panic(err)
 	}
 
-	return country.Country.Names["en"], strings.ToLower(country.Country.IsoCode)
+	return country.Country.Names["en"], country.Country.IsoCode
 }

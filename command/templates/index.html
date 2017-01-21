@@ -8,7 +8,7 @@
 		<tbody>
 			{{ range . }}
 			<tr>
-				<td><img src="static/images/flags/{{ .CountryCode }}.png"> {{ .Country }}</td>
+				<td><img src="static/images/flags/{{ .GetFlagName }}.png"> {{ .Country }}</td>
 				<td>{{ .GetDisplayHost }}</td>
 				<td>{{ .Computer.GetDisplayName }}</td>
 			</tr>

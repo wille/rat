@@ -37,6 +37,21 @@ func (c *Client) GetIP() string {
 	return strings.Split(c.Conn.RemoteAddr().String(), ":")[0]
 }
 
+func (c *Client) GetFlagName() string {
+	name := strings.ToLower(c.CountryCode)
+
+	if name == "" {
+		switch c.GetIP() {
+		case "127.0.0.1":
+			name = "local"
+		default:
+			name = "unknown"
+		}
+	}
+
+	return name
+}
+
 func (c *Client) WriteInt(i int32) error {
 	return binary.Write(c, common.ByteOrder, &i)
 }
