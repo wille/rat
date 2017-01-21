@@ -4,7 +4,7 @@ package userinfo
 
 import "os/user"
 
-func GetUser() common.Computer {
+func GetComputerInformation() common.Computer {
 	u := user.Current()
 
 	return common.Computer{
