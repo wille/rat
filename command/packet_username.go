@@ -12,6 +12,5 @@ func (packet Username) Read(c *Client) error {
 	}
 
 	c.Username = username
-
 	return nil
 }

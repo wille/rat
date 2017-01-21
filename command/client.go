@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"io"
 	"net"
 	"rat/common"
 )
@@ -15,12 +16,8 @@ type Client struct {
 	Username string
 }
 
-func (c *Client) WriteVar(i interface{}) error {
-	return binary.Write(c, common.ByteOrder, &i)
-}
-
 func (c *Client) WriteInt(i int32) error {
-	return c.WriteVar(i)
+	return binary.Write(c, common.ByteOrder, &i)
 }
 
 func (c *Client) WriteString(s string) error {
@@ -30,29 +27,26 @@ func (c *Client) WriteString(s string) error {
 		return err
 	}
 
-	_, err = fmt.Fprintf(c.Conn, s)
+	c.Conn.Write([]byte(s))
 	return err
 }
 
 func (c *Client) ReadString() (string, error) {
 	n, err := c.ReadInt()
 
+	fmt.Println("Reading")
+
 	if err != nil {
-		fmt.Println("zaf")
+		fmt.Println(err.Error())
 		return "", err
 	}
 
-	var s string
-	for i := 0; int32(i) < n; i++ {
-		var r byte
-		err = binary.Read(c.Conn, common.ByteOrder, &r)
+	fmt.Println("Readed")
 
-		if err != nil {
-			break
-		}
+	buf := make([]byte, n)
+	io.ReadFull(c, buf)
 
-		s += string(r)
-	}
+	s := string(buf)
 
 	return s, err
 }

@@ -1,7 +1,6 @@
 package common
 
 type Writer interface {
-	WriteVar(i interface{}) error
 	WriteInt(int) error
 	WriteString(string) error
 }

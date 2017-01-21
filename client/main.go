@@ -19,6 +19,8 @@ func main() {
 		Conn: conn,
 	}
 
+	con.Init()
+
 	for {
 		header, err := con.ReadHeader()
 
