@@ -14,7 +14,7 @@ type Connection struct {
 }
 
 func (c *Connection) Init() {
-	err := c.WritePacket(UserInfo{})
+	err := c.WritePacket(ComputerInfoPacket{})
 	if err != nil {
 		panic(err)
 	}

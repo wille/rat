@@ -13,7 +13,15 @@ type Client struct {
 	common.Writer
 	common.Reader
 
-	Username string
+	common.Computer
+}
+
+func NewClient() *Client {
+	client := new(Client)
+
+	client.Computer = common.Computer{}
+
+	return client
 }
 
 func (c *Client) WriteInt(i int32) error {

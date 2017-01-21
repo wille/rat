@@ -1,6 +1,6 @@
 package common
 
 const (
-	PingHeader     PacketHeader = 0
-	UserInfoHeader PacketHeader = 5
+	PingHeader         PacketHeader = 0
+	ComputerInfoHeader PacketHeader = 5
 )
