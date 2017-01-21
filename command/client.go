@@ -34,14 +34,10 @@ func (c *Client) WriteString(s string) error {
 func (c *Client) ReadString() (string, error) {
 	n, err := c.ReadInt()
 
-	fmt.Println("Reading")
-
 	if err != nil {
 		fmt.Println(err.Error())
 		return "", err
 	}
-
-	fmt.Println("Readed")
 
 	buf := make([]byte, n)
 	io.ReadFull(c, buf)

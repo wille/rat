@@ -20,7 +20,7 @@ type IncomingPacket interface {
 func InitPackets() {
 	packets = make(PacketMap)
 	packets[common.PingHeader] = Ping{}
-	packets[common.UsernameHeader] = Username{}
+	packets[common.UserInfoHeader] = UserInfo{}
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {

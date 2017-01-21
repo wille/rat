@@ -48,7 +48,7 @@ func handleClient(client *Client) {
 		err = packet.Read(client)
 
 		if err != nil {
-			break
+			fmt.Println(err)
 		}
 	}
 }
