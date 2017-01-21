@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"rat/common"
+	"strings"
 )
 
 type Client struct {
@@ -14,18 +15,26 @@ type Client struct {
 	common.Reader
 
 	common.Computer
+	Country     string
+	CountryCode string
 }
 
-func NewClient() *Client {
+func NewClient(conn net.Conn) *Client {
 	client := new(Client)
 
 	client.Computer = common.Computer{}
+	client.Conn = conn
+	client.Country, client.CountryCode = GetCountry(client.GetIP())
 
 	return client
 }
 
 func (c *Client) GetDisplayHost() string {
 	return c.Conn.RemoteAddr().String()
+}
+
+func (c *Client) GetIP() string {
+	return strings.Split(c.Conn.RemoteAddr().String(), ":")[0]
 }
 
 func (c *Client) WriteInt(i int32) error {

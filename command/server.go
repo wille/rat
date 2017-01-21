@@ -28,8 +28,8 @@ func Listen(server *Server) error {
 			continue
 		}
 
-		client := NewClient()
-		client.Conn = conn
+		client := NewClient(conn)
+
 		Clients = append(Clients, client)
 		go handleClient(client)
 		go heartbeat(client)
