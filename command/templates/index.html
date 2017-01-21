@@ -1,0 +1,23 @@
+{{ template "head" }}
+	<table id="clients">
+		<thead>
+			<th>Country</th>
+			<th>Host</th>
+			<th>User@Computer</th>
+		</thead>
+		<tbody>
+			{{ range . }}
+			<tr>
+				<td>Unknown</td>
+				<td>{{ .GetDisplayHost }}</td>
+				<td>{{ .Computer.GetDisplayName }}</td>
+			</tr>
+			{{ end }}
+		</tbody>
+	</table>
+	</div>
+
+	<script>
+		update("#clients", "/ #clients", 1000);
+	</script>
+{{ template "tail" }}

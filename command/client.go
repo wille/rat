@@ -24,6 +24,10 @@ func NewClient() *Client {
 	return client
 }
 
+func (c *Client) GetDisplayHost() string {
+	return c.Conn.RemoteAddr().String()
+}
+
 func (c *Client) WriteInt(i int32) error {
 	return binary.Write(c, common.ByteOrder, &i)
 }
