@@ -12,7 +12,7 @@
 				<td><img src="static/images/flags/{{ .GetFlagName }}.png"> {{ .GetCountry }}</td>
 				<td>{{ .GetDisplayHost }}</td>
 				<td>{{ .Computer.GetDisplayName }}</td>
-				<td>{{ .Ping.Current }}</td>
+				<td class="ping"> {{ .Ping.Current }}</td>
 			</tr>
 			{{ end }}
 		</tbody>
@@ -20,6 +20,8 @@
 	</div>
 
 	<script>
-		update("#clients", "/ #clients", 1000);
+		update("#clients", "/ #clients", 1000, function() {
+			updatePing();
+		});
 	</script>
 {{ template "tail" }}
