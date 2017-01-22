@@ -16,5 +16,6 @@ func (packet Ping) Write(c *Connection) error {
 }
 
 func (packet Ping) Read(c *Connection) error {
+	c.WritePacket(Ping{})
 	return nil
 }
