@@ -6,7 +6,9 @@ import (
 	"io"
 	"net"
 	"rat/common"
+	"strconv"
 	"strings"
+	"time"
 )
 
 type Client struct {
@@ -17,6 +19,11 @@ type Client struct {
 	common.Computer
 	Country     string
 	CountryCode string
+
+	Ping struct {
+		Start   time.Time
+		Current int
+	}
 }
 
 func NewClient(conn net.Conn) *Client {
@@ -50,6 +57,25 @@ func (c *Client) GetFlagName() string {
 	}
 
 	return name
+}
+
+func (c *Client) GetCountry() string {
+	name := c.Country
+
+	if name == "" {
+		switch c.GetIP() {
+		case "127.0.0.1":
+			name = "Local Network"
+		default:
+			name = "Unknown"
+		}
+	}
+
+	return name
+}
+
+func (c *Client) GetPing() string {
+	return strconv.Itoa(c.Ping.Current) + " ms"
 }
 
 func (c *Client) WriteInt(i int32) error {
