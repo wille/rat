@@ -41,6 +41,8 @@ func handleClient(client *Client) {
 		header, err := client.ReadHeader()
 
 		if err != nil {
+			fmt.Println(err.Error())
+			remove(client)
 			break
 		}
 
@@ -48,7 +50,9 @@ func handleClient(client *Client) {
 		err = packet.Read(client)
 
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println(err.Error())
+			remove(client)
+			break
 		}
 	}
 }
@@ -57,5 +61,14 @@ func heartbeat(client *Client) {
 	for {
 		time.Sleep(time.Second * 2)
 		client.WritePacket(Ping{})
+	}
+}
+
+func remove(client *Client) {
+	for k, v := range Clients {
+		if v.id == client.id {
+			Clients = append(Clients[:k], Clients[k+1:]...)
+			break
+		}
 	}
 }

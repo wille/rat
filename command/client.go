@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"math/rand"
 	"net"
 	"rat/common"
 	"strconv"
@@ -15,6 +16,8 @@ type Client struct {
 	net.Conn
 	common.Writer
 	common.Reader
+
+	id int
 
 	common.Computer
 	Country     string
@@ -28,6 +31,8 @@ type Client struct {
 
 func NewClient(conn net.Conn) *Client {
 	client := new(Client)
+
+	client.id = rand.Int()
 
 	client.Computer = common.Computer{}
 	client.Conn = conn
