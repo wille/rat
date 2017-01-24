@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include "screen.h"
 
-#undef DEBUG_WRITE_BITMAP
-
 static int monitor = 0;
 
 char *GetBitmap(HBITMAP, HDC, int *size);
@@ -33,7 +31,7 @@ void QueryMonitors(void) {
 	ReleaseDC(NULL, hdc);
 }
 
-char *GetScreenshot(Monitor monitor, int *len) {
+char *GetScreenshot(Monitor monitor, int *size) {
     HDC hScreen = GetDC(NULL);
     HDC hDC = CreateCompatibleDC(hScreen);
     HBITMAP hBitmap = CreateCompatibleBitmap(hScreen, monitor.coordinates.width, monitor.coordinates.height);
@@ -45,7 +43,7 @@ char *GetScreenshot(Monitor monitor, int *len) {
     SetClipboardData(CF_BITMAP, hBitmap);
     CloseClipboard();
 
-	char *buffer = GetBitmap(hBitmap, hDC, len);
+	char *buffer = GetBitmap(hBitmap, hDC, size);
 	
     SelectObject(hDC, old_obj);
     DeleteDC(hDC);
@@ -59,8 +57,8 @@ char *GetBitmap(HBITMAP bitmap, HDC hDC, int *size) {
 	BITMAP bmp; 
 	PBITMAPINFO pbmi; 
 	WORD cClrBits; 
-	BITMAPFILEHEADER hdr; // bitmap file-header 
-	PBITMAPINFOHEADER pbih; // bitmap info-header 
+	BITMAPFILEHEADER bmpFileHeader; // bitmap file-header 
+	PBITMAPINFOHEADER bmpInfoHeader; // bitmap info-header 
 	LPBYTE lpBits; // memory pointer 
 
 	// create the bitmapinfo header information
@@ -110,8 +108,8 @@ char *GetBitmap(HBITMAP bitmap, HDC hDC, int *size) {
 	pbmi->bmiHeader.biClrImportant = 0; 
 
 	// now open file and save the data
-	pbih = (PBITMAPINFOHEADER) pbmi; 
-	lpBits = (LPBYTE) GlobalAlloc(GMEM_FIXED, pbih->biSizeImage);
+	bmpInfoHeader = (PBITMAPINFOHEADER) pbmi; 
+	lpBits = (LPBYTE) GlobalAlloc(GMEM_FIXED, bmpInfoHeader->biSizeImage);
 
 	if (!lpBits) {
 		printf("failed to alloc memory");
@@ -119,36 +117,36 @@ char *GetBitmap(HBITMAP bitmap, HDC hDC, int *size) {
 	}
 
 	// Retrieve the color table (RGBQUAD array) and the bits 
-	if (!GetDIBits(hDC, bitmap, 0, (WORD) pbih->biHeight, lpBits, pbmi, DIB_RGB_COLORS)) {
+	if (!GetDIBits(hDC, bitmap, 0, (WORD) bmpInfoHeader->biHeight, lpBits, pbmi, DIB_RGB_COLORS)) {
 		printf("GetDIBits error");
 		return NULL;
 	}
 
-	hdr.bfType = 0x4d42; // 0x42 = "B" 0x4d = "M" 
+	bmpFileHeader.bfType = 0x4d42; // 0x42 = "B" 0x4d = "M" 
 	// Compute the size of the entire file.
-	hdr.bfSize = (DWORD)(sizeof(BITMAPFILEHEADER) + pbih->biSize + pbih->biClrUsed * sizeof(RGBQUAD) + pbih->biSizeImage);
-	hdr.bfReserved1 = 0;
-	hdr.bfReserved2 = 0;
+	bmpFileHeader.bfSize = (DWORD)(sizeof(BITMAPFILEHEADER) + bmpInfoHeader->biSize + bmpInfoHeader->biClrUsed * sizeof(RGBQUAD) + bmpInfoHeader->biSizeImage);
+	bmpFileHeader.bfReserved1 = 0;
+	bmpFileHeader.bfReserved2 = 0;
 
 	// Compute the offset to the array of color indices. 
-	hdr.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + 
-	pbih->biSize + pbih->biClrUsed * sizeof (RGBQUAD); 
+	bmpFileHeader.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + 
+	bmpInfoHeader->biSize + bmpInfoHeader->biClrUsed * sizeof (RGBQUAD); 
 
-	int len = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + pbih->biClrUsed * sizeof(RGBQUAD) + pbih->biSizeImage;
+	int len = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + bmpInfoHeader->biClrUsed * sizeof(RGBQUAD) + bmpInfoHeader->biSizeImage;
 	char *buf = malloc(len);
 	*size = len;
 
 	int headerlen = sizeof(BITMAPFILEHEADER);
-	memmove(buf, &hdr, headerlen);
-	int infolen = sizeof(BITMAPINFOHEADER) + pbih->biClrUsed * sizeof (RGBQUAD);
-	memmove(buf + headerlen, pbih, infolen);
-	memmove(buf + headerlen + infolen, lpBits, pbih->biSizeImage);
+	memcpy(buf, &bmpFileHeader, headerlen);
+	int infolen = sizeof(BITMAPINFOHEADER) + bmpInfoHeader->biClrUsed * sizeof (RGBQUAD);
+	memcpy(buf + headerlen, bmpInfoHeader, infolen);
+	memcpy(buf + headerlen + infolen, lpBits, bmpInfoHeader->biSizeImage);
 
-	#ifdef DEBUG_WRITE_BITMAP	
+#ifdef DEBUG_WRITE_RAW
 	FILE *file = fopen("file.bmp", "wb");
 	fwrite(buf, len, 1, file);
 	fclose(file);
-	#endif
+#endif
 
 	GlobalFree((HGLOBAL)lpBits);
 
