@@ -1,27 +1,30 @@
 #ifndef _BITMAP_H
 #define _BITMAP_H
 
-#pragma pack(1)
+typedef unsigned int DWORD;
+typedef unsigned short WORD;
+
+#pragma pack(1) // prevent byte aligning which will make sizeof(BITMAP...HEADER) return incorrect value
 typedef struct {
-    short bfType;
-    int bfSize;
-    short bfReserved1;
-    short bfReserved2;
-    int bfOffBits;
+    WORD bfType;
+    DWORD bfSize;
+    WORD bfReserved1;
+    WORD bfReserved2;
+    DWORD bfOffBits;
 } BITMAPFILEHEADER;
 
 typedef struct {
-    int biSize;
-    int biWidth;
-    int biHeight;
-    short biPlanes;
-    short biBitCount;
-    int biCompression;
-    int biSizeImage;
-    int biXPelsPerMeter;
-    int biYPelsPerMeter;
-    int biClrUsed;
-    int biClrImportant;
+    DWORD biSize;
+    DWORD biWidth;
+    DWORD biHeight;
+    WORD biPlanes;
+    WORD biBitCount;
+    DWORD biCompression;
+    DWORD biSizeImage;
+    DWORD biXPelsPerMeter;
+    DWORD biYPelsPerMeter;
+    DWORD biClrUsed;
+    DWORD biClrImportant;
 } BITMAPINFOHEADER;
 
 char *GetBitmap(void *img, int *size, int w, int h);
