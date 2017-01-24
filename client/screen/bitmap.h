@@ -2,8 +2,7 @@
 #define _BITMAP_H
 
 #pragma pack(1)
-typedef struct 
-{
+typedef struct {
     short bfType;
     int bfSize;
     short bfReserved1;
@@ -11,8 +10,7 @@ typedef struct
     int bfOffBits;
 } BITMAPFILEHEADER;
 
-typedef struct 
-{
+typedef struct {
     int biSize;
     int biWidth;
     int biHeight;
@@ -25,5 +23,7 @@ typedef struct
     int biClrUsed;
     int biClrImportant;
 } BITMAPINFOHEADER;
+
+char *GetBitmap(void *img, int *size, int w, int h);
 
 #endif
