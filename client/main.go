@@ -25,9 +25,14 @@ func main() {
 			Conn: conn,
 		}
 
-		con.Init()
+		go func() {
+			for {
+				packet := <-Queue
+				con.WritePacket(packet)
+			}
+		}()
 
-		con.WritePacket(ScreenPacket{})
+		con.Init()
 
 		for {
 			header, err := con.ReadHeader()

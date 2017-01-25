@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"golang.org/x/net/websocket"
 )
 
 type Client struct {
@@ -29,14 +31,21 @@ type Client struct {
 		Current int
 	}
 
-	Screen []byte
+	Screen struct {
+		Buffer []byte
+	}
+
+	Queue chan OutgoingPacket
 }
+
+var WServer websocket.Server
 
 func NewClient(conn net.Conn) *Client {
 	client := new(Client)
 
-	client.Id = rand.Int()
+	client.Queue = make(chan OutgoingPacket)
 
+	client.Id = int(rand.Int31())
 	client.Computer = common.Computer{}
 	client.Conn = conn
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
@@ -147,5 +156,5 @@ func (c *Client) WritePacket(packet OutgoingPacket) error {
 
 // GetEncodedScreen returns a base64 encoded version of the most recent screenshot
 func (c *Client) GetEncodedScreen() string {
-	return base64.StdEncoding.EncodeToString(c.Screen)
+	return base64.StdEncoding.EncodeToString(c.Screen.Buffer)
 }

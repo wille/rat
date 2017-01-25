@@ -33,6 +33,12 @@ func Listen(server *Server) error {
 		Clients = append(Clients, client)
 		go handleClient(client)
 		go heartbeat(client)
+		go func() {
+			for {
+				packet := <-client.Queue
+				client.WritePacket(packet)
+			}
+		}()
 	}
 }
 
@@ -60,7 +66,7 @@ func handleClient(client *Client) {
 func heartbeat(client *Client) {
 	for {
 		time.Sleep(time.Second * 2)
-		client.WritePacket(Ping{})
+		client.Queue <- Ping{}
 	}
 }
 
@@ -75,6 +81,7 @@ func remove(client *Client) {
 
 func get(id int) *Client {
 	for _, v := range Clients {
+
 		if v.Id == id {
 			return v
 		}

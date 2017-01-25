@@ -1,7 +1,9 @@
 package main
 
-import "io"
-import "errors"
+import (
+	"errors"
+	"io"
+)
 
 type ScreenPacket struct {
 	IncomingPacket
@@ -14,9 +16,9 @@ func (packet ScreenPacket) Read(c *Client) error {
 		return err
 	}
 
-	c.Screen = make([]byte, int(len))
+	c.Screen.Buffer = make([]byte, int(len))
 
-	rlen, err := io.ReadFull(c, c.Screen)
+	rlen, err := io.ReadFull(c, c.Screen.Buffer)
 
 	if int32(rlen) != len {
 		return errors.New("EOF")

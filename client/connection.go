@@ -13,11 +13,10 @@ type Connection struct {
 	common.Reader
 }
 
+var Queue = make(chan OutgoingPacket)
+
 func (c *Connection) Init() {
-	err := c.WritePacket(ComputerInfoPacket{})
-	if err != nil {
-		panic(err)
-	}
+	Queue <- ComputerInfoPacket{}
 }
 
 func (c *Connection) WriteInt(i int32) error {
