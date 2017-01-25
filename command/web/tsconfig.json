@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "sourceMap": true,
+		"outDir": "scripts"
+    },
+	"include": [
+		"typings.d.ts",
+		"screen.ts",
+		"live.ts",
+		"ping.ts"
+	]
+}
