@@ -29,7 +29,7 @@ func main() {
 	go Listen(&config)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.New("index.html").ParseFiles("web/templates/index.html", "web/templates/template.html"))
+		t := template.Must(template.New("index.html").ParseFiles("web/index.html", "web/template.html"))
 		err := t.Execute(w, &Clients)
 
 		if err != nil {
@@ -37,7 +37,7 @@ func main() {
 		}
 	})
 	http.HandleFunc("/screen", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.New("screen.html").ParseFiles("web/templates/screen.html", "web/templates/template.html"))
+		t := template.Must(template.New("screen.html").ParseFiles("web/screen.html", "web/template.html"))
 		id, _ := strconv.Atoi(r.FormValue("id"))
 		err := t.Execute(w, NewSingle(get(id)))
 
