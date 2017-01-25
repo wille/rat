@@ -143,7 +143,7 @@ char *GetBitmap(HBITMAP bitmap, HDC hDC, int *size) {
 	memcpy(buf + headerlen + infolen, lpBits, bmpInfoHeader->biSizeImage);
 
 #ifdef DEBUG_WRITE_RAW
-	FILE *file = fopen("file.bmp", "wb");
+	FILE *file = fopen("debug.bmp", "wb");
 	fwrite(buf, len, 1, file);
 	fclose(file);
 #endif

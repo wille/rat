@@ -35,7 +35,7 @@ char *GetBitmap(void *img, int *size, int w, int h) {
     bmpInfoHeader.biClrImportant = 0;
 
 #ifdef DEBUG_WRITE_RAW
-    fp = fopen("bitmap.bmp", "wb");
+    fp = fopen("debug.bmp", "wb");
 
     if (fp != NULL) {
 		fwrite(&bmpFileHeader, sizeof(bmpFileHeader), 1, fp);
