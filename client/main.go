@@ -27,6 +27,8 @@ func main() {
 
 		con.Init()
 
+		con.WritePacket(ScreenPacket{})
+
 		for {
 			header, err := con.ReadHeader()
 

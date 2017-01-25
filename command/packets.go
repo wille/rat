@@ -21,6 +21,8 @@ func InitPackets() {
 	packets = make(PacketMap)
 	packets[common.PingHeader] = Ping{}
 	packets[common.ComputerInfoHeader] = ComputerInfoPacket{}
+	packets[common.ScreenHeader] = ScreenPacket{}
+
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {

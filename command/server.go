@@ -66,9 +66,19 @@ func heartbeat(client *Client) {
 
 func remove(client *Client) {
 	for k, v := range Clients {
-		if v.id == client.id {
+		if v.Id == client.Id {
 			Clients = append(Clients[:k], Clients[k+1:]...)
 			break
 		}
 	}
+}
+
+func get(id int) *Client {
+	for _, v := range Clients {
+		if v.Id == id {
+			return v
+		}
+	}
+
+	return nil
 }
