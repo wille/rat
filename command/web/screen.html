@@ -1,5 +1,13 @@
 {{ template "head" }}
 	
-	<img src="data:image/jpg;base64,{{ .Client.GetEncodedScreen }}">
+	<img id="screen" src="">
+
+	<script src="scripts/screen.js"></script>
+
+	<script>
+		const id = {{ .Client.Id }};
+		var stream = new ScreenStream(id, document.getElementById("screen"));
+		stream.start();
+	</script>
 
 {{ template "tail" }}
