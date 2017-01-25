@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "target": "es5",
         "noImplicitAny": false,
         "sourceMap": true,
-		"outDir": "scripts"
+		"outFile": "static/lib.js"
     },
-	"include": [
+	"files": [
+		"control.ts",
 		"typings.d.ts",
 		"screen.ts",
 		"live.ts",

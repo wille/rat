@@ -2,12 +2,9 @@
 	
 	<img id="screen" src="">
 
-	<script src="scripts/screen.js"></script>
-
 	<script>
 		const id = {{ .Client.Id }};
-		var stream = new ScreenStream(id, document.getElementById("screen"));
-		stream.start();
+		Control.init(id);
 	</script>
 
 {{ template "tail" }}

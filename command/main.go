@@ -62,12 +62,19 @@ func main() {
 
 		if client != nil {
 			for {
-				ws.Write([]byte(client.GetEncodedScreen()))
+				s := struct {
+					Event int
+					Data  string
+				}{
+					0,
+					client.GetEncodedScreen(),
+				}
+				websocket.JSON.Send(ws, &s)
 				time.Sleep(time.Second)
 			}
 		}
 	}
-	http.Handle("/ssock", websocket.Handler(onConnected))
+	http.Handle("/control", websocket.Handler(onConnected))
 
 	log.Fatal(http.ListenAndServeTLS("localhost:7777", "cert.pem", "private.key", nil))
 }
