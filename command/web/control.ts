@@ -21,10 +21,16 @@ namespace Control {
 	}
 
 	export function emit(eventType: EventType, data: any) {
-		events[eventType].emit(data);
+		let event = events[eventType];
+
+		if (event !== undefined) {
+			event.emit(data);
+		} else {
+			console.error("control: received unknown event", eventType);
+		}
 	}
 
- 	export class Client {
+	export class Client {
 
 		private socket: WebSocket;
 
