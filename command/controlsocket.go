@@ -36,6 +36,10 @@ func incomingWebSocket(ws *websocket.Conn) {
 			return
 		}
 
+		if event.ClientId == 0 {
+			continue
+		}
+
 		client := get(event.ClientId)
 
 		if event.Event == ScreenUpdateEvent {
