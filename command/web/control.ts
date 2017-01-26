@@ -1,10 +1,9 @@
 namespace Control {
 
-	export var instance: Control.Client;
 	var events: IncomingEvent[] = [];
 
 	export enum EventType {
-		SCREEN
+		SCREEN = 0
 	}
 
 	export interface IncomingEvent {
@@ -23,10 +22,13 @@ namespace Control {
 
 		private socket: WebSocket;
 
-		constructor(private id: number) { }
+		constructor() {
 
-		public start() {
+		}
+
+		public start(func: any) {
 			this.reconnect();
+			this.socket.onopen = () => func();
 		}
 
 		private reconnect() {
@@ -35,7 +37,6 @@ namespace Control {
 			}
 			this.socket = new WebSocket("wss://localhost:7777/control");
 			this.socket.onmessage = (event) => this.onMessage(event);
-			this.socket.onopen = () => this.onOpen();
 			this.socket.onclose = () => setTimeout(this.reconnect(), 1000);
 		}
 
@@ -44,11 +45,11 @@ namespace Control {
 			Control.emit(data.Event, data.Data);
 		}
 
-		private onOpen() {
-			this.socket.send(this.id + "\n");
+		public onOpen(func: any) {
+			this.socket.addEventListener("onopen", func);
 		}
 
-		public write(eventType: Control.EventType, data: any, id?: number) {
+		public write(eventType: Control.EventType, data: string, id?: number) {
 			if (id == undefined) {
 				id = 0;
 			}
@@ -61,8 +62,9 @@ namespace Control {
 		}
 	}
 
-	export function init(id: number) {
-		this.instance = new Control.Client(id);
-		this.instance.start();
+	export var instance: Control.Client = new Control.Client();
+
+	export function init(func: any) {
+		Control.instance.start(func);
 	}
 }

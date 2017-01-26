@@ -4,7 +4,7 @@
 
 	<script>
 		const id = {{ .Client.Id }};
-		Control.init(id);
+		startStream(document.getElementById("screen"), id);
 	</script>
 
 {{ template "tail" }}
