@@ -15,6 +15,12 @@ import (
 	"golang.org/x/net/websocket"
 )
 
+const (
+	Windows = "Windows"
+	MacOS   = "macOS"
+	Linux   = "Linux"
+)
+
 type Client struct {
 	net.Conn
 	common.Writer

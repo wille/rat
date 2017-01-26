@@ -6,12 +6,9 @@ type ComputerInfoPacket struct {
 
 func (packet ComputerInfoPacket) Read(c *Client) error {
 	username, err := c.ReadString()
-
-	if err != nil {
-		return err
-	}
-
 	hostname, err := c.ReadString()
+	ostype, err := c.ReadString()
+	os, err := c.ReadString()
 
 	if err != nil {
 		return err
@@ -19,6 +16,8 @@ func (packet ComputerInfoPacket) Read(c *Client) error {
 
 	c.Computer.Username = username
 	c.Computer.Hostname = hostname
+	c.Computer.OperatingSystemType = ostype
+	c.Computer.OperatingSystem = os
 
 	return nil
 }

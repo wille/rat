@@ -43,8 +43,13 @@ func incomingWebSocket(ws *websocket.Conn) {
 				for {
 					event := newEvent(ScreenUpdateEvent, client.Id, client.GetEncodedScreen())
 
-					websocket.JSON.Send(ws, &event)
-					time.Sleep(time.Second)
+					err := websocket.JSON.Send(ws, &event)
+
+					if err != nil {
+						fmt.Println(err.Error())
+						return
+					}
+					time.Sleep(time.Millisecond * 200)
 				}
 			}()
 		}

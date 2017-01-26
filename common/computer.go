@@ -1,9 +1,11 @@
 package common
 
 type Computer struct {
-	Username string
-	Hostname string
-	HomeDir  string
+	Username            string
+	Hostname            string
+	HomeDir             string
+	OperatingSystemType string
+	OperatingSystem     string
 }
 
 func (ui *Computer) GetDisplayName() string {

