@@ -21,6 +21,8 @@ func main() {
 			continue
 		}
 
+		Queue = make(chan OutgoingPacket)
+
 		con := Connection{
 			Conn: conn,
 		}

@@ -13,7 +13,7 @@ type Connection struct {
 	common.Reader
 }
 
-var Queue = make(chan OutgoingPacket)
+var Queue chan OutgoingPacket
 
 func (c *Connection) Init() {
 	Queue <- ComputerInfoPacket{}
