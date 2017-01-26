@@ -41,3 +41,16 @@ tr:nth-child(even) {
 .error {
 	color: #ff0000;
 }
+
+.statusbar {
+	font-family: arial, sans-serif;
+	color: #888888;
+	font-size: 12px;
+	position: fixed;
+	left: 5;
+	bottom: 0;
+}
+
+.version::before {
+	content: "version: ";
+}

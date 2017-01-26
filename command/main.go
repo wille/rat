@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"rat/common"
 	"strconv"
 )
 
@@ -24,6 +25,7 @@ func main() {
 
 	funcMap := template.FuncMap{
 		"GetOperatingSystemIcon": GetOperatingSystemIcon,
+		"Version":                func() string { return common.Version },
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
