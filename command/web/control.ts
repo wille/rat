@@ -16,6 +16,10 @@ namespace Control {
 		events[eventType] = event;
 	}
 
+	export function removeEvent(eventType: EventType) {
+		delete events[eventType];
+	}
+
 	export function emit(eventType: EventType, data: any) {
 		events[eventType].emit(data);
 	}
@@ -28,9 +32,8 @@ namespace Control {
 
 		}
 
-		public start(func: any) {
+		public start() {
 			this.reconnect();
-			this.socket.onopen = () => func();
 		}
 
 		private reconnect() {
@@ -74,7 +77,9 @@ namespace Control {
 
 	export var instance: Control.Client = new Control.Client();
 
-	export function init(func: any) {
-		Control.instance.start(func);
+	export function init() {
+		Control.instance.start();
 	}
 }
+
+Control.init();

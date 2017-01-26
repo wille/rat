@@ -4,13 +4,5 @@
         "noImplicitAny": false,
         "sourceMap": true,
 		"outFile": "static/lib.js"
-    },
-	"files": [
-		"connection.ts",
-		"control.ts",
-		"typings.d.ts",
-		"screen.ts",
-		"live.ts",
-		"ping.ts"
-	]
+    }
 }

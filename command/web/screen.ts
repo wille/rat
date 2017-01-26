@@ -1,4 +1,5 @@
 /// <reference path="control.ts" />
+/// <reference path="view.ts" />
 
 class ScreenEvent implements Control.IncomingEvent {
 
@@ -9,10 +10,21 @@ class ScreenEvent implements Control.IncomingEvent {
 	}
 }
 
-function startStream(element: HTMLImageElement, id: number) {
-	Control.addEvent(Control.EventType.SCREEN, new ScreenEvent(element, id));
+let element: HTMLImageElement = <HTMLImageElement>document.getElementById("screen");
 
-	Control.init(() => {
+class ScreenView extends View {
+
+	constructor(id: number) {
+		super("static/screen.html", id);
+	}
+
+	onEnter() {
+		Control.addEvent(Control.EventType.SCREEN, new ScreenEvent(element, id));
 		Control.instance.write(Control.EventType.SCREEN, "true", id);
-	});
+	}
+
+	onLeave() {
+		Control.removeEvent(Control.EventType.SCREEN);
+		Control.instance.write(Control.EventType.SCREEN, "false", id);
+	}
 }

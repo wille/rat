@@ -1,4 +1,3 @@
-{{ template "head" }}
 	<table id="clients">
 		<thead>
 			<th>Country</th>
@@ -16,16 +15,8 @@
 				<td>{{ .Computer.GetDisplayName }}</td>
 				<td><img src="{{ GetOperatingSystemIcon .Computer.OperatingSystemType }}"> {{ .Computer.OperatingSystem }}</td>
 				<td class="ping"> {{ .Ping.Current }}</td>
-				<td><a href="screen?id={{ .Id }}">Screen</td>
+				<td><a onclick="setScreenView({{ .Id }});">Screen</td>
 			</tr>
 			{{ end }}
 		</tbody>
 	</table>
-	</div>
-
-	<script>
-		update("#clients", "/ #clients", 1000, function() {
-			updatePing();
-		});
-	</script>
-{{ template "tail" }}
