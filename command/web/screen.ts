@@ -10,8 +10,6 @@ class ScreenEvent implements Control.IncomingEvent {
 	}
 }
 
-let element: HTMLImageElement = <HTMLImageElement>document.getElementById("screen");
-
 class ScreenView extends View {
 
 	constructor(id: number) {
@@ -19,12 +17,14 @@ class ScreenView extends View {
 	}
 
 	onEnter() {
-		Control.addEvent(Control.EventType.SCREEN, new ScreenEvent(element, id));
-		Control.instance.write(Control.EventType.SCREEN, "true", id);
+		let element = <HTMLImageElement>document.getElementById("screen");
+
+		Control.addEvent(Control.EventType.SCREEN, new ScreenEvent(element, this.id));
+		Control.instance.write(Control.EventType.SCREEN, "true", this.id);
 	}
 
 	onLeave() {
 		Control.removeEvent(Control.EventType.SCREEN);
-		Control.instance.write(Control.EventType.SCREEN, "false", id);
+		Control.instance.write(Control.EventType.SCREEN, "false", this.id);
 	}
 }
