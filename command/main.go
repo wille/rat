@@ -22,8 +22,13 @@ func main() {
 
 	go Listen(&config)
 
+	funcMap := template.FuncMap{
+		"GetOperatingSystemIcon": GetOperatingSystemIcon,
+	}
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.New("index.html").ParseFiles("web/index.html", "web/template.html"))
+		t := template.Must(template.New("index.html").Funcs(funcMap).ParseFiles("web/index.html", "web/template.html"))
+
 		err := t.Execute(w, &Clients)
 
 		if err != nil {

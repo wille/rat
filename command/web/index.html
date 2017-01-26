@@ -14,7 +14,7 @@
 				<td><img src="static/images/flags/{{ .GetFlagName }}.png"> {{ .GetCountry }}</td>
 				<td>{{ .GetDisplayHost }}</td>
 				<td>{{ .Computer.GetDisplayName }}</td>
-				<td>{{ .Computer.OperatingSystem }}</td>
+				<td><img src="{{ GetOperatingSystemIcon .Computer.OperatingSystemType }}"> {{ .Computer.OperatingSystem }}</td>
 				<td class="ping"> {{ .Ping.Current }}</td>
 				<td><a href="screen?id={{ .Id }}">Screen</td>
 			</tr>
