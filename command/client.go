@@ -95,6 +95,41 @@ func (c *Client) GetPing() string {
 	return strconv.Itoa(c.Ping.Current) + " ms"
 }
 
+func (client *Client) PacketReader() {
+	for {
+		header, err := client.ReadHeader()
+
+		if err != nil {
+			fmt.Println(err.Error())
+			remove(client)
+			break
+		}
+
+		packet := GetIncomingPacket(header)
+		err = packet.Read(client)
+
+		if err != nil {
+			fmt.Println(err.Error())
+			remove(client)
+			break
+		}
+	}
+}
+
+func (client *Client) Heartbeat() {
+	for {
+		time.Sleep(time.Second * 2)
+		client.Queue <- Ping{}
+	}
+}
+
+func (client *Client) PacketQueue() {
+	for {
+		packet := <-client.Queue
+		client.WritePacket(packet)
+	}
+}
+
 func (c *Client) WriteInt(i int32) error {
 	return binary.Write(c, common.ByteOrder, &i)
 }

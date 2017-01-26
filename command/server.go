@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"time"
 )
 
 var (
@@ -31,42 +30,9 @@ func Listen(server *Server) error {
 		client := NewClient(conn)
 
 		Clients = append(Clients, client)
-		go handleClient(client)
-		go heartbeat(client)
-		go func() {
-			for {
-				packet := <-client.Queue
-				client.WritePacket(packet)
-			}
-		}()
-	}
-}
-
-func handleClient(client *Client) {
-	for {
-		header, err := client.ReadHeader()
-
-		if err != nil {
-			fmt.Println(err.Error())
-			remove(client)
-			break
-		}
-
-		packet := GetIncomingPacket(header)
-		err = packet.Read(client)
-
-		if err != nil {
-			fmt.Println(err.Error())
-			remove(client)
-			break
-		}
-	}
-}
-
-func heartbeat(client *Client) {
-	for {
-		time.Sleep(time.Second * 2)
-		client.Queue <- Ping{}
+		go client.PacketReader()
+		go client.Heartbeat()
+		go client.PacketQueue()
 	}
 }
 
