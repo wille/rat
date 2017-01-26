@@ -5,11 +5,11 @@ class IndexView extends View {
 	private interval: number;
 
 	constructor() {
-		super("index");
+		super("clients");
 	}
 
 	onEnter() {
-		this.interval = update("#clients", "/index #clients", 1000, function() {
+		this.interval = update("#clients", "/clients #clients", 1000, function() {
 			updatePing();
 		});
 	}
