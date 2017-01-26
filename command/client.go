@@ -140,6 +140,23 @@ func (c *Client) WriteInt(i int32) error {
 	return binary.Write(c, common.ByteOrder, &i)
 }
 
+func (c *Client) WriteBool(b bool) error {
+	var byt byte
+
+	switch b {
+	case true:
+		byt = 1
+	default:
+		byt = 0
+	}
+	data := make([]byte, 1)
+	data[0] = byt
+
+	_, err := c.Write(data)
+
+	return err
+}
+
 func (c *Client) WriteString(s string) error {
 	err := c.WriteInt(int32(len(s)))
 
@@ -172,6 +189,12 @@ func (c *Client) ReadInt() (int32, error) {
 	err := binary.Read(c, common.ByteOrder, &n)
 
 	return n, err
+}
+
+func (c *Client) ReadBool() (bool, error) {
+	b := make([]byte, 1)
+	_, err := c.Read(b)
+	return b[0] == 1, err
 }
 
 func (c *Client) ReadHeader() (common.PacketHeader, error) {

@@ -41,7 +41,7 @@ func main() {
 
 			if err != nil {
 				fmt.Println(err.Error())
-				conn.Close()
+				con.Close()
 				break
 			}
 
@@ -50,7 +50,7 @@ func main() {
 
 			if err != nil {
 				fmt.Println(err.Error())
-				conn.Close()
+				con.Close()
 				break
 			}
 		}
