@@ -1,6 +1,6 @@
 namespace Control {
 
-	var instance: Control.Client;
+	export var instance: Control.Client;
 	var events: IncomingEvent[] = [];
 
 	export enum EventType {
@@ -46,6 +46,18 @@ namespace Control {
 
 		private onOpen() {
 			this.socket.send(this.id + "\n");
+		}
+
+		public write(eventType: Control.EventType, data: any, id?: number) {
+			if (id == undefined) {
+				id = 0;
+			}
+
+			this.socket.send(JSON.stringify({
+				"Event": eventType,
+				"ClientId": id,
+				"Data": data
+			}));
 		}
 	}
 

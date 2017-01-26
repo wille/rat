@@ -1,16 +1,10 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
-	"time"
-
-	"golang.org/x/net/websocket"
 )
 
 type ClientPage struct {
@@ -48,33 +42,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
 	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./web/scripts"))))
 
-	onConnected := func(ws *websocket.Conn) {
-		defer func() {
-			ws.Close()
-		}()
-
-		reader := bufio.NewReader(ws)
-		sid, _ := reader.ReadString('\n')
-
-		id, _ := strconv.Atoi(strings.Trim(sid, "\n"))
-		client := get(id)
-		fmt.Println("id:", id)
-
-		if client != nil {
-			for {
-				s := struct {
-					Event int
-					Data  string
-				}{
-					0,
-					client.GetEncodedScreen(),
-				}
-				websocket.JSON.Send(ws, &s)
-				time.Sleep(time.Second)
-			}
-		}
-	}
-	http.Handle("/control", websocket.Handler(onConnected))
+	InitControlSocket()
 
 	log.Fatal(http.ListenAndServeTLS("localhost:7777", "cert.pem", "private.key", nil))
 }
