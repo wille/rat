@@ -37,3 +37,7 @@ tr:nth-child(even) {
 .ping-5::before {
 	content:url("../images/ping/ping5.png");
 }
+
+.error {
+	color: #ff0000;
+}

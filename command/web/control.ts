@@ -1,3 +1,5 @@
+/// <reference path="connection.ts" />
+
 namespace Control {
 
 	var events: IncomingEvent[] = [];
@@ -37,7 +39,15 @@ namespace Control {
 			}
 			this.socket = new WebSocket("wss://localhost:7777/control");
 			this.socket.onmessage = (event) => this.onMessage(event);
-			this.socket.onclose = () => setTimeout(this.reconnect(), 1000);
+
+			this.socket.onclose = () => {
+				setTimeout(this.reconnect(), 1000);
+				Connection.setConnectionStatus(false);
+			};
+
+			this.socket.onopen = () => {
+				Connection.setConnectionStatus(true);
+			};
 		}
 
 		private onMessage(event) {
