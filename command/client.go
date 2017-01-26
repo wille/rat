@@ -42,6 +42,8 @@ type Client struct {
 	}
 
 	Queue chan OutgoingPacket
+
+	StreamingScreen bool
 }
 
 var WServer websocket.Server

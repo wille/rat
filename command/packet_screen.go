@@ -3,10 +3,19 @@ package main
 import (
 	"errors"
 	"io"
+	"rat/common"
 )
 
 type ScreenPacket struct {
-	IncomingPacket
+	Activate bool
+}
+
+func (packet ScreenPacket) GetHeader() common.PacketHeader {
+	return common.ScreenHeader
+}
+
+func (packet ScreenPacket) Write(c *Client) error {
+	return c.WriteBool(packet.Activate)
 }
 
 func (packet ScreenPacket) Read(c *Client) error {
