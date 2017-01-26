@@ -1,8 +1,10 @@
 BUILD=go build
 
-default:
+default: web
 	cd client && $(BUILD) -o ../client.exe
 	cd command && $(BUILD) -o ../command.exe
+
+web:
 	tsc -p command/web/
 
 cert:
