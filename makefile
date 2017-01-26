@@ -5,7 +5,7 @@ default: web
 	cd command && $(BUILD) -o ../command.exe
 
 web:
-	tsc -p command/web/
+	tsc
 
 cert:
 	cd command && openssl genrsa -out private.key 1024

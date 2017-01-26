@@ -3,6 +3,8 @@
         "target": "es5",
         "noImplicitAny": false,
         "sourceMap": true,
-		"outFile": "static/lib.js"
+		"outFile": "command/web/static/lib.js",
+		"removeComments": true,
+		"rootDir": "command/web/"
     }
 }
