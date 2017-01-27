@@ -1,5 +1,3 @@
-/// <reference path="typings.d.ts" />
-
 namespace Connection {
 	export function setConnectionStatus(connected: boolean) {
 		let element = $("#error");

@@ -26,8 +26,6 @@ function setView(view: View) {
 }
 
 // Helper functions to make it simple to call from HTML onclick or similar
-/// <reference path="index.ts" />
-/// <reference path="screen.ts" />
 function setMainView() {
 	setView(new IndexView());
 }

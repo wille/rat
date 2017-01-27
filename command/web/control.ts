@@ -1,5 +1,3 @@
-/// <reference path="connection.ts" />
-
 namespace Control {
 
 	var events: IncomingEvent[] = [];
@@ -42,8 +40,24 @@ namespace Control {
 			this.reconnect();
 		}
 
+		public onOpen(func: any) {
+			this.socket.addEventListener("onopen", func);
+		}
+
+		public write(eventType: Control.EventType, data: string, id?: number) {
+			if (id === undefined) {
+				id = 0;
+			}
+
+			this.socket.send(JSON.stringify({
+				"Event": eventType,
+				"ClientId": id,
+				"Data": data
+			}));
+		}
+
 		private reconnect() {
-			if (this.socket != undefined) {
+			if (this.socket !== undefined) {
 				this.socket.close();
 			}
 			this.socket = new WebSocket("wss://localhost:7777/control");
@@ -65,24 +79,9 @@ namespace Control {
 			Control.emit(data.Event, data.Data);
 		}
 
-		public onOpen(func: any) {
-			this.socket.addEventListener("onopen", func);
-		}
-
-		public write(eventType: Control.EventType, data: string, id?: number) {
-			if (id == undefined) {
-				id = 0;
-			}
-
-			this.socket.send(JSON.stringify({
-				"Event": eventType,
-				"ClientId": id,
-				"Data": data
-			}));
-		}
 	}
 
-	export var instance: Control.Client = new Control.Client();
+	export let instance: Control.Client = new Control.Client();
 
 	export function init() {
 		Control.instance.start();
