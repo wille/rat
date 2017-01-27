@@ -23,8 +23,7 @@ func main() {
 	go Listen(&config)
 
 	funcMap := template.FuncMap{
-		"GetOperatingSystemIcon": GetOperatingSystemIcon,
-		"Version":                func() string { return common.Version },
+		"Version": func() string { return common.Version },
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

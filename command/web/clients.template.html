@@ -20,8 +20,8 @@
 				<td>
 					{{ .Computer.GetDisplayName }}
 				</td>
-				<td>
-					<img src="{{ GetOperatingSystemIcon .Computer.OperatingSystemType }}"> {{ .Computer.OperatingSystem }}
+				<td class="os">
+					<img></img> {{ .Computer.OperatingSystem }}
 				</td>
 				<td class="ping"> 
 					{{ .Ping.Current }}
