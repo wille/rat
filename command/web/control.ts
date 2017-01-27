@@ -56,6 +56,7 @@ namespace Control {
 
 			this.socket.onopen = () => {
 				Connection.setConnectionStatus(true);
+				console.log("control socket: connected");
 			};
 		}
 
