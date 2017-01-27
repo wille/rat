@@ -35,6 +35,7 @@ void QueryProcesses(void) {
 
 				p.pid = processID;
 				ProcessCallback(p);
+				free(p.path);
 			}
 
 			CloseHandle(hProcess);

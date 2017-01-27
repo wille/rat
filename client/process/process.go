@@ -5,7 +5,6 @@ package process
 #include "process.h"
 */
 import "C"
-import "unsafe"
 
 type Process struct {
 	Path string
@@ -22,9 +21,6 @@ func ProcessCallback(p C.Process) {
 		Path: C.GoString(p.path),
 		PID:  int(p.pid),
 	}
-
-	// Free C process struct after converted to Go struct
-	C.free(unsafe.Pointer(p.path))
 
 	Processes = append(Processes, process)
 }
