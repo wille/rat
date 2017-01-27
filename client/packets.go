@@ -21,6 +21,7 @@ func InitPackets() {
 	packets = make(PacketMap)
 	packets[common.PingHeader] = Ping{}
 	packets[common.ScreenHeader] = ScreenPacket{}
+	packets[common.ProcessHeader] = ProcessPacket{}
 
 }
 

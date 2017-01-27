@@ -11,6 +11,7 @@ import (
 
 const (
 	ScreenUpdateEvent = 0
+	ProcessQueryEvent = 1
 )
 
 type Event struct {
@@ -53,6 +54,9 @@ func incomingWebSocket(ws *websocket.Conn) {
 			defer func() {
 				client.StreamingScreen = false
 			}()
+		} else if event.Event == ProcessQueryEvent {
+			client.ws = ws
+			client.Queue <- ProcessPacket{}
 		}
 	}
 }

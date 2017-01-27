@@ -44,9 +44,9 @@ type Client struct {
 	Queue chan OutgoingPacket
 
 	StreamingScreen bool
-}
 
-var WServer websocket.Server
+	ws *websocket.Conn
+}
 
 func NewClient(conn net.Conn) *Client {
 	client := new(Client)

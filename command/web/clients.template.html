@@ -7,15 +7,29 @@
 			<th>Ping</th>
 			<th></th>
 		</thead>
+
 		<tbody>
 			{{ range . }}
 			<tr>
-				<td><img src="static/images/flags/{{ .GetFlagName }}.png"> {{ .GetCountry }}</td>
-				<td>{{ .GetDisplayHost }}</td>
-				<td>{{ .Computer.GetDisplayName }}</td>
-				<td><img src="{{ GetOperatingSystemIcon .Computer.OperatingSystemType }}"> {{ .Computer.OperatingSystem }}</td>
-				<td class="ping"> {{ .Ping.Current }}</td>
-				<td><a onclick="setScreenView({{ .Id }});">Screen</td>
+				<td>
+					<img src="static/images/flags/{{ .GetFlagName }}.png"> {{ .GetCountry }}
+				</td>
+				<td>
+					{{ .GetDisplayHost }}
+				</td>
+				<td>
+					{{ .Computer.GetDisplayName }}
+				</td>
+				<td>
+					<img src="{{ GetOperatingSystemIcon .Computer.OperatingSystemType }}"> {{ .Computer.OperatingSystem }}
+				</td>
+				<td class="ping"> 
+					{{ .Ping.Current }}
+				</td>
+				<td>
+					<a onclick="setScreenView({{ .Id }});">Screen</a>
+					<a onclick="setProcessesView({{ .Id }});">Processes</a>
+				</td>
 			</tr>
 			{{ end }}
 		</tbody>

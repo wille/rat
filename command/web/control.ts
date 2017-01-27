@@ -3,7 +3,8 @@ namespace Control {
 	var events: IncomingEvent[] = [];
 
 	export enum EventType {
-		SCREEN = 0
+		SCREEN = 0,
+		PROCESS = 1
 	}
 
 	export interface IncomingEvent {

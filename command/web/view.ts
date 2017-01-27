@@ -33,3 +33,7 @@ function setMainView() {
 function setScreenView(id: number) {
 	setView(new ScreenView(id));
 }
+
+function setProcessesView(id: number) {
+	setView(new ProcessView(id));
+}
