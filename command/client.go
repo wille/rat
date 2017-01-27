@@ -138,8 +138,9 @@ func (client *Client) PacketQueue() {
 	}
 }
 
-func (c *Client) WriteInt(i int32) error {
-	return binary.Write(c, common.ByteOrder, &i)
+func (c *Client) WriteInt(i int) error {
+	i32 := int32(i)
+	return binary.Write(c, common.ByteOrder, &i32)
 }
 
 func (c *Client) WriteBool(b bool) error {
@@ -160,7 +161,7 @@ func (c *Client) WriteBool(b bool) error {
 }
 
 func (c *Client) WriteString(s string) error {
-	err := c.WriteInt(int32(len(s)))
+	err := c.WriteInt(len(s))
 
 	if err != nil {
 		return err
@@ -186,11 +187,11 @@ func (c *Client) ReadString() (string, error) {
 	return s, err
 }
 
-func (c *Client) ReadInt() (int32, error) {
+func (c *Client) ReadInt() (int, error) {
 	var n int32
 	err := binary.Read(c, common.ByteOrder, &n)
 
-	return n, err
+	return int(n), err
 }
 
 func (c *Client) ReadBool() (bool, error) {

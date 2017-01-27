@@ -25,8 +25,9 @@ func (c *Connection) Close() {
 	c.Conn.Close()
 }
 
-func (c *Connection) WriteInt(i int32) error {
-	return binary.Write(c, common.ByteOrder, &i)
+func (c *Connection) WriteInt(i int) error {
+	i32 := int32(i)
+	return binary.Write(c, common.ByteOrder, &i32)
 }
 
 func (c *Connection) WriteBool(b bool) error {
@@ -47,7 +48,7 @@ func (c *Connection) WriteBool(b bool) error {
 }
 
 func (c *Connection) WriteString(s string) error {
-	err := c.WriteInt(int32(len(s)))
+	err := c.WriteInt(len(s))
 
 	if err != nil {
 		return err

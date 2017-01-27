@@ -41,7 +41,7 @@ func (packet ScreenPacket) Write(c *Connection) error {
 		Quality: 75,
 	})
 
-	c.WriteInt(int32(len(w.Bytes())))
+	c.WriteInt(len(w.Bytes()))
 	c.Write(w.Bytes())
 
 	return nil
