@@ -28,7 +28,7 @@ namespace Icons {
 		let type = args[0].toLowerCase();
 
 		// (Windows) 10, (macOS) 10.12
-		let version = args.length >= 2 ? args[1] : null;
+		let version = args.length >= 2 ? args[args.length - 1] : null;
 
 		let icon: string;
 
@@ -42,6 +42,12 @@ namespace Icons {
 		case "debian":
 		case "ubuntu":
 		case "opensuse":
+		case "mint":
+		case "gentoo":
+		case "fedora":
+		case "centos":
+		case "arch":
+		case "kali":
 			icon = "dist_" + type;
 			break;
 		default:
