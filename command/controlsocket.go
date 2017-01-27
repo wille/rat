@@ -55,7 +55,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 				client.StreamingScreen = false
 			}()
 		} else if event.Event == ProcessQueryEvent {
-			client.ws = ws
+			client.Listeners[common.ProcessHeader] = ws
 			client.Queue <- ProcessPacket{}
 		}
 	}

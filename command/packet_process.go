@@ -30,14 +30,18 @@ func (packet ProcessPacket) Read(c *Client) error {
 			fmt.Println("process:", err.Error())
 		}
 
-		event := newEvent(ProcessQueryEvent, c.Id, strconv.Itoa(pid)+","+name)
+		if ws, ok := c.Listeners[common.ProcessHeader]; ok {
+			event := newEvent(ProcessQueryEvent, c.Id, strconv.Itoa(pid)+","+name)
 
-		err = websocket.JSON.Send(c.ws, &event)
+			err = websocket.JSON.Send(ws, &event)
 
-		if err != nil {
-			return err
+			if err != nil {
+				return err
+			}
 		}
 	}
+
+	delete(c.Listeners, common.ProcessHeader)
 
 	return nil
 }

@@ -21,6 +21,8 @@ const (
 	Linux   = "Linux"
 )
 
+type listenerMap map[common.PacketHeader]*websocket.Conn
+
 type Client struct {
 	net.Conn
 	common.Writer
@@ -45,7 +47,7 @@ type Client struct {
 
 	StreamingScreen bool
 
-	ws *websocket.Conn
+	Listeners listenerMap
 }
 
 func NewClient(conn net.Conn) *Client {
@@ -57,6 +59,7 @@ func NewClient(conn net.Conn) *Client {
 	client.Computer = common.Computer{}
 	client.Conn = conn
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
+	client.Listeners = make(map[common.PacketHeader]*websocket.Conn)
 
 	return client
 }
