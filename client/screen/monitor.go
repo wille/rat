@@ -6,7 +6,7 @@ package screen
 import "C"
 
 type Monitor struct {
-	id, x, y, width, height int
+	ID, X, Y, Width, Height int
 }
 
 var (

@@ -18,5 +18,6 @@ func MonitorCallback(cm C.Monitor) {
 }
 
 func QueryMonitors() {
+	Monitors = make([]Monitor, 0)
 	C.QueryMonitors()
 }

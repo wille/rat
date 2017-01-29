@@ -19,11 +19,11 @@ import (
 func Capture(monitor Monitor) image.Image {
 	var m C.Monitor
 
-	m.id = C.int(monitor.id)
-	m.coordinates.x = C.int(monitor.x)
-	m.coordinates.y = C.int(monitor.y)
-	m.coordinates.width = C.int(monitor.width)
-	m.coordinates.height = C.int(monitor.height)
+	m.id = C.int(monitor.ID)
+	m.coordinates.x = C.int(monitor.X)
+	m.coordinates.y = C.int(monitor.Y)
+	m.coordinates.width = C.int(monitor.Width)
+	m.coordinates.height = C.int(monitor.Height)
 
 	var len C.int
 
