@@ -2,8 +2,14 @@
 
 class ScreenView extends View {
 
+	private fps: HTMLElement;
+	private screenElement;
+	private screenEvent: ScreenEvent;
+
 	constructor(id: number) {
 		super("static/screen.html", "Screen", id);
+
+		this.fps = document.createElement("p");
 	}
 
 	onEnter() {
@@ -18,22 +24,32 @@ class ScreenView extends View {
 
 		this.initStream();
 
-		let screenElement = <HTMLImageElement>document.getElementById("screen");
-		Control.addEvent(Control.EventType.SCREEN, new ScreenEvent(screenElement, this.id));
-
 		let monitorsElement = <HTMLSelectElement>document.getElementById("monitors");
 		monitorsElement.addEventListener("change", () => this.initStream());
 		Control.addEvent(Control.EventType.MONITOR, new MonitorEvent(monitorsElement));
+
+		this.screenElement = <HTMLImageElement>document.getElementById("screen");
+		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
+			this.fps.innerHTML = fps + " FPS";
+		});
+
+		Control.addEvent(Control.EventType.SCREEN, this.screenEvent);
+
+		Statusbar.addElement(this.fps);
 	}
 
 	onLeave() {
 		Control.removeEvent(Control.EventType.SCREEN);
 		Control.removeEvent(Control.EventType.MONITOR);
 
+		Statusbar.removeElement(this.fps);
+
 		let data = JSON.stringify({
 			"Activate": false
 		});
 		Control.instance.write(Control.EventType.SCREEN, data, this.id);
+
+		this.screenEvent.stop();
 	}
 
 	// Sends screen event with new configuration
