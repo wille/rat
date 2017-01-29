@@ -51,6 +51,10 @@ func (packet ScreenPacket) Write(c *Connection) error {
 
 	var w bytes.Buffer
 
+	if packet.Monitor >= len(screen.Monitors) {
+		packet.Monitor = 0
+	}
+
 	img := screen.Capture(screen.Monitors[packet.Monitor])
 
 	if packet.Scale > 0 && packet.Scale < 1.0 {
