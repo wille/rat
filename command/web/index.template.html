@@ -1,16 +1,19 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="static/css/index.css">
-		
-		<script>
-			var id;
-		</script>
 
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	</head>
 	<body>
+		<!-- Shown on all views that will return to index view -->
+		<div id="subview_toolbar">
+			<a onclick="setMainView()">Back</a>
+		</div>
+		
+		<!-- Current view -->
 		<div id="view"></div>	
 
+		<!-- Statusbar -->
 		<div class="statusbar">
 			<p class="version">{{ Version }}</p>
 			<p id="error" class="error"></p>

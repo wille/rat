@@ -9,6 +9,8 @@ class IndexView extends View {
 	}
 
 	onEnter() {
+		$("#subview_toolbar").hide();
+
 		this.interval = update("#clients", "/clients #clients", 1000, () => {
 			this.updatePing();
 			this.updateOSIcons();
@@ -17,6 +19,7 @@ class IndexView extends View {
 
 	onLeave() {
 		clearInterval(this.interval);
+		$("#subview_toolbar").show();
 	}
 
 	private updatePing() {
