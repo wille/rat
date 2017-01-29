@@ -8,6 +8,7 @@ import (
 
 type ScreenPacket struct {
 	Activate bool
+	Scale    float32
 }
 
 func (packet ScreenPacket) GetHeader() common.PacketHeader {
@@ -15,7 +16,8 @@ func (packet ScreenPacket) GetHeader() common.PacketHeader {
 }
 
 func (packet ScreenPacket) Write(c *Client) error {
-	return c.WriteBool(packet.Activate)
+	c.WriteBool(packet.Activate)
+	return c.WriteFloat(packet.Scale)
 }
 
 func (packet ScreenPacket) Read(c *Client) error {

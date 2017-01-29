@@ -40,12 +40,11 @@ type Client struct {
 	}
 
 	Screen struct {
-		Buffer []byte
+		Streaming bool
+		Buffer    []byte
 	}
 
 	Queue chan OutgoingPacket
-
-	StreamingScreen bool
 
 	Listeners listenerMap
 }
@@ -146,6 +145,10 @@ func (c *Client) WriteInt(i int) error {
 	return binary.Write(c, common.ByteOrder, &i32)
 }
 
+func (c *Client) WriteFloat(f float32) error {
+	return binary.Write(c, common.ByteOrder, &f)
+}
+
 func (c *Client) WriteBool(b bool) error {
 	var byt byte
 
@@ -195,6 +198,12 @@ func (c *Client) ReadInt() (int, error) {
 	err := binary.Read(c, common.ByteOrder, &n)
 
 	return int(n), err
+}
+
+func (c *Client) ReadFloat() (float32, error) {
+	var f float32
+	err := binary.Read(c, common.ByteOrder, &f)
+	return f, err
 }
 
 func (c *Client) ReadBool() (bool, error) {

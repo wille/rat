@@ -30,6 +30,10 @@ func (c *Connection) WriteInt(i int) error {
 	return binary.Write(c, common.ByteOrder, &i32)
 }
 
+func (c *Connection) WriteFloat(f float32) error {
+	return binary.Write(c, common.ByteOrder, &f)
+}
+
 func (c *Connection) WriteBool(b bool) error {
 	var byt byte
 
@@ -73,11 +77,17 @@ func (c *Connection) ReadString() (string, error) {
 	return s, err
 }
 
-func (c *Connection) ReadInt() (int32, error) {
+func (c *Connection) ReadInt() (int, error) {
 	var n int32
 	err := binary.Read(c, common.ByteOrder, &n)
 
-	return n, err
+	return int(n), err
+}
+
+func (c *Connection) ReadFloat() (float32, error) {
+	var f float32
+	err := binary.Read(c, common.ByteOrder, &f)
+	return f, err
 }
 
 func (c *Connection) ReadBool() (bool, error) {

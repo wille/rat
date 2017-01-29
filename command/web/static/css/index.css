@@ -1,3 +1,9 @@
+/* Global */
+body {
+	font-family: arial, sans-serif;
+}
+
+/* Tables */
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -14,6 +20,7 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
+/* Clients */
 .ping-0::before {
 	content:url("../images/ping/ping0.png");
 }
@@ -38,10 +45,8 @@ tr:nth-child(even) {
 	content:url("../images/ping/ping5.png");
 }
 
-.error {
-	color: #ff0000;
-}
 
+/* Status bar */
 .statusbar {
 	font-family: arial, sans-serif;
 	color: #888888;
@@ -57,4 +62,13 @@ tr:nth-child(even) {
 
 .version::before {
 	content: "version: ";
+}
+
+.error {
+	color: #ff0000;
+}
+
+/* Screen scale selector */
+.scale {
+	display: inline-block;
 }
