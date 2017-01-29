@@ -5,7 +5,7 @@ class IndexView extends View {
 	private interval: number;
 
 	constructor() {
-		super("clients");
+		super("clients", "Clients");
 	}
 
 	onEnter() {

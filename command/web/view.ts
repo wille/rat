@@ -4,7 +4,7 @@ interface IView {
 }
 
 abstract class View implements IView {
-	constructor(public url: string, public id?: number) { }
+	constructor(public url: string, public title: string, public id?: number) { }
 
 	abstract onEnter();
 	abstract onLeave();
@@ -23,6 +23,8 @@ function setView(view: View) {
 		Connection.setConnectionStatus(status !== "error");
 		view.onEnter();
 	});
+
+	document.title = view.title;
 }
 
 // Helper functions to make it simple to call from HTML onclick or similar

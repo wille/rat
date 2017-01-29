@@ -3,7 +3,7 @@
 class ScreenView extends View {
 
 	constructor(id: number) {
-		super("static/screen.html", id);
+		super("static/screen.html", "Screen", id);
 	}
 
 	onEnter() {

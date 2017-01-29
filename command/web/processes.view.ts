@@ -3,7 +3,7 @@
 class ProcessView extends View {
 
 	constructor(id: number) {
-		super("static/processes.html", id);
+		super("static/processes.html", "Processes", id);
 	}
 
 	onEnter() {
