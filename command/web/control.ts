@@ -4,7 +4,8 @@ namespace Control {
 
 	export enum EventType {
 		SCREEN = 0,
-		PROCESS = 1
+		PROCESS = 1,
+		MONITOR = 2
 	}
 
 	export interface IncomingEvent {

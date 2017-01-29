@@ -12,7 +12,8 @@ import (
 var screenStream bool
 
 type ScreenPacket struct {
-	Scale float32
+	Scale   float32
+	Monitor int
 }
 
 func (packet ScreenPacket) GetHeader() common.PacketHeader {
@@ -30,10 +31,15 @@ func (packet ScreenPacket) Read(c *Connection) error {
 		return err
 	}
 
+	monitor, err := c.ReadInt()
+	if err != nil {
+		return err
+	}
+
 	if run {
 		// Dispatch one screen packet
 		screenStream = false
-		Queue <- ScreenPacket{scale}
+		Queue <- ScreenPacket{scale, monitor}
 		screenStream = run
 	}
 
@@ -45,7 +51,7 @@ func (packet ScreenPacket) Write(c *Connection) error {
 
 	var w bytes.Buffer
 
-	img := screen.Capture(screen.Monitors[0])
+	img := screen.Capture(screen.Monitors[packet.Monitor])
 
 	if packet.Scale > 0 && packet.Scale < 1.0 {
 		width := float32(img.Bounds().Max.X) * packet.Scale

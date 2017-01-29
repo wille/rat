@@ -23,6 +23,12 @@ const (
 
 type listenerMap map[common.PacketHeader]*websocket.Conn
 
+type Monitor struct {
+	ID     int `json:"id"`
+	Width  int `json:"w"`
+	Height int `json:"h"`
+}
+
 type Client struct {
 	net.Conn
 	common.Writer
@@ -47,6 +53,8 @@ type Client struct {
 	Queue chan OutgoingPacket
 
 	Listeners listenerMap
+
+	Monitors []Monitor
 }
 
 func NewClient(conn net.Conn) *Client {
@@ -59,6 +67,7 @@ func NewClient(conn net.Conn) *Client {
 	client.Conn = conn
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
 	client.Listeners = make(map[common.PacketHeader]*websocket.Conn)
+	client.Monitors = make([]Monitor, 0)
 
 	return client
 }

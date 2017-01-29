@@ -23,6 +23,7 @@ func InitPackets() {
 	packets[common.ComputerInfoHeader] = ComputerInfoPacket{}
 	packets[common.ScreenHeader] = ScreenPacket{}
 	packets[common.ProcessHeader] = ProcessPacket{}
+	packets[common.MonitorsHeader] = MonitorsPacket{}
 
 }
 

@@ -14,6 +14,7 @@ import (
 const (
 	ScreenUpdateEvent = 0
 	ProcessQueryEvent = 1
+	MonitorQueryEvent = 2
 )
 
 type Event struct {
@@ -25,6 +26,7 @@ type Event struct {
 type ScreenEvent struct {
 	Activate bool
 	Scale    float32
+	Monitor  int
 }
 
 func newEvent(event int, clientID int, data string) *Event {
@@ -56,13 +58,33 @@ func incomingWebSocket(ws *websocket.Conn) {
 			err := json.Unmarshal([]byte(event.Data), &screenEvent)
 
 			if err != nil {
-				fmt.Println("json:", err.Error())
+				fmt.Println("json:", err.Error(), event.Data)
 			}
 
 			stream := screenEvent.Activate
-			scale := screenEvent.Scale
 
-			packet := ScreenPacket{stream, scale}
+			if stream {
+				json, err := json.Marshal(&client.Monitors)
+
+				if err != nil {
+					fmt.Println("json:", err)
+				}
+
+				event := newEvent(MonitorQueryEvent, client.Id, string(json))
+
+				err = websocket.JSON.Send(ws, &event)
+
+				if err != nil {
+					fmt.Println("ws:", err)
+				}
+			}
+
+			scale := screenEvent.Scale
+			monitor := screenEvent.Monitor
+
+			client.Listeners[common.MonitorsHeader] = ws
+
+			packet := ScreenPacket{stream, scale, monitor}
 			client.Queue <- packet
 
 			if !client.Screen.Streaming {

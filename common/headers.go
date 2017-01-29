@@ -5,4 +5,5 @@ const (
 	ComputerInfoHeader PacketHeader = 5
 	ScreenHeader       PacketHeader = 10
 	ProcessHeader      PacketHeader = 11
+	MonitorsHeader     PacketHeader = 12
 )
