@@ -52,9 +52,9 @@ namespace Control {
 			}
 
 			this.socket.send(JSON.stringify({
-				"Event": eventType,
-				"ClientId": id,
-				"Data": data
+				"event": eventType,
+				"id": id,
+				"data": data
 			}));
 		}
 
@@ -78,7 +78,7 @@ namespace Control {
 
 		private onMessage(event) {
 			let data = JSON.parse(event.data);
-			Control.emit(data.Event, data.Data);
+			Control.emit(data.event, data.data);
 		}
 
 	}

@@ -46,9 +46,9 @@ class ScreenView extends View {
 		let monitor = !selected ? 0 : Number(selected.value);
 
 		let data = JSON.stringify({
-			"Activate": true,
-			"Scale": Number(scale) / 100,
-			"Monitor": monitor
+			"active": true,
+			"scale": Number(scale) / 100,
+			"monitor": monitor
 		});
 
 		Control.instance.write(Control.EventType.SCREEN, data, this.id);

@@ -18,15 +18,15 @@ const (
 )
 
 type Event struct {
-	Event    int
-	ClientId int
-	Data     string
+	Event    int    `json:"event"`
+	ClientId int    `json:"id"`
+	Data     string `json:"data"`
 }
 
 type ScreenEvent struct {
-	Activate bool
-	Scale    float32
-	Monitor  int
+	Activate bool    `json:"active"`
+	Scale    float32 `json:"scale"`
+	Monitor  int     `json:"monitor"`
 }
 
 func newEvent(event int, clientID int, data string) *Event {
