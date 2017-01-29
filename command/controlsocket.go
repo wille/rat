@@ -109,6 +109,13 @@ func InitControlSocket() {
 // ScreenStream streams screen to websocket
 func ScreenStream(client *Client, ws *websocket.Conn) {
 	for client.Screen.Streaming {
+		if !client.Screen.New {
+			time.Sleep(time.Millisecond)
+			continue
+		}
+
+		client.Screen.New = false
+
 		event := newEvent(ScreenUpdateEvent, client.Id, client.GetEncodedScreen())
 
 		err := websocket.JSON.Send(ws, &event)
@@ -118,6 +125,5 @@ func ScreenStream(client *Client, ws *websocket.Conn) {
 			return
 		}
 
-		time.Sleep(common.ScreenStreamWait)
 	}
 }

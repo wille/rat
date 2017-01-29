@@ -47,6 +47,7 @@ type Client struct {
 
 	Screen struct {
 		Streaming bool
+		New       bool
 		Buffer    []byte
 	}
 

@@ -34,6 +34,8 @@ func (packet ScreenPacket) Read(c *Client) error {
 
 	rlen, err := io.ReadFull(c, c.Screen.Buffer)
 
+	c.Screen.New = true
+
 	if rlen != len {
 		return errors.New("EOF")
 	}
