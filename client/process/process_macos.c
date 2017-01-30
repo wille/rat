@@ -1,3 +1,5 @@
+//+build darwin
+
 #include <sys/sysctl.h>
 #include <stdlib.h>
 #include <stdio.h>

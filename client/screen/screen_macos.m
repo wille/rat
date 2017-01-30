@@ -1,3 +1,5 @@
+//+build darwin
+
 #import <ApplicationServices/ApplicationServices.h>
 
 #include "bitmap.h"
@@ -67,6 +69,7 @@ char *GetScreenshot(Monitor monitor, int *size) {
 	}
 
 	CGContextRelease(cgctx);
+	CGImageRelease(image);
 
 	if (data) {
 		free(data);
@@ -115,7 +118,7 @@ CGContextRef CreateARGBBitmapContext(CGImageRef inImage) {
     context = CGBitmapContextCreate(bitmapData, pixelsWide, pixelsHigh, 8, // bits per component
 					bitmapBytesPerRow,
 				    colorSpace,
-				    kCGImageAlphaPremultipliedLast);
+					(CGBitmapInfo) kCGImageAlphaPremultipliedLast);
 
     if (context == NULL) {
 		free(bitmapData);
