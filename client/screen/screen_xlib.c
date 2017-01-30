@@ -11,25 +11,33 @@
 
 void QueryMonitors(void) {
 	Display *display;
-    int screen;
+    Screen *screen;
     Window root;
     display = XOpenDisplay(NULL);
-    screen = DefaultScreen(display);
-    root = RootWindow(display, screen);
-    XWindowAttributes gwa;
+	
+	int screen_count = ScreenCount(display);
+	int i;
+	for (i = 0; i < screen_count; i++) {
+		screen = ScreenOfDisplay(display, i);
+		int screen_number = *(int*)screen;
 
-    XGetWindowAttributes(display, root, &gwa);
+		root = RootWindow(display, screen_number);
+		XWindowAttributes gwa;
+
+		XGetWindowAttributes(display, root, &gwa);
+
+		Monitor m;
+
+		m.id = screen_number;
+		m.coordinates.x = gwa.x;
+		m.coordinates.y = gwa.y;
+		m.coordinates.width = gwa.width;
+		m.coordinates.height = gwa.height;
+
+		MonitorCallback(m);
+	}
 
 	XCloseDisplay(display);
-
-   	Monitor m;
-
-	m.coordinates.x = gwa.x;
-	m.coordinates.y = gwa.y;
-	m.coordinates.width = gwa.width;
-	m.coordinates.height = gwa.height;
-
-	MonitorCallback(m);
 }
 
 char *GetScreenshot(Monitor monitor, int *size) {
