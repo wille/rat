@@ -1,0 +1,1 @@
+extern int Install(char *name, char *path);
