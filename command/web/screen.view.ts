@@ -45,7 +45,7 @@ class ScreenView extends View {
 		Statusbar.removeElement(this.fps);
 
 		let data = JSON.stringify({
-			"Activate": false
+			"active": false
 		});
 		Control.instance.write(Control.EventType.SCREEN, data, this.id);
 
