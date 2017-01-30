@@ -31,3 +31,7 @@ func GetComputerInformation() common.Computer {
 
 	return info
 }
+
+func IsRoot() bool {
+	return GetComputerInformation().Username == "root"
+}
