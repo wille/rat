@@ -34,10 +34,12 @@ namespace Icons {
 
 		switch (type) {
 		case "windows":
-		case "mac": // Mac OS X
-		case "macos":
 		case "linux":
 			icon = "os_" + type;
+			break;
+		case "mac": // Mac OS X
+		case "macos":
+			icon = "os_mac";
 			break;
 		case "debian":
 		case "ubuntu":
