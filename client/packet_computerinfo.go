@@ -15,7 +15,7 @@ func (packet ComputerInfoPacket) GetHeader() common.PacketHeader {
 }
 
 func (packet ComputerInfoPacket) Write(c *Connection) error {
-	u := userinfo.GetComputerInformation()
+	u := computer.GetComputerInformation()
 
 	c.WriteString(u.Username)
 	c.WriteString(u.Hostname)

@@ -1,6 +1,6 @@
-// +build !windows
+//+build !windows
 
-package userinfo
+package computer
 
 import (
 	"fmt"

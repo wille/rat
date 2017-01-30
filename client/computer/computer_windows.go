@@ -1,4 +1,4 @@
-package userinfo
+package computer
 
 /*
 #include <windows.h>
