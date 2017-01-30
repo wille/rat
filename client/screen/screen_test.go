@@ -19,10 +19,10 @@ func TestQueryMonitors(t *testing.T) {
 
 func TestScreenshot(t *testing.T) {
 	for _, monitor := range Monitors {
-		fmt.Println("Capturing monitor", monitor.id)
+		fmt.Println("Capturing monitor", monitor.ID)
 		img := Capture(monitor)
 
-		file, err := os.Create("test" + strconv.Itoa(monitor.id) + ".jpg")
+		file, err := os.Create("test" + strconv.Itoa(monitor.ID) + ".jpg")
 
 		if err != nil {
 			fmt.Println("error", err.Error())
