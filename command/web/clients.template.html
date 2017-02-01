@@ -29,7 +29,7 @@
 				<td>
 					<a onclick="setScreenView({{ .Id }});">Screen</a>
 					<a onclick="setProcessesView({{ .Id }});">Processes</a>
-					<a onclick="setDirectoryView({{ .Id }});">Files</a>
+					<a onclick="setDirectoryView({{ .Id }}, {{ .GetPathSep }});">Files</a>
 				</td>
 			</tr>
 			{{ end }}

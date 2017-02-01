@@ -115,6 +115,14 @@ func (c *Client) GetPing() string {
 	return strconv.Itoa(c.Ping.Current) + " ms"
 }
 
+func (c *Client) GetPathSep() string {
+	if c.Computer.OperatingSystemType == Windows {
+		return "\\"
+	}
+
+	return "/"
+}
+
 func (client *Client) PacketReader() {
 	for {
 		header, err := client.ReadHeader()

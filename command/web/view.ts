@@ -40,6 +40,6 @@ function setProcessesView(id: number) {
 	setView(new ProcessView(id));
 }
 
-function setDirectoryView(id: number) {
-	setView(new DirectoryView(id));
+function setDirectoryView(id: number, separator: string) {
+	setView(new DirectoryView(id, separator));
 }
