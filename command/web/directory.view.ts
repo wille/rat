@@ -2,7 +2,7 @@
 
 class DirectoryView extends View {
 
-	private current: string;
+	private currentDirectory: string;
 
 	constructor(id: number, private separator: string) {
 		super("static/files.html", "File Browser", id);
@@ -19,8 +19,21 @@ class DirectoryView extends View {
 		Control.removeEvent(Control.EventType.DIRECTORY);
 	}
 
-	private get backElement() {
+	private get current(): string {
+		return this.currentDirectory;
+	}
+
+	private set current(dir: string) {
+		this.currentDirectory = dir;
+		this.directoryElement.value = dir;
+	}
+
+	private get backElement(): HTMLElement {
 		return document.getElementById("back");
+	}
+
+	public get directoryElement(): HTMLInputElement {
+		return <HTMLInputElement>document.getElementById("dir");
 	}
 
 	public get table(): HTMLTableElement {
