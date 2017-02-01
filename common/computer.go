@@ -9,7 +9,14 @@ type Computer struct {
 }
 
 func (ui *Computer) GetDisplayName() string {
-	display := ui.Username + "@" + ui.Hostname
+	var display string
+
+	if ui.OperatingSystemType == Windows {
+		display = ui.Hostname + "\\" + ui.Username
+	} else {
+		display = ui.Username + "@" + ui.Hostname
+
+	}
 
 	return display
 }
