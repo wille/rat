@@ -31,6 +31,10 @@ func (c *Connection) WriteInt(i int) error {
 	return binary.Write(c, common.ByteOrder, &i32)
 }
 
+func (c *Connection) WriteInt64(i int64) error {
+	return binary.Write(c, common.ByteOrder, &i)
+}
+
 func (c *Connection) WriteFloat(f float32) error {
 	return binary.Write(c, common.ByteOrder, &f)
 }
@@ -83,6 +87,12 @@ func (c *Connection) ReadInt() (int, error) {
 	err := binary.Read(c, common.ByteOrder, &n)
 
 	return int(n), err
+}
+
+func (c *Connection) ReadInt64() (int64, error) {
+	var n int64
+	err := binary.Read(c, common.ByteOrder, &n)
+	return n, err
 }
 
 func (c *Connection) ReadFloat() (float32, error) {
