@@ -13,6 +13,7 @@ cert:
 
 clean:
 	cd client/screen/ && rm -f *.bmp *.jpg
-	rm -rf command/web/scripts/
 	rm -f debug.bmp
 	rm -f *.exe
+	rm -f command/command client/client command/command.exe client/client.exe
+	rm -f command/debug client/debug
