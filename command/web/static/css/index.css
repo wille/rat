@@ -16,10 +16,6 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
-
 /* Clients */
 .ping-0::before {
 	content:url("../images/ping/ping0.png");
