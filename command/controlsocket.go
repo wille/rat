@@ -12,9 +12,10 @@ import (
 )
 
 const (
-	ScreenUpdateEvent = 0
-	ProcessQueryEvent = 1
-	MonitorQueryEvent = 2
+	ScreenUpdateEvent   = 0
+	ProcessQueryEvent   = 1
+	MonitorQueryEvent   = 2
+	DirectoryQueryEvent = 3
 )
 
 type Event struct {
@@ -27,6 +28,10 @@ type ScreenEvent struct {
 	Activate bool    `json:"active"`
 	Scale    float32 `json:"scale"`
 	Monitor  int     `json:"monitor"`
+}
+
+type DirectoryRequestEvent struct {
+	Path string `json:"path"`
 }
 
 func newEvent(event int, clientID int, data string) *Event {
@@ -98,6 +103,16 @@ func incomingWebSocket(ws *websocket.Conn) {
 		} else if event.Event == ProcessQueryEvent {
 			client.Listeners[common.ProcessHeader] = ws
 			client.Queue <- ProcessPacket{}
+		} else if event.Event == DirectoryQueryEvent {
+			var directoryEvent DirectoryRequestEvent
+			err := json.Unmarshal([]byte(event.Data), &directoryEvent)
+
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			client.Listeners[common.DirectoryHeader] = ws
+			client.Queue <- DirectoryPacket{directoryEvent.Path}
 		}
 	}
 }

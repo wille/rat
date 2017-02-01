@@ -22,6 +22,7 @@ func InitPackets() {
 	packets[common.PingHeader] = Ping{}
 	packets[common.ScreenHeader] = ScreenPacket{}
 	packets[common.ProcessHeader] = ProcessPacket{}
+	packets[common.DirectoryHeader] = DirectoryPacket{}
 
 }
 

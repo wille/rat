@@ -39,3 +39,7 @@ function setScreenView(id: number) {
 function setProcessesView(id: number) {
 	setView(new ProcessView(id));
 }
+
+function setDirectoryView(id: number) {
+	setView(new DirectoryView(id));
+}

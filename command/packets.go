@@ -24,6 +24,7 @@ func InitPackets() {
 	packets[common.ScreenHeader] = ScreenPacket{}
 	packets[common.ProcessHeader] = ProcessPacket{}
 	packets[common.MonitorsHeader] = MonitorsPacket{}
+	packets[common.DirectoryHeader] = DirectoryPacket{}
 
 }
 
