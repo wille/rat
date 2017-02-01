@@ -23,6 +23,8 @@ class DirectoryEvent implements Control.IncomingEvent {
 				};
 			}
 
+			pathCell.className = Icons.getFileIcon(entry.path, entry.directory);
+
 			let sizeCell = row.insertCell(1);
 			if (entry.size !== "0 B") {
 				sizeCell.innerHTML = entry.size;

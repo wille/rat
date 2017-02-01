@@ -1,0 +1,23 @@
+.directory::before {
+	content:url("../images/files/folder.png");
+}
+
+.file::before {
+	content:url("../images/files/file.png");
+}
+
+.archive::before {
+	content:url("../images/files/archive.png");
+}
+
+.script::before {
+	content:url("../images/files/script.png");
+}
+
+.application::before {
+	content:url("../images/files/application.png");
+}
+
+table.files {
+	font-size: 16px;
+}

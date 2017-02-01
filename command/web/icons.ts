@@ -59,4 +59,42 @@ namespace Icons {
 
 		return "static/images/os/" + icon + ".png";
 	}
+
+	export function getFileIcon(name: string, isDir?: boolean) {
+		if (isDir) {
+			return "directory";
+		}
+
+		if (name.indexOf(".") !== -1) {
+			let ext = name.substring(name.lastIndexOf("."), name.length).toLowerCase();
+			let type: string;
+
+			switch (ext) {
+				case ".zip":
+				case ".tar":
+				case ".gz":
+					type = "archive";
+					break;
+				case ".js":
+				case ".sh":
+				case ".bash":
+					type = "script";
+					break;
+				case ".bat":
+				case ".cmd":
+				case ".exe":
+				case ".jar":
+					type = "application";
+					break;
+				default:
+					type = "file";
+					break;
+			}
+
+			return type;
+		}
+
+		return "file";
+
+	}
 }
