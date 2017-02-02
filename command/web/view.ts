@@ -43,3 +43,7 @@ function setProcessesView(id: number) {
 function setDirectoryView(id: number, separator: string) {
 	setView(new DirectoryView(id, separator));
 }
+
+function setBuildView() {
+	setView(new BuildView());
+}

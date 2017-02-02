@@ -44,6 +44,9 @@ func main() {
 			panic(err)
 		}
 	})
+	http.HandleFunc("/build", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Built"))
+	})
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
 	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./web/scripts"))))
 
