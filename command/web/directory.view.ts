@@ -12,7 +12,7 @@ class DirectoryView extends View {
 		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this, this.id));
 		this.backElement.onclick = () => this.back();
 
-		this.browse("C:");
+		this.browse("");
 	}
 
 	onLeave() {
@@ -58,15 +58,19 @@ class DirectoryView extends View {
 			this.current = "";
 		}
 
-		path = this.current + path + this.separator;
+		if (path !== "") {
+			path = this.current + path + this.separator;
+			this.current = path;
 
-		this.current = path;
+			document.title = this.title + " (" + path + ")";
+		} else {
+			document.title = this.title;
+		}
 
 		let data = JSON.stringify({
 			"path": path
 		});
 
 		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
-		document.title = this.title + " (" + path + ")";
 	}
 }
