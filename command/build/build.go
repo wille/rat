@@ -81,8 +81,6 @@ func Build(c *BuildConfig, w io.Writer) error {
 			binary.Write(temp, common.ByteOrder, offset)
 
 			temp.Close()
-
-			break
 		}
 	}
 
