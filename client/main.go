@@ -6,7 +6,11 @@ import (
 )
 
 func main() {
-	InitPackets()
+	err := ParseConfig()
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 
 	for {
 		host := "localhost:9999"

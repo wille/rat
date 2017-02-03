@@ -17,13 +17,12 @@ type IncomingPacket interface {
 	Read(c *Connection) error
 }
 
-func InitPackets() {
+func init() {
 	packets = make(PacketMap)
 	packets[common.PingHeader] = Ping{}
 	packets[common.ScreenHeader] = ScreenPacket{}
 	packets[common.ProcessHeader] = ProcessPacket{}
 	packets[common.DirectoryHeader] = DirectoryPacket{}
-
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {
