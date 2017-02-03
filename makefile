@@ -1,5 +1,5 @@
 BUILD=go build
-PROD=go build -ldflags="-w -s"
+PROD=go build -ldflags="-w -s" --tags="prod"
 
 default: web
 	cd client && $(BUILD) -o ../client.exe
