@@ -23,20 +23,23 @@ class BuildView extends View {
 	private get os() {
 		let element = <HTMLSelectElement>document.getElementById("os");
 		let option = <HTMLOptionElement>element.options[element.selectedIndex]
-		
 		return option.value;
 	}
-	
+
 	private get arch() {
 		let element = <HTMLSelectElement>document.getElementById("arch");
 		let option = <HTMLOptionElement>element.options[element.selectedIndex]
-		
 		return option.value;
 	}
-	
+
 	private get delay(): number {
 		let element = <HTMLInputElement>document.getElementById("delay");
 		return Number(element.value);
+	}
+
+	private get upx(): boolean {
+		let element = <HTMLInputElement>document.getElementById("upx");
+		return Boolean(element.checked);
 	}
 
 	private build() {
@@ -44,7 +47,8 @@ class BuildView extends View {
 			"host": this.host,
 			"os": this.os,
 			"arch": this.arch,
-			"delay": this.delay
+			"delay": this.delay,
+			"upx": this.upx
 		};
 
 		let log = document.getElementById("log");
