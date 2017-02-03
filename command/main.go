@@ -49,7 +49,7 @@ func main() {
 	})
 	http.HandleFunc("/build", func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
-		var config build.BuildConfig
+		var config build.Config
 		decoder.Decode(&config)
 		err := build.Build(&config, w)
 

