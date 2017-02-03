@@ -39,6 +39,18 @@ func Build(c *BuildConfig, w io.Writer) error {
 		archs = []string{c.TargetArch}
 	}
 
+	config := common.BinaryConfig{
+		Host:  c.Host,
+		Delay: c.Delay,
+	}
+
+	fmt.Println("Encoded config:", config)
+
+	encoded, err := json.Marshal(&config)
+	if err != nil {
+		return err
+	}
+
 	for _, ost := range oss {
 		for _, arch := range archs {
 			ext := ""
@@ -69,14 +81,6 @@ func Build(c *BuildConfig, w io.Writer) error {
 			offset := stat.Size() // int64
 			fmt.Println("Offset:", offset)
 
-			config := common.BinaryConfig{
-				Host:  c.Host,
-				Delay: c.Delay,
-			}
-
-			fmt.Println("Encoded config:", config)
-
-			encoded, err := json.Marshal(&config)
 			temp.Write(encoded)
 			binary.Write(temp, common.ByteOrder, offset)
 
