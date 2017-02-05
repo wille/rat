@@ -7,7 +7,8 @@ namespace Control {
 		PROCESS = 1, // process.event.ts
 		MONITOR = 2, // monitor.event.ts
 		DIRECTORY = 3, // directory.event.ts
-		DOWNLOAD = 4 // download.event.ts
+		DOWNLOAD = 4, // download.event.ts
+		MOUSE_MOVE = 10
 	}
 
 	export interface IncomingEvent {

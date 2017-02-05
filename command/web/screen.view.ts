@@ -29,6 +29,15 @@ class ScreenView extends View {
 		Control.addEvent(Control.EventType.MONITOR, new MonitorEvent(monitorsElement));
 
 		this.screenElement = <HTMLImageElement>document.getElementById("screen");
+		this.screenElement.onmousemove = (event) => {
+			let data = JSON.stringify({
+				"id": this.monitor,
+				"x": event.offsetX / (this.scale / 100),
+				"y": event.offsetY / (this.scale / 100)
+			});
+			Control.instance.write(Control.EventType.MOUSE_MOVE, data, this.id);
+		};
+
 		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
 			this.fps.innerHTML = fps + " FPS";
 		});
@@ -52,19 +61,27 @@ class ScreenView extends View {
 		this.screenEvent.stop();
 	}
 
-	// Sends screen event with new configuration
-	private initStream() {
-		let scaleElement = <HTMLInputElement>document.getElementById("scale");
-		let scale  = scaleElement.value;
-
+	private get monitor(): number {
 		let monitorsElement = <HTMLSelectElement>document.getElementById("monitors");
 		let selected = monitorsElement.options[monitorsElement.selectedIndex];
 		let monitor = !selected ? 0 : Number(selected.value);
 
+		return monitor;
+	}
+
+	private get scale(): number {
+		let scaleElement = <HTMLInputElement>document.getElementById("scale");
+		let scale  = scaleElement.value;
+
+		return Number(scale);
+	}
+
+	// Sends screen event with new configuration
+	private initStream() {
 		let data = JSON.stringify({
 			"active": true,
-			"scale": Number(scale) / 100,
-			"monitor": monitor
+			"scale": this.scale / 100,
+			"monitor": this.monitor
 		});
 
 		Control.instance.write(Control.EventType.SCREEN, data, this.id);

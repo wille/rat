@@ -25,6 +25,7 @@ func init() {
 	packets[common.DirectoryHeader] = DirectoryPacket{}
 	packets[common.PutFileHeader] = DownloadPacket{}
 	packets[common.GetFileHeader] = UploadPacket{}
+	packets[common.MouseMoveHeader] = MouseMovePacket{}
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {
