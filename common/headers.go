@@ -7,4 +7,5 @@ const (
 	ProcessHeader      PacketHeader = 11
 	MonitorsHeader     PacketHeader = 12
 	DirectoryHeader    PacketHeader = 13
+	TransferHeader     PacketHeader = 14
 )

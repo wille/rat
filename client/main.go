@@ -31,6 +31,7 @@ func main() {
 		}
 
 		Queue = make(chan OutgoingPacket)
+		Transfers = make(TransfersMap)
 
 		go func() {
 			for {

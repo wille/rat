@@ -12,6 +12,9 @@ class DirectoryView extends View {
 		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this, this.id));
 		this.backElement.onclick = () => this.back();
 
+		let element = document.getElementById("upload");
+		element.onclick = () => this.upload();
+
 		this.browse("");
 	}
 
@@ -72,5 +75,54 @@ class DirectoryView extends View {
 		});
 
 		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
+	}
+
+	private upload() {
+		let form = document.createElement("form");
+
+		let dir = document.createElement("input");
+		dir.setAttribute("type", "hidden");
+		dir.setAttribute("name", "directory");
+		dir.setAttribute("value", this.current);
+		form.appendChild(dir);
+
+		let id = document.createElement("input");
+		id.setAttribute("type", "hidden");
+		id.setAttribute("name", "id");
+		id.setAttribute("value", String(this.id));
+		form.appendChild(id);
+
+		let input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("name", "file");
+		form.appendChild(input);
+
+		input.onchange = (event) => {
+			let file = input.files[0];
+			console.log(file);
+
+			let req = new XMLHttpRequest();
+			req.addEventListener("progress", (progressEvent) => {
+				if (progressEvent.lengthComputable) {
+					let percentComplete = progressEvent.loaded / progressEvent.total;
+					console.log(percentComplete + "%");
+				} else {
+					console.log(progressEvent);
+				}
+			});
+			req.addEventListener("load", () => {
+				console.log("Transfer complete");
+			});
+			req.addEventListener("error", (errorEvent) => {
+				console.log(errorEvent);
+			});
+			req.open("post", "/upload");
+			req.send(new FormData(form));
+		};
+		input.click();
+
+		let data = JSON.stringify({
+			"path": this.current
+		});
 	}
 }

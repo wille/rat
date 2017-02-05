@@ -7,4 +7,6 @@ const (
 
 	// Version global version number
 	Version = "0.0"
+
+	TransferPacketSize int64 = 1024 * 8
 )

