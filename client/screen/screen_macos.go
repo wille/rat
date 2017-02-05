@@ -30,13 +30,7 @@ func init() {
 }
 
 func Capture(monitor Monitor) image.Image {
-	var m C.Monitor
-
-	m.id = C.int(monitor.ID)
-	m.coordinates.x = C.int(monitor.X)
-	m.coordinates.y = C.int(monitor.Y)
-	m.coordinates.width = C.int(monitor.Width)
-	m.coordinates.height = C.int(monitor.Height)
+	m := cMonitor(monitor)
 
 	var len C.int
 
