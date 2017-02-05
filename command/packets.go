@@ -25,7 +25,8 @@ func InitPackets() {
 	packets[common.ProcessHeader] = ProcessPacket{}
 	packets[common.MonitorsHeader] = MonitorsPacket{}
 	packets[common.DirectoryHeader] = DirectoryPacket{}
-
+	packets[common.TransferHeader] = UploadPacket{}
+	packets[common.GetFileHeader] = DownloadPacket{}
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {

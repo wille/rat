@@ -6,7 +6,8 @@ namespace Control {
 		SCREEN = 0, // screen.event.ts
 		PROCESS = 1, // process.event.ts
 		MONITOR = 2, // monitor.event.ts
-		DIRECTORY = 3 // directory.event.ts
+		DIRECTORY = 3, // directory.event.ts
+		DOWNLOAD = 4 // download.event.ts
 	}
 
 	export interface IncomingEvent {

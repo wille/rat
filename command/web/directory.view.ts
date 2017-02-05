@@ -9,6 +9,7 @@ class DirectoryView extends View {
 	}
 
 	onEnter() {
+		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
 		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this, this.id));
 		this.backElement.onclick = () => this.back();
 
@@ -19,14 +20,15 @@ class DirectoryView extends View {
 	}
 
 	onLeave() {
+		Control.removeEvent(Control.EventType.DOWNLOAD);;
 		Control.removeEvent(Control.EventType.DIRECTORY);
 	}
 
-	private get current(): string {
+	public get current(): string {
 		return this.currentDirectory;
 	}
 
-	private set current(dir: string) {
+	public set current(dir: string) {
 		this.currentDirectory = dir;
 		this.directoryElement.value = dir;
 	}
@@ -120,9 +122,5 @@ class DirectoryView extends View {
 			req.send(new FormData(form));
 		};
 		input.click();
-
-		let data = JSON.stringify({
-			"path": this.current
-		});
 	}
 }

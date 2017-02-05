@@ -8,4 +8,5 @@ const (
 	MonitorsHeader     PacketHeader = 12
 	DirectoryHeader    PacketHeader = 13
 	TransferHeader     PacketHeader = 14
+	GetFileHeader      PacketHeader = 15 // Download file from client
 )
