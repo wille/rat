@@ -86,6 +86,12 @@ namespace Icons {
 				case ".jar":
 					type = "application";
 					break;
+				case ".png":
+				case ".jpg":
+				case ".jpeg":
+				case ".gif":
+					type = "image";
+					break;
 				default:
 					type = "file";
 					break;

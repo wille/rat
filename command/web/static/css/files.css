@@ -18,6 +18,10 @@
 	content:url("../images/files/application.png");
 }
 
+.image::before {
+	content:url("../images/files/image.png");
+}
+
 table.files {
 	font-size: 16px;
 }
