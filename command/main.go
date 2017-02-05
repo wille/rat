@@ -11,8 +11,13 @@ import (
 	"strconv"
 )
 
+type TempFile struct {
+	Path string
+	Name string
+}
+
 // TempFiles contains mappings to downloaded files in temporary directory
-var TempFiles map[string]string
+var TempFiles map[string]TempFile
 
 type ClientPage struct {
 	*Client
@@ -84,7 +89,9 @@ func main() {
 	})
 	http.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
 		if file, ok := TempFiles[r.FormValue("key")]; ok {
-			http.ServeFile(w, r, file)
+			w.Header().Set("Content-Disposition", "attachment; filename="+file.Name)
+
+			http.ServeFile(w, r, file.Path)
 		}
 	})
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static"))))
@@ -97,7 +104,7 @@ func main() {
 
 func init() {
 	InitPackets()
-	TempFiles = make(map[string]string)
+	TempFiles = make(map[string]TempFile)
 }
 
 func GetClient(id int) *Client {
