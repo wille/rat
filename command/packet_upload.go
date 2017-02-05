@@ -11,7 +11,7 @@ type UploadPacket struct {
 }
 
 func (packet UploadPacket) GetHeader() common.PacketHeader {
-	return common.TransferHeader
+	return common.PutFileHeader
 }
 
 func (packet UploadPacket) Write(c *Client) error {

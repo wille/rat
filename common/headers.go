@@ -7,6 +7,6 @@ const (
 	ProcessHeader      PacketHeader = 11
 	MonitorsHeader     PacketHeader = 12
 	DirectoryHeader    PacketHeader = 13
-	TransferHeader     PacketHeader = 14
+	PutFileHeader      PacketHeader = 14 // Upload file to client
 	GetFileHeader      PacketHeader = 15 // Download file from client
 )

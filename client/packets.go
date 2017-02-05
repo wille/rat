@@ -23,7 +23,7 @@ func init() {
 	packets[common.ScreenHeader] = ScreenPacket{}
 	packets[common.ProcessHeader] = ProcessPacket{}
 	packets[common.DirectoryHeader] = DirectoryPacket{}
-	packets[common.TransferHeader] = DownloadPacket{}
+	packets[common.PutFileHeader] = DownloadPacket{}
 	packets[common.GetFileHeader] = UploadPacket{}
 }
 

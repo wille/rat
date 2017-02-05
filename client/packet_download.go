@@ -18,7 +18,7 @@ func init() {
 }
 
 func (packet DownloadPacket) GetHeader() common.PacketHeader {
-	return common.TransferHeader
+	return common.PutFileHeader
 }
 
 func (packet DownloadPacket) Write(c *Connection) error {
