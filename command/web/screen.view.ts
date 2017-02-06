@@ -30,12 +30,14 @@ class ScreenView extends View {
 
 		this.screenElement = <HTMLImageElement>document.getElementById("screen");
 		this.screenElement.onmousemove = (event) => {
-			let data = JSON.stringify({
-				"id": this.monitor,
-				"x": event.offsetX / (this.scale / 100),
-				"y": event.offsetY / (this.scale / 100)
-			});
-			Control.instance.write(Control.EventType.MOUSE_MOVE, data, this.id);
+			if (this.moveMouse) {
+				let data = JSON.stringify({
+					"id": this.monitor,
+					"x": event.offsetX / (this.scale / 100),
+					"y": event.offsetY / (this.scale / 100)
+				});
+				Control.instance.write(Control.EventType.MOUSE_MOVE, data, this.id);
+			}
 		};
 
 		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
@@ -74,6 +76,12 @@ class ScreenView extends View {
 		let scale  = scaleElement.value;
 
 		return Number(scale);
+	}
+
+	private get moveMouse() {
+		let element = <HTMLInputElement>document.getElementById("cursor");
+
+		return element.checked;
 	}
 
 	// Sends screen event with new configuration
