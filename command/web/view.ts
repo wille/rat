@@ -47,3 +47,7 @@ function setDirectoryView(id: number, separator: string) {
 function setBuildView() {
 	setView(new BuildView());
 }
+
+function setTransfersView() {
+	setView(new TransfersView());
+}
