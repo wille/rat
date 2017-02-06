@@ -79,11 +79,11 @@ func Build(c *Config, w io.Writer) error {
 				return err
 			}
 
-			offset := stat.Size() // int64
+			offset := int32(stat.Size()) // 32 bit integer
 			fmt.Println("Offset:", offset)
 
 			temp.Write(encoded)
-			binary.Write(temp, common.ByteOrder, offset)
+			binary.Write(temp, common.ByteOrder, offset) // write offset as int (4 bytes)
 
 			temp.Close()
 		}
