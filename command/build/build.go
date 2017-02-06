@@ -18,6 +18,7 @@ type Config struct {
 	Host       string `json:"host"`
 	Delay      int    `json:"delay"`
 	UPX        bool   `json:"upx"`
+	Name       string `json:"name"`
 }
 
 func Build(c *Config, w io.Writer) error {
@@ -44,6 +45,7 @@ func Build(c *Config, w io.Writer) error {
 	config := common.BinaryConfig{
 		Host:  c.Host,
 		Delay: c.Delay,
+		Name:  c.Name,
 	}
 
 	fmt.Println("Encoded config:", config)

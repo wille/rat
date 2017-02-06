@@ -15,6 +15,11 @@ class BuildView extends View {
 
 	}
 
+	private get name() {
+		let element = <HTMLInputElement>document.getElementById("name");
+		return element.value;
+	}
+
 	private get host() {
 		let element = <HTMLInputElement>document.getElementById("host");
 		return element.value;
@@ -48,7 +53,8 @@ class BuildView extends View {
 			"os": this.os,
 			"arch": this.arch,
 			"delay": this.delay,
-			"upx": this.upx
+			"upx": this.upx,
+			"name": this.name
 		};
 
 		let log = document.getElementById("log");

@@ -4,4 +4,5 @@ package common
 type BinaryConfig struct {
 	Host  string `json:"host"`
 	Delay int    `json:"delay"`
+	Name  string `json:"name"`
 }
