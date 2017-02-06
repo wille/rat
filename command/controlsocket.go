@@ -160,8 +160,6 @@ func incomingWebSocket(ws *websocket.Conn) {
 			client.Listeners[common.GetFileHeader] = ws
 			Transfers[downloadEvent.File] = Transfer{file, downloadEvent.File}
 			client.Queue <- DownloadPacket{downloadEvent.File}
-
-			DisplayTransfers = append(DisplayTransfers, DisplayTransfer{})
 		} else if event.Event == MouseMove {
 			var mouseEvent MouseMoveEvent
 			err := json.Unmarshal([]byte(event.Data), &mouseEvent)
