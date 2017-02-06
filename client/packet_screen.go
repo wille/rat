@@ -40,8 +40,9 @@ func (packet ScreenPacket) Read(c *Connection) error {
 		// Dispatch one screen packet
 		screenStream = false
 		Queue <- ScreenPacket{scale, monitor}
-		screenStream = run
 	}
+
+	screenStream = run
 
 	return err
 }
