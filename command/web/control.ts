@@ -43,7 +43,11 @@ namespace Control {
 			for (let t of Transfers.TRANSFERS) {
 				if (t.remote == data.file) {
 					t.progress = (data.read / data.total) * 100;
-					console.log("read", data.read, "total", data.total);
+
+					if (data.read === data.total) {
+						t.setStatus(Transfers.Status.COMPLETE);
+					}
+
 					break;
 				}
 			}

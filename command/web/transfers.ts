@@ -40,7 +40,7 @@ class Transfer {
 
 	public id: number;
 	public progress: number;
-	private status: Transfers.Status;
+	public status: Transfers.Status;
 
 	constructor(public remote: string, public local?: string) {
 		this.id = Math.random();
