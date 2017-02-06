@@ -63,6 +63,10 @@ class DirectoryView extends View {
 			this.current = "";
 		}
 
+		if (this.separator == "/" && this.current == "" && path == "") {
+			this.current = "/";
+		}
+
 		if (path !== "") {
 			path = this.current + path + this.separator;
 			this.current = path;
