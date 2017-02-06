@@ -11,6 +11,7 @@ type UploadPacket struct {
 	File  string
 	Final bool
 	Data  []byte
+	Total int64
 }
 
 func (packet UploadPacket) GetHeader() common.PacketHeader {
@@ -19,6 +20,8 @@ func (packet UploadPacket) GetHeader() common.PacketHeader {
 
 func (packet UploadPacket) Write(c *Connection) error {
 	c.WriteString(packet.File)
+
+	c.WriteInt64(packet.Total)
 	c.WriteBool(packet.Final)
 
 	c.WriteInt(len(packet.Data))
@@ -33,7 +36,12 @@ func (packet UploadPacket) Read(c *Connection) error {
 		final := false
 		local, err := os.Open(file)
 		defer local.Close()
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
 
+		stat, err := local.Stat()
 		if err != nil {
 			fmt.Println(err.Error())
 			return
@@ -49,7 +57,7 @@ func (packet UploadPacket) Read(c *Connection) error {
 				fmt.Println(err.Error())
 				return
 			}
-			Queue <- UploadPacket{file, final, data[:read]}
+			Queue <- UploadPacket{file, final, data[:read], stat.Size()}
 		}
 	}()
 

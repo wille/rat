@@ -9,6 +9,7 @@ namespace Control {
 		DIRECTORY = 3, // directory.event.ts
 		DOWNLOAD = 4, // download.event.ts
 		TRANSFERS = 5,
+		DOWNLOAD_PROGRESS = 6,
 		MOUSE_MOVE = 10
 	}
 
@@ -31,6 +32,21 @@ namespace Control {
 			event.emit(data);
 		} else {
 			console.error("control: received unknown event", eventType);
+		}
+	}
+
+	class DownloadProgressEvent implements Control.IncomingEvent {
+		
+		public emit(data) {
+			data = JSON.parse(data);
+
+			for (let t of Transfers.TRANSFERS) {
+				if (t.remote == data.file) {
+					t.progress = (data.read / data.total) * 100;
+					console.log("read", data.read, "total", data.total);
+					break;
+				}
+			}
 		}
 	}
 
@@ -64,6 +80,7 @@ namespace Control {
 		private socket: WebSocket;
 
 		constructor() {
+			addEvent(EventType.DOWNLOAD_PROGRESS, new DownloadProgressEvent());
 			addEvent(EventType.TRANSFERS, new TransfersEvent());
 		}
 

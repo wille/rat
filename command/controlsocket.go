@@ -13,13 +13,14 @@ import (
 )
 
 const (
-	ScreenUpdateEvent   = 0
-	ProcessQueryEvent   = 1
-	MonitorQueryEvent   = 2
-	DirectoryQueryEvent = 3
-	DownloadQueryEvent  = 4
-	TransfersEvent      = 5
-	MouseMove           = 10
+	ScreenUpdateEvent           = 0
+	ProcessQueryEvent           = 1
+	MonitorQueryEvent           = 2
+	DirectoryQueryEvent         = 3
+	DownloadQueryEvent          = 4
+	TransfersEvent              = 5
+	DownloadProgressUpdateEvent = 6
+	MouseMove                   = 10
 )
 
 type DisplayTransfer struct {
@@ -56,6 +57,12 @@ type MouseMoveEvent struct {
 	X       float32 `json:"x"`
 	Y       float32 `json:"y"`
 	Monitor int     `json:"id"`
+}
+
+type DownloadProgressEvent struct {
+	File  string `json:"file"`
+	Read  int64  `json:"read"`
+	Total int64  `json:"total"`
 }
 
 func newEvent(event int, clientID int, data string) *Event {
@@ -158,7 +165,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 			file, _ := ioutil.TempFile("", "download")
 
 			client.Listeners[common.GetFileHeader] = ws
-			Transfers[downloadEvent.File] = Transfer{file, downloadEvent.File}
+			Transfers[downloadEvent.File] = &Transfer{file, downloadEvent.File, 0, 0}
 			client.Queue <- DownloadPacket{downloadEvent.File}
 		} else if event.Event == MouseMove {
 			var mouseEvent MouseMoveEvent

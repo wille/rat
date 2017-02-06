@@ -6,7 +6,7 @@ namespace Transfers {
 		IN_PROGRESS
 	}
 
-	let TRANSFERS: Transfer[] = [];
+	export let TRANSFERS: Transfer[] = [];
 
 	export function addTransfer(transfer: Transfer, update: boolean = true) {
 		TRANSFERS.push(transfer);

