@@ -17,12 +17,12 @@ class BuildView extends View {
 
 	private get name() {
 		let element = <HTMLInputElement>document.getElementById("name");
-		return element.value;
+		return element.value === "" ? element.placeholder : element.value;
 	}
 
 	private get host() {
 		let element = <HTMLInputElement>document.getElementById("host");
-		return element.value;
+		return element.value === "" ? element.placeholder : element.value;
 	}
 
 	private get os() {
