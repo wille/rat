@@ -122,7 +122,7 @@ class DirectoryView extends View {
 				transfer.complete();
 			});
 			req.addEventListener("error", (errorEvent) => {
-				transfer.status = Transfers.Status.FAIL;
+				transfer.setStatus(Transfers.Status.FAIL);
 			});
 			req.open("post", "/upload");
 			req.send(new FormData(form));

@@ -174,6 +174,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 			screen.MoveCursor(mouseEvent.Monitor, int(mouseEvent.X), int(mouseEvent.Y))
 		} else if event.Event == TransfersEvent {
 			err := json.Unmarshal([]byte(event.Data), &DisplayTransfers)
+
 			if err != nil {
 				fmt.Println(err.Error())
 			}

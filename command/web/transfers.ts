@@ -10,12 +10,15 @@ namespace Transfers {
 
 	export function addTransfer(transfer: Transfer, update: boolean = true) {
 		TRANSFERS.push(transfer);
-
-		let data = JSON.stringify(TRANSFERS);
 		
 		if (update) {
-			Control.instance.write(Control.EventType.TRANSFERS, data, -1);
+			this.update();
 		}
+	}
+
+	export function update() {
+		let data = JSON.stringify(TRANSFERS);
+		Control.instance.write(Control.EventType.TRANSFERS, data, -1);
 	}
 
 	export function getTransfers(): Transfer[] {
@@ -37,16 +40,22 @@ class Transfer {
 
 	public id: number;
 	public progress: number;
-	public status: Transfers.Status;
+	private status: Transfers.Status;
 
 	constructor(public remote: string, public local?: string) {
 		this.id = Math.random();
 		this.status = Transfers.Status.IN_PROGRESS;
 	}
 
+	public setStatus(status: Transfers.Status) {
+		this.status = status;
+		Transfers.update();
+	}
+
 	public complete() {
 		this.progress = 100;
 		this.status = Transfers.Status.COMPLETE;
+		Transfers.update();
 	}
 
 	public toString() {
