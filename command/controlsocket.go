@@ -19,8 +19,19 @@ const (
 	MonitorQueryEvent   = 2
 	DirectoryQueryEvent = 3
 	DownloadQueryEvent  = 4
+	TransfersEvent      = 5
 	MouseMove           = 10
 )
+
+type DisplayTransfer struct {
+	Remote   string  `json:"remote"`
+	Local    string  `json:"local"`
+	Progress int     `json:"progress"`
+	ID       float64 `json:"id"`
+	Status   int     `json:"status"`
+}
+
+var DisplayTransfers []DisplayTransfer
 
 type Event struct {
 	Event    int    `json:"event"`
@@ -56,6 +67,15 @@ func incomingWebSocket(ws *websocket.Conn) {
 	defer func() {
 		ws.Close()
 	}()
+
+	transfers, err := json.Marshal(&DisplayTransfers)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	event := newEvent(TransfersEvent, 0, string(transfers))
+	websocket.JSON.Send(ws, &event)
 
 	for {
 		var event Event
@@ -141,6 +161,8 @@ func incomingWebSocket(ws *websocket.Conn) {
 			client.Listeners[common.GetFileHeader] = ws
 			Transfers[downloadEvent.File] = Transfer{file, downloadEvent.File}
 			client.Queue <- DownloadPacket{downloadEvent.File}
+
+			DisplayTransfers = append(DisplayTransfers, DisplayTransfer{})
 		} else if event.Event == MouseMove {
 			var mouseEvent MouseMoveEvent
 			err := json.Unmarshal([]byte(event.Data), &mouseEvent)
@@ -150,6 +172,11 @@ func incomingWebSocket(ws *websocket.Conn) {
 			}
 
 			screen.MoveCursor(mouseEvent.Monitor, int(mouseEvent.X), int(mouseEvent.Y))
+		} else if event.Event == TransfersEvent {
+			err := json.Unmarshal([]byte(event.Data), &DisplayTransfers)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
 		}
 	}
 }

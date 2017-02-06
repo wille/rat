@@ -8,8 +8,14 @@ namespace Transfers {
 
 	let TRANSFERS: Transfer[] = [];
 
-	export function addTransfer(transfer: Transfer) {
+	export function addTransfer(transfer: Transfer, update: boolean = true) {
 		TRANSFERS.push(transfer);
+
+		let data = JSON.stringify(TRANSFERS);
+		
+		if (update) {
+			Control.instance.write(Control.EventType.TRANSFERS, data, -1);
+		}
 	}
 
 	export function getTransfers(): Transfer[] {
@@ -41,6 +47,27 @@ class Transfer {
 	public complete() {
 		this.progress = 100;
 		this.status = Transfers.Status.COMPLETE;
+	}
+
+	public toString() {
+		return JSON.stringify({
+			"id": this.id,
+			"progress": this.progress,
+			"status": this.status,
+			"remote": this.remote,
+			"local": this.local
+		});
+	}
+
+	public static create(json: any): Transfer {
+		let t = new Transfer(json.remove, json.local);
+		t.id = json.id;
+		t.status = json.status;
+		t.progress = json.progress;
+		t.remote = json.remote;
+		t.local = json.local;
+
+		return t;
 	}
 }
 

@@ -8,6 +8,7 @@ namespace Control {
 		MONITOR = 2, // monitor.event.ts
 		DIRECTORY = 3, // directory.event.ts
 		DOWNLOAD = 4, // download.event.ts
+		TRANSFERS = 5,
 		MOUSE_MOVE = 10
 	}
 
@@ -33,12 +34,37 @@ namespace Control {
 		}
 	}
 
+	class TransfersEvent implements Control.IncomingEvent {
+
+		public emit(data) {
+			if (data == null) {
+				return;
+			}
+			
+			let json = JSON.parse(data);
+
+			if (json == null) {
+				return;
+			}
+
+			for (let i = 0; i < json.length; i++) {
+				let t = Transfer.create(json[i]);
+
+				if (t.remote == "" && t.local == "") {
+					continue;
+				}
+
+				Transfers.addTransfer(t, false);
+			}
+		}
+	}
+
 	export class Client {
 
 		private socket: WebSocket;
 
 		constructor() {
-
+			addEvent(EventType.TRANSFERS, new TransfersEvent());
 		}
 
 		public start() {
@@ -83,7 +109,6 @@ namespace Control {
 			let data = JSON.parse(event.data);
 			Control.emit(data.event, data.data);
 		}
-
 	}
 
 	export let instance: Control.Client = new Control.Client();
