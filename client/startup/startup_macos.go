@@ -24,18 +24,18 @@ func Install(name, path string) error {
 	defer file.Close()
 
 	_, err = file.WriteString(`
-		<plist version="1.0">
-		<dict>
-			<key>Label</key>
-			<string>` + name + `</string>
-			<key>ProgramArguments</key>
-			<array>
-				<string>` + path + `</string>
-			</array>
-			<key>RunAtLoad</key>
-			<true/>
-		</dict>
-		</plist>
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>` + name + `</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>` + path + `</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+</dict>
+</plist>
 	`)
 
 	return err

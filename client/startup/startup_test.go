@@ -11,5 +11,9 @@ func TestStartup(t *testing.T) {
 
 	fmt.Println("Executable:", executable)
 
-	Install("name", executable)
+	err := Install("name", executable)
+
+	if err != nil {
+		t.Error(err.Error())
+	}
 }
