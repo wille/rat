@@ -101,22 +101,24 @@ class DirectoryView extends View {
 
 		input.onchange = (event) => {
 			let file = input.files[0];
-			console.log(file);
+
+			let transfer = new Transfer(this.current + file.name, file.name);
+			Transfers.addTransfer(transfer);
 
 			let req = new XMLHttpRequest();
 			req.addEventListener("progress", (progressEvent) => {
 				if (progressEvent.lengthComputable) {
 					let percentComplete = progressEvent.loaded / progressEvent.total;
-					console.log(percentComplete + "%");
+					transfer.progress = percentComplete;
 				} else {
 					console.log(progressEvent);
 				}
 			});
 			req.addEventListener("load", () => {
-				console.log("Transfer complete");
+				transfer.complete();
 			});
 			req.addEventListener("error", (errorEvent) => {
-				console.log(errorEvent);
+				transfer.status = Transfers.Status.FAIL;
 			});
 			req.open("post", "/upload");
 			req.send(new FormData(form));

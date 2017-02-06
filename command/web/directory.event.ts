@@ -36,8 +36,13 @@ class DirectoryEvent implements Control.IncomingEvent {
 			let downloadCell = row.insertCell(3);
 			downloadCell.innerHTML = "Download";
 			downloadCell.onclick = () => {
+				let file = this.view.current + entry.path;
+
+				let transfer = new Transfer(file);
+				Transfers.addTransfer(transfer);
+
 				let json = JSON.stringify({
-					"file": this.view.current + entry.path
+					"file": file
 				});
 				Control.instance.write(Control.EventType.DOWNLOAD, json, this.id);
 			};
