@@ -126,6 +126,8 @@ class DirectoryView extends View {
 			});
 			req.open("post", "/upload");
 			req.send(new FormData(form));
+
+			setTransfersView();
 		};
 		input.click();
 	}

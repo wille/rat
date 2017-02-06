@@ -45,6 +45,8 @@ class DirectoryEvent implements Control.IncomingEvent {
 					"file": file
 				});
 				Control.instance.write(Control.EventType.DOWNLOAD, json, this.id);
+				
+				setTransfersView();
 			};
 		}
 	}
