@@ -9,16 +9,28 @@ import (
 	"rat/common"
 )
 
-const ConfigFile = "config.json"
+var ConfigFiles = [...]string{
+	"config.json",
+	"client/config.json",
+}
 
 var Config common.BinaryConfig
 
 func ParseConfig() error {
-	file, err := os.Open(ConfigFile)
-	defer file.Close()
-	if err != nil {
-		return err
+	var file *os.File
+	var err error
+
+	var current int
+	for {
+		file, err = os.Open(ConfigFiles[current])
+		current++
+
+		if err == nil {
+			break
+		}
 	}
+
+	defer file.Close()
 
 	stat, err := file.Stat()
 	if err != nil {
