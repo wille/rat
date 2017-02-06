@@ -42,7 +42,11 @@ class TransfersView extends View {
 				str = "Complete";
 				break;
 			case Transfers.Status.IN_PROGRESS:
-				str = "Transferring...";
+				if (transfer.download) {
+					str = "Downloading...";
+				} else {
+					str = "Uploading...";
+				}
 				break;
 			case Transfers.Status.FAIL:
 				str = "Error";

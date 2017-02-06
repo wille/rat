@@ -38,7 +38,7 @@ class DirectoryEvent implements Control.IncomingEvent {
 			downloadCell.onclick = () => {
 				let file = this.view.current + entry.path;
 
-				let transfer = new Transfer(file);
+				let transfer = new Transfer(true, file);
 				Transfers.addTransfer(transfer);
 
 				let json = JSON.stringify({

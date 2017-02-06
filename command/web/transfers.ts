@@ -42,7 +42,7 @@ class Transfer {
 	public progress: number;
 	public status: Transfers.Status;
 
-	constructor(public remote: string, public local?: string) {
+	constructor(public download: boolean, public remote: string, public local?: string) {
 		this.id = Math.random();
 		this.status = Transfers.Status.IN_PROGRESS;
 	}

@@ -106,7 +106,7 @@ class DirectoryView extends View {
 		input.onchange = (event) => {
 			let file = input.files[0];
 
-			let transfer = new Transfer(this.current + file.name, file.name);
+			let transfer = new Transfer(false, this.current + file.name, file.name);
 			Transfers.addTransfer(transfer);
 
 			let req = new XMLHttpRequest();

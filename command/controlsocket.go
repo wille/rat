@@ -29,6 +29,7 @@ type DisplayTransfer struct {
 	Progress int     `json:"progress"`
 	ID       float64 `json:"id"`
 	Status   int     `json:"status"`
+	Download bool    `json:"download"`
 }
 
 var DisplayTransfers []DisplayTransfer
