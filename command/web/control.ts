@@ -36,17 +36,24 @@ namespace Control {
 	}
 
 	class DownloadProgressEvent implements Control.IncomingEvent {
-		
+
 		public emit(data) {
 			data = JSON.parse(data);
 
 			for (let t of Transfers.TRANSFERS) {
-				if (t.remote == data.file) {
+				if (t.remote === data.file) {
 					t.progress = (data.read / data.total) * 100;
 
 					if (data.read === data.total) {
-						t.setStatus(Transfers.Status.COMPLETE);
+						t.setStatus(Transfers.Status.COMPLETE, false);
 					}
+
+					if (data.key !== undefined) {
+						t.key = data.key;
+						document.location.href = "/download?key=" + data.key;
+					}
+
+					Transfers.update();
 
 					break;
 				}
@@ -60,7 +67,7 @@ namespace Control {
 			if (data == null) {
 				return;
 			}
-			
+
 			let json = JSON.parse(data);
 
 			if (json == null) {
@@ -70,7 +77,7 @@ namespace Control {
 			for (let i = 0; i < json.length; i++) {
 				let t = Transfer.create(json[i]);
 
-				if (t.remote == "" && t.local == "") {
+				if (t.remote === "" && t.local === "") {
 					continue;
 				}
 

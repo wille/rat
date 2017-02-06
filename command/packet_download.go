@@ -19,6 +19,10 @@ type Transfer struct {
 	Total  int64
 }
 
+func (t *Transfer) Complete() bool {
+	return t.Read == t.Total
+}
+
 type TransfersMap map[string]*Transfer
 
 var Transfers TransfersMap
@@ -62,7 +66,18 @@ func (packet DownloadPacket) Read(c *Client) error {
 	}
 
 	if ws, ok := c.Listeners[common.GetFileHeader]; ok {
-		e := DownloadProgressEvent{file, transfer.Read, transfer.Total}
+		e := DownloadProgressEvent{file, transfer.Read, transfer.Total, ""}
+
+		if transfer.Complete() && final {
+			// Set temp file mapping so that we can download it from the web panel
+			tempKey := utils.Sha256(file)
+			TempFiles[tempKey] = TempFile{
+				Path: transfer.Local.Name(),
+				Name: filepath.Base(file),
+			}
+
+			e.Key = tempKey
+		}
 
 		data, err := json.Marshal(&e)
 		event := newEvent(DownloadProgressUpdateEvent, c.Id, string(data))
@@ -86,24 +101,6 @@ func (packet DownloadPacket) Read(c *Client) error {
 		}
 
 		delete(Transfers, file)
-
-		// Set temp file mapping so that we can download it from the web panel
-		tempKey := utils.Sha256(file)
-		TempFiles[tempKey] = TempFile{
-			Path: transfer.Local.Name(),
-			Name: filepath.Base(file),
-		}
-
-		if ws, ok := c.Listeners[common.GetFileHeader]; ok {
-			event := newEvent(DownloadQueryEvent, c.Id, tempKey)
-
-			err = websocket.JSON.Send(ws, &event)
-
-			if err != nil {
-				return err
-			}
-		}
-
 		delete(c.Listeners, common.GetFileHeader)
 
 		return nil

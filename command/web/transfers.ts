@@ -41,31 +41,25 @@ class Transfer {
 	public id: number;
 	public progress: number;
 	public status: Transfers.Status;
+	public key: string;
 
 	constructor(public download: boolean, public remote: string, public local?: string) {
 		this.id = Math.random();
 		this.status = Transfers.Status.IN_PROGRESS;
 	}
 
-	public setStatus(status: Transfers.Status) {
+	public setStatus(status: Transfers.Status, update: boolean = true) {
 		this.status = status;
-		Transfers.update();
+
+		if (update) {
+			Transfers.update();
+		}
 	}
 
 	public complete() {
 		this.progress = 100;
 		this.status = Transfers.Status.COMPLETE;
 		Transfers.update();
-	}
-
-	public toString() {
-		return JSON.stringify({
-			"id": this.id,
-			"progress": this.progress,
-			"status": this.status,
-			"remote": this.remote,
-			"local": this.local
-		});
 	}
 
 	public static create(json: any): Transfer {
@@ -75,6 +69,7 @@ class Transfer {
 		t.progress = json.progress;
 		t.remote = json.remote;
 		t.local = json.local;
+		t.key = json.key;
 
 		return t;
 	}

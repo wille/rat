@@ -26,10 +26,11 @@ const (
 type DisplayTransfer struct {
 	Remote   string  `json:"remote"`
 	Local    string  `json:"local"`
-	Progress int     `json:"progress"`
+	Progress float64 `json:"progress"`
 	ID       float64 `json:"id"`
 	Status   int     `json:"status"`
 	Download bool    `json:"download"`
+	Key      string  `json:"key,omitempty"`
 }
 
 var DisplayTransfers []DisplayTransfer
@@ -64,6 +65,7 @@ type DownloadProgressEvent struct {
 	File  string `json:"file"`
 	Read  int64  `json:"read"`
 	Total int64  `json:"total"`
+	Key   string `json:"key,omitempty"`
 }
 
 func newEvent(event int, clientID int, data string) *Event {

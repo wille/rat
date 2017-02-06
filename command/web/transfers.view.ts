@@ -38,7 +38,7 @@ class TransfersView extends View {
 		let str;
 
 		switch (transfer.status) {
-			case Transfers.Status.COMPLETE: 
+			case Transfers.Status.COMPLETE:
 				str = "Complete";
 				break;
 			case Transfers.Status.IN_PROGRESS:
@@ -65,5 +65,10 @@ class TransfersView extends View {
 
 		let progressCell = row.insertCell(3);
 		progressCell.innerHTML = '<progress value=' + transfer.progress + ' min=0 max=100></progress>';
+
+		let saveCell = row.insertCell(4);
+		if (transfer.key !== undefined) {
+			saveCell.innerHTML = '<a href="/download?key=' + transfer.key + '">Save</a>';
+		}
 	}
 }
