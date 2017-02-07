@@ -16,6 +16,10 @@ enum Constant {
 };
 
 typedef struct {
+	int x, y;
+} Point;
+
+typedef struct {
 	int button, type;
 } ClickEvent;
 

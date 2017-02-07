@@ -8,10 +8,6 @@ typedef struct {
 	void (*func)(int, int, void*); // callback function (x, y, param)
 } Param;
 
-typedef struct {
-	int x, y;
-} Position;
-
 static int monitor;
 
 BOOL CALLBACK MonitorEnumProc1(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
@@ -40,12 +36,12 @@ static void runOnMonitor(Param *param) {
 }
 
 static void mouseMove(int x, int y, void *param) {
-	Position *p = (Position*)param;
+	Point *p = (Point*)param;
 	SetCursorPos(x + p->x, y + p->y);
 }
 
 void MoveCursor(int m, int x, int y) {
-	Position p;
+	Point p;
 	p.x = x;
 	p.y = y;
 
