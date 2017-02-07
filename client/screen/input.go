@@ -12,3 +12,7 @@ func MoveCursor(m, x, y int) {
 func Mouse(m, button, t int) {
 	C.Mouse(C.int(m), C.int(button), C.int(t))
 }
+
+func Key(key uint16, t int) {
+	C.Key(C.ushort(key), C.int(t))
+}

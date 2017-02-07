@@ -19,6 +19,7 @@ const (
 	DownloadProgressUpdateEvent = 6
 	MouseMove                   = 10
 	Mouse                       = 11
+	Key                         = 12
 )
 
 // Event incoming message data
@@ -57,6 +58,7 @@ func init() {
 	Messages[ProcessQueryEvent] = ProcessQueryMessage{}
 	Messages[ScreenUpdateEvent] = ScreenUpdateMessage{}
 	Messages[Mouse] = MouseMessage{}
+	Messages[Key] = KeyMessage{}
 }
 
 func newEvent(event int, clientID int, data string) *Event {

@@ -5,8 +5,9 @@
 
 void MoveCursor(int m, int x, int y);
 void Mouse(int m, int button, int type);
+void Key(unsigned short key, int type);
 
-enum Constants {
+enum Constant {
 	LEFT = 0,
 	RIGHT = 1,
 

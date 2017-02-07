@@ -11,7 +11,8 @@ namespace Control {
 		TRANSFERS = 5,
 		DOWNLOAD_PROGRESS = 6,
 		MOUSE_MOVE = 10,
-		MOUSE = 11
+		MOUSE = 11,
+		KEY = 12
 	}
 
 	export interface IncomingEvent {

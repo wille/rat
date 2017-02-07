@@ -11,4 +11,5 @@ const (
 	GetFileHeader      PacketHeader = 15 // Download file from client
 	MouseMoveHeader    PacketHeader = 16
 	MouseHeader        PacketHeader = 17
+	KeyHeader          PacketHeader = 18
 )

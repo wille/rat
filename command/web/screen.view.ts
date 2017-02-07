@@ -43,6 +43,9 @@ class ScreenView extends View {
 		this.screenElement.onmousedown = (event) => this.mouseEvent(event.button, Mouse.PRESS);
 		this.screenElement.onmouseup = (event) => this.mouseEvent(event.button, Mouse.RELEASE);
 
+		document.onkeydown = (event) => this.keyEvent(event.keyCode, Mouse.PRESS);
+		document.onkeyup = (event) => this.keyEvent(event.keyCode, Mouse.RELEASE);
+
 		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
 			this.fps.innerHTML = fps + " FPS";
 		});
@@ -64,6 +67,9 @@ class ScreenView extends View {
 		Control.instance.write(Control.EventType.SCREEN, data, this.id);
 
 		this.screenEvent.stop();
+
+		document.onkeydown = undefined;
+		document.onkeyup = undefined;
 	}
 
 	private get monitor(): number {
@@ -87,6 +93,12 @@ class ScreenView extends View {
 		return element.checked;
 	}
 
+	private get keyboard() {
+		let element = <HTMLInputElement>document.getElementById("keyboard");
+
+		return element.checked;
+	}
+
 	private mouseEvent(button: Mouse, event: Mouse) {
 		if (this.moveMouse) {
 			let data = JSON.stringify({
@@ -96,6 +108,17 @@ class ScreenView extends View {
 			});
 
 			Control.instance.write(Control.EventType.MOUSE, data, this.id);
+		}
+	}
+
+	private keyEvent(keyCode: number, event: Mouse) {
+		if (this.keyboard && keyCode !== 255) {
+			let data = JSON.stringify({
+				"key": keyCode,
+				"event": event
+			});
+
+			Control.instance.write(Control.EventType.KEY, data, this.id);
 		}
 	}
 

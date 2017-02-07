@@ -100,3 +100,23 @@ void Mouse(int m, int button, int type) {
 
 	runOnMonitor(&p);
 }
+
+void Key(unsigned short key, int t) {
+	DWORD type;
+
+	switch (t) {
+		case PRESS:
+			type = 0;
+			break;
+		case RELEASE:
+			type = KEYEVENTF_KEYUP;
+			break;
+	}
+
+	INPUT event;
+	event.type = INPUT_KEYBOARD;
+	event.ki.wVk = (WORD) key;
+	event.ki.wScan = 0;
+	event.ki.dwFlags = type;
+	SendInput(1, &event, sizeof(INPUT));
+}
