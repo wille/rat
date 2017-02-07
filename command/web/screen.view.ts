@@ -40,6 +40,9 @@ class ScreenView extends View {
 			}
 		};
 
+		this.screenElement.onmousedown = (event) => this.mouseEvent(event.button, Mouse.PRESS);
+		this.screenElement.onmouseup = (event) => this.mouseEvent(event.button, Mouse.RELEASE);
+
 		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
 			this.fps.innerHTML = fps + " FPS";
 		});
@@ -73,7 +76,7 @@ class ScreenView extends View {
 
 	private get scale(): number {
 		let scaleElement = <HTMLInputElement>document.getElementById("scale");
-		let scale  = scaleElement.value;
+		let scale = scaleElement.value;
 
 		return Number(scale);
 	}
@@ -82,6 +85,18 @@ class ScreenView extends View {
 		let element = <HTMLInputElement>document.getElementById("cursor");
 
 		return element.checked;
+	}
+
+	private mouseEvent(button: Mouse, event: Mouse) {
+		if (this.moveMouse) {
+			let data = JSON.stringify({
+				"id": this.monitor,
+				"button": button,
+				"event": event
+			});
+
+			Control.instance.write(Control.EventType.MOUSE, data, this.id);
+		}
 	}
 
 	// Sends screen event with new configuration

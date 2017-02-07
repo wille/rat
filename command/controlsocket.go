@@ -18,6 +18,7 @@ const (
 	TransfersEvent              = 5
 	DownloadProgressUpdateEvent = 6
 	MouseMove                   = 10
+	Mouse                       = 11
 )
 
 // Event incoming message data
@@ -55,6 +56,7 @@ func init() {
 	Messages[DirectoryQueryEvent] = DirectoryRequestMessage{}
 	Messages[ProcessQueryEvent] = ProcessQueryMessage{}
 	Messages[ScreenUpdateEvent] = ScreenUpdateMessage{}
+	Messages[Mouse] = MouseMessage{}
 }
 
 func newEvent(event int, clientID int, data string) *Event {

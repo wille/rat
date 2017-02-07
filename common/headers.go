@@ -10,4 +10,5 @@ const (
 	PutFileHeader      PacketHeader = 14 // Upload file to client
 	GetFileHeader      PacketHeader = 15 // Download file from client
 	MouseMoveHeader    PacketHeader = 16
+	MouseHeader        PacketHeader = 17
 )

@@ -10,7 +10,8 @@ namespace Control {
 		DOWNLOAD = 4, // download.event.ts
 		TRANSFERS = 5,
 		DOWNLOAD_PROGRESS = 6,
-		MOUSE_MOVE = 10
+		MOUSE_MOVE = 10,
+		MOUSE = 11
 	}
 
 	export interface IncomingEvent {
