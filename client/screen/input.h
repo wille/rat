@@ -17,7 +17,7 @@ enum Constant {
 
 typedef struct {
 	int x, y;
-} Point;
+} Coordinates;
 
 typedef struct {
 	int button, type;

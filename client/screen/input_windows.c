@@ -36,12 +36,12 @@ static void runOnMonitor(Param *param) {
 }
 
 static void mouseMove(int x, int y, void *param) {
-	Point *p = (Point*)param;
+	Coordinates *p = (Coordinates*)param;
 	SetCursorPos(x + p->x, y + p->y);
 }
 
 void MoveCursor(int m, int x, int y) {
-	Point p;
+	Coordinates p;
 	p.x = x;
 	p.y = y;
 
