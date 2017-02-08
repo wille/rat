@@ -61,7 +61,7 @@ class BuildView extends View {
 		log.innerHTML = "";
 
 		$.post("/build", JSON.stringify(data), (response: string) => {
-			log.innerHTML += response;
+			document.location.href = "/download?key=" + response;
 		}, "text");
 	}
 }

