@@ -6,6 +6,8 @@
 
 #include "input.h"
 
+extern CGKeyCode GetCode(unsigned char keycode);
+
 // save for click event
 static int lastX, lastY;
 
@@ -55,7 +57,9 @@ void Mouse(int m, int button, int type) {
 void Key(unsigned short key, int t) {
 	bool keyDown = t == PRESS;
 
-	CGEventRef event = CGEventCreateKeyboardEvent(NULL, (CGKeyCode) key, keyDown);
+	CGKeyCode code = GetCode(key);
+
+	CGEventRef event = CGEventCreateKeyboardEvent(NULL, code, keyDown);
 	CGEventPost(kCGHIDEventTap, event);
 	CFRelease(event);
 }
