@@ -9,7 +9,7 @@ void Key(unsigned short key, int type);
 
 enum Constant {
 	LEFT = 0,
-	RIGHT = 1,
+	RIGHT = 2,
 
 	PRESS = 0,
 	RELEASE = 1

@@ -43,7 +43,7 @@ void Mouse(int m, int button, int type) {
 				return;
 		}
 	} else {
-		fprintf(stderr, "invalid button type: %i\n", type);
+		fprintf(stderr, "invalid button type: %i\n", button);
 		return;
 	}
 
