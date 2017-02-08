@@ -26,6 +26,13 @@ linux: prod
 	cd client && GOOS=linux GOARCH=amd64 $(PROD) -o ../command/bin/linux_amd64
 	cd client && GOOS=linux GOARCH=386 $(PROD) -o ../command/bin/linux_x86
 
+fakebin:
+
+	touch command/bin/windows_amd64.exe
+	touch command/bin/windows_x86.exe
+	touch command/bin/macos_amd64
+	touch command/bin/linux_amd64
+	touch command/bin/linux_x86
 
 clean:
 	cd client/screen/ && rm -f *.bmp *.jpg
