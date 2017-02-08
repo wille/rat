@@ -57,15 +57,15 @@ func Build(c *Config, w io.Writer) (string, error) {
 
 	fmt.Println("Encoded config:", config)
 
-	encoded, err := json.Marshal(&config)
-	if err != nil {
-		return "", err
-	}
-
 	var files []file
 
 	for _, ost := range oss {
 		for _, arch := range archs {
+			encoded, err := json.Marshal(&config)
+			if err != nil {
+				return "", err
+			}
+
 			ext := ""
 			if ost == "windows" {
 				ext = ".exe"
