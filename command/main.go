@@ -4,12 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"rat/command/build"
 	"rat/command/utils"
 	"rat/common"
 	"strconv"
+)
+
+const (
+	ConfigFile = "config.json"
 )
 
 type TempFile struct {
@@ -36,9 +41,15 @@ func NewSingle(client *Client) ClientPage {
 }
 
 func main() {
-	config := Server{
-		Address: "localhost:9999",
+	var config Server
+	data, err := ioutil.ReadFile("config.json")
+
+	if err != nil {
+		log.Fatal("failed to load", ConfigFile)
+		return
 	}
+
+	json.Unmarshal(data, &config)
 
 	go Listen(&config)
 
@@ -113,7 +124,7 @@ func main() {
 
 	InitControlSocket()
 
-	log.Fatal(http.ListenAndServeTLS("localhost:7777", "cert.pem", "private.key", nil))
+	log.Fatal(http.ListenAndServeTLS(config.HttpAddress, "cert.pem", "private.key", nil))
 }
 
 func init() {

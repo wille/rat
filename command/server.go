@@ -11,7 +11,8 @@ var (
 )
 
 type Server struct {
-	Address string
+	Address     string `json:"host"`
+	HttpAddress string `json:"http"`
 }
 
 func Listen(server *Server) error {
