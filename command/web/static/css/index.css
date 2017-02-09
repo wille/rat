@@ -52,6 +52,16 @@ td, th {
 	bottom: 0;
 }
 
+.statusbar .separator {
+	display: inline;
+	margin: 5px;
+	color: #dddddd;
+}
+
+.statusbar .separator::before {
+	content: "|";
+}
+
 .statusbar p {
 	display: inline-block;
 }
