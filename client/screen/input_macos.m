@@ -44,6 +44,18 @@ void Mouse(int m, int button, int type) {
 				fprintf(stderr, "invalid event type: %i\n", type);
 				return;
 		}
+	} else if (button == MIDDLE) {
+		button = kCGMouseButtonCenter;
+		switch (type) {
+			case PRESS:
+				type = kCGEventOtherMouseDown;
+				break;
+			case RELEASE:
+				type = kCGEventOtherMouseUp;
+			default:
+				fprintf(stderr, "invalid event type: %i\n", type);
+				return;
+		}
 	} else {
 		fprintf(stderr, "invalid button type: %i\n", button);
 		return;

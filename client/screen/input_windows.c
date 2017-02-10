@@ -76,6 +76,15 @@ static void mouseClick(int x, int y, void *param) {
 				type = MOUSEEVENTF_RIGHTUP;
 				break;
 		}
+	} else if (data->button == MIDDLE) {
+		switch (data->type) {
+			case PRESS:
+				type = MOUSEEVENTF_MIDDLEDOWN;
+				break;
+			case RELEASE:
+				type = MOUSEEVENTF_MIDDLEUP;
+				break;
+		}
 	}
 
 	INPUT event;
