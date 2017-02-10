@@ -72,16 +72,16 @@ CGKeyCode GetCode(unsigned char keycode) {
 		// case 187: return 78; duplicate
 		// case 187: return 81; another equal sign
 
-		/*case 0: return 82;
-		case 1: return 83;
-		case 2: return 84;
-		case 3: return 85;
-		case 4: return 86;
-		case 5: return 87;
-		case 6: return 88;
-		case 7: return 89;
-		case 8: return 91;
-		case 9: return 92;*/
+		case 96: return 82;
+		case 97: return 83;
+		case 98: return 84;
+		case 99: return 85;
+		case 100: return 86;
+		case 101: return 87;
+		case 102: return 88;
+		case 103: return 89;
+		case 104: return 91;
+		case 105: return 92;
 
 		case 116: return 96;
 		case 117: return 97;
