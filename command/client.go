@@ -35,8 +35,9 @@ type Client struct {
 	CountryCode string
 
 	Ping struct {
-		Start   time.Time
-		Current int
+		Start    time.Time
+		Current  int
+		Received bool
 	}
 
 	Screen struct {
@@ -140,8 +141,13 @@ func (client *Client) PacketReader() {
 
 func (client *Client) Heartbeat() {
 	for {
-		time.Sleep(time.Second * 2)
 		client.Queue <- Ping{}
+
+		for !client.Ping.Received {
+			time.Sleep(time.Millisecond)
+		}
+
+		time.Sleep(time.Second * 2)
 	}
 }
 
