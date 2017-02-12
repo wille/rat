@@ -42,3 +42,4 @@ clean:
 	rm -f command/debug client/debug
 	rm -f command/bin/*
 	rm -f rat
+	rm -f command/web/static/lib.js command/web/static/lib.js.map
