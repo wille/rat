@@ -88,10 +88,6 @@ func incomingWebSocket(ws *websocket.Conn) {
 			return
 		}
 
-		if event.ClientID == 0 {
-			continue
-		}
-
 		client := get(event.ClientID)
 
 		if handler, ok := Messages[event.Event]; ok {
