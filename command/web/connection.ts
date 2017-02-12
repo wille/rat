@@ -1,15 +1,13 @@
 namespace Connection {
 	export function setConnectionStatus(connected: boolean) {
-		let element = $("#error");
+		let element = document.getElementById("status");
 
-		switch (connected) {
-			case true:
-				element.hide();
-				break;
-			case false:
-				element.show();
-				element.text("Lost connection");
-				break;
+		if (connected) {
+			element.innerHTML = "Connected";
+			element.className = "";
+		} else {
+			element.innerHTML = "Lost connection";
+			element.className = "error";
 		}
 	}
 }

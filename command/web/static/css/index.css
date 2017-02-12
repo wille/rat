@@ -70,7 +70,7 @@ td, th {
 	content: "version: ";
 }
 
-.error {
+.statusbar .error {
 	color: #ff0000;
 }
 
