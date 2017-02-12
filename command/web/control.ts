@@ -1,6 +1,6 @@
 namespace Control {
 
-	var events: IncomingEvent[] = [];
+	let events: IncomingEvent[] = [];
 
 	export enum EventType {
 		SCREEN = 0, // screen.event.ts
@@ -12,7 +12,8 @@ namespace Control {
 		DOWNLOAD_PROGRESS = 6,
 		MOUSE_MOVE = 10,
 		MOUSE = 11,
-		KEY = 12
+		KEY = 12,
+		BUILD = 13
 	}
 
 	export interface IncomingEvent {

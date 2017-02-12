@@ -9,10 +9,12 @@ class BuildView extends View {
 	onEnter() {
 		let button = <HTMLButtonElement>document.getElementById("submit");
 		button.onclick = () => this.build();
+
+		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
 	}
 
 	onLeave() {
-
+		Control.removeEvent(Control.EventType.DOWNLOAD);
 	}
 
 	private get name() {
@@ -48,20 +50,15 @@ class BuildView extends View {
 	}
 
 	private build() {
-		let data = {
+		let data = JSON.stringify({
 			"host": this.host,
 			"os": this.os,
 			"arch": this.arch,
 			"delay": this.delay,
 			"upx": this.upx,
 			"name": this.name
-		};
+		});
 
-		let log = document.getElementById("log");
-		log.innerHTML = "";
-
-		$.post("/build", JSON.stringify(data), (response: string) => {
-			document.location.href = "/download?key=" + response;
-		}, "text");
+		Control.instance.write(Control.EventType.BUILD, data);
 	}
 }
