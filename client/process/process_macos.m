@@ -11,7 +11,7 @@
 
 typedef struct kinfo_proc kinfo_proc;
 
-static int GetBSDProcessList (kinfo_proc **procList, size_t *procCount) {
+static int GetBSDProcessList(kinfo_proc **procList, size_t *procCount) {
     int err;
     kinfo_proc *result;
     bool done;
