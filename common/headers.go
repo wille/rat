@@ -12,4 +12,5 @@ const (
 	MouseMoveHeader    PacketHeader = 16
 	MouseHeader        PacketHeader = 17
 	KeyHeader          PacketHeader = 18
+	ShellHeader        PacketHeader = 20
 )

@@ -13,7 +13,8 @@ namespace Control {
 		MOUSE_MOVE = 10,
 		MOUSE = 11,
 		KEY = 12,
-		BUILD = 13
+		BUILD = 13,
+		TERMINAL = 14
 	}
 
 	export interface IncomingEvent {

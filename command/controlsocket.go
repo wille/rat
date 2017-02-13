@@ -21,6 +21,7 @@ const (
 	Mouse                       = 11
 	Key                         = 12
 	Build                       = 13
+	Shell                       = 14
 )
 
 // Event incoming message data
@@ -61,6 +62,7 @@ func init() {
 	Messages[Mouse] = MouseMessage{}
 	Messages[Key] = KeyMessage{}
 	Messages[Build] = BuildMessage{}
+	Messages[Shell] = ShellMessage{}
 }
 
 func newEvent(event int, clientID int, data string) *Event {

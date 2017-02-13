@@ -69,7 +69,25 @@ func main() {
 		t := template.Must(template.New("clients.template.html").Funcs(funcMap).ParseFiles("web/clients.template.html"))
 
 		err := t.Execute(w, &Clients)
+	http.HandleFunc("/terminal", func(w http.ResponseWriter, r *http.Request) {
+		t := template.Must(template.New("terminal.template.html").Funcs(funcMap).ParseFiles("web/terminal.template.html"))
 
+		var client *Client
+
+		for _, k := range Clients {
+			id, err := strconv.Atoi(r.FormValue("id"))
+
+			if k.Id == id && err == nil {
+				client = k
+				break
+			}
+		}
+
+		if client == nil {
+			panic("not valid id")
+		}
+
+		err := t.Execute(w, client)
 		if err != nil {
 			panic(err)
 		}

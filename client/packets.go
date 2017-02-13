@@ -28,6 +28,7 @@ func init() {
 	packets[common.MouseMoveHeader] = MouseMovePacket{}
 	packets[common.MouseHeader] = MousePacket{}
 	packets[common.KeyHeader] = KeyPacket{}
+	packets[common.ShellHeader] = ShellPacket{}
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {
