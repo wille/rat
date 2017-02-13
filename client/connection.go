@@ -9,8 +9,6 @@ import (
 
 type Connection struct {
 	net.Conn
-	common.Writer
-	common.Reader
 }
 
 var Queue chan OutgoingPacket
