@@ -69,6 +69,10 @@ func main() {
 		t := template.Must(template.New("clients.template.html").Funcs(funcMap).ParseFiles("web/clients.template.html"))
 
 		err := t.Execute(w, &Clients)
+		if err != nil {
+			panic(err)
+		}
+	})
 	http.HandleFunc("/terminal", func(w http.ResponseWriter, r *http.Request) {
 		t := template.Must(template.New("terminal.template.html").Funcs(funcMap).ParseFiles("web/terminal.template.html"))
 
