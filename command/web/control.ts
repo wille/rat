@@ -103,7 +103,7 @@ namespace Control {
 		}
 
 		public onOpen(func: any) {
-			this.socket.addEventListener("onopen", func);
+			this.socket.addEventListener("open", func);
 		}
 
 		public write(eventType: Control.EventType, data: string, id?: number) {
