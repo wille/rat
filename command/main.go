@@ -57,7 +57,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.New("index.template.html").Funcs(funcMap).ParseFiles("web/index.template.html"))
+		t := template.Must(template.New("index.template.html").Funcs(funcMap).ParseFiles("web/index.template.html", "web/head.template.html", "web/tail.template.html"))
 
 		err := t.Execute(w, &Clients)
 
@@ -74,7 +74,7 @@ func main() {
 		}
 	})
 	http.HandleFunc("/terminal", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.New("terminal.template.html").Funcs(funcMap).ParseFiles("web/terminal.template.html"))
+		t := template.Must(template.New("terminal.template.html").Funcs(funcMap).ParseFiles("web/terminal.template.html", "web/head.template.html", "web/tail.template.html"))
 
 		var client *Client
 

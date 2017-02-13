@@ -1,11 +1,4 @@
-<html>
-	<head>
-		<link rel="stylesheet" href="static/css/index.css">
-		<link rel="stylesheet" href="static/css/files.css">
-		<link rel="stylesheet" href="static/css/terminal.css">
-
-		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	</head>
+{{ template "head" }}
 	<body>
 		<!-- Shown on all views that will return to index view -->
 		<div id="subview_toolbar">
@@ -26,8 +19,4 @@
 			<p id="status"></p>
 		</div>
 	</body>
-
-	<script src="static/lib.js"></script>
-	<script src="static/ansi.js"></script>
-	<script src="static/onload.js"></script>
-</html>
+{{ template "tail" "index" }}

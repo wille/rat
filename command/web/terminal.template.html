@@ -1,20 +1,6 @@
-<html>
-	<head>
-		<link rel="stylesheet" href="static/css/index.css">
-		<link rel="stylesheet" href="static/css/files.css">
-		<link rel="stylesheet" href="static/css/terminal.css">
-
-		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	</head>
+{{ template "head" }}
 	<body id="terminal">
 		<div id="display"></div>
 		<input type="text" id="command">
 	</body>
-
-	<script src="static/lib.js"></script>
-	<script src="static/ansi.js"></script>
-	<script src="static/onload.js"></script>
-	<script>
-		initTerminalView({{ .Id }});
-	</script>
-</html>
+{{ template "tail" "terminal" }}

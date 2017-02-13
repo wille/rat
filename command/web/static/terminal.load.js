@@ -1,0 +1,3 @@
+var id = window.location.search.substr(4); // ?id=...
+
+initTerminalView(Number(id));
