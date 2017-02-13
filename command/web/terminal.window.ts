@@ -42,7 +42,7 @@ class TerminalView {
 	}
 
 	private get terminal() {
-		return <HTMLTextAreaElement>document.getElementById("terminal");
+		return <HTMLTextAreaElement>document.getElementById("display");
 	}
 
 	// Append a raw line to the terminal element
