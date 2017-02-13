@@ -101,6 +101,28 @@ namespace Icons {
 		}
 
 		return "file";
+	}
 
+	export function updatePing() {
+		$(".ping").each(function(index, element) {
+			let ping = $(this).text();
+
+			$(this).removeClass();
+			$(this).addClass("ping");
+			$(this).addClass(Icons.getPingClass(ping));
+
+			$(this).text(ping);
+		});
+	}
+
+	export function updateOSIcons() {
+		$(".os").each(function(index, element) {
+			let os = $(this).text();
+			os = os.trim();
+
+			let icon = Icons.getOperatingSystemIcon(os);
+
+			$(this).children().attr("src", icon);
+		});
 	}
 }
