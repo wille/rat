@@ -25,7 +25,9 @@ class TerminalView {
 		let commandElement = <HTMLInputElement>document.getElementById("command");
 		commandElement.onkeypress = (event) => {
 			if (event.keyCode === 13) { // enter
-				this.write(Shell.WRITE, commandElement.value);
+				let command = commandElement.value;
+				this.append("> " + command);
+				this.write(Shell.WRITE, command);
 				commandElement.value = "";
 			}
 		};
