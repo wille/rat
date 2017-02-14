@@ -11,18 +11,20 @@
 	- Xcode
 - Linux
 	- gcc
-	- X development headers and libraries
+	- X11 development headers and libraries
 - `go get github.com/oschwald/geoip2-golang`
 - `go get golang.org/x/image/bmp`
 - `go get github.com/disintegration/imaging`
 - `go get golang.org/x/net/websocket`
 - `go get github.com/dustin/go-humanize`
+- `npm install uglifyjs -g`
 
 ***
 
 ```bash
 $ make  # builds web, command and client (client, command)
 $ make web  # runs the TypeScript compiler (tsconfig.json) (command/web/static/lib.js, command/web/static/lib.js.map)
+$ make ugly  # runs web and uglifyjs
 $ make cert  # generates TLS certificates (command/private.key, command/cert.pem)
 $ make clean  # removes all debugging and built files
 $ make prod  # builds production command (rat)

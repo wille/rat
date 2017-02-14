@@ -1,5 +1,6 @@
 BUILD=go build
 PROD=go build -ldflags="-w -s" --tags="prod"
+LIB=command/web/static/lib.js
 
 default: web
 	cd client && $(BUILD) -o ../client.exe
@@ -8,11 +9,14 @@ default: web
 web:
 	tsc
 
+ugly: web
+	uglifyjs --compress --mangle -o $(LIB) -- $(LIB)
+
 cert:
 	cd command && openssl genrsa -out private.key 1024
 	cd command && openssl req -new -x509 -key private.key -out cert.pem -days 365
 
-prod:
+prod: web ugly
 	cd command && $(PROD) -o ../rat
 
 windows: prod
@@ -27,7 +31,6 @@ linux: prod
 	cd client && GOOS=linux GOARCH=386 $(PROD) -o ../command/bin/linux_x86
 
 fakebin:
-
 	touch command/bin/windows_amd64.exe
 	touch command/bin/windows_x86.exe
 	touch command/bin/macos_amd64
