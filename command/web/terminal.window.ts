@@ -49,7 +49,7 @@ class TerminalView {
 
 	// Append a raw line to the terminal element
 	public append(line: string) {
-		this.terminal.innerHTML += ansi_up.ansi_to_html(line) + "<br>";
+		this.terminal.innerHTML += ANSI.ansi_to_html(line) + "<br>";
 	}
 
 	private write(action: number, line: string = "") {
