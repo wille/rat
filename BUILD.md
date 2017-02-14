@@ -17,7 +17,7 @@
 - `go get github.com/disintegration/imaging`
 - `go get golang.org/x/net/websocket`
 - `go get github.com/dustin/go-humanize`
-- `npm install uglifyjs -g`
+- `npm install uglify-js -g`
 
 ***
 
