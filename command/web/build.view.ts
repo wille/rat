@@ -10,6 +10,14 @@ class BuildView extends View {
 		let button = <HTMLButtonElement>document.getElementById("submit");
 		button.onclick = () => this.build();
 
+		let osElement = <HTMLSelectElement>document.getElementById("os");
+		osElement.onchange = (event) => {
+			let manifestDiv = <HTMLDivElement>document.getElementById("manifest");
+			let os = (<HTMLOptionElement>osElement.options[osElement.selectedIndex]).value;
+
+			manifestDiv.hidden = !(os === "all" || os === "windows");
+		};
+
 		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
 	}
 
@@ -29,13 +37,13 @@ class BuildView extends View {
 
 	private get os() {
 		let element = <HTMLSelectElement>document.getElementById("os");
-		let option = <HTMLOptionElement>element.options[element.selectedIndex]
+		let option = <HTMLOptionElement>element.options[element.selectedIndex];
 		return option.value;
 	}
 
 	private get arch() {
 		let element = <HTMLSelectElement>document.getElementById("arch");
-		let option = <HTMLOptionElement>element.options[element.selectedIndex]
+		let option = <HTMLOptionElement>element.options[element.selectedIndex];
 		return option.value;
 	}
 
