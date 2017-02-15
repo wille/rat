@@ -2,6 +2,7 @@ BUILD=go build
 PROD=CGO_ENABLED=1 go build -ldflags="-w -s" --tags="prod"
 PROD_WIN32=CGO_ENABLED=1 go build -ldflags="-w -s -H windowsgui" --tags="prod"
 LIB=command/web/static/lib.js
+UPX=upx -9
 
 default: web
 	cd client && $(BUILD) -o ../client.exe
@@ -18,18 +19,24 @@ cert:
 	cd command && openssl req -new -x509 -key private.key -out cert.pem -days 365
 
 prod: web ugly
-	cd command && $(PROD) -o ../rat
+	cd command && $(PROD) -o ../command.exe
+	$(UPX) command.exe
 
 windows: prod
 	cd client && GOOS=windows GOARCH=amd64 $(PROD_WIN32) -o ../command/bin/windows_amd64.exe
+	$(UPX) command/bin/windows_amd64.exe
 	cd client && GOOS=windows GOARCH=386 $(PROD_WIN32) -o ../command/bin/windows_x86.exe
+	$(UPX) command/bin/windows_x86.exe
 
 macos: prod
 	cd client && GOOS=darwin GOARCH=amd64 $(PROD) -o ../command/bin/macos_amd64
+	$(UPX) command/bin/macos_amd64
 
 linux: prod
 	cd client && GOOS=linux GOARCH=amd64 $(PROD) -o ../command/bin/linux_amd64
+	$(UPX) command/bin/linux_amd64
 	cd client && GOOS=linux GOARCH=386 $(PROD) -o ../command/bin/linux_x86
+	$(UPX) command/bin/linux_x86
 
 fakebin:
 	touch command/bin/windows_amd64.exe
