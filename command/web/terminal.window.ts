@@ -9,6 +9,8 @@ function openTerminal(id: number) {
 }
 
 function initTerminalView(id: number) {
+	document.title = "Terminal";
+
 	let view = new TerminalView(id);
 	window.onbeforeunload = () => view.onLeave();
 
