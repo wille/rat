@@ -1,6 +1,6 @@
 BUILD=go build
-PROD=go build -ldflags="-w -s" --tags="prod"
-PROD_WIN32=go build -ldflags="-w -s -H windowsgui" --tags="prod"
+PROD=CGO_ENABLED=1 go build -ldflags="-w -s" --tags="prod"
+PROD_WIN32=CGO_ENABLED=1 go build -ldflags="-w -s -H windowsgui" --tags="prod"
 LIB=command/web/static/lib.js
 
 default: web
