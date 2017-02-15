@@ -1,5 +1,19 @@
 /// <reference path="view.ts" />
 
+enum FileTask {
+	// Touch file
+	TOUCH = 0,
+
+	// Unlink file
+	UNLINK = 1,
+
+	// Move file
+	MOVE = 2,
+
+	// Copy file
+	COPY = 3
+}
+
 class DirectoryView extends View {
 
 	private currentDirectory: string;
@@ -83,6 +97,14 @@ class DirectoryView extends View {
 		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
 	}
 
+	public reload() {
+		let data = JSON.stringify({
+			"path": this.current
+		});
+
+		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
+	}
+
 	private upload() {
 		let form = document.createElement("form");
 
@@ -130,5 +152,18 @@ class DirectoryView extends View {
 			setTransfersView();
 		};
 		input.click();
+	}
+
+	public fileEvent(task: FileTask, file: string, destination?: string) {
+		let data = {
+			"task": task,
+			"file": file,
+		};
+
+		if (destination) {
+			data["destination"] = destination;
+		}
+
+		Control.instance.write(Control.EventType.FILE, JSON.stringify(data), this.id);
 	}
 }

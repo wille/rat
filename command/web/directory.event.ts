@@ -33,9 +33,11 @@ class DirectoryEvent implements Control.IncomingEvent {
 			let modCell = row.insertCell(2);
 			modCell.innerHTML = entry.time;
 
-			let downloadCell = row.insertCell(3);
-			downloadCell.innerHTML = "Download";
-			downloadCell.onclick = () => {
+			let actionsCell = row.insertCell(3);
+
+			let downloadElement = document.createElement("p");
+			downloadElement.innerHTML = "Download";
+			downloadElement.onclick = () => {
 				let file = this.view.current + entry.path;
 
 				let transfer = new Transfer(true, file);
@@ -48,6 +50,17 @@ class DirectoryEvent implements Control.IncomingEvent {
 				
 				setTransfersView();
 			};
+			actionsCell.appendChild(downloadElement);
+
+			let deleteElement = document.createElement("p");
+			deleteElement.innerHTML = "Delete";
+			deleteElement.onclick = () => {
+				let file = this.view.current + entry.path;
+
+				this.view.fileEvent(FileTask.UNLINK, file);
+				this.view.reload();
+			};
+			actionsCell.appendChild(deleteElement);
 		}
 	}
 }

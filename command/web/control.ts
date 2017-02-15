@@ -14,7 +14,8 @@ namespace Control {
 		MOUSE = 11,
 		KEY = 12,
 		BUILD = 13,
-		TERMINAL = 14
+		TERMINAL = 14,
+		FILE = 15
 	}
 
 	export interface IncomingEvent {
