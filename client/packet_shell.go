@@ -56,7 +56,7 @@ func (packet ShellPacket) Read(c *Connection) error {
 		current.process.Process.Kill()
 		current.process = nil
 	case common.WriteShell:
-		current.stdin.Write([]byte(data + "\r\n"))
+		current.stdin.Write([]byte(data + shell.LineEnd))
 	}
 
 	return err
