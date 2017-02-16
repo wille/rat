@@ -16,6 +16,9 @@ class BuildView extends View {
 			let os = (<HTMLOptionElement>osElement.options[osElement.selectedIndex]).value;
 
 			manifestDiv.hidden = !(os === "all" || os === "windows");
+
+			let x86 = <HTMLOptionElement>document.getElementById("386");
+			x86.disabled = os === "macos";
 		};
 
 		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
