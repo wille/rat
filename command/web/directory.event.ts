@@ -57,8 +57,10 @@ class DirectoryEvent implements Control.IncomingEvent {
 			deleteElement.onclick = () => {
 				let file = this.view.current + entry.path;
 
-				this.view.fileEvent(FileTask.UNLINK, file);
-				this.view.reload();
+				if (confirm("Are you sure that you want to delete \"" + file + "\"?")) {
+					this.view.fileEvent(FileTask.UNLINK, file);
+					this.view.reload();
+				}
 			};
 			actionsCell.appendChild(deleteElement);
 		}
