@@ -1,8 +1,6 @@
 #ifndef _SCREEN_H
 #define _SCREEN_H
 
-#define DEBUG_WRITE_RAW
-
 typedef struct {
 	int x, y, width, height;
 } MonitorCoordinates;
