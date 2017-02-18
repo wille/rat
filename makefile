@@ -1,15 +1,24 @@
 GCFLAGS=-gcflags="-trimpath=$(GOPATH)\src"
 
-BUILD=go build $(GCFLAGS)
-PROD=CGO_ENABLED=1 go build $(GCFLAGS) -ldflags="-w -s" --tags="prod"
-PROD_WIN32=CGO_ENABLED=1 go build $(GCFLAGS) -ldflags="-w -s" --tags="prod"
+BUILD=CGO_ENABLED=1 go build
+LDFLAGS=-ldflags="-w -s"
+
+DEFAULT=$(BUILD) $(GCFLAGS)
+PROD=$(BUILD) $(GCFLAGS) $(LDFLAGS) --tags="prod"
+PROD_WIN32=$(BUILD) $(GCFLAGS) -ldflags="-w -s -H windowsgui" --tags="prod"
 
 LIB=command/web/static/lib.js
 UPX=-upx -9
 
+ifdef SYSTEMROOT # windows
+	EXT=.exe
+else
+	EXT=
+endif
+
 default: web
-	cd client && $(BUILD) -o ../client.exe
-	cd command && $(BUILD) -o ../command.exe
+	cd client && $(DEFAULT) -o ../client$(EXT)
+	cd command && $(DEFAULT) -o ../command$(EXT)
 
 web:
 	-tsc
@@ -22,8 +31,8 @@ cert:
 	cd command && openssl req -new -x509 -key private.key -out cert.pem -days 365
 
 prod: web ugly
-	cd command && $(PROD) -o ../command.exe
-	$(UPX) command.exe
+	cd command && $(PROD) -o ../command$(EXT)
+	$(UPX) command$(EXT)
 
 windows: prod
 	cd client && GOOS=windows GOARCH=amd64 $(PROD_WIN32) -o ../command/bin/windows_amd64.exe
