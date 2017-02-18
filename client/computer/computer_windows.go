@@ -23,14 +23,14 @@ func GetComputerInformation() common.Computer {
 	ptr := (*C.WCHAR)(unsafe.Pointer(&lpBuffer[0]))
 
 	C.GetUserNameW(ptr, &lpnSize)
-	info.Username = utils.GetWideString(lpBuffer[:lpnSize], int(lpnSize))
+	info.Username = utils.TrimCStr(utils.GetWideString(lpBuffer[:lpnSize], int(lpnSize)))
 
 	lpnSize = BufferSize
 	C.GetComputerNameW(ptr, &lpnSize)
-	info.Hostname = utils.GetWideString(lpBuffer[:lpnSize], int(lpnSize))
+	info.Hostname = utils.TrimCStr(utils.GetWideString(lpBuffer[:lpnSize], int(lpnSize)))
 
 	C.SHGetFolderPathW(nil, C.CSIDL_PROFILE, nil, 0, ptr)
-	info.HomeDir = utils.GetWideString(lpBuffer, utils.GetLength(lpBuffer))
+	info.HomeDir = utils.TrimCStr(utils.GetWideString(lpBuffer, utils.GetLength(lpBuffer)))
 
 	return info
 }
