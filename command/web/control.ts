@@ -15,7 +15,8 @@ namespace Control {
 		KEY = 12,
 		BUILD = 13,
 		TERMINAL = 14,
-		FILE = 15
+		FILE = 15,
+		EXIT = 16
 	}
 
 	export interface IncomingEvent {

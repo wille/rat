@@ -23,6 +23,7 @@ const (
 	Build                       = 13
 	Shell                       = 14
 	ModifyFileEvent             = 15
+	Exit                        = 16
 )
 
 // Event incoming message data
@@ -65,6 +66,7 @@ func init() {
 	Messages[Build] = BuildMessage{}
 	Messages[Shell] = ShellMessage{}
 	Messages[ModifyFileEvent] = FileMessage{}
+	Messages[Exit] = ExitMessage{}
 }
 
 func newEvent(event int, clientID int, data string) *Event {
