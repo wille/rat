@@ -2,17 +2,17 @@ BUILD=go build
 PROD=CGO_ENABLED=1 go build -ldflags="-w -s" --tags="prod"
 PROD_WIN32=CGO_ENABLED=1 go build -ldflags="-w -s -H windowsgui" --tags="prod"
 LIB=command/web/static/lib.js
-UPX=upx -9
+UPX=-upx -9
 
 default: web
 	cd client && $(BUILD) -o ../client.exe
 	cd command && $(BUILD) -o ../command.exe
 
 web:
-	tsc
+	-tsc
 
 ugly: web
-	uglifyjs --compress --mangle -o $(LIB) -- $(LIB)
+	-uglifyjs --compress --mangle -o $(LIB) -- $(LIB)
 
 cert:
 	cd command && openssl genrsa -out private.key 1024
