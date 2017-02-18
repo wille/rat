@@ -1,6 +1,9 @@
-BUILD=go build
-PROD=CGO_ENABLED=1 go build -ldflags="-w -s" --tags="prod"
-PROD_WIN32=CGO_ENABLED=1 go build -ldflags="-w -s -H windowsgui" --tags="prod"
+GCFLAGS=-gcflags="-trimpath=$(GOPATH)\src"
+
+BUILD=go build $(GCFLAGS)
+PROD=CGO_ENABLED=1 go build $(GCFLAGS) -ldflags="-w -s" --tags="prod"
+PROD_WIN32=CGO_ENABLED=1 go build $(GCFLAGS) -ldflags="-w -s" --tags="prod"
+
 LIB=command/web/static/lib.js
 UPX=-upx -9
 
