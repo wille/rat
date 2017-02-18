@@ -27,8 +27,14 @@ class DirectoryView extends View {
 		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this, this.id));
 		this.backElement.onclick = () => this.back();
 
-		let element = document.getElementById("upload");
-		element.onclick = () => this.upload();
+		let uploadElement = document.getElementById("upload");
+		uploadElement.onclick = () => this.upload();
+
+		let downloadElement = document.getElementById("download");
+		downloadElement.onclick = () => this.download();
+
+		let deleteElement = document.getElementById("delete");
+		deleteElement.onclick = () => this.delete();
 
 		this.browse("");
 	}
@@ -59,6 +65,22 @@ class DirectoryView extends View {
 		return <HTMLTableElement>document.getElementById("files");
 	}
 
+	public getSelectedFiles() {
+		let elements = document.getElementsByTagName("tr");
+
+		let selected = [];
+
+		for (let i = 0; i < elements.length; i++) {
+			let element = elements[i];
+
+			if (element.className === "selected") {
+				selected.push(this.current + element.children[0].innerHTML);
+			}
+		}
+
+		return selected;
+	}
+
 	public back() {
 		let path = this.current;
 
@@ -77,7 +99,7 @@ class DirectoryView extends View {
 			this.current = "";
 		}
 
-		if (this.separator == "/" && this.current == "" && path == "") {
+		if (this.separator === "/" && this.current === "" && path === "") {
 			this.current = "/";
 		}
 
@@ -152,6 +174,30 @@ class DirectoryView extends View {
 			setTransfersView();
 		};
 		input.click();
+	}
+
+	private download() {
+		for (let file of this.getSelectedFiles()) {
+			let transfer = new Transfer(true, file);
+			Transfers.addTransfer(transfer);
+
+			let json = JSON.stringify({
+				"file": file
+			});
+			Control.instance.write(Control.EventType.DOWNLOAD, json, this.id);
+		}
+
+		setTransfersView();
+	}
+
+	private delete() {
+		for (let file of this.getSelectedFiles()) {
+			if (confirm("Are you sure that you want to delete \"" + file + "\"?")) {
+				this.fileEvent(FileTask.UNLINK, file);
+			}
+		}
+
+		this.reload();
 	}
 
 	public fileEvent(task: FileTask, file: string, destination?: string) {

@@ -33,36 +33,13 @@ class DirectoryEvent implements Control.IncomingEvent {
 			let modCell = row.insertCell(2);
 			modCell.innerHTML = entry.time;
 
-			let actionsCell = row.insertCell(3);
-
-			let downloadElement = document.createElement("p");
-			downloadElement.innerHTML = "Download";
-			downloadElement.onclick = () => {
-				let file = this.view.current + entry.path;
-
-				let transfer = new Transfer(true, file);
-				Transfers.addTransfer(transfer);
-
-				let json = JSON.stringify({
-					"file": file
-				});
-				Control.instance.write(Control.EventType.DOWNLOAD, json, this.id);
-				
-				setTransfersView();
-			};
-			actionsCell.appendChild(downloadElement);
-
-			let deleteElement = document.createElement("p");
-			deleteElement.innerHTML = "Delete";
-			deleteElement.onclick = () => {
-				let file = this.view.current + entry.path;
-
-				if (confirm("Are you sure that you want to delete \"" + file + "\"?")) {
-					this.view.fileEvent(FileTask.UNLINK, file);
-					this.view.reload();
+			row.onclick = () => {
+				if (row.className === "") {
+					row.className = "selected";
+				} else {
+					row.className = "";
 				}
 			};
-			actionsCell.appendChild(deleteElement);
 		}
 	}
 }

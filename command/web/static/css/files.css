@@ -25,3 +25,7 @@
 table.files {
 	font-size: 16px;
 }
+
+tr.selected {
+	background: #e2edff;
+}
