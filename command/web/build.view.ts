@@ -55,9 +55,6 @@ class BuildView extends View {
 		return Number(element.value);
 	}
 
-	private get upx(): boolean {
-		let element = <HTMLInputElement>document.getElementById("upx");
-		return Boolean(element.checked);
 	}
 
 	private build() {
