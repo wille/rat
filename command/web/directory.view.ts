@@ -177,17 +177,23 @@ class DirectoryView extends View {
 	}
 
 	private download() {
+		setTransfersView();
+
+		let interval = 0;
 		for (let file of this.getSelectedFiles()) {
+			interval += 1000;
+
 			let transfer = new Transfer(true, file);
 			Transfers.addTransfer(transfer);
 
 			let json = JSON.stringify({
 				"file": file
 			});
-			Control.instance.write(Control.EventType.DOWNLOAD, json, this.id);
-		}
 
-		setTransfersView();
+			setTimeout(() => {
+				Control.instance.write(Control.EventType.DOWNLOAD, json, this.id);
+			}, interval);
+		}
 	}
 
 	private delete() {

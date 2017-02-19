@@ -78,6 +78,10 @@ func (packet DownloadPacket) Read(c *Client) error {
 		}
 
 		data, err := json.Marshal(&e)
+		if err != nil {
+			return err
+		}
+
 		event := newEvent(DownloadProgressUpdateEvent, c.Id, string(data))
 
 		err = websocket.JSON.Send(ws, &event)
@@ -88,6 +92,9 @@ func (packet DownloadPacket) Read(c *Client) error {
 	}
 
 	if final {
+		defer delete(Transfers, file)
+		defer delete(c.Listeners, common.GetFileHeader)
+
 		err = transfer.Local.Sync()
 		if err != nil {
 			return err
@@ -97,9 +104,6 @@ func (packet DownloadPacket) Read(c *Client) error {
 		if err != nil {
 			return err
 		}
-
-		delete(Transfers, file)
-		delete(c.Listeners, common.GetFileHeader)
 
 		return nil
 	}
