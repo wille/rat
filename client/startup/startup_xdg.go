@@ -23,14 +23,12 @@ func Install(name, path string) error {
 	}
 	defer file.Close()
 
-	_, err = file.WriteString(`
-		[Desktop Entry]
-		Type=Application
-		Name=` + name + `
-		Exec=` + path + `
-		Terminal=false
-		NoDisplay=true
-	`)
+	_, err = file.WriteString(`[Desktop Entry]
+Type=Application
+Name=` + name + `
+Exec=` + path + `
+Terminal=false
+NoDisplay=true`)
 
 	exec.Command("chmod", "+x", path)
 
