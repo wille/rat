@@ -22,8 +22,10 @@ func main() {
 		if err != nil {
 			fmt.Println("install:", err.Error())
 		} else {
-			exec.Command(file).Start()
-			return
+			err = exec.Command(file).Start()
+			if err != nil {
+				fmt.Println(err.Error())
+			}
 		}
 	}
 

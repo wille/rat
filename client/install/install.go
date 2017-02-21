@@ -45,6 +45,11 @@ func Install(name string, p installpath.Path) (string, error) {
 	file := filepath.Join(getPath(p), name)
 
 	out, err := os.Create(file)
+
+	if oslib.Name != oslib.Windows {
+		out.Chmod(0777)
+	}
+
 	defer out.Close()
 	if err != nil {
 		return "", err
