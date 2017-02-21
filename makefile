@@ -13,7 +13,7 @@ UPX=-upx -9
 ifdef SYSTEMROOT # windows
 	EXT=.exe
 else
-	EXT=
+	EXT=.bin
 endif
 
 default: web
@@ -60,7 +60,7 @@ fakebin:
 clean:
 	cd client/screen/ && rm -f *.bmp *.jpg
 	rm -f debug.bmp
-	rm -f *.exe
+	rm -f *.exe *.bin
 	rm -f command/command client/client command/command.exe client/client.exe
 	rm -f command/debug client/debug
 	rm -f command/bin/*
