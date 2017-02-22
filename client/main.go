@@ -43,7 +43,7 @@ func start(config common.BinaryConfig) {
 		fmt.Println("Connecting to", host)
 
 		conn, err := tls.Dial("tcp", host, &tls.Config{
-			InsecureSkipVerify: true,
+			InsecureSkipVerify: Config.InvalidSSL,
 		})
 
 		con := Connection{

@@ -21,6 +21,7 @@ type Config struct {
 	Delay      int    `json:"delay"`
 	UPX        bool   `json:"upx"`
 	Name       string `json:"name"`
+	InvalidSSL bool   `json:"invalid_ssl"`
 }
 
 type file struct {
@@ -50,9 +51,11 @@ func Build(c *Config) (string, string, error) {
 	}
 
 	config := common.BinaryConfig{
-		Host:  c.Host,
-		Delay: c.Delay,
-		Name:  c.Name,
+		Host:       c.Host,
+		Delay:      c.Delay,
+		Name:       c.Name,
+		Install:    0,
+		InvalidSSL: c.InvalidSSL,
 	}
 
 	fmt.Println("Encoded config:", config)

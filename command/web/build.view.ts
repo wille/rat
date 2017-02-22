@@ -55,17 +55,24 @@ class BuildView extends View {
 		return Number(element.value);
 	}
 
+	private get invalidCerts(): boolean {
+		let element = <HTMLInputElement>document.getElementById("invalidssl");
+		return element.checked;
+	}
+
 	}
 
 	private build() {
-		let data = JSON.stringify({
+		let os = this.os;
+
+		let data = {
 			"host": this.host,
-			"os": this.os,
+			"os": os,
 			"arch": this.arch,
 			"delay": this.delay,
-			"upx": this.upx,
-			"name": this.name
-		});
+			"name": this.name,
+			"invalid_ssl": this.invalidCerts
+		};
 
 		Control.instance.write(Control.EventType.BUILD, data);
 	}
