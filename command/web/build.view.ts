@@ -60,6 +60,20 @@ class BuildView extends View {
 		return element.checked;
 	}
 
+	private get installPath(): number {
+		let elements = document.getElementsByName("path");
+
+		for (let i = 0; i < elements.length; i++) {
+			let element = <HTMLInputElement>elements[i];
+
+			if (element.checked) {
+				return Number(element.value);
+			}
+		}
+
+		return 0;
+	}
+
 	}
 
 	private build() {
@@ -71,6 +85,7 @@ class BuildView extends View {
 			"arch": this.arch,
 			"delay": this.delay,
 			"name": this.name,
+			"install_path": this.installPath,
 			"invalid_ssl": this.invalidCerts
 		};
 
