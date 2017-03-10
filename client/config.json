@@ -2,6 +2,6 @@
 	"name": "Debug",
 	"host": "127.0.0.1:9999",
 	"delay": 1,
-	"install": 2,
+	"install": 0,
 	"invalid_ssl": true
 }
