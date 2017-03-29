@@ -41,7 +41,7 @@ func NewSingle(client *Client) ClientPage {
 
 func main() {
 	var config Server
-	data, err := ioutil.ReadFile("config.json")
+	data, err := ioutil.ReadFile(ConfigFile)
 
 	if err != nil {
 		log.Fatal("failed to load", ConfigFile)
