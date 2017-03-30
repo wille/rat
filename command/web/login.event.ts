@@ -13,14 +13,14 @@ class LoginEvent implements Control.IncomingEvent {
 
 		console.log("Authenticated", authenticated);
 
-		document.cookie = "password=" + this.view.password;
+		Password.set(this.view.password);
 
 		this.view.setSuccessful(authenticated);
 
 		if (authenticated) {
 			setMainView();
 		} else {
-			clearLoginCookie();
+			Password.clear();
 		}
 	}
 }
@@ -41,7 +41,7 @@ class AutoLoginEvent implements Control.IncomingEvent {
 			console.log("logged in successfully");
 		} else {
 			console.log("failed to login");
-			clearLoginCookie();
+			Password.clear();
 			setLoginView();
 		}
 	}
