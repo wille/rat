@@ -22,7 +22,10 @@ type TempFile struct {
 }
 
 // TempFiles contains mappings to downloaded files in temporary directory
-var TempFiles map[string]TempFile
+var (
+	TempFiles map[string]TempFile
+	Config    Server
+)
 
 func addDownload(tf TempFile) string {
 	tempKey := utils.Sha256(tf.Path)
@@ -40,7 +43,6 @@ func NewSingle(client *Client) ClientPage {
 }
 
 func main() {
-	var config Server
 	data, err := ioutil.ReadFile(ConfigFile)
 
 	if err != nil {
@@ -48,9 +50,9 @@ func main() {
 		return
 	}
 
-	json.Unmarshal(data, &config)
+	json.Unmarshal(data, &Config)
 
-	go Listen(&config)
+	go Listen(&Config)
 
 	funcMap := template.FuncMap{
 		"Version": func() string { return common.Version },
@@ -128,7 +130,7 @@ func main() {
 
 	InitControlSocket()
 
-	log.Fatal(http.ListenAndServeTLS(config.HttpAddress, "cert.pem", "private.key", nil))
+	log.Fatal(http.ListenAndServeTLS(Config.HttpAddress, "cert.pem", "private.key", nil))
 }
 
 func init() {
@@ -144,4 +146,8 @@ func GetClient(id int) *Client {
 	}
 
 	return nil
+}
+
+func Authenticate(p string) bool {
+	return p == Config.Password
 }

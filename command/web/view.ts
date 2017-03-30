@@ -51,3 +51,7 @@ function setBuildView() {
 function setTransfersView() {
 	setView(new TransfersView());
 }
+
+function setLoginView() {
+	setView(new LoginView());
+}

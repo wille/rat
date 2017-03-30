@@ -16,7 +16,8 @@ namespace Control {
 		BUILD = 13,
 		TERMINAL = 14,
 		FILE = 15,
-		EXIT = 16
+		EXIT = 16,
+		LOGIN = 17 // login.event.ts
 	}
 
 	export interface IncomingEvent {
@@ -94,6 +95,9 @@ namespace Control {
 
 	export class Client {
 
+		public authenticated: boolean;
+		
+		private key: string;
 		private socket: WebSocket;
 
 		constructor() {
@@ -101,7 +105,8 @@ namespace Control {
 			addEvent(EventType.TRANSFERS, new TransfersEvent());
 		}
 
-		public start() {
+		public start(key: string) {
+			this.key = key;
 			this.reconnect();
 		}
 
@@ -121,6 +126,10 @@ namespace Control {
 			}));
 		}
 
+		public stop() {
+			this.socket.close();
+		}
+
 		private reconnect() {
 			if (this.socket !== undefined) {
 				this.socket.close();
@@ -129,13 +138,19 @@ namespace Control {
 			this.socket.onmessage = (event) => this.onMessage(event);
 
 			this.socket.onclose = () => {
-				setTimeout(this.reconnect(), 1000);
+				if (this.authenticated) {
+					setTimeout(this.reconnect(), 1000);
+				}
 				Connection.setConnectionStatus(false);
 			};
 
 			this.socket.onopen = () => {
 				Connection.setConnectionStatus(true);
 				console.log("control socket: connected");
+
+				this.socket.send(JSON.stringify({
+					"key": this.key
+				}));
 			};
 		}
 
@@ -147,9 +162,11 @@ namespace Control {
 
 	export let instance: Control.Client = new Control.Client();
 
-	export function init() {
-		Control.instance.start();
+	export function init(key: string) {
+		Control.instance.start(key);
+	}
+
+	export function stop() {
+		Control.instance.stop();
 	}
 }
-
-Control.init();

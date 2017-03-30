@@ -24,6 +24,7 @@ const (
 	Shell                       = 14
 	ModifyFileEvent             = 15
 	Exit                        = 16
+	AuthenticationEvent         = 17
 )
 
 // Event incoming message data
@@ -78,13 +79,38 @@ func incomingWebSocket(ws *websocket.Conn) {
 		ws.Close()
 	}()
 
+	var auth LoginMessage
+	err := websocket.JSON.Receive(ws, &auth)
+	if err != nil {
+		fmt.Println("error while authenticating", err.Error())
+		return
+	}
+	fmt.Println("client login with:", auth)
+
+	authenticated := Authenticate(auth.Key)
+
+	result, err := json.Marshal(LoginResultMessage{authenticated})
+	if err != nil {
+		fmt.Println("auth", err.Error())
+		return
+	}
+	event := newEvent(AuthenticationEvent, 0, string(result))
+	websocket.JSON.Send(ws, &event)
+
+	if !authenticated {
+		fmt.Println("Not authenticated!")
+		return
+	}
+
+	fmt.Println("authenticated with key", auth.Key)
+
 	transfers, err := json.Marshal(&DisplayTransfers)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
-	event := newEvent(TransfersEvent, 0, string(transfers))
+	event = newEvent(TransfersEvent, 0, string(transfers))
 	websocket.JSON.Send(ws, &event)
 
 	for {
