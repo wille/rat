@@ -1,8 +1,3 @@
-function exit() {
-	Control.instance.write(Control.EventType.EXIT, "");
-	window.close();
-}
-
 function autoLogin() {
 	Control.addEvent(Control.EventType.LOGIN, new AutoLoginEvent());
 
@@ -13,6 +8,7 @@ function autoLogin() {
 }
 
 function logout() {
+	Control.instance.write(Control.EventType.EXIT, "");
 	Password.clear();
 	setLoginView();
 }
