@@ -16,5 +16,13 @@ class ProcessEvent implements Control.IncomingEvent {
 
 		let pathCell = row.insertCell(1);
 		pathCell.innerHTML = path;
+
+		row.onclick = () => {
+			if (row.className === "") {
+				row.className = "selected";
+			} else {
+				row.className = "";
+			}
+		}
 	}
 }
