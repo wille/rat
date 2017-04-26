@@ -8,7 +8,6 @@ function autoLogin() {
 }
 
 function logout() {
-	Control.instance.write(Control.EventType.EXIT, "");
 	Password.clear();
 	setLoginView();
 }
