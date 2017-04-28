@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef _PROCESS_H
 #define _PROCESS_H
 
@@ -13,5 +15,7 @@ typedef struct {
 extern void ProcessCallback(Process p);
 
 void QueryProcesses(void);
+
+bool Kill(int pid);
 
 #endif

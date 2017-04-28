@@ -5,6 +5,11 @@ import (
 	"strconv"
 )
 
+/*
+#include "process.h"
+*/
+import "C"
+
 func QueryProcesses() {
 	Processes = make([]Process, 0)
 
@@ -30,4 +35,8 @@ func QueryProcesses() {
 			}
 		}
 	}
+}
+
+func Kill(pid int) {
+	C.Kill(C.int(pid))
 }

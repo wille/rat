@@ -22,3 +22,7 @@ func QueryProcesses() {
 	Processes = make([]Process, 0)
 	C.QueryProcesses()
 }
+
+func Kill(pid int) {
+	C.Kill(C.int(pid))
+}

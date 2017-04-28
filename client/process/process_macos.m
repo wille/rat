@@ -108,3 +108,7 @@ void QueryProcesses(void) {
 
     free(procs);
 }
+
+bool Kill(int pid) {
+	return false;
+}

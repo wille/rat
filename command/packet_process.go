@@ -9,6 +9,8 @@ import (
 )
 
 type ProcessPacket struct {
+	Type int
+	PIDs []int
 }
 
 func (packet ProcessPacket) GetHeader() common.PacketHeader {
@@ -16,6 +18,14 @@ func (packet ProcessPacket) GetHeader() common.PacketHeader {
 }
 
 func (packet ProcessPacket) Write(c *Client) error {
+	c.WriteInt(packet.Type)
+
+	c.WriteInt(len(packet.PIDs))
+
+	for _, pid := range packet.PIDs {
+		c.WriteInt(pid)
+	}
+
 	return nil
 }
 

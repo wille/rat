@@ -1,5 +1,10 @@
 /// <reference path="view.ts" />
 
+enum ProcessRequestType {
+	QUERY = 0,
+	KILL = 1
+}
+
 class ProcessView extends SubView {
 
 	constructor(id: number) {
@@ -10,7 +15,7 @@ class ProcessView extends SubView {
 		let element = <HTMLTableElement>document.getElementById("processes");
 
 		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(element, this.id));
-		Control.instance.write(Control.EventType.PROCESS, "", this.id);
+		this.update();
 
 		let killElement = document.getElementById("kill");
 		killElement.onclick = () => this.kill();
@@ -29,16 +34,30 @@ class ProcessView extends SubView {
 			let element = elements[i];
 
 			if (element.className === "selected") {
-				selected.push(element.children[0].innerHTML);
+				selected.push(Number(element.children[0].innerHTML));
 			}
 		}
 
 		return selected;
 	}
 
-	private kill() {
-		for (let pid of this.getSelectedProcesses()) {
-			console.log(pid);
+	private send(type: ProcessRequestType, pids?: number[]) {
+		let data = {
+			"type": type
+		};
+
+		if (pids) {
+			data["pids"] = pids;
 		}
+
+		Control.instance.write(Control.EventType.PROCESS, JSON.stringify(data), this.id);
+	}
+
+	private update() {
+		this.send(ProcessRequestType.QUERY)
+	}
+
+	private kill() {
+		this.send(ProcessRequestType.KILL, this.getSelectedProcesses());
 	}
 }

@@ -42,3 +42,7 @@ void QueryProcesses(void) {
 		}
     }
 }
+
+bool Kill(int pid) {
+	return false;
+}
