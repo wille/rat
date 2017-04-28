@@ -1,6 +1,6 @@
 /// <reference path="view.ts" />
 
-class ProcessView extends View {
+class ProcessView extends SubView {
 
 	constructor(id: number) {
 		super("static/processes.html", "Processes", id);

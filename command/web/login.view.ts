@@ -1,6 +1,6 @@
 /// <reference path="view.ts" />
 
-class LoginView extends View {
+class LoginView extends MainView {
 
 	private passwordElement: HTMLInputElement;
 	private submitElement: HTMLButtonElement;

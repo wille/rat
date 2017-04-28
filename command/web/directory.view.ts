@@ -14,7 +14,7 @@ enum FileTask {
 	COPY = 3
 }
 
-class DirectoryView extends View {
+class DirectoryView extends SubView {
 
 	private currentDirectory: string;
 

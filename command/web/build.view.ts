@@ -1,6 +1,6 @@
 /// <reference path="view.ts" />
 
-class BuildView extends View {
+class BuildView extends SubView {
 
 	constructor() {
 		super("static/build.html", "Build");

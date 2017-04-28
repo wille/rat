@@ -1,6 +1,6 @@
 /// <reference path="view.ts" />
 
-class TransfersView extends View {
+class TransfersView extends SubView {
 
 	private element: HTMLTableElement;
 	private interval: number;

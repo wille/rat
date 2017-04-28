@@ -1,21 +1,43 @@
-interface IView {
-	onEnter();
-	onLeave();
+abstract class AbstractView {
+
+	constructor(public url: string, public title: string) { }
+
+	abstract onEnter();
+	abstract onLeave();
 }
 
-abstract class View implements IView {
-	constructor(public url: string, public title: string, public id?: number) { }
+abstract class MainView extends AbstractView {
+
+	constructor(url: string, title: string) {
+		super(url, title);
+	}
+
+	abstract onEnter();
+	abstract onLeave();
+}
+
+abstract class SubView extends AbstractView {
+
+	constructor(url: string, title: string, public id?: number) {
+		super(url, title);
+	}
 
 	abstract onEnter();
 	abstract onLeave();
 }
 
 // Current active view
-let currentView: View;
+let currentView: AbstractView;
 
-function setView(view: View) {
+function setView(view: AbstractView) {
 	if (currentView !== undefined) {
 		currentView.onLeave();
+	}
+
+	if (view instanceof MainView) {
+		$("#subview_toolbar").hide();
+	} else if (view instanceof SubView) {
+		$("#subview_toolbar").show();
 	}
 
 	currentView = view;

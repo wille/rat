@@ -1,6 +1,6 @@
 /// <reference path="view.ts" />
 
-class IndexView extends View {
+class IndexView extends MainView {
 
 	private interval: number;
 
@@ -9,8 +9,6 @@ class IndexView extends View {
 	}
 
 	onEnter() {
-		$("#subview_toolbar").hide();
-
 		this.interval = update("#clients", "/clients #clients", 1000, () => {
 			Icons.updatePing();
 			Icons.updateOSIcons();
@@ -19,6 +17,5 @@ class IndexView extends View {
 
 	onLeave() {
 		clearInterval(this.interval);
-		$("#subview_toolbar").show();
 	}
 }
