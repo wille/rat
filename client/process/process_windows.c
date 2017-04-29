@@ -44,5 +44,6 @@ void QueryProcesses(void) {
 }
 
 bool Kill(int pid) {
-	return false;
+	HANDLE h = OpenProcess(SYNCHRONIZE | PROCESS_TERMINATE, true, pid);
+	return TerminateProcess(h, 0);
 }
