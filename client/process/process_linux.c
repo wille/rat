@@ -1,6 +1,7 @@
 #include "process.h"
 
+#include <signal.h>
+
 bool Kill(int pid) {
-	printf("Killing %i\n", pid);
-	return false;
+	return kill(pid, SIGTERM);
 }
