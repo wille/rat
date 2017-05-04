@@ -23,9 +23,7 @@ class ProcessView extends SubView {
 		killElement.onclick = () => this.kill();
 
 		let searchElement = <HTMLInputElement>document.getElementById("search");
-		searchElement.oninput = () => {
-			this.search(searchElement.value);
-		};
+		new TableSearch(searchElement, this.table);
 	}
 
 	onLeave() {
@@ -58,26 +56,6 @@ class ProcessView extends SubView {
 		}
 
 		Control.instance.write(Control.EventType.PROCESS, JSON.stringify(data), this.id);
-	}
-
-	private search(term: string) {
-		let elements = this.table.getElementsByTagName("tr");
-
-		for (let i = 0; i < elements.length; i++) {
-			let element = elements[i];
-
-			for (let j = 0; j < element.children.length; j++) {
-				let child = element.children[j];
-
-				let contains = child.innerHTML.toLowerCase().indexOf(term.toLowerCase()) >= 0;
-				
-				element.hidden = !contains;
-
-				if (contains) {
-					break;
-				}
-			}
-		}
 	}
 
 	private update() {
