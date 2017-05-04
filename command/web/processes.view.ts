@@ -7,18 +7,25 @@ enum ProcessRequestType {
 
 class ProcessView extends SubView {
 
+	private table: HTMLTableElement;
+
 	constructor(id: number) {
 		super("static/processes.html", "Processes", id);
 	}
 
 	onEnter() {
-		let element = <HTMLTableElement>document.getElementById("processes");
+		this.table = <HTMLTableElement>document.getElementById("processes");
 
-		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(element, this.id));
+		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(this.table, this.id));
 		this.update();
 
 		let killElement = document.getElementById("kill");
 		killElement.onclick = () => this.kill();
+
+		let searchElement = <HTMLInputElement>document.getElementById("search");
+		searchElement.oninput = () => {
+			this.search(searchElement.value);
+		};
 	}
 
 	onLeave() {
@@ -33,7 +40,7 @@ class ProcessView extends SubView {
 		for (let i = 0; i < elements.length; i++) {
 			let element = elements[i];
 
-			if (element.className === "selected") {
+			if (element.className === "selected" && !element.hidden) {
 				selected.push(Number(element.children[0].innerHTML));
 			}
 		}
@@ -51,6 +58,26 @@ class ProcessView extends SubView {
 		}
 
 		Control.instance.write(Control.EventType.PROCESS, JSON.stringify(data), this.id);
+	}
+
+	private search(term: string) {
+		let elements = this.table.getElementsByTagName("tr");
+
+		for (let i = 0; i < elements.length; i++) {
+			let element = elements[i];
+
+			for (let j = 0; j < element.children.length; j++) {
+				let child = element.children[j];
+
+				let contains = child.innerHTML.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+				
+				element.hidden = !contains;
+
+				if (contains) {
+					break;
+				}
+			}
+		}
 	}
 
 	private update() {
