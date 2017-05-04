@@ -9,7 +9,7 @@ class ProcessEvent implements Control.IncomingEvent {
 		let pid = data[0];
 		let path = data[1];
 
-		let row = this.table.insertRow(1);
+		let row = this.table.insertRow(0);
 
 		let pidCell = row.insertCell(0);
 		pidCell.innerHTML = pid;
