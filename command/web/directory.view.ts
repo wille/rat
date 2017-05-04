@@ -37,6 +37,9 @@ class DirectoryView extends SubView {
 		deleteElement.onclick = () => this.delete();
 
 		this.browse("");
+
+		let searchElement = <HTMLInputElement>document.getElementById("search");
+		new TableSearch(searchElement, this.table);
 	}
 
 	onLeave() {
@@ -129,6 +132,7 @@ class DirectoryView extends SubView {
 
 	private upload() {
 		let form = document.createElement("form");
+		form.setAttribute("enctype", "multipart/form-data");
 
 		let dir = document.createElement("input");
 		dir.setAttribute("type", "hidden");
@@ -145,7 +149,10 @@ class DirectoryView extends SubView {
 		let input = document.createElement("input");
 		input.setAttribute("type", "file");
 		input.setAttribute("name", "file");
+		input.setAttribute("multiple", "multiple");
 		form.appendChild(input);
+
+		setTransfersView();
 
 		input.onchange = (event) => {
 			let file = input.files[0];
@@ -170,8 +177,6 @@ class DirectoryView extends SubView {
 			});
 			req.open("post", "/upload");
 			req.send(new FormData(form));
-
-			setTransfersView();
 		};
 		input.click();
 	}
