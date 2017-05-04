@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <errno.h>
 #include <libproc.h>
+#include <signal.h>
 
 #include "process.h"
 
@@ -110,5 +111,5 @@ void QueryProcesses(void) {
 }
 
 bool Kill(int pid) {
-	return false;
+	return kill(pid, SIGTERM);
 }
