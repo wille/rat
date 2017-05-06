@@ -30,25 +30,37 @@ cert:
 	cd command && openssl genrsa -out private.key 1024
 	cd command && openssl req -new -x509 -key private.key -out cert.pem -days 365
 
-prod: web ugly
+controller: web ugly
 	cd command && $(PROD) -o ../command$(EXT)
 	$(UPX) command$(EXT)
 
-windows: prod
+windows: controller
 	cd client && GOOS=windows GOARCH=amd64 $(PROD_WIN32) -o ../command/bin/windows_amd64.exe
 	$(UPX) command/bin/windows_amd64.exe
 	cd client && GOOS=windows GOARCH=386 $(PROD_WIN32) -o ../command/bin/windows_x86.exe
 	$(UPX) command/bin/windows_x86.exe
 
-macos: prod
+macos: controller
 	cd client && GOOS=darwin GOARCH=amd64 $(PROD) -o ../command/bin/macos_amd64
 	$(UPX) command/bin/macos_amd64
 
-linux: prod
+linux: controller
 	cd client && GOOS=linux GOARCH=amd64 $(PROD) -o ../command/bin/linux_amd64
 	$(UPX) command/bin/linux_amd64
 	cd client && GOOS=linux GOARCH=386 $(PROD) -o ../command/bin/linux_x86
 	$(UPX) command/bin/linux_x86
+
+prod:
+	rm -rf prod
+	mkdir prod
+	cp command/GeoLite2-Country.mmdb prod/
+	cp command/config.json prod/
+	mkdir prod/bin
+	cp command/bin/* prod/bin/
+	mkdir prod/web
+	cp command/web/*.template.html prod/web/
+	cp -R command/web/static prod/web
+	@echo Move controller binaries for different platforms manually to production folder!
 
 fakebin:
 	touch command/bin/windows_amd64.exe
