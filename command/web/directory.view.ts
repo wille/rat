@@ -76,7 +76,7 @@ class DirectoryView extends SubView {
 		for (let i = 0; i < elements.length; i++) {
 			let element = elements[i];
 
-			if (element.className === "selected") {
+			if (element.className === "selected" && !element.hidden) {
 				selected.push(this.current + element.children[0].innerHTML);
 			}
 		}
