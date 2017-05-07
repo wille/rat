@@ -2,6 +2,9 @@
 
 class BuildView extends SubView {
 
+	private iconPreviewElement: HTMLImageElement;
+	private iconElement: HTMLInputElement;
+
 	constructor() {
 		super("static/build.html", "Build");
 	}
@@ -20,6 +23,11 @@ class BuildView extends SubView {
 			let x86 = <HTMLOptionElement>document.getElementById("386");
 			x86.disabled = os === "macos";
 		};
+
+		this.iconPreviewElement = <HTMLImageElement>document.getElementById("icon_preview");
+
+		this.iconElement = <HTMLInputElement>document.getElementById("icon");
+		this.iconElement.onchange = () => this.updateIcon();
 
 		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
 	}
@@ -72,6 +80,10 @@ class BuildView extends SubView {
 		}
 
 		return 0;
+	}
+
+	private updateIcon() {
+		this.iconPreviewElement.src = URL.createObjectURL(this.iconElement.files[0]);
 	}
 
 	}
