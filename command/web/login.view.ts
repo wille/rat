@@ -18,10 +18,14 @@ class LoginView extends MainView {
 		this.submitElement.onclick = () => this.login();
 
 		Control.addEvent(Control.EventType.LOGIN, new LoginEvent(this));
+
+		Statusbar.hide();
 	}
 
 	onLeave() {
 		Control.removeEvent(Control.EventType.LOGIN);
+		
+		Statusbar.show();
 	}
 
 	public setSuccessful(result: boolean) {

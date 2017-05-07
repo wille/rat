@@ -17,4 +17,12 @@ namespace Statusbar {
 		statusbar.removeChild(element);
 		statusbar.removeChild(statusbar.childNodes[statusbar.childNodes.length - 1]);
 	}
+
+	export function hide() {
+		statusbar.hidden = true;
+	}
+
+	export function show() {
+		statusbar.hidden = false;
+	}
 }
