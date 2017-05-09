@@ -43,6 +43,8 @@ func NewSingle(client *Client) ClientPage {
 }
 
 func main() {
+	fmt.Println("tsm rat", common.Version)
+
 	data, err := ioutil.ReadFile(ConfigFile)
 
 	if err != nil {
