@@ -6,7 +6,7 @@ const (
 	Linux   = "Linux"
 
 	// Version global version number
-	Version = "0.0"
+	Version = "0.1-b1"
 
 	TransferPacketSize int64 = 1024 * 8
 )
