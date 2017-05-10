@@ -2,6 +2,7 @@ package build
 
 import (
 	"archive/zip"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
@@ -24,6 +25,11 @@ type Config struct {
 	Name        string `json:"name"`
 	InstallPath int    `json:"install_path"`
 	InvalidSSL  bool   `json:"invalid_ssl"`
+
+	Manifest struct {
+		Version  string `json:"version,omitempty"`
+		IconData string `json:"icon,omitempty"`
+	} `json:"manifest,omitempty"`
 }
 
 type file struct {
@@ -61,6 +67,22 @@ func Build(c *Config) (string, string, error) {
 	}
 
 	fmt.Println("Encoded config:", config)
+
+	if c.Manifest.IconData != "" {
+		icon, err := ioutil.TempFile("", "icon")
+		if err != nil {
+			fmt.Println("icon:", err.Error())
+		}
+
+		data, err := base64.StdEncoding.DecodeString(c.Manifest.IconData)
+		if err != nil {
+			fmt.Println("icon:", err.Error())
+		}
+
+		icon.Write(data)
+
+		icon.Close()
+	}
 
 	var files []file
 

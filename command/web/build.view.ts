@@ -4,6 +4,7 @@ class BuildView extends SubView {
 
 	private iconPreviewElement: HTMLImageElement;
 	private iconElement: HTMLInputElement;
+	private iconData: ArrayBuffer;
 
 	constructor() {
 		super("static/build.html", "Build");
@@ -84,8 +85,26 @@ class BuildView extends SubView {
 
 	private updateIcon() {
 		this.iconPreviewElement.src = URL.createObjectURL(this.iconElement.files[0]);
+
+		let file = this.iconElement.files[0];
+		var reader = new FileReader();
+
+		reader.onload = (e: any) => {
+			this.iconData = e.target.result;
+		};
+		
+		reader.readAsArrayBuffer(file);
 	}
 
+	private get icon() {
+		let base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(this.iconData)));
+
+		return base64String;
+	}
+
+	private get version(): string {
+		let element = <HTMLInputElement>document.getElementById("version");
+		return element.value === "" ? element.placeholder : element.value;
 	}
 
 	private build() {
@@ -101,6 +120,15 @@ class BuildView extends SubView {
 			"invalid_ssl": this.invalidCerts
 		};
 
-		Control.instance.write(Control.EventType.BUILD, data);
+		if (os === "all" || os === "windows") {
+			data["manifest"] = {
+				"version": this.version,
+				"icon": this.icon
+			};
+		}
+
+		console.log(JSON.stringify(data));
+
+		Control.instance.write(Control.EventType.BUILD, JSON.stringify(data));
 	}
 }
