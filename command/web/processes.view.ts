@@ -22,6 +22,9 @@ class ProcessView extends SubView {
 		let killElement = document.getElementById("kill");
 		killElement.onclick = () => this.kill();
 
+		let spawnElement = document.getElementById("spawn");
+		spawnElement.onclick = () => this.spawn();
+
 		let searchElement = <HTMLInputElement>document.getElementById("search");
 		new TableSearch(searchElement, this.table);
 	}
@@ -64,5 +67,9 @@ class ProcessView extends SubView {
 
 	private kill() {
 		this.send(ProcessRequestType.KILL, this.getSelectedProcesses());
+	}
+	
+	private spawn() {
+		showDialog(new SpawnDialog(this.id));
 	}
 }
