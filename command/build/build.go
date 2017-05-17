@@ -68,6 +68,8 @@ func Build(c *Config) (string, string, error) {
 
 	fmt.Println("Encoded config:", config)
 
+	var options []optionpair
+
 	if c.Manifest.IconData != "" {
 		icon, err := ioutil.TempFile("", "icon")
 		if err != nil {
@@ -82,6 +84,12 @@ func Build(c *Config) (string, string, error) {
 		icon.Write(data)
 
 		icon.Close()
+
+		options = append(options, optionpair{Icon, icon.Name()})
+	}
+
+	if c.Manifest.Version != "" {
+		options = append(options, optionpair{ProductVersion, c.Manifest.Version})
 	}
 
 	var files []file
@@ -139,6 +147,10 @@ func Build(c *Config) (string, string, error) {
 			binary.Write(temp, common.ByteOrder, offset) // write offset as int32 (4 bytes)
 
 			temp.Close()
+
+			if ost == "windows" && len(options) > 0 {
+				AddResources(temp.Name(), options)
+			}
 		}
 	}
 
