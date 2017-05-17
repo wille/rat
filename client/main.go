@@ -20,10 +20,12 @@ func main() {
 	}
 
 	if Config.Install != installpath.None && !install.IsInstalled(Config.Install) {
+		fmt.Println("Not installed, installing...")
 		file, err := install.Install(Config.Name, Config.Install)
 		if err != nil {
 			fmt.Println("install:", err.Error())
 		} else {
+			fmt.Println("Installed to", file)
 			err = exec.Command(file).Start()
 			if err != nil {
 				fmt.Println(err.Error())
