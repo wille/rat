@@ -9,13 +9,15 @@ class IndexView extends MainView {
 	}
 
 	onEnter() {
-		this.interval = update("#clients", "/clients #clients", 1000, () => {
-			Icons.updatePing();
-			Icons.updateOSIcons();
-		});
+		this.interval = update("#clients", "/clients #clients", 1000, this.onUpdate);
 	}
 
 	onLeave() {
 		clearInterval(this.interval);
+	}
+
+	private onUpdate() {
+		Icons.updatePing();
+		Icons.updateOSIcons();
 	}
 }
