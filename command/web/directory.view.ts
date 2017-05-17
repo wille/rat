@@ -14,6 +14,34 @@ enum FileTask {
 	COPY = 3
 }
 
+class DirectoryContextMenu extends ContextMenu {
+
+	private view: DirectoryView;
+
+	private downloadItem;
+	private deleteItem;
+
+	constructor(parent: DirectoryView) {
+		super(parent.table, document.getElementById("menu"));
+
+		this.view = parent;
+
+		this.downloadItem = document.getElementById("item-download");
+		this.downloadItem.onclick = () => parent.download();
+
+		this.deleteItem = document.getElementById("item-remove");
+		this.deleteItem.onclick = () => parent.delete();
+	}
+
+	onOpen() {
+
+	}
+
+	onClose() {
+
+	}
+}
+
 class DirectoryView extends SubView {
 
 	private currentDirectory: string;
@@ -30,16 +58,13 @@ class DirectoryView extends SubView {
 		let uploadElement = document.getElementById("upload");
 		uploadElement.onclick = () => this.upload();
 
-		let downloadElement = document.getElementById("download");
-		downloadElement.onclick = () => this.download();
-
-		let deleteElement = document.getElementById("delete");
-		deleteElement.onclick = () => this.delete();
-
 		this.browse("");
 
 		let searchElement = <HTMLInputElement>document.getElementById("search");
 		new TableSearch(searchElement, this.table);
+
+		let menu = new DirectoryContextMenu(this);
+		menu.hook();
 	}
 
 	onLeave() {
@@ -181,7 +206,7 @@ class DirectoryView extends SubView {
 		input.click();
 	}
 
-	private download() {
+	public download() {
 		setTransfersView();
 
 		let interval = 0;
@@ -201,7 +226,7 @@ class DirectoryView extends SubView {
 		}
 	}
 
-	private delete() {
+	public delete() {
 		for (let file of this.getSelectedFiles()) {
 			if (confirm("Are you sure that you want to delete \"" + file + "\"?")) {
 				this.fileEvent(FileTask.UNLINK, file);
