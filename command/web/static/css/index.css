@@ -3,19 +3,6 @@ body {
 	font-family: arial, sans-serif;
 }
 
-/* Tables */
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
 /* Clients */
 .ping-0::before {
 	content:url("../images/ping/ping0.png");

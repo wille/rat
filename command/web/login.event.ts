@@ -18,7 +18,7 @@ class LoginEvent implements Control.IncomingEvent {
 		this.view.setSuccessful(authenticated);
 
 		if (authenticated) {
-			setMainView();
+			setMainView(new IndexView());
 		} else {
 			Password.clear();
 		}

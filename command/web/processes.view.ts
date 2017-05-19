@@ -27,6 +27,10 @@ class ProcessView extends SubView {
 
 		let searchElement = <HTMLInputElement>document.getElementById("search");
 		new TableSearch(searchElement, this.table);
+
+		$("#close1").on("click", () => {
+			sub.closeView(this);
+		});
 	}
 
 	onLeave() {

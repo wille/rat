@@ -1,12 +1,25 @@
 {{ template "head" }}
 	<body>
-		<!-- Shown on all views that will return to index view -->
-		<div id="subview_toolbar">
-			<a onclick="setMainView()">Back</a>
-		</div>
-		
 		<!-- Current view -->
-		<div id="view"></div>	
+		<div id="views-parent">
+			<div id="first">
+				<ul class="nav nav-tabs" id="mainview-tabs">
+
+				</ul>
+				<div id="view-main">
+
+				</div>
+			</div>
+
+			<div id="second" hidden>
+				<ul class="nav nav-tabs" id="subview-tabs">
+
+				</ul>
+				<div id="view-sub">
+
+				</div>
+			</div>
+		</div>
 
 		<!-- Statusbar -->
 		<div id="statusbar" class="statusbar">

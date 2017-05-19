@@ -1,32 +1,59 @@
-	<table>
-		<tr>
-			<td>
-				<a id="back">Back</a>
-				<input id="dir" readonly></input>
-				<a id="upload">Upload</a>
-				<a onclick="setTransfersView()">Transfers</a>
-			</td>
-			<td>
-				<a id="download">Download</a>
-				<a id="delete">Delete</a>
-			</td>
-			<td>
-				Filter <input id="search">
-			</td>
-		</tr>
-	</table>
-	
-	<table class="files">
-		<thead>
-			<th>Name</th>
-			<th>Size</th>
-			<th>Last modified</th>
-		</thead>
-		<tbody id="files">
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
 
-		</tbody>
-	</table>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li>
+					<a id="back">Back</a>
+				</li>
+				<li>
+					<a id="upload">Upload</a>
+				</li>
+			</ul>
+			<form class="navbar-form navbar-left">
+				<div class="form-group">
+					<input type="text" id="search" class="form-control" placeholder="Search">
+				</div>
+			</form>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="close">Close</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<ol class="breadcrumb" id="path">
 	
+</ol>
+
+<table>
+	<tr>
+		<td>
+			<input id="dir" readonly></input>
+			Filter <input id="search">
+		</td>
+	</tr>
+</table>
+
+<table class="table table-bordered files">
+	<thead>
+		<th>Name</th>
+		<th>Size</th>
+		<th>Last modified</th>
+	</thead>
+	<tbody id="files">
+
+	</tbody>
+</table>
+
 <div id="menu" class="dropdown clearfix" style="position: absolute; display: none;">
 	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block; position:static; margin-bottom:5px;">
 		<li><a tabindex="-1" id="item-download">Download</a></li>

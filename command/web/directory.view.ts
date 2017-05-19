@@ -53,6 +53,7 @@ class DirectoryView extends SubView {
 	onEnter() {
 		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
 		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this, this.id));
+
 		this.backElement.onclick = () => this.back();
 
 		let uploadElement = document.getElementById("upload");
@@ -65,6 +66,10 @@ class DirectoryView extends SubView {
 
 		let menu = new DirectoryContextMenu(this);
 		menu.hook();
+
+		$("#close").on("click", () => {
+			sub.closeView(this);
+		});
 	}
 
 	onLeave() {
@@ -109,20 +114,22 @@ class DirectoryView extends SubView {
 		return selected;
 	}
 
-	public back() {
+	public back(levels: number = 1) {
 		let path = this.current;
 
-		if (path.charAt(path.length - 1) === this.separator) {
-			path = path.substring(0, path.length - 1);
-		}
+		for (let i = 0; i < levels; i++) {
+			if (path.charAt(path.length - 1) === this.separator) {
+				path = path.substring(0, path.length - 1);
+			}
 
-		path = path.substring(0, path.lastIndexOf(this.separator));
+			path = path.substring(0, path.lastIndexOf(this.separator));
+		}
 
 		this.current = null;
 		this.browse(path);
 	}
 
-	public browse(path: string) {
+	public browse(path: string, boo?) {
 		if (!this.current) {
 			this.current = "";
 		}
@@ -132,8 +139,12 @@ class DirectoryView extends SubView {
 		}
 
 		if (path !== "") {
-			path = this.current + path + this.separator;
-			this.current = path;
+			if (boo) {
+				this.current = path;
+			} else {
+				path = this.current + path + this.separator;
+				this.current = path;
+			}
 
 			document.title = this.title + " (" + path + ")";
 		} else {
@@ -143,6 +154,30 @@ class DirectoryView extends SubView {
 		let data = JSON.stringify({
 			"path": path
 		});
+
+
+		let paths = path.split(this.separator);
+
+		let breadcrumb = document.getElementById("path");
+		breadcrumb.innerHTML = "";
+
+		let depth = "";
+
+		for (let i = 0; i < paths.length; i++) {
+			let li = document.createElement("li");
+			li.innerHTML = paths[i];
+
+			depth += paths[i];
+
+			if (i < paths.length - 1) {
+				depth += this.separator;
+			}
+
+			let c = depth;
+			li.onclick = () => this.browse(c, true);
+
+			breadcrumb.appendChild(li);
+		};
 
 		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
 	}

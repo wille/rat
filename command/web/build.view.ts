@@ -1,4 +1,6 @@
 /// <reference path="view.ts" />
+/// <reference path="control.ts" />
+/// <reference path="download.event.ts" />
 
 class BuildView extends SubView {
 
