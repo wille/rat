@@ -24,7 +24,6 @@ class LoginView extends MainView {
 
 	onLeave() {
 		Control.removeEvent(Control.EventType.LOGIN);
-		
 		Statusbar.show();
 	}
 
@@ -50,4 +49,21 @@ class LoginView extends MainView {
 
 		Control.init(password);
 	}
+
+	/**
+	 * LoginView is always shown in full screen, no tabs or other elements visible
+	 * Restore all elements thats hidden, and set clients view as selected
+	 */
+	public close() {
+		$(mainViewTabs).show();
+		$(subViewContainer).show();
+		main.closeView(this);
+		main.setActiveView(MainViewContainer.clientsView);
+	}
+}
+
+function setLoginView() {
+	main.setView(new LoginView());
+	$(mainViewTabs).hide();
+	$(subViewContainer).hide();
 }

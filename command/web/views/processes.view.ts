@@ -1,5 +1,3 @@
-/// <reference path="view.ts" />
-
 enum ProcessRequestType {
 	QUERY = 0,
 	KILL = 1
@@ -14,21 +12,21 @@ class ProcessView extends SubView {
 	}
 
 	onEnter() {
-		this.table = <HTMLTableElement>document.getElementById("processes");
+		this.table = <HTMLTableElement>this.getElementById("processes");
 
 		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(this.table, this.id));
 		this.update();
 
-		let killElement = document.getElementById("kill");
+		let killElement = this.getElementById("kill");
 		killElement.onclick = () => this.kill();
 
-		let spawnElement = document.getElementById("spawn");
+		let spawnElement = this.getElementById("spawn");
 		spawnElement.onclick = () => this.spawn();
 
-		let searchElement = <HTMLInputElement>document.getElementById("search");
+		let searchElement = <HTMLInputElement>this.getElementById("search");
 		new TableSearch(searchElement, this.table);
 
-		$("#close1").on("click", () => {
+		$("#close").on("click", () => {
 			sub.closeView(this);
 		});
 	}

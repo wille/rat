@@ -1,4 +1,4 @@
-/// <reference path="view.ts" />
+/// <reference path="../views/view.ts" />
 
 abstract class Dialog extends AbstractView {
 

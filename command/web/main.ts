@@ -1,14 +1,17 @@
-/// <reference path="login.event.ts" />
+/// <reference path="events/login.event.ts" />
+/// <reference path="events/autologin.event.ts" />
+
+/// <reference path="containers/mainview.container.ts" />
+/// <reference path="containers/subview.container.ts" />
 
 function autoLogin() {
 	Control.addEvent(Control.EventType.LOGIN, new AutoLoginEvent());
 
-	let key = Password.get();
-	Control.init(key);
-	console.log("auto logging in with", "'" + key + "'");
+	Control.init(settings.password);
+	console.log("auto logging in with", "'" + settings.password + "'");
 }
 
 function logout() {
-	Password.clear();
+	settings.clearPassword();
 	setLoginView();
 }

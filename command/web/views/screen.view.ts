@@ -1,5 +1,3 @@
-/// <reference path="view.ts" />
-
 class ScreenView extends SubView {
 
 	private fps: HTMLElement;

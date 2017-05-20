@@ -1,5 +1,3 @@
-/// <reference path="view.ts" />
-
 enum FileTask {
 	// Touch file
 	TOUCH = 0,

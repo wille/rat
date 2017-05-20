@@ -21,3 +21,15 @@ class IndexView extends MainView {
 		Icons.updateOSIcons();
 	}
 }
+
+function setProcessesView(id: number) {
+	sub.setView(new ProcessView(id));
+}
+
+function setDirectoryView(id: number, separator: string) {
+	sub.setView(new DirectoryView(id, separator));
+}
+
+function setScreenView(id: number) {
+	sub.setView(new ScreenView(id));
+}

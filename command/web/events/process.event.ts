@@ -1,4 +1,4 @@
-/// <reference path="view.ts" />
+/// <reference path="../views/view.ts" />
 
 class ProcessEvent implements Control.IncomingEvent {
 

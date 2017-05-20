@@ -1,66 +1,8 @@
-abstract class AbstractView {
-
-	public tab: HTMLElement;
-	public viewElement: HTMLElement;
-
-	constructor(public url: string, public title: string) { }
-
-	abstract onEnter();
-	abstract onLeave();
-}
-
-abstract class MainView extends AbstractView {
-
-	constructor(url: string, title: string) {
-		super(url, title);
-	}
-
-	abstract onEnter();
-	abstract onLeave();
-}
-
-abstract class SubView extends AbstractView {
-
-	constructor(url: string, title: string, public id?: number) {
-		super(url, title);
-	}
-
-	abstract onEnter();
-	abstract onLeave();
-}
-
-let mainViewContainer = document.getElementById("first");
-let subViewContainer = document.getElementById("second");
-let mainViewElement = document.getElementById("view-main");
-let subViewElement = document.getElementById("view-sub");
-
-let mainViewTabs = document.getElementById("mainview-tabs");
-let subViewTabs = document.getElementById("subview-tabs");
-
-// Views
-let viewContainer = document.getElementById("views-parent");
-let currentMainView: MainView;
-
-let split;
-
-function initViews() {
-	split = Split(['#first', '#second'], {
-		sizes: [
-			0,
-			100
-		],
-		direction: "horizontal",
-		minSize: 0
-	});
-}
-
-class TabbedView<T extends AbstractView> {
+class TabbedContainer<T extends AbstractView> {
 
 	public views: T[] = [];
 
-	constructor(protected container, protected viewElement, protected tabs) {
-
-	}
+	constructor(protected container, protected viewElement, protected tabs) { }
 
 	protected isEmpty() {
 		return this.views.length == 0;
@@ -128,9 +70,7 @@ class TabbedView<T extends AbstractView> {
 		
 		this.views = temp;
 
-		let tabs = document.getElementById("subview-tabs");
-		tabs.removeChild(view.tab);
-		
+		this.tabs.removeChild(view.tab);
 		this.viewElement.removeChild(view.viewElement);
 
 		// Select nearest tab
@@ -145,5 +85,7 @@ class TabbedView<T extends AbstractView> {
 		if (this.views.length > 0) {
 			this.setActiveView(this.views[index]);
 		}
+
+		view.onLeave();
 	}
 }

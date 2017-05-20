@@ -6,3 +6,6 @@ declare var id: number;
 
 // Split.js
 declare var Split;
+
+// js-cookie
+declare var Cookies;
