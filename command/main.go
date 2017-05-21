@@ -77,29 +77,7 @@ func main() {
 			panic(err)
 		}
 	})
-	http.HandleFunc("/terminal", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.New("terminal.template.html").Funcs(funcMap).ParseFiles("web/terminal.template.html", "web/head.template.html", "web/tail.template.html"))
 
-		var client *Client
-
-		for _, k := range Clients {
-			id, err := strconv.Atoi(r.FormValue("id"))
-
-			if k.Id == id && err == nil {
-				client = k
-				break
-			}
-		}
-
-		if client == nil {
-			panic("not valid id")
-		}
-
-		err := t.Execute(w, client)
-		if err != nil {
-			panic(err)
-		}
-	})
 	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		dir := r.PostFormValue("directory")
 

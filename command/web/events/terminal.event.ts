@@ -5,6 +5,7 @@ class TerminalEvent implements Control.IncomingEvent {
 	}
 
 	public emit(data) {
+		console.log(data);
 		this.view.append(data);
 	}
 }

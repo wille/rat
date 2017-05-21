@@ -1,8 +1,4 @@
-#terminal {
-	background-color: #002B36;
-}
-
-#display {
+.terminal {
 	font-family: consolas;
 	font-size: 14px;
 	background-color: #002B36;
@@ -11,7 +7,7 @@
 	bottom: 20px;
 }
 
-#command {
+.command {
 	position: fixed;
 	left: 0px;
 	bottom: 0px;
