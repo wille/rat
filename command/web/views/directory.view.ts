@@ -20,11 +20,11 @@ class DirectoryContextMenu extends ContextMenu {
 	private deleteItem;
 
 	constructor(parent: DirectoryView) {
-		super(parent.table, document.getElementById("menu"));
+		super(parent.table, parent.getElementById("menu"));
 
 		this.view = parent;
 
-		this.downloadItem = document.getElementById("item-download");
+		this.downloadItem = parent.getElementById("item-download");
 		this.downloadItem.onclick = () => parent.download();
 
 		this.deleteItem = document.getElementById("item-remove");
@@ -54,24 +54,25 @@ class DirectoryView extends SubView {
 
 		this.backElement.onclick = () => this.back();
 
-		let uploadElement = document.getElementById("upload");
+		let uploadElement = this.getElementById("upload");
 		uploadElement.onclick = () => this.upload();
 
 		this.browse("");
 
-		let searchElement = <HTMLInputElement>document.getElementById("search");
+		let searchElement = <HTMLInputElement>this.getElementById("search");
 		new TableSearch(searchElement, this.table);
 
 		let menu = new DirectoryContextMenu(this);
 		menu.hook();
 
-		$("#close").on("click", () => {
+		let closeElement = this.getElementById("close");
+		closeElement.onclick = () => {
 			sub.closeView(this);
-		});
+		};
 	}
 
 	onLeave() {
-		Control.removeEvent(Control.EventType.DOWNLOAD);;
+		Control.removeEvent(Control.EventType.DOWNLOAD);
 		Control.removeEvent(Control.EventType.DIRECTORY);
 	}
 
@@ -81,15 +82,10 @@ class DirectoryView extends SubView {
 
 	public set current(dir: string) {
 		this.currentDirectory = dir;
-		this.directoryElement.value = dir;
 	}
 
 	private get backElement(): HTMLElement {
 		return document.getElementById("back");
-	}
-
-	public get directoryElement(): HTMLInputElement {
-		return <HTMLInputElement>document.getElementById("dir");
 	}
 
 	public get table(): HTMLTableElement {
@@ -158,12 +154,24 @@ class DirectoryView extends SubView {
 
 		let breadcrumb = document.getElementById("path");
 		breadcrumb.innerHTML = "";
+		let root = document.createElement("li");
+		breadcrumb.appendChild(root);
 
 		let depth = "";
 
 		for (let i = 0; i < paths.length; i++) {
 			let li = document.createElement("li");
-			li.innerHTML = paths[i];
+
+			let active = i === paths.length - 2;
+
+			if (active) {
+				li.innerHTML = paths[i];
+				li.className = "active";
+			} else {
+				let a = document.createElement("a");
+				a.innerHTML = paths[i];
+				li.appendChild(a);
+			}
 
 			depth += paths[i];
 
@@ -175,7 +183,7 @@ class DirectoryView extends SubView {
 			li.onclick = () => this.browse(c, true);
 
 			breadcrumb.appendChild(li);
-		};
+		}
 
 		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
 	}
