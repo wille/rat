@@ -10,14 +10,17 @@ abstract class AbstractView {
 	abstract onEnter();
 	abstract onLeave();
 
-	public  getElementById(id: string): HTMLElement {
-		let elements = this.viewElement.getElementsByClassName(id);
-		
-		if (elements && elements.length == 1) {
-			return <HTMLElement>elements[0];
-		} else {
-			throw new Error("more than one element found");
+	public getElementById(id: string): HTMLElement {
+		let elements = this.viewElement.getElementsByTagName("*");
+
+		for (let i = 0; i < elements.length; i++) {
+			let element = elements[i];
+			if (element.getAttribute("id") === id) {
+				return <HTMLElement>element;
+			}
 		}
+
+		throw new Error("element " + id + " not found");
 	}
 }
 
