@@ -11,16 +11,16 @@
 
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li><a class="spawn">Spawn</a></li>
-				<li><a class="kill">Kill</a></li>
+				<li><a id="spawn">Spawn</a></li>
+				<li><a id="kill">Kill</a></li>
 			</ul>
 			<form class="navbar-form navbar-left">
 				<div class="form-group">
-					<input type="text" class="search form-control" placeholder="Search">
+					<input type="text" id="search" class="form-control" placeholder="Search">
 				</div>
 			</form>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a class="close">Close</a></li>
+				<li><a id="close">Close</a></li>
 			</ul>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 		<th>Path</th>
 	</thead>
 
-	<tbody class="processes">
+	<tbody id="processes">
 
 	</tbody>
 </table>

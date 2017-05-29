@@ -87,12 +87,12 @@ class BuildView extends SubView {
 		this.iconPreviewElement.src = URL.createObjectURL(this.iconElement.files[0]);
 
 		let file = this.iconElement.files[0];
-		var reader = new FileReader();
+		let reader = new FileReader();
 
 		reader.onload = (e: any) => {
 			this.iconData = e.target.result;
 		};
-		
+
 		reader.readAsArrayBuffer(file);
 	}
 
