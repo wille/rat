@@ -97,9 +97,11 @@ class BuildView extends SubView {
 	}
 
 	private get icon() {
-		let base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(this.iconData)));
+		if (this.iconData) {
+			return btoa(String.fromCharCode.apply(null, new Uint8Array(this.iconData)));
+		}
 
-		return base64String;
+		return null;
 	}
 
 	private get version(): string {
