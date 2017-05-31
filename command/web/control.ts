@@ -114,7 +114,7 @@ namespace Control {
 			this.socket.addEventListener("open", func);
 		}
 
-		public write(eventType: Control.EventType, data: string | object, id?: number) {
+		public write(eventType: Control.EventType, data: any, id?: number) {
 			if (id === undefined) {
 				id = 0;
 			}
