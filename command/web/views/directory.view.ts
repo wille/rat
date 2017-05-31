@@ -64,11 +64,6 @@ class DirectoryView extends SubView {
 
 		let menu = new DirectoryContextMenu(this);
 		menu.hook();
-
-		let closeElement = this.getElementById("close");
-		closeElement.onclick = () => {
-			sub.closeView(this);
-		};
 	}
 
 	onLeave() {
