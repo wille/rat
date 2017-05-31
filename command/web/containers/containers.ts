@@ -1,3 +1,6 @@
+/// <reference path="mainview.container.ts" />
+/// <reference path="subview.container.ts" />
+
 const viewContainer = document.getElementById("views-parent");
 const mainViewContainer = document.getElementById("first");
 const subViewContainer = document.getElementById("second");

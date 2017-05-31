@@ -20,7 +20,7 @@ class MainViewContainer extends TabbedContainer<MainView> {
         this.setActiveView(MainViewContainer.clientsView);
 	}
 
-    public setView(view: SubView) {
+    public setView(view: MainView) {
         // No subviews currently visible, display subview
 		if (this.isEmpty()) {
 			$(this.container).show();
@@ -33,7 +33,7 @@ class MainViewContainer extends TabbedContainer<MainView> {
         super.setView(view);
     }
 
-    public closeView(view: SubView) {
+    public closeView(view: MainView) {
         super.closeView(view);
 
         if (this.views.length == 0) { // No tabs left open

@@ -8,7 +8,7 @@ class TabbedContainer<T extends AbstractView> {
 		return this.views.length == 0;
 	}
 
-	public setView(view: T) {
+	public setView(view: T, onOpen?: () => void) {
 		this.views.push(view);
 
 		// Create element for the view and load it
@@ -16,6 +16,10 @@ class TabbedContainer<T extends AbstractView> {
 		$(viewElement).load(view.url, (response, status) => {
 			Connection.setConnectionStatus(status !== "error");
 			view.onEnter();
+
+			if (onOpen) {
+				onOpen();
+			}
 		});
 		view.viewElement = viewElement;
 
