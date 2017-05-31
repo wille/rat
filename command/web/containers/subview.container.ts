@@ -16,8 +16,18 @@ class SubViewContainer extends TabbedContainer<SubView> {
             viewSplitter.create();
         }
 
-        super.setView(view);
-    }
+        super.setView(view, () => {
+			let closeElement = view.getElementById("close");
+
+			if (closeElement) {
+				closeElement.onclick = () => {
+					this.closeView(view);
+				};
+			} else {
+				throw new Error("#close not found");
+			}
+		});
+	}
 
     public closeView(view: SubView) {
         super.closeView(view);
