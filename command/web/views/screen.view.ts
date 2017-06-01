@@ -3,6 +3,13 @@ class ScreenView extends SubView {
 	private fps: HTMLElement;
 	private screenElement;
 	private screenEvent: ScreenEvent;
+	
+	private scaleSlider: Slider;
+
+	private moveMouse: boolean;
+	private keyboard: boolean;
+
+	public selectedMonitor: number;
 
 	constructor(id: number) {
 		super("static/screen.html", "Screen", id);
@@ -11,26 +18,33 @@ class ScreenView extends SubView {
 	}
 
 	onEnter() {
-		let scaleElement = <HTMLInputElement>document.getElementById("scale");
-		scaleElement.addEventListener("change", () => {
-			// Set text to scale in percentage
-			let currentScaleElement = <HTMLParagraphElement>document.getElementById("current_scale");
-			currentScaleElement.innerHTML = scaleElement.value + "%";
-
-			this.initStream();
+		// Initialize slider
+		this.scaleSlider = new Slider(super.getElementById("scale"), {
+			formatter: (value) => {
+				return value + "%";
+			}
 		});
 
+		// On slider value change, reinit stream
+		this.scaleSlider.on("change", () => {
+			if (this.scaleSlider) {
+				this.initStream();
+			}
+		});
+
+		// Start stream
 		this.initStream();
 
-		let monitorsElement = <HTMLSelectElement>document.getElementById("monitors");
-		monitorsElement.addEventListener("change", () => this.initStream());
-		Control.addEvent(Control.EventType.MONITOR, new MonitorEvent(monitorsElement));
+		// Setup monitor dropdown button
+		let monitorsElement = super.getElementById("monitors");
+		Control.addEvent(Control.EventType.MONITOR, new MonitorEvent(this));
 
-		this.screenElement = <HTMLImageElement>document.getElementById("screen");
+		// Setup input events
+		this.screenElement = <HTMLImageElement>super.getElementById("screen");
 		this.screenElement.onmousemove = (event) => {
 			if (this.moveMouse) {
 				let data = JSON.stringify({
-					"id": this.monitor,
+					"id": this.selectedMonitor,
 					"x": event.offsetX / (this.scale / 100),
 					"y": event.offsetY / (this.scale / 100)
 				});
@@ -44,13 +58,25 @@ class ScreenView extends SubView {
 		document.onkeydown = (event) => this.keyEvent(event.keyCode, Mouse.PRESS);
 		document.onkeyup = (event) => this.keyEvent(event.keyCode, Mouse.RELEASE);
 
+		// Setup screen event
 		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
+			// Set FPS label text
 			this.fps.innerHTML = fps + " FPS";
 		});
-
 		Control.addEvent(Control.EventType.SCREEN, this.screenEvent);
 
 		Statusbar.addElement(this.fps);
+
+		// Setup mouse and keyboard input toggles
+		let mouseToggle = new ToggleButton(super.getElementById("cursor"));
+		mouseToggle.onclick = () => {
+			this.moveMouse = !this.moveMouse;
+		};
+
+		let keyboardToggle = new ToggleButton(super.getElementById("keyboard"));
+		keyboardToggle.onclick = (checked) => {
+			this.keyboard = checked;
+		};
 	}
 
 	onLeave() {
@@ -70,37 +96,31 @@ class ScreenView extends SubView {
 		document.onkeyup = undefined;
 	}
 
-	private get monitor(): number {
-		let monitorsElement = <HTMLSelectElement>document.getElementById("monitors");
-		let selected = monitorsElement.options[monitorsElement.selectedIndex];
-		let monitor = !selected ? 0 : Number(selected.value);
-
-		return monitor;
+	// returns the monitor selector element
+	public get monitorsElement(): HTMLElement {
+		return super.getElementById("monitors");
 	}
 
+	// returns the current scale in percent
 	private get scale(): number {
-		let scaleElement = <HTMLInputElement>document.getElementById("scale");
-		let scale = scaleElement.value;
-
-		return Number(scale);
+		return this.scaleSlider.getValue();
 	}
 
-	private get moveMouse() {
-		let element = <HTMLInputElement>document.getElementById("cursor");
+	// Set badge displaying number of monitors. If just one, hide the badge
+	public set monitorCount(count: number) {
+		let display = String(count);
 
-		return element.checked;
-	}
+		if (count === 0) {
+			display = "";
+		}
 
-	private get keyboard() {
-		let element = <HTMLInputElement>document.getElementById("keyboard");
-
-		return element.checked;
+		super.getElementById("monitor-count").innerText = display;
 	}
 
 	private mouseEvent(button: Mouse, event: Mouse) {
 		if (this.moveMouse) {
 			let data = JSON.stringify({
-				"id": this.monitor,
+				"id": this.selectedMonitor,
 				"button": button,
 				"event": event
 			});
@@ -121,11 +141,11 @@ class ScreenView extends SubView {
 	}
 
 	// Sends screen event with new configuration
-	private initStream() {
+	public initStream() {
 		let data = JSON.stringify({
 			"active": true,
 			"scale": this.scale / 100,
-			"monitor": this.monitor
+			"monitor": this.selectedMonitor
 		});
 
 		Control.instance.write(Control.EventType.SCREEN, data, this.id);

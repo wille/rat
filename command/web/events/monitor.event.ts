@@ -1,31 +1,50 @@
 class MonitorEvent implements Control.IncomingEvent {
 
-	constructor(private element: HTMLSelectElement) {
+	constructor(private parent: ScreenView) {
 
 	}
 
 	public emit(data) {
 		data = JSON.parse(data);
 
-		let selected = this.element.selectedIndex;
+		let selected = this.parent.selectedMonitor;
 
-		while (this.element.firstChild) {
-			this.element.removeChild(this.element.firstChild);
+		let element = this.parent.monitorsElement;
+
+		// Remove all menu items from dropdown
+		while (element.firstChild) {
+			element.removeChild(element.firstChild);
 		}
+
+		this.parent.monitorCount = data.length;
 
 		for (let i = 0; i < data.length; i++) {
 			let monitor = data[i];
-			let str = monitor.id + ": " + monitor.w + "x" + monitor.h;
 
-			let child = <HTMLOptionElement>document.createElement("option");
-			child.innerHTML = str;
-			child.value = monitor.id;
-
-			if (selected === i) {
-				child.selected = true;
+			// If no monitor is selected (on open) set the first one
+			if (this.parent.selectedMonitor === undefined) {
+				this.parent.selectedMonitor = monitor.id;
+				selected = monitor.id;
 			}
 
-			this.element.appendChild(child);
+			let str = monitor.id + ": " + monitor.w + "x" + monitor.h;
+
+			let child = document.createElement("li");
+			let a = document.createElement("a");
+			child.appendChild(a);
+
+			a.innerText = str;
+			child.onclick = () => {
+				this.parent.selectedMonitor = monitor.id;
+				this.parent.initStream();
+			};
+
+			// If this monitor is selected, disable the menu item
+			if (selected === i) {
+				child.className = "disabled";
+			}
+
+			element.appendChild(child);
 		}
 	}
 }

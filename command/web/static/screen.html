@@ -1,25 +1,24 @@
-<div class="scale">
-	<table>
-		<tr>
-			<td>
-				<input id="scale" type="range"></input>
-			</td>
-			<td>
-				<p id="current_scale">50%</p>
-			</td>
-			<td>
-				<select id="monitors"></select>
-			</td>
-			<td>
-				<input id="cursor" type="checkbox">Move cursor</input>
-				<input id="keyboard" type="checkbox">Keyboard</input>
-			</td>
-			<td>
-				<a id="close">Close</a>
-			</td>
-		</tr>
-	</table>
+<br>
+
+<input id="scale" data-slider-id='ex1Slider' type="text" data-slider-min="10" data-slider-max="100" data-slider-step="10" data-slider-value="50"/>
+
+<div class="btn-group">
+	<button type="button" id="cursor" class="btn btn-default">Mouse</button>
+	<button type="button" id="keyboard" class="btn btn-default">Keyboard</button>
+</div>
+
+<div class="btn-group">
+	<div class="btn-group" role="group">
+		<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> Monitor <span class="badge" id="monitor-count"></span>   <span class="caret"></span></button>
+		<ul class="dropdown-menu" id="monitors">
+
+		</ul>
+	</div>
+
+	<button type="button" id="close" class="btn btn-default">Close</button>
 </div>
 
 <br>
+<br>
+
 <img id="screen" src="">

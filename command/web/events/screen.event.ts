@@ -1,9 +1,13 @@
+/**
+ * Incoming desktop frame
+ */
 class ScreenEvent implements Control.IncomingEvent {
 
 	private fps = 0;
 	private interval: number;
 
-	constructor(private element: HTMLImageElement, private id: number, private callback: any) {
+	constructor(private element: HTMLImageElement, private id: number, private callback: (fps: number) => void) {
+		// Report current FPS once a second
 		this.interval = setInterval(() => {
 			callback(this.fps);
 			this.fps = 0;
@@ -15,6 +19,7 @@ class ScreenEvent implements Control.IncomingEvent {
 		this.fps++;
 	}
 
+	// Stop the FPS reporter interval
 	public stop() {
 		clearInterval(this.interval);
 	}
