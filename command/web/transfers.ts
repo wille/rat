@@ -17,8 +17,7 @@ namespace Transfers {
 	}
 
 	export function update() {
-		let data = JSON.stringify(TRANSFERS);
-		Control.instance.write(Control.EventType.TRANSFERS, data, -1);
+		Control.instance.write(new TransfersMessage(JSON.stringify(TRANSFERS)), -1);
 	}
 
 	export function getTransfers(): Transfer[] {

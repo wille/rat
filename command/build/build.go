@@ -23,8 +23,8 @@ type Config struct {
 	Delay       int    `json:"delay"`
 	UPX         bool   `json:"upx"`
 	Name        string `json:"name"`
-	InstallPath int    `json:"install_path"`
-	InvalidSSL  bool   `json:"invalid_ssl"`
+	InstallPath int    `json:"installPath"`
+	InvalidSSL  bool   `json:"invalidCertificates"`
 
 	Manifest struct {
 		Version  string `json:"version,omitempty"`

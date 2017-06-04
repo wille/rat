@@ -1,16 +1,3 @@
-enum FileTask {
-	// Touch file
-	TOUCH = 0,
-
-	// Unlink file
-	UNLINK = 1,
-
-	// Move file
-	MOVE = 2,
-
-	// Copy file
-	COPY = 3
-}
 
 class DirectoryContextMenu extends ContextMenu {
 
@@ -140,12 +127,11 @@ class DirectoryView extends SubView {
 			document.title = this.title;
 		}
 
-		let data = JSON.stringify({
-			"path": path
-		});
-
-
 		let paths = path.split(this.separator);
+
+		if (this.separator === "/") {
+			paths = paths.splice(0, 1);
+		}
 
 		let breadcrumb = document.getElementById("path");
 		breadcrumb.innerHTML = "";
@@ -180,15 +166,11 @@ class DirectoryView extends SubView {
 			breadcrumb.appendChild(li);
 		}
 
-		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
+		Control.instance.write(new DirectoryMessage(path), this.id);
 	}
 
 	public reload() {
-		let data = JSON.stringify({
-			"path": this.current
-		});
-
-		Control.instance.write(Control.EventType.DIRECTORY, data, this.id);
+		Control.instance.write(new DirectoryMessage(this.current), this.id);
 	}
 
 	private upload() {
@@ -252,12 +234,8 @@ class DirectoryView extends SubView {
 			let transfer = new Transfer(true, file);
 			Transfers.addTransfer(transfer);
 
-			let json = JSON.stringify({
-				"file": file
-			});
-
 			setTimeout(() => {
-				Control.instance.write(Control.EventType.DOWNLOAD, json, this.id);
+				Control.instance.write(new DownloadMessage(file), this.id);
 			}, interval);
 		}
 	}
@@ -265,23 +243,14 @@ class DirectoryView extends SubView {
 	public delete() {
 		for (let file of this.getSelectedFiles()) {
 			if (confirm("Are you sure that you want to delete \"" + file + "\"?")) {
-				this.fileEvent(FileTask.UNLINK, file);
+				this.fileEvent(FileAction.UNLINK, file);
 			}
 		}
 
 		this.reload();
 	}
 
-	public fileEvent(task: FileTask, file: string, destination?: string) {
-		let data = {
-			"task": task,
-			"file": file,
-		};
-
-		if (destination) {
-			data["destination"] = destination;
-		}
-
-		Control.instance.write(Control.EventType.FILE, JSON.stringify(data), this.id);
+	public fileEvent(task: FileAction, file: string, destination?: string) {
+		Control.instance.write(new FileMessage(task, file, destination), this.id);
 	}
 }

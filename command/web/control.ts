@@ -114,19 +114,15 @@ namespace Control {
 			this.socket.addEventListener("open", func);
 		}
 
-		public write(eventType: Control.EventType, data: any, id?: number) {
+		public write(data: Message, id?: number) {
 			if (id === undefined) {
 				id = 0;
 			}
 
-			if (typeof data === "object") {
-				data = JSON.stringify(data);
-			}
-
 			this.socket.send(JSON.stringify({
-				"event": eventType,
+				"event": data.header,
 				"id": id,
-				"data": data
+				"data": Message.stringify(data)
 			}));
 		}
 

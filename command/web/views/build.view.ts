@@ -112,25 +112,25 @@ class BuildView extends SubView {
 	private build() {
 		let os = this.os;
 
-		let data = {
-			"host": this.host,
-			"os": os,
-			"arch": this.arch,
-			"delay": this.delay,
-			"name": this.name,
-			"install_path": this.installPath,
-			"invalid_ssl": this.invalidCerts
+		let params: BuildParameters = {
+			host: this.host,
+			os: os,
+			arch: this.arch,
+			delay: this.delay,
+			name: this.name,
+			installPath: this.installPath,
+			invalidCertificates: this.invalidCerts
 		};
 
 		if (os === "all" || os === "windows") {
-			data["manifest"] = {
-				"version": this.version,
-				"icon": this.icon
-			};
+			let manifest: Win32Manifest = {
+				version: this.version,
+				icon: this.icon
+			}
+			
+			params.manifest = manifest;
 		}
 
-		console.log(JSON.stringify(data));
-
-		Control.instance.write(Control.EventType.BUILD, JSON.stringify(data));
+		Control.instance.write(new BuildMessage(params));
 	}
 }

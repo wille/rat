@@ -41,22 +41,13 @@ class ScreenView extends SubView {
 
 		// Setup input events
 		this.screenElement = <HTMLImageElement>super.getElementById("screen");
-		this.screenElement.onmousemove = (event) => {
-			if (this.moveMouse) {
-				let data = JSON.stringify({
-					"id": this.selectedMonitor,
-					"x": event.offsetX / (this.scale / 100),
-					"y": event.offsetY / (this.scale / 100)
-				});
-				Control.instance.write(Control.EventType.MOUSE_MOVE, data, this.id);
-			}
-		};
+		this.screenElement.onmousemove = (event: MouseEvent) => this.mouseMotionEvent(event);
 
-		this.screenElement.onmousedown = (event) => this.mouseEvent(event.button, Mouse.PRESS);
-		this.screenElement.onmouseup = (event) => this.mouseEvent(event.button, Mouse.RELEASE);
+		this.screenElement.onmousedown = (event) => this.mouseEvent(event.button, InputState.PRESS);
+		this.screenElement.onmouseup = (event) => this.mouseEvent(event.button, InputState.RELEASE);
 
-		document.onkeydown = (event) => this.keyEvent(event.keyCode, Mouse.PRESS);
-		document.onkeyup = (event) => this.keyEvent(event.keyCode, Mouse.RELEASE);
+		document.onkeydown = (event) => this.keyEvent(event.keyCode, InputState.PRESS);
+		document.onkeyup = (event) => this.keyEvent(event.keyCode, InputState.RELEASE);
 
 		// Setup screen event
 		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
@@ -85,10 +76,7 @@ class ScreenView extends SubView {
 
 		Statusbar.removeElement(this.fps);
 
-		let data = JSON.stringify({
-			"active": false
-		});
-		Control.instance.write(Control.EventType.SCREEN, data, this.id);
+		Control.instance.write(new ScreenMessage({ active: false } as ScreenMessageParameters), this.id);
 
 		this.screenEvent.stop();
 
@@ -117,37 +105,49 @@ class ScreenView extends SubView {
 		super.getElementById("monitor-count").innerText = display;
 	}
 
-	private mouseEvent(button: Mouse, event: Mouse) {
+	private mouseMotionEvent(event: MouseEvent) {
 		if (this.moveMouse) {
-			let data = JSON.stringify({
-				"id": this.selectedMonitor,
-				"button": button,
-				"event": event
-			});
+			let params: MouseMotionMessageParameters = {
+				monitorId: this.selectedMonitor,
+				x: event.offsetX / (this.scale / 100),
+				y: event.offsetY / (this.scale / 100)
+			};
 
-			Control.instance.write(Control.EventType.MOUSE, data, this.id);
+			Control.instance.write(new MouseMotionMessage(params), this.id);
 		}
 	}
 
-	private keyEvent(keyCode: number, event: Mouse) {
-		if (this.keyboard && keyCode !== 255) {
-			let data = JSON.stringify({
-				"key": keyCode,
-				"event": event
-			});
+	private mouseEvent(button: MouseButton, event: InputState) {
+		if (this.moveMouse) {
+			let params: MouseInputMessageParameters = {
+				monitorId: this.selectedMonitor,
+				button: button,
+				state: event
+			};
 
-			Control.instance.write(Control.EventType.KEY, data, this.id);
+			Control.instance.write(new MouseInputMessage(params), this.id);
+		}
+	}
+
+	private keyEvent(keyCode: number, event: InputState) {
+		if (this.keyboard && keyCode !== 255) {
+			let params: KeyMessageParameters = {
+				keyCode: keyCode,
+				state: event
+			};
+
+			Control.instance.write(new KeyMessage(params), this.id);
 		}
 	}
 
 	// Sends screen event with new configuration
 	public initStream() {
-		let data = JSON.stringify({
-			"active": true,
-			"scale": this.scale / 100,
-			"monitor": this.selectedMonitor
-		});
+		let params: ScreenMessageParameters = {
+			active: true,
+			scale: this.scale / 100,
+			monitor: this.selectedMonitor
+		};
 
-		Control.instance.write(Control.EventType.SCREEN, data, this.id);
+		Control.instance.write(new ScreenMessage(params), this.id);
 	}
 }

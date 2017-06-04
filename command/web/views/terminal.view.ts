@@ -1,8 +1,4 @@
-enum Shell {
-	START = 0,
-	STOP = 1,
-	WRITE = 2
-}
+/// <reference path="../messages/terminal.message.ts" />
 
 class TerminalView extends SubView {
 
@@ -34,13 +30,21 @@ class TerminalView extends SubView {
 	
 		Control.addEvent(Control.EventType.TERMINAL, new TerminalEvent(this));
 
-		this.write(Shell.START);
+		this.start();
 	}
 
 	onLeave() {
 		Control.removeEvent(Control.EventType.TERMINAL);
 
-		this.write(Shell.STOP);
+		this.stop();
+	}
+
+	private start() {
+		this.write(TerminalAction.START);
+	}
+
+	public stop() {
+		this.write(TerminalAction.STOP);
 	}
 
 	private sendCommand() {
@@ -48,7 +52,7 @@ class TerminalView extends SubView {
 
 		let command = commandElement.value;
 		this.append("> " + command);
-		this.write(Shell.WRITE, command);
+		this.write(TerminalAction.WRITE, command);
 		commandElement.value = "";
 	}
 
@@ -62,12 +66,7 @@ class TerminalView extends SubView {
 		return <HTMLTextAreaElement>this.getElementById("terminal");
 	}
 
-	private write(action: number, line: string = "") {
-		let data = JSON.stringify({
-			"action": action,
-			"command": line
-		});
-
-		Control.instance.write(Control.EventType.TERMINAL, data, this.id);
+	private write(action: TerminalAction, line?: string) {
+		Control.instance.write(new TerminalMessage(action, line), this.id);
 	}
 }

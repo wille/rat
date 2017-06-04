@@ -7,8 +7,8 @@ import (
 )
 
 type KeyEvent struct {
-	Key   int `json:"key"`
-	Event int `json:"event"`
+	Key   int `json:"keyCode"`
+	Event int `json:"state"`
 }
 
 type KeyMessage Message

@@ -1,7 +1,3 @@
-enum ProcessRequestType {
-	QUERY = 0,
-	KILL = 1
-}
 
 class ProcessView extends SubView {
 
@@ -48,15 +44,15 @@ class ProcessView extends SubView {
 	}
 
 	private send(type: ProcessRequestType, pids?: number[]) {
-		let data = {
-			"type": type
+		let params: ProcessMessageParameters = {
+			type: type
 		};
 
 		if (pids) {
-			data["pids"] = pids;
+			params.pids = pids;
 		}
 
-		Control.instance.write(Control.EventType.PROCESS, JSON.stringify(data), this.id);
+		Control.instance.write(new ProcessMessage(params), this.id);
 	}
 
 	private update() {

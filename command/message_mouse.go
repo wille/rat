@@ -7,9 +7,9 @@ import (
 )
 
 type MouseEvent struct {
-	Monitor int `json:"id"`
+	Monitor int `json:"monitorId"`
 	Button  int `json:"button"`
-	Event   int `json:"event"`
+	Event   int `json:"state"`
 }
 
 type MouseMessage Message
