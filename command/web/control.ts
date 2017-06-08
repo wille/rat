@@ -93,7 +93,7 @@ namespace Control {
 		}
 	}
 
-	export class Client {
+	export class Socket {
 
 		public authenticated: boolean;
 		
@@ -114,9 +114,11 @@ namespace Control {
 			this.socket.addEventListener("open", func);
 		}
 
-		public write(data: Message, id?: number) {
-			if (id === undefined) {
-				id = 0;
+		public write(data: Message, client?: Client) {
+			let id = 0;
+
+			if (client) {
+				id = client.id;
 			}
 
 			this.socket.send(JSON.stringify({
@@ -160,7 +162,7 @@ namespace Control {
 		}
 	}
 
-	export let instance: Control.Client = new Control.Client();
+	export let instance: Control.Socket = new Control.Socket();
 
 	export function init(key: string) {
 		Control.instance.start(key);

@@ -6,7 +6,7 @@ class ScreenEvent implements Control.IncomingEvent {
 	private fps = 0;
 	private interval: number;
 
-	constructor(private element: HTMLImageElement, private id: number, private callback: (fps: number) => void) {
+	constructor(private element: HTMLImageElement, private callback: (fps: number) => void) {
 		// Report current FPS once a second
 		this.interval = setInterval(() => {
 			callback(this.fps);

@@ -1,6 +1,6 @@
 class Client {
 
-    constructor(public readonly id: number) {
+    constructor(public readonly id: ClientId) {
         
     }
 }

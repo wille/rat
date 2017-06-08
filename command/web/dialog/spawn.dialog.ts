@@ -13,11 +13,11 @@ class SpawnButton extends DialogButton {
 
 class SpawnDialog extends Dialog {
 
-	constructor(id: number) {
+	constructor(client: Client) {
 		super("static/spawn.dialog.html", "Spawn Process", [
 			new SpawnButton(),
 			new CancelButton()
-		], id);
+		], client);
 	}
 
 	onEnter() {

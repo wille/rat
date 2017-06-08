@@ -11,8 +11,8 @@ class ScreenView extends SubView {
 
 	public selectedMonitor: number;
 
-	constructor(id: number) {
-		super("static/screen.html", "Screen", id);
+	constructor(client: Client) {
+		super("static/screen.html", "Screen", client);
 
 		this.fps = document.createElement("p");
 	}
@@ -50,7 +50,7 @@ class ScreenView extends SubView {
 		document.onkeyup = (event) => this.keyEvent(event.keyCode, InputState.RELEASE);
 
 		// Setup screen event
-		this.screenEvent = new ScreenEvent(this.screenElement, this.id, (fps) => {
+		this.screenEvent = new ScreenEvent(this.screenElement, (fps) => {
 			// Set FPS label text
 			this.fps.innerHTML = fps + " FPS";
 		});
@@ -76,7 +76,7 @@ class ScreenView extends SubView {
 
 		Statusbar.removeElement(this.fps);
 
-		Control.instance.write(new ScreenMessage({ active: false } as ScreenMessageParameters), this.id);
+		Control.instance.write(new ScreenMessage({ active: false } as ScreenMessageParameters), this.client);
 
 		this.screenEvent.stop();
 
@@ -113,7 +113,7 @@ class ScreenView extends SubView {
 				y: event.offsetY / (this.scale / 100)
 			};
 
-			Control.instance.write(new MouseMotionMessage(params), this.id);
+			Control.instance.write(new MouseMotionMessage(params), this.client);
 		}
 	}
 
@@ -125,7 +125,7 @@ class ScreenView extends SubView {
 				state: event
 			};
 
-			Control.instance.write(new MouseInputMessage(params), this.id);
+			Control.instance.write(new MouseInputMessage(params), this.client);
 		}
 	}
 
@@ -136,7 +136,7 @@ class ScreenView extends SubView {
 				state: event
 			};
 
-			Control.instance.write(new KeyMessage(params), this.id);
+			Control.instance.write(new KeyMessage(params), this.client);
 		}
 	}
 
@@ -148,6 +148,6 @@ class ScreenView extends SubView {
 			monitor: this.selectedMonitor
 		};
 
-		Control.instance.write(new ScreenMessage(params), this.id);
+		Control.instance.write(new ScreenMessage(params), this.client);
 	}
 }

@@ -2,7 +2,7 @@
 
 class ProcessEvent implements Control.IncomingEvent {
 
-	constructor(private table: HTMLTableElement, private id: number) { }
+	constructor(private table: HTMLTableElement) { }
 
 	public emit(data) {
 		data = data.split(",");

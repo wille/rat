@@ -36,7 +36,7 @@ abstract class MainView extends AbstractView {
 
 abstract class SubView extends AbstractView {
 
-	constructor(url: string, title: string, public id?: number) {
+	constructor(url: string, title: string, public client?: Client) {
 		super(url, title);
 	}
 

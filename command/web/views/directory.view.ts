@@ -31,13 +31,13 @@ class DirectoryView extends SubView {
 
 	private currentDirectory: string;
 
-	constructor(id: number, private separator: string) {
-		super("static/files.html", "File Browser", id);
+	constructor(client: Client, private separator: string) {
+		super("static/files.html", "File Browser", client);
 	}
 
 	onEnter() {
 		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
-		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this, this.id));
+		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this));
 
 		this.backElement.onclick = () => this.back();
 
@@ -166,11 +166,11 @@ class DirectoryView extends SubView {
 			breadcrumb.appendChild(li);
 		}
 
-		Control.instance.write(new DirectoryMessage(path), this.id);
+		Control.instance.write(new DirectoryMessage(path), this.client);
 	}
 
 	public reload() {
-		Control.instance.write(new DirectoryMessage(this.current), this.id);
+		Control.instance.write(new DirectoryMessage(this.current), this.client);
 	}
 
 	private upload() {
@@ -186,7 +186,7 @@ class DirectoryView extends SubView {
 		let id = document.createElement("input");
 		id.setAttribute("type", "hidden");
 		id.setAttribute("name", "id");
-		id.setAttribute("value", String(this.id));
+		id.setAttribute("value", String(this.client.id));
 		form.appendChild(id);
 
 		let input = document.createElement("input");
@@ -235,7 +235,7 @@ class DirectoryView extends SubView {
 			Transfers.addTransfer(transfer);
 
 			setTimeout(() => {
-				Control.instance.write(new DownloadMessage(file), this.id);
+				Control.instance.write(new DownloadMessage(file), this.client);
 			}, interval);
 		}
 	}
@@ -251,6 +251,6 @@ class DirectoryView extends SubView {
 	}
 
 	public fileEvent(task: FileAction, file: string, destination?: string) {
-		Control.instance.write(new FileMessage(task, file, destination), this.id);
+		Control.instance.write(new FileMessage(task, file, destination), this.client);
 	}
 }

@@ -2,7 +2,7 @@
 
 abstract class Dialog extends AbstractView {
 
-	constructor(url: string, title: string, public dialogButtons: DialogButton[], public id?: number) {
+	constructor(url: string, title: string, public dialogButtons: DialogButton[], public client?: Client) {
 		super(url, title);
 	}
 

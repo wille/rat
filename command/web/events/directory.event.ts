@@ -2,7 +2,7 @@
 
 class DirectoryEvent implements Control.IncomingEvent {
 
-	constructor(private view: DirectoryView, private id: number) { }
+	constructor(private view: DirectoryView) { }
 
 	public emit(data) {
 		data = JSON.parse(data);

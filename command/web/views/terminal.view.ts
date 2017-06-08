@@ -2,12 +2,12 @@
 
 class TerminalView extends SubView {
 
-	constructor(id: number) {
-		super("static/terminal.html", "Terminal", id);
+	constructor(client: Client) {
+		super("static/terminal.html", "Terminal", client);
 	}
 
 	public static open(id: number) {
-		sub.setView(new TerminalView(id));
+		sub.setView(new TerminalView(new Client(id)));
 	}
 
 	onEnter() {
@@ -67,6 +67,6 @@ class TerminalView extends SubView {
 	}
 
 	private write(action: TerminalAction, line?: string) {
-		Control.instance.write(new TerminalMessage(action, line), this.id);
+		Control.instance.write(new TerminalMessage(action, line), this.client);
 	}
 }

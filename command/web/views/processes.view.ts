@@ -3,14 +3,14 @@ class ProcessView extends SubView {
 
 	private table: HTMLTableElement;
 
-	constructor(id: number) {
-		super("static/processes.html", "Processes", id);
+	constructor(client: Client) {
+		super("static/processes.html", "Processes", client);
 	}
 
 	onEnter() {
 		this.table = <HTMLTableElement>this.getElementById("processes");
 
-		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(this.table, this.id));
+		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(this.table));
 		this.update();
 
 		let killElement = this.getElementById("kill");
@@ -52,7 +52,7 @@ class ProcessView extends SubView {
 			params.pids = pids;
 		}
 
-		Control.instance.write(new ProcessMessage(params), this.id);
+		Control.instance.write(new ProcessMessage(params), this.client);
 	}
 
 	private update() {
@@ -64,6 +64,6 @@ class ProcessView extends SubView {
 	}
 	
 	private spawn() {
-		showDialog(new SpawnDialog(this.id));
+		showDialog(new SpawnDialog(this.client));
 	}
 }
