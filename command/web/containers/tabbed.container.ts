@@ -28,8 +28,6 @@ class TabbedContainer<T extends AbstractView> {
 
 		// Add tab
 		this.addTab(view);
-
-		document.title = view.title;
 	}
 
 	private addTab(view: T) {
