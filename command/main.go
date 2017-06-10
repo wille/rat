@@ -37,7 +37,7 @@ func addDownload(tf TempFile) string {
 func main() {
 	fmt.Println("tsm rat", common.Version)
 
-	if CertExists() {
+	if !CertExists() {
 		fmt.Println("generating certificate...")
 		GenerateCertificate("localhost")
 	}
