@@ -36,11 +36,27 @@ namespace Control {
 	export function emit(eventType: EventType, data: any) {
 		let event = events[eventType];
 
-		if (event !== undefined) {
-			event.emit(JSON.parse(data));
+		if (event) {
+			try {
+				data = JSON.parse(data);
+			} catch (e) {
+				console.log(e);
+			}
+
+			event.emit(data);
 		} else {
 			console.error("control: received unknown event", eventType);
 		}
+	}
+
+	interface MessageParameters {
+		event: EventType;
+		id: number;
+		data: string;
+	}
+
+	interface LoginParameters {
+		key: string;
 	}
 
 	export class Socket {
@@ -61,26 +77,26 @@ namespace Control {
 			this.reconnect();
 		}
 
-		public onOpen(func: any) {
-			this.socket.addEventListener("open", func);
-		}
-
-		public write(data: Message, client?: Client) {
+		public send(data: Message, client?: Client) {
 			let id = 0;
 
 			if (client) {
 				id = client.id;
 			}
 
-			this.socket.send(JSON.stringify({
-				"event": data.header,
-				"id": id,
-				"data": Message.stringify(data)
-			}));
+			this.write({
+				event: data.header,
+				id: id,
+				data: Message.stringify(data)
+			} as MessageParameters);
 		}
 
 		public stop() {
 			this.socket.close();
+		}
+
+		private write(data: any) {
+			this.socket.send(JSON.stringify(data));
 		}
 
 		private reconnect() {
@@ -88,28 +104,31 @@ namespace Control {
 				this.socket.close();
 			}
 			this.socket = new WebSocket("wss://localhost:7777/control");
-			this.socket.onmessage = (event) => this.onMessage(event);
+			this.socket.onmessage = (event: MessageEvent) => this.onMessage(event);
 
-			this.socket.onclose = () => {
-				if (this.authenticated) {
-					setTimeout(this.reconnect(), 1000);
-				}
-				Connection.setConnectionStatus(false);
-			};
+			this.socket.onclose = () => this.onClose();
 
-			this.socket.onopen = () => {
-				Connection.setConnectionStatus(true);
-				console.log("control socket: connected");
-
-				this.socket.send(JSON.stringify({
-					"key": this.key
-				}));
-			};
+			this.socket.onopen = () => this.onOpen();
 		}
 
-		private onMessage(event) {
-			let data = JSON.parse(event.data);
+		private onOpen() {
+			Connection.setConnectionStatus(true);
+			console.log("control socket: connected");
+
+			this.write({ key: "key" } as LoginParameters);
+		}
+
+		private onMessage(event: MessageEvent) {
+			let data: MessageParameters = JSON.parse(event.data);
 			Control.emit(data.event, data.data);
+		}
+
+		private onClose() {
+			if (this.authenticated) {
+				setTimeout(this.reconnect(), 1000);
+			}
+
+			Connection.setConnectionStatus(false);
 		}
 	}
 

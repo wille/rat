@@ -67,6 +67,6 @@ class TerminalView extends SubView {
 	}
 
 	private write(action: TerminalAction, line?: string) {
-		Control.instance.write(new TerminalMessage(action, line), this.client);
+		Control.instance.send(new TerminalMessage(action, line), this.client);
 	}
 }

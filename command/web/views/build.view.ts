@@ -131,6 +131,6 @@ class BuildView extends SubView {
 			params.manifest = manifest;
 		}
 
-		Control.instance.write(new BuildMessage(params));
+		Control.instance.send(new BuildMessage(params));
 	}
 }

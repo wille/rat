@@ -76,7 +76,7 @@ class ScreenView extends SubView {
 
 		Statusbar.removeElement(this.fps);
 
-		Control.instance.write(new ScreenMessage({ active: false } as ScreenMessageParameters), this.client);
+		Control.instance.send(new ScreenMessage({ active: false } as ScreenMessageParameters), this.client);
 
 		this.screenEvent.stop();
 
@@ -113,7 +113,7 @@ class ScreenView extends SubView {
 				y: event.offsetY / (this.scale / 100)
 			};
 
-			Control.instance.write(new MouseMotionMessage(params), this.client);
+			Control.instance.send(new MouseMotionMessage(params), this.client);
 		}
 	}
 
@@ -125,7 +125,7 @@ class ScreenView extends SubView {
 				state: event
 			};
 
-			Control.instance.write(new MouseInputMessage(params), this.client);
+			Control.instance.send(new MouseInputMessage(params), this.client);
 		}
 	}
 
@@ -136,7 +136,7 @@ class ScreenView extends SubView {
 				state: event
 			};
 
-			Control.instance.write(new KeyMessage(params), this.client);
+			Control.instance.send(new KeyMessage(params), this.client);
 		}
 	}
 
@@ -148,6 +148,6 @@ class ScreenView extends SubView {
 			monitor: this.selectedMonitor
 		};
 
-		Control.instance.write(new ScreenMessage(params), this.client);
+		Control.instance.send(new ScreenMessage(params), this.client);
 	}
 }

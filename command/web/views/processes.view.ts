@@ -52,7 +52,7 @@ class ProcessView extends SubView {
 			params.pids = pids;
 		}
 
-		Control.instance.write(new ProcessMessage(params), this.client);
+		Control.instance.send(new ProcessMessage(params), this.client);
 	}
 
 	private update() {

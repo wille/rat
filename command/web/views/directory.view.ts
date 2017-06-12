@@ -166,11 +166,11 @@ class DirectoryView extends SubView {
 			breadcrumb.appendChild(li);
 		}
 
-		Control.instance.write(new DirectoryMessage(path), this.client);
+		Control.instance.send(new DirectoryMessage(path), this.client);
 	}
 
 	public reload() {
-		Control.instance.write(new DirectoryMessage(this.current), this.client);
+		Control.instance.send(new DirectoryMessage(this.current), this.client);
 	}
 
 	private upload() {
@@ -235,7 +235,7 @@ class DirectoryView extends SubView {
 			Transfers.addTransfer(transfer);
 
 			setTimeout(() => {
-				Control.instance.write(new DownloadMessage(file), this.client);
+				Control.instance.send(new DownloadMessage(file), this.client);
 			}, interval);
 		}
 	}
@@ -251,6 +251,6 @@ class DirectoryView extends SubView {
 	}
 
 	public fileEvent(task: FileAction, file: string, destination?: string) {
-		Control.instance.write(new FileMessage(task, file, destination), this.client);
+		Control.instance.send(new FileMessage(task, file, destination), this.client);
 	}
 }
