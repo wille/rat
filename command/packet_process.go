@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"rat/common"
-	"strconv"
+
+	"encoding/json"
 
 	"golang.org/x/net/websocket"
 )
@@ -41,7 +42,9 @@ func (packet ProcessPacket) Read(c *Client) error {
 		}
 
 		if ws, ok := c.Listeners[common.ProcessHeader]; ok {
-			event := newEvent(ProcessQueryEvent, c.Id, strconv.Itoa(pid)+","+name)
+			message := ProcessMessage{pid, name}
+			mstr, _ := json.Marshal(&message)
+			event := newEvent(ProcessQueryEvent, c.Id, string(mstr))
 
 			err = websocket.JSON.Send(ws, &event)
 

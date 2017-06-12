@@ -1,3 +1,7 @@
+/// <reference path="events/downloadProgress.event.ts" />
+/// <reference path="events/transfers.event.ts" />
+/// <reference path="events/client.event.ts" />
+
 namespace Control {
 
 	let events: IncomingEvent<any>[] = [];

@@ -1,23 +1,22 @@
 /// <reference path="../views/view.ts" />
 
-type ProcessParameter = string
+interface ProcessParameters {
+	pid: number;
+	path: string;
+}
 
-class ProcessEvent implements IncomingEvent<ProcessParameter> {
+class ProcessEvent implements IncomingEvent<ProcessParameters> {
 
 	constructor(private table: HTMLTableElement) { }
 
-	public emit(data: ProcessParameter) {
-		let split = data.split(",");
-		let pid = split[0];
-		let path = split[1];
-
+	public emit(data: ProcessParameters) {
 		let row = this.table.insertRow(0);
 
 		let pidCell = row.insertCell(0);
-		pidCell.innerHTML = pid;
+		pidCell.innerHTML = String(data.pid);
 
 		let pathCell = row.insertCell(1);
-		pathCell.innerHTML = path;
+		pathCell.innerHTML = data.path;
 
 		row.onclick = () => {
 			if (row.className === "") {
