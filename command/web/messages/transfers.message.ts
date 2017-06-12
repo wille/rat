@@ -1,12 +1,12 @@
 /// <reference path="message.ts" />
 
-class TransfersMessage extends Message<any> {
+class TransfersMessage extends Message<Transfer[]> {
 
     /**
      * Send all transfers cached to the server
-     * @param s JSON string of TRANSFERS object (TODO)
+     * @param transfers
      */
-    constructor(s: any) {
-        super(Control.EventType.TRANSFERS, s);
+    constructor(transfers: Transfer[]) {
+        super(Control.EventType.TRANSFERS, transfers);
     }
 }
