@@ -110,8 +110,12 @@ func incomingWebSocket(ws *websocket.Conn) {
 		return
 	}
 
-	event = newEvent(TransfersEvent, 0, string(transfers))
-	websocket.JSON.Send(ws, &event)
+	stransfers := string(transfers)
+	if stransfers != "null" {
+		event = newEvent(TransfersEvent, 0, string(transfers))
+		websocket.JSON.Send(ws, &event)
+	}
+
 
 	for {
 		var event Event
