@@ -1,15 +1,16 @@
 namespace Control {
 
-	let events: IncomingEvent[] = [];
+	let events: IncomingEvent<any>[] = [];
 
 	export enum EventType {
-		SCREEN = 0, // screen.event.ts
-		PROCESS = 1, // process.event.ts
-		MONITOR = 2, // monitor.event.ts
+		CLIENT_UPDATE = 1,
 		DIRECTORY = 3, // directory.event.ts
 		DOWNLOAD = 4, // download.event.ts
 		TRANSFERS = 5,
 		DOWNLOAD_PROGRESS = 6,
+		SCREEN = 7, // screen.event.ts
+		PROCESS = 8, // process.event.ts
+		MONITOR = 9, // monitor.event.ts
 		MOUSE_MOVE = 10,
 		MOUSE = 11,
 		KEY = 12,
@@ -20,11 +21,7 @@ namespace Control {
 		LOGIN = 17 // login.event.ts
 	}
 
-	export interface IncomingEvent {
-		emit(data: any);
-	}
-
-	export function addEvent(eventType: EventType, event: IncomingEvent) {
+	export function addEvent(eventType: EventType, event: IncomingEvent<any>) {
 		events[eventType] = event;
 	}
 
@@ -36,60 +33,9 @@ namespace Control {
 		let event = events[eventType];
 
 		if (event !== undefined) {
-			event.emit(data);
+			event.emit(JSON.parse(data));
 		} else {
 			console.error("control: received unknown event", eventType);
-		}
-	}
-
-	class DownloadProgressEvent implements Control.IncomingEvent {
-
-		public emit(data) {
-			data = JSON.parse(data);
-
-			for (let t of Transfers.TRANSFERS) {
-				if (t.remote === data.file) {
-					t.progress = (data.read / data.total) * 100;
-
-					if (data.read === data.total) {
-						t.setStatus(Transfers.Status.COMPLETE, false);
-					}
-
-					if (data.key !== undefined) {
-						t.key = data.key;
-						document.location.href = "/download?key=" + data.key;
-					}
-
-					Transfers.update();
-
-					break;
-				}
-			}
-		}
-	}
-
-	class TransfersEvent implements Control.IncomingEvent {
-
-		public emit(data) {
-			if (data == null) {
-				return;
-			}
-
-			let json = JSON.parse(data);
-
-			if (json == null) {
-				return;
-			}
-
-			for (let i = 0; i < json.length; i++) {
-				let t = Transfer.create(json[i]);
-
-				if (t.remote === "" && t.local === "") {
-					continue;
-				}
-
-				Transfers.addTransfer(t, false);
-			}
 		}
 	}
 
@@ -103,6 +49,7 @@ namespace Control {
 		constructor() {
 			addEvent(EventType.DOWNLOAD_PROGRESS, new DownloadProgressEvent());
 			addEvent(EventType.TRANSFERS, new TransfersEvent());
+			addEvent(EventType.CLIENT_UPDATE, new ClientUpdateEvent());
 		}
 
 		public start(key: string) {

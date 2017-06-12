@@ -1,6 +1,8 @@
-class DownloadEvent implements Control.IncomingEvent {
+type DownloadParameter = string;
 
-	public emit(data) {
+class DownloadEvent implements IncomingEvent<DownloadParameter> {
+
+	public emit(data: DownloadParameter) {
 		document.location.href = "/download?key=" + data;
 	}
 }

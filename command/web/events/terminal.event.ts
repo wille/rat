@@ -1,11 +1,12 @@
-class TerminalEvent implements Control.IncomingEvent {
+type TerminalParameter = string
+
+class TerminalEvent implements IncomingEvent<TerminalParameter> {
 
 	constructor(private view: TerminalView) {
 
 	}
 
-	public emit(data) {
-		console.log(data);
+	public emit(data: TerminalParameter) {
 		this.view.append(data);
 	}
 }

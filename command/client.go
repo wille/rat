@@ -265,3 +265,9 @@ func (c *Client) WritePacket(packet OutgoingPacket) error {
 func (c *Client) GetEncodedScreen() string {
 	return base64.StdEncoding.EncodeToString(c.Screen.Buffer)
 }
+
+func (c *Client) GetClientData() ConnectClientData {
+	return ConnectClientData{
+		Ping: c.Ping.Current,
+	}
+}

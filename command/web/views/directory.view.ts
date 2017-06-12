@@ -195,7 +195,7 @@ class DirectoryView extends SubView {
 		input.setAttribute("multiple", "multiple");
 		form.appendChild(input);
 
-		setTransfersView();
+		main.setActiveView(MainViewContainer.transfersView);
 
 		input.onchange = (event) => {
 			let file = input.files[0];

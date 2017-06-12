@@ -1,7 +1,10 @@
 /**
  * Incoming desktop frame
  */
-class ScreenEvent implements Control.IncomingEvent {
+
+type ScreenParameter = string
+
+class ScreenEvent implements IncomingEvent<ScreenParameter> {
 
 	private fps = 0;
 	private interval: number;
@@ -14,7 +17,7 @@ class ScreenEvent implements Control.IncomingEvent {
 		}, 1000);
 	}
 
-	public emit(data) {
+	public emit(data: ScreenParameter) {
 		this.element.src = "data:image/jpg;base64," + data;
 		this.fps++;
 	}

@@ -1,12 +1,14 @@
-class MonitorEvent implements Control.IncomingEvent {
+interface MonitorParameters {
+	id, w, h: number;
+}
+
+class MonitorEvent implements IncomingEvent<MonitorParameters[]> {
 
 	constructor(private parent: ScreenView) {
 
 	}
 
-	public emit(data) {
-		data = JSON.parse(data);
-
+	public emit(data: MonitorParameters[]) {
 		let selected = this.parent.selectedMonitor;
 
 		let element = this.parent.monitorsElement;

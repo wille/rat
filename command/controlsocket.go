@@ -10,13 +10,14 @@ import (
 )
 
 const (
-	ScreenUpdateEvent           = 0
-	ProcessQueryEvent           = 1
-	MonitorQueryEvent           = 2
+	ClientUpdateEvent           = 1
 	DirectoryQueryEvent         = 3
 	DownloadQueryEvent          = 4
 	TransfersEvent              = 5
 	DownloadProgressUpdateEvent = 6
+	ScreenUpdateEvent           = 7
+	ProcessQueryEvent           = 8
+	MonitorQueryEvent           = 9
 	MouseMove                   = 10
 	Mouse                       = 11
 	Key                         = 12
@@ -74,6 +75,8 @@ func newEvent(event int, clientID int, data string) *Event {
 	return &Event{event, clientID, data}
 }
 
+var globalws *websocket.Conn
+
 func incomingWebSocket(ws *websocket.Conn) {
 	defer func() {
 		ws.Close()
@@ -116,7 +119,9 @@ func incomingWebSocket(ws *websocket.Conn) {
 		websocket.JSON.Send(ws, &event)
 	}
 
+	globalws = ws
 
+	updateAll()
 	for {
 		var event Event
 		err := websocket.JSON.Receive(ws, &event)

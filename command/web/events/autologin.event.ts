@@ -1,7 +1,10 @@
-class AutoLoginEvent implements Control.IncomingEvent {
+interface AutoLoginParameters {
+	result: boolean;
+}
 
-	public emit(data) {
-		data = JSON.parse(data);
+class AutoLoginEvent implements IncomingEvent<AutoLoginParameters> {
+
+	public emit(data: AutoLoginParameters) {
 		let authenticated = data.result;
 
 		Control.removeEvent(Control.EventType.LOGIN);

@@ -2,7 +2,10 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
+
+	"golang.org/x/net/websocket"
 )
 
 var (
@@ -31,11 +34,18 @@ func Listen(server *Server) error {
 
 		client := NewClient(conn)
 
-		Clients = append(Clients, client)
+		add(client)
+
 		go client.PacketReader()
 		go client.Heartbeat()
 		go client.PacketQueue()
 	}
+}
+
+func add(client *Client) {
+	Clients = append(Clients, client)
+
+	update(NewClientEvent(Add, client, client.GetClientData()))
 }
 
 func remove(client *Client) {
@@ -44,6 +54,30 @@ func remove(client *Client) {
 			Clients = append(Clients[:k], Clients[k+1:]...)
 			break
 		}
+	}
+
+	update(NewClientEvent(Remove, client, nil))
+}
+
+func update(e ClientEvent) error {
+	data, err := json.Marshal(&e)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(data))
+
+	event := newEvent(ClientUpdateEvent, 0, string(data))
+	if globalws != nil {
+		websocket.JSON.Send(globalws, &event)
+	}
+
+	return nil
+}
+
+func updateAll() {
+	for _, client := range Clients {
+		update(NewClientEvent(Add, client, client.GetClientData()))
 	}
 }
 

@@ -1,14 +1,16 @@
 /// <reference path="../views/login.view.ts" />
 
-class LoginEvent implements Control.IncomingEvent {
+interface LoginParameters {
+	result: boolean;
+}
+
+class LoginEvent implements IncomingEvent<LoginParameters> {
 
 	constructor(private view: LoginView) {
 
 	}
 
-	public emit(data) {
-		data = JSON.parse(data);
-
+	public emit(data: LoginParameters) {
 		let authenticated = data.result;
 
 		Control.instance.authenticated = authenticated;

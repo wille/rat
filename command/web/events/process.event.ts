@@ -1,13 +1,15 @@
 /// <reference path="../views/view.ts" />
 
-class ProcessEvent implements Control.IncomingEvent {
+type ProcessParameter = string
+
+class ProcessEvent implements IncomingEvent<ProcessParameter> {
 
 	constructor(private table: HTMLTableElement) { }
 
-	public emit(data) {
-		data = data.split(",");
-		let pid = data[0];
-		let path = data[1];
+	public emit(data: ProcessParameter) {
+		let split = data.split(",");
+		let pid = split[0];
+		let path = split[1];
 
 		let row = this.table.insertRow(0);
 

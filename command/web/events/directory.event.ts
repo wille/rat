@@ -1,12 +1,16 @@
 /// <reference path="../views/view.ts" />
 
-class DirectoryEvent implements Control.IncomingEvent {
+interface DirectoryParameters {
+	path: string;
+	directory: boolean;
+	size, time: string;
+}
+
+class DirectoryEvent implements IncomingEvent<DirectoryParameters[]> {
 
 	constructor(private view: DirectoryView) { }
 
-	public emit(data) {
-		data = JSON.parse(data);
-
+	public emit(data: DirectoryParameters[]) {
 		this.view.table.innerHTML = "";
 
 		for (let i = 0; i < data.length; i++) {
