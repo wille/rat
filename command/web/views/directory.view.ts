@@ -105,7 +105,7 @@ class DirectoryView extends SubView {
 		this.browse(path);
 	}
 
-	public browse(path: string, boo?) {
+	public browse(path: string, absolute?: boolean) {
 		if (!this.current) {
 			this.current = "";
 		}
@@ -115,16 +115,12 @@ class DirectoryView extends SubView {
 		}
 
 		if (path !== "") {
-			if (boo) {
+			if (absolute) {
 				this.current = path;
 			} else {
 				path = this.current + path + this.separator;
 				this.current = path;
 			}
-
-			document.title = this.title + " (" + path + ")";
-		} else {
-			document.title = this.title;
 		}
 
 		let paths = path.split(this.separator);
