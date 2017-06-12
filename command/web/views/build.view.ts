@@ -112,7 +112,7 @@ class BuildView extends SubView {
 	private build() {
 		let os = this.os;
 
-		let params: BuildParameters = {
+		let params: BuildMessageParameters = {
 			host: this.host,
 			os: os,
 			arch: this.arch,

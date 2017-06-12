@@ -6,13 +6,9 @@ interface MouseInputMessageParameters {
     state: InputState;
 }
 
-class MouseInputMessage extends Message {
+class MouseInputMessage extends Message<MouseInputMessageParameters> {
 
-    constructor(private params: MouseInputMessageParameters) {
-        super(Control.EventType.MOUSE_MOVE);
-    }
-
-    public build(): {} {
-        return this.params;
+    constructor(params: MouseInputMessageParameters) {
+        super(Control.EventType.MOUSE_MOVE, params);
     }
 }

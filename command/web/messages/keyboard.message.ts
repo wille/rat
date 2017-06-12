@@ -5,13 +5,9 @@ interface KeyMessageParameters {
     state: InputState;
 }
 
-class KeyMessage extends Message {
+class KeyMessage extends Message<KeyMessageParameters> {
 
-    constructor(private params: KeyMessageParameters) {
-        super(Control.EventType.KEY);
-    }
-
-    public build(): {} {
-        return this.params;
+    constructor(params: KeyMessageParameters) {
+        super(Control.EventType.KEY, params);
     }
 }

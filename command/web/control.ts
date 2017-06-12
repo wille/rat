@@ -77,7 +77,7 @@ namespace Control {
 			this.reconnect();
 		}
 
-		public send(data: Message, client?: Client) {
+		public send(data: Message<any>, client?: Client) {
 			let id = 0;
 
 			if (client) {

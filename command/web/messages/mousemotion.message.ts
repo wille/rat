@@ -5,13 +5,9 @@ interface MouseMotionMessageParameters {
     x, y: number;
 }
 
-class MouseMotionMessage extends Message {
+class MouseMotionMessage extends Message<MouseMotionMessageParameters> {
 
-    constructor(private params: MouseMotionMessageParameters) {
-        super(Control.EventType.MOUSE_MOVE);
-    }
-
-    public build(): {} {
-        return this.params;
+    constructor(params: MouseMotionMessageParameters) {
+        super(Control.EventType.MOUSE_MOVE, params);
     }
 }

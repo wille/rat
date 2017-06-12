@@ -1,16 +1,16 @@
 /// <reference path="../views/view.ts" />
 
-interface DirectoryParameters {
+interface DirectoryMessageParameters {
 	path: string;
 	directory: boolean;
 	size, time: string;
 }
 
-class DirectoryEvent implements IncomingEvent<DirectoryParameters[]> {
+class DirectoryEvent implements IncomingEvent<DirectoryMessageParameters[]> {
 
 	constructor(private view: DirectoryView) { }
 
-	public emit(data: DirectoryParameters[]) {
+	public emit(data: DirectoryMessageParameters[]) {
 		this.view.table.innerHTML = "";
 
 		for (let i = 0; i < data.length; i++) {

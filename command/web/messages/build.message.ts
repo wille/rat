@@ -1,13 +1,27 @@
 /// <reference path="message.ts" />
-/// <reference path="../build.parameters.ts" />
 
-class BuildMessage extends Message {
+type Base64Image = string;
 
-    constructor(private params: BuildParameters) {
-        super(Control.EventType.BUILD);
-    }
+interface Win32Manifest {
+    version: string;
+    icon: Base64Image;
+}
 
-    public build(): {} {
-        return this.params;
+interface BuildMessageParameters {
+    host: string;
+    os: string;
+    arch: string;
+    delay: number;
+    name: string;
+    installPath: number;
+    invalidCertificates: boolean;
+
+    manifest?: Win32Manifest;
+}
+
+class BuildMessage extends Message<BuildMessageParameters> {
+
+    constructor(params: BuildMessageParameters) {
+        super(Control.EventType.BUILD, params);
     }
 }

@@ -14,23 +14,15 @@ enum FileAction {
 	COPY = 3
 }
 
-class FileMessage extends Message {
+interface FileMessageParameters {
+    action: FileAction;
+    file: string;
+    destination?: string;
+}
 
-    /**
-     * Perform task on remote file
-     * @param action Copy, move, etc
-     * @param file Absolute file path
-     * @param destination Absolute destination path. Defaults to empty string
-     */
-    constructor(private action: FileAction, private file: string, private destination: string = "") {
-        super(Control.EventType.FILE);
-    }
+class FileMessage extends Message<FileMessageParameters> {
 
-    public build(): {} {
-        return {
-            task: this.action,
-            file: this.file,
-            destination: this.destination
-        }
+    constructor(params: FileMessageParameters) {
+        super(Control.EventType.FILE, params);
     }
 }

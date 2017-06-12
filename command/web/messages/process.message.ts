@@ -10,13 +10,9 @@ interface ProcessMessageParameters {
     pids?: ProcessId[];
 }
 
-class ProcessMessage extends Message {
+class ProcessMessage extends Message<ProcessMessageParameters> {
 
-    constructor(private params: ProcessMessageParameters) {
-        super(Control.EventType.PROCESS);
-    }
-
-    public build(): {} {
-        return this.params;
+    constructor(params: ProcessMessageParameters) {
+        super(Control.EventType.PROCESS, params);
     }
 }

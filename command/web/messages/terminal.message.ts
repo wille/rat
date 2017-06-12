@@ -6,22 +6,19 @@ enum TerminalAction {
     WRITE = 2
 }
 
-class TerminalMessage extends Message {
+interface TerminalMessageParameters {
+    action: TerminalAction;
+    command?: string;
+}
+
+class TerminalMessage extends Message<TerminalMessageParameters> {
 
     /**
      * Remote Shell
      * @param action Action to perform, such as start shell, kill shell, write command
      * @param command Command string, may be empty
      */
-    constructor(private action: TerminalAction, private command: string = "") {
-        super(Control.EventType.TERMINAL);
+    constructor(action: TerminalAction, command: string = "") {
+        super(Control.EventType.TERMINAL, { action: action, command: command } as TerminalMessageParameters);
     }
-
-    public build(): {} {
-        return {
-            action: this.action,
-            command: this.command
-        }
-    }
-
 }

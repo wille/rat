@@ -250,7 +250,16 @@ class DirectoryView extends SubView {
 		this.reload();
 	}
 
-	public fileEvent(task: FileAction, file: string, destination?: string) {
-		Control.instance.send(new FileMessage(task, file, destination), this.client);
+	public fileEvent(action: FileAction, file: string, destination?: string) {
+		let params: FileMessageParameters = {
+			action: action,
+			file: file
+		}
+
+		if (destination) {
+			params.destination = destination;
+		}
+
+		Control.instance.send(new FileMessage(params), this.client);
 	}
 }

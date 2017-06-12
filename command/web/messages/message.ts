@@ -1,16 +1,15 @@
-abstract class Message {
+abstract class Message<T> {
 
     /**
      * Outgoing websocket message
      * @param header The message numeric header
+     * @param params The message parameters
      */
-    constructor(public readonly header: Control.EventType) {
+    constructor(public readonly header: Control.EventType, public readonly params: T) {
 
     }
 
-    abstract build(): {};
-
-    public static stringify(msg: Message): string {
-        return JSON.stringify(msg.build());
+    public static stringify(msg: Message<any>): string {
+        return JSON.stringify(msg.params);
     }
 }
