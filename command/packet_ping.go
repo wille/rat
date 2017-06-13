@@ -25,5 +25,9 @@ func (packet Ping) Read(c *Client) error {
 	c.Ping.Current = int(utils.GetMilliseconds(time.Now()) - utils.GetMilliseconds(c.Ping.Start))
 	c.Ping.Received = true
 
+	update(NewClientEvent(Update, c, ClientData{
+		Ping: c.Ping.Current,
+	}))
+
 	return nil
 }
