@@ -8,7 +8,22 @@
 		<th></th>
 	</thead>
 
-    <tbody id="body">
-		
+	<tbody id="body">
+
 	</tbody>
 </table>
+
+<div id="menu" class="dropdown clearfix" style="position: absolute; display: none;">
+	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block; position:static; margin-bottom:5px;">
+		<li id="item-disconnect"><a tabindex="-1">Disconnect</a></li>
+		<li class="divider"></li>
+		<li class="dropdown-submenu">
+			<a tabindex="-1" id="item-view">View <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a tabindex="-1" id="item-view-screen">Screen</a></li>
+				<li><a tabindex="-1" id="item-view-files">Files</a></li>
+				<li><a tabindex="-1" id="item-view-processes">Processes</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
