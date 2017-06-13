@@ -51,6 +51,8 @@ type Client struct {
 	Listeners listenerMap
 
 	Monitors []Monitor
+
+	Authenticated bool
 }
 
 func NewClient(conn net.Conn) *Client {

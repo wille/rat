@@ -19,5 +19,10 @@ func (packet ComputerInfoPacket) Read(c *Client) error {
 	c.Computer.OperatingSystemType = ostype
 	c.Computer.OperatingSystem = os
 
+	if !c.Authenticated {
+		add(c)
+		c.Authenticated = true
+	}
+
 	return nil
 }

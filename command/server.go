@@ -34,8 +34,6 @@ func Listen(server *Server) error {
 
 		client := NewClient(conn)
 
-		add(client)
-
 		go client.PacketReader()
 		go client.Heartbeat()
 		go client.PacketQueue()
