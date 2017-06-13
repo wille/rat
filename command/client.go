@@ -268,8 +268,13 @@ func (c *Client) GetEncodedScreen() string {
 	return base64.StdEncoding.EncodeToString(c.Screen.Buffer)
 }
 
-func (c *Client) GetClientData() ConnectClientData {
-	return ConnectClientData{
-		Ping: c.Ping.Current,
+func (c *Client) GetClientData() ClientData {
+	return ClientData{
+		Ping:            c.Ping.Current,
+		Country:         c.GetCountry(),
+		Flag:            c.GetFlagName(),
+		Host:            c.GetDisplayHost(),
+		ComputerName:    c.Computer.GetDisplayName(),
+		OperatingSystem: c.Computer.OperatingSystem,
 	}
 }
