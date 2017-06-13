@@ -17,6 +17,8 @@ class ContextMenu {
 				top: event.pageY
 			});
 
+			this.onOpen();
+
 			event.preventDefault();
 		});
     }
