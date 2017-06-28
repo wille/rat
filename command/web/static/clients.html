@@ -15,8 +15,7 @@
 
 <div id="menu" class="dropdown clearfix" style="position: absolute; display: none;">
 	<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block; position:static; margin-bottom:5px;">
-		<li id="item-disconnect"><a tabindex="-1">Disconnect</a></li>
-		<li class="divider"></li>
+		
 		<li class="dropdown-submenu">
 			<a tabindex="-1" id="item-view">View <span class="caret"></span></a>
 			<ul class="dropdown-menu">
@@ -25,5 +24,17 @@
 				<li><a tabindex="-1" id="item-view-processes">Processes</a></li>
 			</ul>
 		</li>
+		
+		<li class="divider"></li>
+
+		<li class="dropdown-submenu">
+			<a tabindex="-1" id="item-system">System <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a tabindex="-1" id="item-system-shutdown">Shutdown</a></li>
+				<li><a tabindex="-1" id="item-system-reboot">Reboot</a></li>
+			</ul>
+		</li>
+
+		<li id="item-disconnect"><a tabindex="-1">Disconnect</a></li>
 	</ul>
 </div>

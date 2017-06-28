@@ -11,6 +11,7 @@ import (
 
 const (
 	ClientUpdateEvent           = 1
+	ClientSysEvent              = 2
 	DirectoryQueryEvent         = 3
 	DownloadQueryEvent          = 4
 	TransfersEvent              = 5
@@ -58,6 +59,7 @@ var Messages MessageMap
 func init() {
 	Messages = make(MessageMap)
 	Messages[TransfersEvent] = DisplayTransferEvent{}
+	Messages[ClientSysEvent] = SysMessage{}
 	Messages[MouseMove] = MouseMoveMessage{}
 	Messages[DownloadQueryEvent] = DownloadMessage{}
 	Messages[DirectoryQueryEvent] = DirectoryRequestMessage{}

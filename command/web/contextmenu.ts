@@ -37,3 +37,7 @@ class ContextMenu {
 
     }
 }
+
+function submenuHover() {
+	$(this).next("ul").toggle();
+}

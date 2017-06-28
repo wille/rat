@@ -17,6 +17,8 @@ type IncomingPacket interface {
 	Read(c *Client) error
 }
 
+type Packet struct{}
+
 func InitPackets() {
 	packets = make(PacketMap)
 	packets[common.PingHeader] = Ping{}

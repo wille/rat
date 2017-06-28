@@ -20,15 +20,17 @@ class ClientContextMenu extends ContextMenu {
 	private viewFilesItem: HTMLElement;
 	private viewProcessesItem: HTMLElement;
 
+	private systemItem: HTMLElement;
+	private systemShutdownItem: HTMLElement;
+	private systemRebootItem: HTMLElement;
+
 	private disconnectItem: HTMLElement;
 
 	constructor(private view: ClientsView, tableBody: HTMLTableSectionElement) {
 		super(tableBody, view.getElementById("menu"));
 
 		this.viewItem = view.getElementById("item-view");
-		this.viewItem.onmouseover = function() {
-			$(this).next("ul").toggle();
-		}
+		this.viewItem.onmouseover = submenuHover;
 
 		this.viewScreenItem = view.getElementById("item-view-screen");
 		this.viewScreenItem.onclick = () => this.onViewScreen();
@@ -39,17 +41,31 @@ class ClientContextMenu extends ContextMenu {
 		this.viewProcessesItem = view.getElementById("item-view-processes");
 		this.viewProcessesItem.onclick = () => this.onViewProcesses();
 
+		this.systemItem = view.getElementById("item-system");
+		this.systemItem.onmouseover = submenuHover;
+
+		this.systemShutdownItem = view.getElementById("item-system-shutdown");
+		this.systemShutdownItem.onclick = () =>	this.onShutdown();
+
+		this.systemRebootItem = view.getElementById("item-system-reboot");
+		this.systemRebootItem.onclick = () => this.onReboot();
+
 		this.disconnectItem = view.getElementById("item-disconnect");
+		this.disconnectItem.onclick = () => this.onDisconnect();
 	}
 
 	onOpen() {
 		let selected = this.view.getSelectedClients();
 
+		let className = "";
+
 		if (selected.length === 0) {
-			this.disconnectItem.className = "disabled";
-		} else {
-			this.disconnectItem.className = "";
+			className = "disabled";
 		}
+
+		this.disconnectItem.className = className;
+		this.systemShutdownItem.className = className;
+		this.systemRebootItem.className = className;
 	}
 
 	onClose() {
@@ -86,7 +102,30 @@ class ClientContextMenu extends ContextMenu {
 	}
 
 	private onDisconnect() {
-		
+		if (confirm("Disconnect")) {
+			this.forEach((client) => {
+				client.disconnect();
+				return true;
+			});
+		}
+	}
+
+	private onShutdown() {
+		if (confirm("Shutdown")) {
+			this.forEach((client) => {
+				client.shutdown();
+				return true;
+			});
+		}
+	}
+
+	private onReboot() {
+		if (confirm("Reboot")) {
+			this.forEach((client) => {
+				client.reboot();
+				return true;
+			});
+		}
 	}
 }
 

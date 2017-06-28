@@ -6,6 +6,8 @@ import (
 
 type PacketMap map[common.PacketHeader]IncomingPacket
 
+type Packet struct{}
+
 var packets PacketMap
 
 type OutgoingPacket interface {
@@ -20,6 +22,7 @@ type IncomingPacket interface {
 func init() {
 	packets = make(PacketMap)
 	packets[common.PingHeader] = Ping{}
+	packets[common.SysHeader] = SysPacket{}
 	packets[common.ScreenHeader] = ScreenPacket{}
 	packets[common.ProcessHeader] = ProcessPacket{}
 	packets[common.DirectoryHeader] = DirectoryPacket{}

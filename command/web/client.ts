@@ -30,6 +30,22 @@ class Client implements ClientFields {
         return this.operatingSystem.indexOf("Windows") !== -1 ? "\\" : "/";
     }
 
+    private sys(action: SysAction) {
+        Control.instance.send(new SysMessage(action), this);
+    }
+
+    public disconnect() {
+        this.sys(SysAction.DISCONNECT);
+    }
+
+    public shutdown() {
+        this.sys(SysAction.SHUTDOWN);
+    }
+
+    public reboot() {
+        this.sys(SysAction.REBOOT);
+    }
+
     public static getById(id: number): Client | null {
         for (let client of Client.clients) {
             if (client.id === id) {

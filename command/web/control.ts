@@ -8,6 +8,7 @@ namespace Control {
 
 	export enum EventType {
 		CLIENT_UPDATE = 1,
+		SYS = 2,
 		DIRECTORY = 3, // directory.event.ts
 		DOWNLOAD = 4, // download.event.ts
 		TRANSFERS = 5,
