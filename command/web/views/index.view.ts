@@ -213,15 +213,3 @@ class IndexView extends MainView {
 		delete this.rows[client.id];
 	}
 }
-
-function setProcessesView(id: number) {
-	sub.setView(new ProcessView(new Client(id)));
-}
-
-function setDirectoryView(id: number, separator: string) {
-	sub.setView(new DirectoryView(new Client(id), separator));
-}
-
-function setScreenView(id: number) {
-	sub.setView(new ScreenView(new Client(id)));
-}
