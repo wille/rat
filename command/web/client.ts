@@ -8,11 +8,11 @@ class Client implements ClientFields {
 
     public static clients: Client[] = [];
 
-    readonly flag: string;
-    readonly country: string;
-    readonly host: string;
-    readonly computerName: string;
-    readonly operatingSystem: string;
+    public readonly flag: string;
+    public readonly country: string;
+    public readonly host: string;
+    public readonly computerName: string;
+    public readonly operatingSystem: string;
 
     public ping: number;
 
@@ -24,6 +24,10 @@ class Client implements ClientFields {
                 }
             }
         }
+    }
+
+    public get separator() {
+        return this.operatingSystem.indexOf("windows") !== -1 ? "\\" : "/";
     }
 
     public static getById(id: number): Client | null {
