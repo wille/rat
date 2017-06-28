@@ -10,6 +10,7 @@ const enum ClientUpdateType {
 }
 
 interface ClientUpdateParameters {
+
 	type: ClientUpdateType;
 	// client id
 	id: number;
@@ -34,7 +35,7 @@ class ClientUpdateEvent implements IncomingEvent<ClientUpdateParameters> {
 			case ClientUpdateType.UPDATE:
 				client = Client.getById(data.id);
 
-				if (params.ping) {
+				if (typeof params.ping === "number") {
 					MainViewContainer.clientsView.setCell(client, TableCell.PING, client.ping = params.ping);
 				}
 
