@@ -22,7 +22,7 @@ class ClientContextMenu extends ContextMenu {
 
 	private disconnectItem: HTMLElement;
 
-	constructor(private view: IndexView, tableBody: HTMLTableSectionElement) {
+	constructor(private view: ClientsView, tableBody: HTMLTableSectionElement) {
 		super(tableBody, view.getElementById("menu"));
 
 		this.viewItem = view.getElementById("item-view");
@@ -90,7 +90,7 @@ class ClientContextMenu extends ContextMenu {
 	}
 }
 
-class IndexView extends MainView {
+class ClientsView extends MainView {
 
 	private tableBody: HTMLTableSectionElement;
 

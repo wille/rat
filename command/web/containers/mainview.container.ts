@@ -1,12 +1,12 @@
 /// <reference path="tabbed.container.ts" />
 
-/// <reference path="../views/index.view.ts" />
+/// <reference path="../views/clients.view.ts" />
 /// <reference path="../views/build.view.ts" />
 /// <reference path="../views/transfers.view.ts" />
 
 class MainViewContainer extends TabbedContainer<MainView> {
 
-    public static readonly clientsView = new IndexView();
+    public static readonly clientsView = new ClientsView();
     public static readonly buildView = new BuildView();
     public static readonly transfersView = new TransfersView();
 
