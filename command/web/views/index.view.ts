@@ -73,7 +73,7 @@ class ClientContextMenu extends ContextMenu {
 
 	private onViewFiles() {
 		this.forEach((client) => {
-			sub.setView(new DirectoryView(client, "\\"));
+			sub.setView(new DirectoryView(client));
 			return true;
 		});
 	}

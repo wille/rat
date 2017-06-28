@@ -30,9 +30,12 @@ class DirectoryContextMenu extends ContextMenu {
 class DirectoryView extends SubView {
 
 	private currentDirectory: string;
+	private separator: string;
 
-	constructor(client: Client, private separator: string) {
+	constructor(client: Client) {
 		super("static/files.html", "File Browser", client);
+
+		this.separator = client.separator;
 	}
 
 	onEnter() {
