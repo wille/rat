@@ -27,7 +27,7 @@ class Client implements ClientFields {
     }
 
     public get separator() {
-        return this.operatingSystem.indexOf("windows") !== -1 ? "\\" : "/";
+        return this.operatingSystem.indexOf("Windows") !== -1 ? "\\" : "/";
     }
 
     public static getById(id: number): Client | null {
