@@ -12,6 +12,8 @@ import (
 	"time"
 )
 
+var conn *tls.Conn
+
 func main() {
 	err := ParseConfig()
 	if err != nil {
@@ -48,7 +50,8 @@ func start(config common.BinaryConfig) {
 		host := config.Host
 		fmt.Println("Connecting to", host)
 
-		conn, err := tls.Dial("tcp", host, &tls.Config{
+		var err error
+		conn, err = tls.Dial("tcp", host, &tls.Config{
 			InsecureSkipVerify: Config.InvalidSSL,
 		})
 

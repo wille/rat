@@ -2,10 +2,11 @@ package main
 
 import (
 	"rat/common"
+	"rat/common/system"
 )
 
 type SysPacket struct {
-	action SysAction
+	action system.Action
 }
 
 func (packet SysPacket) GetHeader() common.PacketHeader {

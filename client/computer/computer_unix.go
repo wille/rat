@@ -5,6 +5,7 @@ package computer
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"os/user"
 	"rat/common"
 )
@@ -34,4 +35,12 @@ func GetComputerInformation() common.Computer {
 
 func IsRoot() bool {
 	return GetComputerInformation().Username == "root"
+}
+
+func Shutdown() {
+	exec.Command("shutdown", "-h", "now").Start()
+}
+
+func Reboot() {
+	exec.Command("shutdown", "-r", "now").Start()
 }

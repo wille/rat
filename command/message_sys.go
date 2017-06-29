@@ -2,18 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"rat/common/system"
 
 	"time"
 
 	"golang.org/x/net/websocket"
-)
-
-type SysAction int
-
-const (
-	Disconnect SysAction = iota
-	Shutdown
-	Reboot
 )
 
 type SysMessage Message
@@ -26,9 +19,9 @@ func (sys SysMessage) Handle(ws *websocket.Conn, client *Client, data string) er
 		return err
 	}
 
-	client.Queue <- SysPacket{SysAction(action)}
+	client.Queue <- SysPacket{system.Action(action)}
 
-	if action == int(Disconnect) {
+	if action == int(system.Disconnect) {
 		go func() {
 			time.Sleep(time.Second)
 			client.Conn.Close()
