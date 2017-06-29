@@ -16,9 +16,11 @@ else
 	EXT=.bin
 endif
 
-default: web
-	cd client && $(DEFAULT) -o ../client$(EXT)
+default: web client
 	cd command && $(DEFAULT) -o ../command$(EXT)
+
+client:
+	cd client && $(DEFAULT) -o ../client$(EXT)
 
 web:
 	-tsc
@@ -78,3 +80,5 @@ clean:
 	rm -f command/bin/*
 	rm -f rat
 	rm -f command/web/static/lib.js command/web/static/lib.js.map
+
+.PHONY: client
