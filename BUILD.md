@@ -57,23 +57,6 @@ Install gcc and X development headers and libraries. Most likely available in yo
 
 ***
 
-# Configuring Go
-
-Set `GOPATH` to your working directory
-
-```
-$ mkdir /go
-$ export PATH=$PATH:/go
-$ cd /go/src/...
-$ make ...
-```
-
-***
-
-# Building without make
-
-Do not forget to run `tsc` in the root directory
-
 ## Development 
 
 ```
