@@ -1,7 +1,10 @@
 interface ClientFields {
     ping?: number;
-    flag?, country?: string;
-    host?, computerName?, operatingSystem?: string;
+    flag?: string;
+    country?: string;
+    host?: string;
+    computerName?: string;
+    operatingSystem: string;
 }
 
 class Client implements ClientFields {

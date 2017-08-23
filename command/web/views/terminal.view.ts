@@ -6,12 +6,8 @@ class TerminalView extends SubView {
 		super("static/terminal.html", "Terminal", client);
 	}
 
-	public static open(id: number) {
-		sub.setView(new TerminalView(new Client(id)));
-	}
-
 	onEnter() {
-		let commandElement = <HTMLInputElement>this.getElementById("command");
+		let commandElement = this.getElementById("command") as HTMLInputElement;
 		commandElement.onkeypress = (event) => {
 			if (event.keyCode === 13) { // enter
 				this.sendCommand();
