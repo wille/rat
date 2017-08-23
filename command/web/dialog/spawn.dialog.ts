@@ -1,23 +1,18 @@
 /// <reference path="dialog.ts" />
 
-class SpawnButton extends DialogButton {
+class SpawnButton implements DialogButton {
+	readonly text = "Spawn";
+	readonly close = true;
 
-	constructor() {
-		super("Spawn");
-	}
-
-	onClick(parent: Dialog) {
-		console.log("Spawning...");
+	public onClick(dialog: Dialog) {
+		console.log("Spawning");
 	}
 }
 
 class SpawnDialog extends Dialog {
 
 	constructor(client: Client) {
-		super("static/spawn.dialog.html", "Spawn Process", [
-			new SpawnButton(),
-			new CancelButton()
-		], client);
+		super("static/spawn.dialog.html", "Spawn Process", new SpawnButton(), new CancelButton());
 	}
 
 	public onEnter() {

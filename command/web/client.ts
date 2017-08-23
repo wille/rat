@@ -32,7 +32,7 @@ class Client implements ClientFields {
     public get separator() {
         return this.operatingSystem.indexOf("Windows") !== -1 ? "\\" : "/";
     }
-
+    
     private sys(action: SysAction) {
         Control.instance.send(new SysMessage(action), this);
     }

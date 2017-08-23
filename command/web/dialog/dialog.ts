@@ -2,28 +2,33 @@
 
 abstract class Dialog extends AbstractView {
 
-	constructor(url: string, title: string, public dialogButtons: DialogButton[], public client?: Client) {
+	public readonly dialogButtons: DialogButton[];
+
+	constructor(url: string, title: string, ...dialogButtons: DialogButton[]) {
 		super(url, title);
+
+		this.dialogButtons = dialogButtons;
 	}
 
 	public abstract onEnter();
 	public abstract onLeave();
 }
 
-abstract class DialogButton {
+interface DialogButton {
+	// Text of the button
+	readonly text: string;
 
-	constructor(public text: string, public close: boolean = true) {
+	// If dialog should close on click
+	readonly close?: boolean;
 
-	}
-
-	public abstract onClick(parent?: Dialog);
+	// Called when the button is clicked
+	onClick: (parent: Dialog) => void;
 }
 
-class CancelButton extends DialogButton {
+class CancelButton implements DialogButton {
 	
-	constructor() {
-		super("Cancel", true);
-	}
+	readonly text = "Cancel";
+	readonly close = true;
 
 	public onClick() {
 		// Will close on click
