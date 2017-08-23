@@ -41,7 +41,9 @@ namespace Control {
 			try {
 				data = JSON.parse(data);
 			} catch (e) {
-				console.log(e);
+				if (!(e instanceof SyntaxError)) {
+					throw e;
+				}
 			}
 
 			event.emit(data);
