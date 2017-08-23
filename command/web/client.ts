@@ -51,7 +51,7 @@ class Client implements ClientFields {
 
     public static getById(id: number): Client | null {
         for (let client of Client.clients) {
-            if (client.id === id) {
+            if (client && client.id === id) {
                 return client;
             }
         }
