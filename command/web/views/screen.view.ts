@@ -17,7 +17,7 @@ class ScreenView extends SubView {
 		this.fps = document.createElement("p");
 	}
 
-	onEnter() {
+	public onEnter() {
 		// Initialize slider
 		this.scaleSlider = new Slider(super.getElementById("scale"), {
 			formatter: (value) => {
@@ -70,7 +70,7 @@ class ScreenView extends SubView {
 		};
 	}
 
-	onLeave() {
+	public onLeave() {
 		Control.removeEvent(Control.EventType.SCREEN);
 		Control.removeEvent(Control.EventType.MONITOR);
 

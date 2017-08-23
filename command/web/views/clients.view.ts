@@ -140,14 +140,14 @@ class ClientsView extends MainView {
 		super("static/clients.html", "Clients");
 	}
 
-	onEnter() {
+	public onEnter() {
 		this.tableBody = <HTMLTableSectionElement>super.getElementById("body");
 
 		let contextMenu = new ClientContextMenu(this, this.tableBody);
 		contextMenu.hook();
 	}
 
-	onLeave() {
+	public onLeave() {
 
 	}
 

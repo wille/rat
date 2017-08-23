@@ -10,7 +10,7 @@ class BuildView extends SubView {
 		super("static/build.html", "Build");
 	}
 
-	onEnter() {
+	public onEnter() {
 		let button = <HTMLButtonElement>document.getElementById("submit");
 		button.onclick = () => this.build();
 
@@ -33,7 +33,7 @@ class BuildView extends SubView {
 		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
 	}
 
-	onLeave() {
+	public onLeave() {
 		Control.removeEvent(Control.EventType.DOWNLOAD);
 	}
 

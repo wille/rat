@@ -9,7 +9,7 @@ class TransfersView extends SubView {
 		super("static/transfers.html", "Transfers");
 	}
 
-	onEnter() {
+	public onEnter() {
 		this.element = <HTMLTableElement>document.getElementById("transfers");
 
 		this.update();
@@ -19,7 +19,7 @@ class TransfersView extends SubView {
 		}, 1000);
 	}
 
-	onLeave() {
+	public onLeave() {
 		clearInterval(this.interval);
 	}
 

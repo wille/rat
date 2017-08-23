@@ -7,7 +7,7 @@ class ProcessView extends SubView {
 		super("static/processes.html", "Processes", client);
 	}
 
-	onEnter() {
+	public onEnter() {
 		this.table = <HTMLTableElement>this.getElementById("processes");
 
 		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(this.table));
@@ -23,7 +23,7 @@ class ProcessView extends SubView {
 		new TableSearch(searchElement, this.table);
 	}
 
-	onLeave() {
+	public onLeave() {
 		Control.removeEvent(Control.EventType.PROCESS);
 	}
 

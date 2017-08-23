@@ -6,8 +6,8 @@ abstract class Dialog extends AbstractView {
 		super(url, title);
 	}
 
-	abstract onEnter();
-	abstract onLeave();
+	public abstract onEnter();
+	public abstract onLeave();
 }
 
 abstract class DialogButton {
@@ -16,7 +16,7 @@ abstract class DialogButton {
 
 	}
 
-	abstract onClick(parent?: Dialog);
+	public abstract onClick(parent?: Dialog);
 }
 
 class CancelButton extends DialogButton {
@@ -25,7 +25,7 @@ class CancelButton extends DialogButton {
 		super("Cancel", true);
 	}
 
-	onClick() {
+	public onClick() {
 		// Will close on click
 	}
 }

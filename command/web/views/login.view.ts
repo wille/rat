@@ -10,7 +10,7 @@ class LoginView extends MainView {
 		super("static/login.html", "Login");
 	}
 
-	onEnter() {
+	public onEnter() {
 		this.passwordElement = <HTMLInputElement>document.getElementById("password");
 		this.submitElement = <HTMLButtonElement>document.getElementById("login");
 		this.statusElement = <HTMLParagraphElement>document.getElementById("login_status");
@@ -22,7 +22,7 @@ class LoginView extends MainView {
 		Statusbar.hide();
 	}
 
-	onLeave() {
+	public onLeave() {
 		Control.removeEvent(Control.EventType.LOGIN);
 		Statusbar.show();
 	}

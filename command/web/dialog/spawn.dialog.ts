@@ -20,11 +20,11 @@ class SpawnDialog extends Dialog {
 		], client);
 	}
 
-	onEnter() {
+	public onEnter() {
 
 	}
 
-	onLeave() {
+	public onLeave() {
 
 	}
 }

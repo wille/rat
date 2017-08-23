@@ -7,8 +7,8 @@ abstract class AbstractView {
 
 	}
 
-	abstract onEnter();
-	abstract onLeave();
+	public abstract onEnter();
+	public abstract onLeave();
 
 	public getElementById(id: string): HTMLElement {
 		let elements = this.viewElement.getElementsByTagName("*");
@@ -30,8 +30,8 @@ abstract class MainView extends AbstractView {
 		super(url, title);
 	}
 
-	abstract onEnter();
-	abstract onLeave();
+	public abstract onEnter();
+	public abstract onLeave();
 }
 
 abstract class SubView extends AbstractView {
@@ -40,6 +40,6 @@ abstract class SubView extends AbstractView {
 		super(url, title);
 	}
 
-	abstract onEnter();
-	abstract onLeave();
+	public abstract onEnter();
+	public abstract onLeave();
 }

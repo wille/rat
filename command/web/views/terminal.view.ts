@@ -6,7 +6,7 @@ class TerminalView extends SubView {
 		super("static/terminal.html", "Terminal", client);
 	}
 
-	onEnter() {
+	public onEnter() {
 		let commandElement = this.getElementById("command") as HTMLInputElement;
 		commandElement.onkeypress = (event) => {
 			if (event.keyCode === 13) { // enter
@@ -29,7 +29,7 @@ class TerminalView extends SubView {
 		this.start();
 	}
 
-	onLeave() {
+	public onLeave() {
 		Control.removeEvent(Control.EventType.TERMINAL);
 
 		this.stop();

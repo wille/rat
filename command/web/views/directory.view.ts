@@ -1,4 +1,3 @@
-
 class DirectoryContextMenu extends ContextMenu {
 
 	private view: DirectoryView;
@@ -38,7 +37,7 @@ class DirectoryView extends SubView {
 		this.separator = client.separator;
 	}
 
-	onEnter() {
+	public onEnter() {
 		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
 		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this));
 
@@ -56,7 +55,7 @@ class DirectoryView extends SubView {
 		menu.hook();
 	}
 
-	onLeave() {
+	public onLeave() {
 		Control.removeEvent(Control.EventType.DOWNLOAD);
 		Control.removeEvent(Control.EventType.DIRECTORY);
 	}
