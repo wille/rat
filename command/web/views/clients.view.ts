@@ -1,4 +1,5 @@
 /// <reference path="view.ts" />
+/// <reference path="../contextmenu.ts" />
 
 const enum TableCell {
     COUNTRY,
