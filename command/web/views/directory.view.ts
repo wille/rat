@@ -16,14 +16,6 @@ class DirectoryContextMenu extends ContextMenu {
 		this.deleteItem = document.getElementById("item-remove");
 		this.deleteItem.onclick = () => parent.delete();
 	}
-
-	onOpen() {
-
-	}
-
-	onClose() {
-
-	}
 }
 
 class DirectoryView extends SubView {
@@ -69,23 +61,23 @@ class DirectoryView extends SubView {
 	}
 
 	private get backElement(): HTMLElement {
-		return document.getElementById("back");
+		return this.getElementById("back");
 	}
 
 	public get table(): HTMLTableElement {
-		return <HTMLTableElement>document.getElementById("files");
+		return this.getElementById("files") as HTMLTableElement;
 	}
 
-	public getSelectedFiles() {
-		let elements = document.getElementsByTagName("tr");
+	public getSelectedFiles(): string[] {
+		let rows = this.table.rows;
 
 		let selected = [];
 
-		for (let i = 0; i < elements.length; i++) {
-			let element = elements[i];
+		for (let i = 0; i < rows.length; i++) {
+			let row = rows[i];
 
-			if (element.className === "selected" && !element.hidden) {
-				selected.push(this.current + element.children[0].innerHTML);
+			if (row.className === "selected" && !row.hidden) {
+				selected.push(this.current + row.children[0].innerHTML);
 			}
 		}
 
