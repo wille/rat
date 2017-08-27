@@ -27,6 +27,7 @@ const (
 	ModifyFileEvent             = 15
 	Exit                        = 16
 	AuthenticationEvent         = 17
+	Windows                     = 18
 )
 
 // Event incoming message data
@@ -71,6 +72,7 @@ func init() {
 	Messages[Shell] = ShellMessage{}
 	Messages[ModifyFileEvent] = FileMessage{}
 	Messages[Exit] = ExitMessage{}
+	Messages[Windows] = WindowMessage{}
 }
 
 func newEvent(event int, clientID int, data string) *Event {

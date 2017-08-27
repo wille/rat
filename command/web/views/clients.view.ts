@@ -20,6 +20,7 @@ class ClientContextMenu extends ContextMenu {
 	private viewScreenItem: HTMLElement;
 	private viewFilesItem: HTMLElement;
 	private viewProcessesItem: HTMLElement;
+	private viewWindowsItem: HTMLElement;
 
 	private systemItem: HTMLElement;
 	private systemShutdownItem: HTMLElement;
@@ -53,6 +54,9 @@ class ClientContextMenu extends ContextMenu {
 
 		this.disconnectItem = view.getElementById("item-disconnect");
 		this.disconnectItem.onclick = () => this.onDisconnect();
+
+		this.viewWindowsItem = view.getElementById("item-view-windows");
+		this.viewWindowsItem.onclick = () => this.onViewWindows();
 	}
 
 	onOpen() {
@@ -98,6 +102,13 @@ class ClientContextMenu extends ContextMenu {
 	private onViewProcesses() {
 		this.forEach((client) => {
 			sub.setView(new ProcessView(client));
+			return true;
+		});
+	}
+
+	private onViewWindows() {
+		this.forEach((client) => {
+			Control.instance.send(new WindowsMessage({}), client);
 			return true;
 		});
 	}

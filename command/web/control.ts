@@ -23,7 +23,8 @@ namespace Control {
 		TERMINAL = 14,
 		FILE = 15,
 		EXIT = 16,
-		LOGIN = 17 // login.event.ts
+		LOGIN = 17, // login.event.ts
+		WINDOWS = 18
 	}
 
 	export function addEvent(eventType: EventType, event: IncomingEvent<any>) {

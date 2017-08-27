@@ -15,4 +15,5 @@ const (
 	KeyHeader          PacketHeader = 18
 	FileHeader         PacketHeader = 19
 	ShellHeader        PacketHeader = 20
+	WindowsHeader      PacketHeader = 21
 )
