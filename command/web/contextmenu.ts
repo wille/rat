@@ -1,4 +1,4 @@
-class ContextMenu {
+abstract class ContextMenu {
 
 	/**
 	 * Context menu source is to be defined in the HTML document
@@ -7,6 +7,9 @@ class ContextMenu {
 	 */
     constructor(private parent: HTMLElement, private menu: HTMLElement) { }
 
+	/**
+	 * Initializes this context menu
+	 */
     public hook() {
 		$(this.parent).on("contextmenu", (event) => {
 			document.onclick = () => this.destroy();
@@ -23,6 +26,9 @@ class ContextMenu {
 		});
     }
 
+	/**
+	 * Destroys this context menu
+	 */
     private destroy() {
         document.onclick = undefined;
         $(this.menu).hide();
@@ -35,9 +41,20 @@ class ContextMenu {
 
     protected onClose() {
 
-    }
-}
+	}
+	
+	/**
+	 * Creates a submenu
+	 * @param element 
+	 */
+	public static createSubMenu(element: HTMLElement) {
+		element.onmouseover = () => $(element).next("ul").show();
+		element.onmouseleave = (event: MouseEvent) => {
+			let target = event.toElement;
 
-function submenuHover() {
-	$(this).next("ul").toggle();
+			if (target.parentElement.parentElement.className !== "dropdown-menu") {
+				$(element).next("ul").hide();
+			}
+		}
+	}
 }

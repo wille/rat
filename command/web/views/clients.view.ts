@@ -31,7 +31,7 @@ class ClientContextMenu extends ContextMenu {
 		super(tableBody, view.getElementById("menu"));
 
 		this.viewItem = view.getElementById("item-view");
-		this.viewItem.onmouseover = submenuHover;
+		ContextMenu.createSubMenu(this.viewItem);
 
 		this.viewScreenItem = view.getElementById("item-view-screen");
 		this.viewScreenItem.onclick = () => this.onViewScreen();
@@ -43,7 +43,7 @@ class ClientContextMenu extends ContextMenu {
 		this.viewProcessesItem.onclick = () => this.onViewProcesses();
 
 		this.systemItem = view.getElementById("item-system");
-		this.systemItem.onmouseover = submenuHover;
+		ContextMenu.createSubMenu(this.systemItem);
 
 		this.systemShutdownItem = view.getElementById("item-system-shutdown");
 		this.systemShutdownItem.onclick = () =>	this.onShutdown();
