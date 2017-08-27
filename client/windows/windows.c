@@ -20,6 +20,7 @@ BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
 
     window.title = GetWindowTitle(handle);
     window.handle = (int)handle;
+    window.rect = GetWindowDimensions(handle);
 
     Callback(window);
 
@@ -30,4 +31,21 @@ BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
 
 void QueryWindows(void) {
     EnumWindows(EnumWindowsCallback, 0);
+}
+
+Rect GetWindowDimensions(int handle) {
+    RECT wrect;
+    GetWindowRect((HWND) handle, &wrect);
+
+    Rect rect;
+    rect.x = wrect.left;
+    rect.y = wrect.top;
+    rect.width = wrect.right - wrect.left;
+    rect.height = wrect.bottom - wrect.top;
+
+    return rect;
+}
+
+void SetWindowPosition(int handle, Rect rect) {
+    MoveWindow((HWND) handle, rect.x, rect.y, rect.width, rect.height, TRUE);
 }

