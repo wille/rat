@@ -22,7 +22,7 @@ BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
     window.handle = (int)handle;
     window.rect = GetWindowDimensions(handle);
 
-    Callback(window);
+    WindowCallback(window);
 
     free(window.title);
 

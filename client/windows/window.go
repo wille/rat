@@ -27,8 +27,8 @@ type Window struct {
 var Windows []Window
 
 // Callback for each window
-//export Callback
-func Callback(w C.Window) {
+//export WindowCallback
+func WindowCallback(w C.Window) {
 	title := utils.WcharToString((*uint16)(w.title), -1)
 
 	window := Window{
