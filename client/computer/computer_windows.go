@@ -19,7 +19,7 @@ func GetComputerInformation() common.Computer {
 	// UNLEN is less than MAX_COMPUTERNAME_LENGTH (Lmcons.h)
 	const BufferSize = C.MAX_COMPUTERNAME_LENGTH + 1
 
-	lpBuffer := make([]utils.WideChar, BufferSize)
+	lpBuffer := make([]utils.Wchar, BufferSize)
 	var lpnSize C.DWORD = BufferSize
 	ptr := (*C.WCHAR)(unsafe.Pointer(&lpBuffer[0]))
 
