@@ -1,9 +1,9 @@
-enum MouseButton {
-	LEFT = 0,
-	RIGHT = 1
+const enum MouseButton {
+	LEFT,
+	RIGHT
 }
 
-enum InputState {
-	PRESS = 0,
-	RELEASE = 1
+const enum InputState {
+	PRESS,
+	RELEASE
 }

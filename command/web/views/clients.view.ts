@@ -189,7 +189,7 @@ class ClientsView extends MainView {
 		switch (cell) {
 			case TableCell.PING:
 				let element = this.getCellElement(client, cell);
-				element.innerText = value;
+				element.innerText = " " + value;
 				element.className = "ping " + Icons.getPingClass(client.ping);
 				break;
 			default:
@@ -237,7 +237,7 @@ class ClientsView extends MainView {
 		osCell.appendChild(osIconElement);
 
 		let osTextElement = document.createElement("span");
-		osTextElement.innerText = client.operatingSystem;
+		osTextElement.innerText = " " + client.operatingSystem;
 		osCell.appendChild(osTextElement);
 
 		let pingCell = row.insertCell(TableCell.PING);
