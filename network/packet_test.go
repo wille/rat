@@ -10,6 +10,9 @@ import (
 type TestPacket struct {
 	Text   string
 	Number int
+	Sub    struct {
+		SubInt int
+	}
 }
 
 func (p TestPacket) header() int {
@@ -32,10 +35,14 @@ func TestS(t *testing.T) {
 		log.Fatal(3, err)
 	}
 
+	writer.WriteInt(5)
+
 	fmt.Println("[", b.Len(), "]", b.Bytes())
 
 	reader := Reader{b}
-	_, err = reader.ReadPacket(TestPacket{})
+	packet, err := reader.ReadPacket(TestPacket{})
+
+	fmt.Println(packet)
 
 	if err != nil {
 		fmt.Println(err)

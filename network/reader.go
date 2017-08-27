@@ -33,10 +33,13 @@ func (r Reader) ReadString() (string, error) {
 }
 
 func (r Reader) ReadPacket(packet Packet) (Packet, error) {
-	pstruct := reflect.New(reflect.TypeOf(packet)).Elem()
-	ptype := pstruct.Type()
+	e, err := deserialize(r, packet)
+	return e.(Packet), err
+}
 
-	fmt.Println("reading", pstruct.Type())
+func deserialize(r Reader, data interface{}) (interface{}, error) {
+	pstruct := reflect.New(reflect.TypeOf(data)).Elem()
+	ptype := pstruct.Type()
 
 	var err error
 
@@ -46,15 +49,23 @@ func (r Reader) ReadPacket(packet Packet) (Packet, error) {
 
 		fmt.Println("setting", fieldType.Name, "("+field.Type().Name()+")")
 
-		switch field.Interface().(type) {
-		case string:
+		switch fieldType.Type.Kind() {
+		case reflect.String:
 			var s string
 			s, err = r.ReadString()
 			field.SetString(s)
-		case int:
+		case reflect.Int:
 			var n int
 			n, err = r.ReadInt()
 			field.SetInt(int64(n))
+		case reflect.Struct:
+			var e interface{}
+			e, err = deserialize(r, field.Interface())
+			if err != nil {
+				break
+			}
+
+			field.Set(reflect.ValueOf(e))
 		}
 
 		fmt.Println("\tto", field.Interface())
@@ -64,5 +75,5 @@ func (r Reader) ReadPacket(packet Packet) (Packet, error) {
 		}
 	}
 
-	return packet, err
+	return pstruct.Interface(), err
 }
