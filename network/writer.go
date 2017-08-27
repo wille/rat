@@ -7,18 +7,17 @@ import (
 )
 
 type Writer struct {
-	io.Writer
+	Writer io.Writer
 }
 
-func (w Writer) Write(i interface{}) error {
-	var err error
+func (w Writer) WriteInt(i int) error {
+	return binary.Write(w.Writer, common.ByteOrder, int32(i))
+}
 
-	switch i.(type) {
-	case string:
-		w.Write(len(i.(string)))
-		_, err = w.Writer.Write([]byte(i.(string)))
-		return err
-	}
+func (w Writer) WriteString(s string) error {
+	w.WriteInt(len(s))
 
-	return binary.Write(w.Writer, common.ByteOrder, &i)
+	w.Writer.Write([]byte(s))
+
+	return nil
 }
