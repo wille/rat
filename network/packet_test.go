@@ -3,7 +3,6 @@ package network
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"testing"
 )
 
@@ -20,22 +19,18 @@ func (p TestPacket) header() int {
 }
 
 func TestS(t *testing.T) {
+	test := TestPacket{
+		Text:   "Text",
+		Number: 15,
+	}
+
+	test.Sub.SubInt = 10
+
 	buf := make([]byte, 0)
 	b := bytes.NewBuffer(buf)
 	writer := Writer{b}
-	str := "test"
 
-	err := writer.WriteString(str)
-	if err != nil {
-		log.Fatal(2, err)
-	}
-
-	err = writer.WriteInt(10)
-	if err != nil {
-		log.Fatal(3, err)
-	}
-
-	writer.WriteInt(5)
+	writer.WritePacket(test)
 
 	fmt.Println("[", b.Len(), "]", b.Bytes())
 
