@@ -2,7 +2,6 @@ package network
 
 import (
 	"encoding/binary"
-	"fmt"
 	"io"
 	"rat/common"
 	"reflect"
@@ -38,9 +37,13 @@ func (r Reader) ReadString() (string, error) {
 	return string(buf), err
 }
 
-func (r Reader) ReadPacket(packet Packet) (Packet, error) {
+func (r Reader) ReadPacket(packet IncomingPacket) (IncomingPacket, error) {
 	e, err := deserialize(r, packet)
-	return e.(Packet), err
+	if err != nil {
+		return nil, err
+	}
+
+	return e.(IncomingPacket), e.(IncomingPacket).OnRecieve()
 }
 
 func deserialize(r Reader, data interface{}) (interface{}, error) {
@@ -53,34 +56,11 @@ func deserialize(r Reader, data interface{}) (interface{}, error) {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		fmt.Print("setting ", fieldType.Name, " ("+field.Type().Name()+") ")
-
-		switch fieldType.Type.Kind() {
-		case reflect.String:
-			var s string
-			s, err = r.ReadString()
-			field.SetString(s)
-		case reflect.Int:
-			fallthrough
-		case reflect.Int32:
-			var n int32
-			n, err = r.ReadInt32()
-			field.SetInt(int64(n))
-		case reflect.Int64:
-			var n int64
-			n, err = r.ReadInt64()
-			field.SetInt(n)
-		case reflect.Struct:
-			var e interface{}
-			e, err = deserialize(r, field.Interface())
-			if err != nil {
-				break
-			}
-
-			field.Set(reflect.ValueOf(e))
+		if fieldType.Tag != "receive" && fieldType.Tag != "both" {
+			continue
 		}
 
-		fmt.Println("=>", field.Interface())
+		deserializeField(r, field, fieldType.Type)
 
 		if err != nil {
 			break
@@ -88,4 +68,45 @@ func deserialize(r Reader, data interface{}) (interface{}, error) {
 	}
 
 	return pstruct.Interface(), err
+}
+
+func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) error {
+	var err error
+
+	switch fieldType.Kind() {
+	case reflect.String:
+		var s string
+		s, err = r.ReadString()
+		field.SetString(s)
+	case reflect.Int:
+		fallthrough
+	case reflect.Int32:
+		var n int32
+		n, err = r.ReadInt32()
+		field.SetInt(int64(n))
+	case reflect.Int64:
+		var n int64
+		n, err = r.ReadInt64()
+		field.SetInt(n)
+	case reflect.Struct:
+		var e interface{}
+		e, err = deserialize(r, field.Interface())
+		if err != nil {
+			break
+		}
+
+		field.Set(reflect.ValueOf(e))
+	case reflect.Array:
+		fallthrough
+	case reflect.Slice:
+		len, _ := r.ReadInt32()
+		slice := reflect.MakeSlice(fieldType, int(len), int(len))
+
+		field.Set(slice)
+		for i := 0; i < int(len); i++ {
+			deserializeField(r, slice.Index(i), fieldType.Elem())
+		}
+	}
+
+	return err
 }

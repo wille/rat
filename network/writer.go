@@ -2,7 +2,6 @@ package network
 
 import (
 	"encoding/binary"
-	"fmt"
 	"io"
 	"rat/common"
 	"reflect"
@@ -42,26 +41,41 @@ func serialize(w Writer, data interface{}) error {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		fmt.Println("sending", fieldType.Name, "("+field.Type().Name()+")", "=>", field.Interface())
-
-		switch fieldType.Type.Kind() {
-		case reflect.String:
-			w.WriteString(field.String())
-		case reflect.Int:
-			fallthrough
-		case reflect.Int32:
-			w.WriteInt32(int32(field.Int()))
-		case reflect.Int64:
-			w.WriteInt64(field.Int())
-		case reflect.Struct:
-			err = serialize(w, field.Interface())
-			if err != nil {
-				break
-			}
+		if fieldType.Tag != "send" && fieldType.Tag != "both" {
+			continue
 		}
+
+		err = serializeField(w, field, fieldType.Type)
 
 		if err != nil {
 			break
+		}
+	}
+
+	return err
+}
+
+func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
+	var err error
+
+	switch d.Kind() {
+	case reflect.String:
+		w.WriteString(field.String())
+	case reflect.Int:
+		fallthrough
+	case reflect.Int32:
+		w.WriteInt32(int32(field.Int()))
+	case reflect.Int64:
+		w.WriteInt64(field.Int())
+	case reflect.Struct:
+		err = serialize(w, field.Interface())
+	case reflect.Array:
+		fallthrough
+	case reflect.Slice:
+		w.WriteInt32(int32(field.Len()))
+
+		for i := 0; i < field.Len(); i++ {
+			serializeField(w, field.Index(i), field.Index(i).Type())
 		}
 	}
 

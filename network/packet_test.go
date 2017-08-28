@@ -3,44 +3,57 @@ package network
 import (
 	"bytes"
 	"fmt"
+	"rat/common"
+	"reflect"
 	"testing"
 )
 
 type TestPacket struct {
-	Text   string
-	Number int
+	Text   string   `both`
+	Number int      `both`
+	Array  []string `both`
 	Sub    struct {
-		SubInt int
-	}
+		SubInt int `both`
+	} `both`
+	Another int `both`
 }
 
-func (p TestPacket) header() int {
+func (p TestPacket) Header() common.PacketHeader {
 	return 0
+}
+
+func (p TestPacket) OnRecieve() error {
+	return nil
 }
 
 func TestPacketSerialization(t *testing.T) {
 	test := TestPacket{
-		Text:   "Text",
-		Number: 15,
+		Text:    "Text",
+		Number:  15,
+		Another: 1,
 	}
 
 	test.Sub.SubInt = 10
+	test.Array = []string{"test1", "test2"}
 
 	buf := make([]byte, 0)
 	b := bytes.NewBuffer(buf)
 	writer := Writer{b}
 
-	writer.WritePacket(test)
-
-	fmt.Println(test)
-	fmt.Println()
+	err := writer.WritePacket(test)
+	if err != nil {
+		t.Error(err)
+	}
 
 	reader := Reader{b}
 	packet, err := reader.ReadPacket(TestPacket{})
-
-	fmt.Println(packet)
-
 	if err != nil {
-		fmt.Println(err)
+		t.Error(err)
+	}
+
+	if !reflect.DeepEqual(test, packet) {
+		fmt.Println("in", test)
+		fmt.Println("out", packet)
+		t.Fail()
 	}
 }

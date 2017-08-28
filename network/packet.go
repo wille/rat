@@ -1,6 +1,16 @@
 package network
 
+import "rat/common"
+
 // Packet
 type Packet interface {
-	header() int
+	Header() common.PacketHeader
+}
+
+type IncomingPacket interface {
+	OnRecieve() error
+}
+
+type OutgoingPacket interface {
+	Init()
 }
