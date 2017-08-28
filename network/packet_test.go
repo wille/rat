@@ -57,3 +57,32 @@ func TestPacketSerialization(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestNullSerialization(t *testing.T) {
+	test := TestPacket{
+		Text: "Text",
+	}
+
+	test.Array = []string{"test2"}
+
+	buf := make([]byte, 0)
+	b := bytes.NewBuffer(buf)
+	writer := Writer{b}
+
+	err := writer.WritePacket(test)
+	if err != nil {
+		t.Error(err)
+	}
+
+	reader := Reader{b}
+	packet, err := reader.ReadPacket(TestPacket{})
+	if err != nil {
+		t.Error(err)
+	}
+
+	if !reflect.DeepEqual(test, packet) {
+		fmt.Println("in", test)
+		fmt.Println("out", packet)
+		t.Fail()
+	}
+}
