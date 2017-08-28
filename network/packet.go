@@ -8,7 +8,7 @@ type Packet interface {
 }
 
 type IncomingPacket interface {
-	OnRecieve() error
+	OnReceive() error
 }
 
 type OutgoingPacket interface {

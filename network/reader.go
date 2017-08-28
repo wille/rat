@@ -11,26 +11,26 @@ type Reader struct {
 	Reader io.Reader
 }
 
-func (r Reader) ReadBool() (bool, error) {
+func (r Reader) readBool() (bool, error) {
 	var n bool
 	err := binary.Read(r.Reader, common.ByteOrder, &n)
 	return n, err
 }
 
-func (r Reader) ReadInt32() (int32, error) {
+func (r Reader) readInt32() (int32, error) {
 	var n int32
 	err := binary.Read(r.Reader, common.ByteOrder, &n)
 	return n, err
 }
 
-func (r Reader) ReadInt64() (int64, error) {
+func (r Reader) readInt64() (int64, error) {
 	var n int64
 	err := binary.Read(r.Reader, common.ByteOrder, &n)
 	return n, err
 }
 
-func (r Reader) ReadString() (string, error) {
-	len, err := r.ReadInt32()
+func (r Reader) readString() (string, error) {
+	len, err := r.readInt32()
 	buf := make([]byte, len)
 	io.ReadFull(r.Reader, buf)
 
@@ -43,7 +43,7 @@ func (r Reader) ReadPacket(packet IncomingPacket) (IncomingPacket, error) {
 		return nil, err
 	}
 
-	return e.(IncomingPacket), e.(IncomingPacket).OnRecieve()
+	return e.(IncomingPacket), e.(IncomingPacket).OnReceive()
 }
 
 func deserialize(r Reader, data interface{}) (interface{}, error) {
@@ -76,17 +76,17 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 	switch fieldType.Kind() {
 	case reflect.String:
 		var s string
-		s, err = r.ReadString()
+		s, err = r.readString()
 		field.SetString(s)
 	case reflect.Int:
 		fallthrough
 	case reflect.Int32:
 		var n int32
-		n, err = r.ReadInt32()
+		n, err = r.readInt32()
 		field.SetInt(int64(n))
 	case reflect.Int64:
 		var n int64
-		n, err = r.ReadInt64()
+		n, err = r.readInt64()
 		field.SetInt(n)
 	case reflect.Struct:
 		var e interface{}
@@ -99,7 +99,7 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 	case reflect.Array:
 		fallthrough
 	case reflect.Slice:
-		len, _ := r.ReadInt32()
+		len, _ := r.readInt32()
 		slice := reflect.MakeSlice(fieldType, int(len), int(len))
 
 		field.Set(slice)

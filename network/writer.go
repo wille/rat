@@ -11,16 +11,16 @@ type Writer struct {
 	Writer io.Writer
 }
 
-func (w Writer) WriteInt32(i int32) error {
+func (w Writer) writeInt32(i int32) error {
 	return binary.Write(w.Writer, common.ByteOrder, int32(i))
 }
 
-func (w Writer) WriteInt64(i int64) error {
+func (w Writer) writeInt64(i int64) error {
 	return binary.Write(w.Writer, common.ByteOrder, int64(i))
 }
 
-func (w Writer) WriteString(s string) error {
-	w.WriteInt32(int32(len(s)))
+func (w Writer) writeString(s string) error {
+	w.writeInt32(int32(len(s)))
 
 	w.Writer.Write([]byte(s))
 
@@ -60,19 +60,19 @@ func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
 
 	switch d.Kind() {
 	case reflect.String:
-		w.WriteString(field.String())
+		w.writeString(field.String())
 	case reflect.Int:
 		fallthrough
 	case reflect.Int32:
-		w.WriteInt32(int32(field.Int()))
+		w.writeInt32(int32(field.Int()))
 	case reflect.Int64:
-		w.WriteInt64(field.Int())
+		w.writeInt64(field.Int())
 	case reflect.Struct:
 		err = serialize(w, field.Interface())
 	case reflect.Array:
 		fallthrough
 	case reflect.Slice:
-		w.WriteInt32(int32(field.Len()))
+		w.writeInt32(int32(field.Len()))
 
 		for i := 0; i < field.Len(); i++ {
 			serializeField(w, field.Index(i), field.Index(i).Type())

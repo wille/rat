@@ -22,7 +22,7 @@ func (p TestPacket) Header() common.PacketHeader {
 	return 0
 }
 
-func (p TestPacket) OnRecieve() error {
+func (p TestPacket) OnReceive() error {
 	return nil
 }
 
