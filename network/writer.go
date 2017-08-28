@@ -28,10 +28,10 @@ func (w Writer) writeString(s string) error {
 }
 
 func (w Writer) WritePacket(packet Packet) error {
-	return serialize(w, packet)
+	return Serialize(w, packet)
 }
 
-func serialize(w Writer, data interface{}) error {
+func Serialize(w Writer, data interface{}) error {
 	pstruct := reflect.ValueOf(data)
 	ptype := pstruct.Type()
 
@@ -68,7 +68,7 @@ func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
 	case reflect.Int64:
 		w.writeInt64(field.Int())
 	case reflect.Struct:
-		err = serialize(w, field.Interface())
+		err = Serialize(w, field.Interface())
 	case reflect.Array:
 		fallthrough
 	case reflect.Slice:

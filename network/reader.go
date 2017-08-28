@@ -37,16 +37,7 @@ func (r Reader) readString() (string, error) {
 	return string(buf), err
 }
 
-func (r Reader) ReadPacket(packet IncomingPacket) (IncomingPacket, error) {
-	e, err := deserialize(r, packet)
-	if err != nil {
-		return nil, err
-	}
-
-	return e.(IncomingPacket), e.(IncomingPacket).OnReceive()
-}
-
-func deserialize(r Reader, data interface{}) (interface{}, error) {
+func Deserialize(r Reader, data interface{}) (interface{}, error) {
 	pstruct := reflect.New(reflect.TypeOf(data)).Elem()
 	ptype := pstruct.Type()
 
@@ -90,7 +81,7 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 		field.SetInt(n)
 	case reflect.Struct:
 		var e interface{}
-		e, err = deserialize(r, field.Interface())
+		e, err = Deserialize(r, field.Interface())
 		if err != nil {
 			break
 		}

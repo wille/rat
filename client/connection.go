@@ -13,7 +13,7 @@ type Connection struct {
 	network.Reader
 }
 
-var Queue chan network.OutgoingPacket
+var Queue chan OutgoingPacket
 
 func (c *Connection) Init() {
 	Queue <- ComputerInfoPacket{}
@@ -37,7 +37,7 @@ func (c *Connection) WriteHeader(header common.PacketHeader) error {
 	return binary.Write(c.Conn, common.ByteOrder, header)
 }
 
-func (c *Connection) WritePacket(packet network.OutgoingPacket) error {
+func (c *Connection) WritePacket(packet OutgoingPacket) error {
 	err := c.WriteHeader(packet.Header())
 
 	if err != nil {
@@ -45,4 +45,25 @@ func (c *Connection) WritePacket(packet network.OutgoingPacket) error {
 	}
 
 	return c.Writer.WritePacket(packet)
+}
+
+type IncomingPacket interface {
+	OnReceive() error
+}
+
+type OutgoingPacket interface {
+	Init()
+	Header() common.PacketHeader
+}
+
+func (c Connection) ReadPacket() (IncomingPacket, error) {
+	header, _ := c.ReadHeader()
+	packet := GetIncomingPacket(header)
+
+	e, err := network.Deserialize(c.Reader, packet)
+	if err != nil {
+		return nil, err
+	}
+
+	return e.(IncomingPacket), e.(IncomingPacket).OnReceive()
 }

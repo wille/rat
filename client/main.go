@@ -67,7 +67,7 @@ func start(config common.BinaryConfig) {
 			goto end
 		}
 
-		Queue = make(chan network.OutgoingPacket)
+		Queue = make(chan OutgoingPacket)
 		Transfers = make(TransfersMap)
 
 		go func() {
@@ -81,17 +81,14 @@ func start(config common.BinaryConfig) {
 		con.Init()
 
 		for {
-			header, err := con.ReadHeader()
-
+			packet, err := con.ReadPacket()
 			if err != nil {
 				fmt.Println(err.Error())
 				con.Close()
 				break
 			}
 
-			packet := GetIncomingPacket(header)
-			packet, err = con.Reader.ReadPacket(packet)
-
+			err = packet.OnReceive()
 			if err != nil {
 				fmt.Println(err.Error())
 				con.Close()

