@@ -56,7 +56,7 @@ func deserialize(r Reader, data interface{}) (interface{}, error) {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		if fieldType.Tag != "receive" && fieldType.Tag != "both" {
+		if fieldType.Tag == "" || fieldType.Tag != "receive" && fieldType.Tag != "both" {
 			continue
 		}
 

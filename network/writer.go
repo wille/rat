@@ -41,7 +41,7 @@ func serialize(w Writer, data interface{}) error {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		if fieldType.Tag != "send" && fieldType.Tag != "both" {
+		if fieldType.Tag == "" || fieldType.Tag != "send" && fieldType.Tag != "both" {
 			continue
 		}
 

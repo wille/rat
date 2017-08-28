@@ -4,7 +4,6 @@ import "rat/common"
 
 // Packet
 type Packet interface {
-	Header() common.PacketHeader
 }
 
 type IncomingPacket interface {
@@ -13,4 +12,5 @@ type IncomingPacket interface {
 
 type OutgoingPacket interface {
 	Init()
+	Header() common.PacketHeader
 }
