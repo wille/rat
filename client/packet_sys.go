@@ -9,15 +9,12 @@ import (
 	"strconv"
 )
 
-type SysPacket Packet
+type SysPacket struct {
+	Action int
+}
 
-func (packet SysPacket) Read(c *Connection) error {
-	action, err := c.ReadInt()
-	if err != nil {
-		return err
-	}
-
-	switch system.Action(action) {
+func (packet SysPacket) OnReceive() error {
+	switch system.Action(packet.Action) {
 	case system.Disconnect:
 		conn.Close()
 		os.Exit(0)
@@ -26,9 +23,9 @@ func (packet SysPacket) Read(c *Connection) error {
 	case system.Reboot:
 		computer.Reboot()
 	default:
-		return errors.New("invalid sysaction " + strconv.Itoa(action))
+		return errors.New("invalid sysaction " + strconv.Itoa(packet.Action))
 	}
 
-	fmt.Println("action", action)
+	fmt.Println("action", packet.Action)
 	return nil
 }

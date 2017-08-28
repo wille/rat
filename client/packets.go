@@ -2,26 +2,16 @@ package main
 
 import (
 	"rat/common"
+	"rat/network"
 )
 
-type PacketMap map[common.PacketHeader]IncomingPacket
-
-type Packet struct{}
+type PacketMap map[common.PacketHeader]network.IncomingPacket
 
 var packets PacketMap
 
-type OutgoingPacket interface {
-	GetHeader() common.PacketHeader
-	Write(c *Connection) error
-}
-
-type IncomingPacket interface {
-	Read(c *Connection) error
-}
-
 func init() {
 	packets = make(PacketMap)
-	packets[common.PingHeader] = Ping{}
+	packets[common.PingHeader] = PingPacket{}
 	packets[common.SysHeader] = SysPacket{}
 	packets[common.ScreenHeader] = ScreenPacket{}
 	packets[common.ProcessHeader] = ProcessPacket{}
@@ -36,6 +26,6 @@ func init() {
 	packets[common.WindowsHeader] = WindowsPacket{}
 }
 
-func GetIncomingPacket(header common.PacketHeader) IncomingPacket {
+func GetIncomingPacket(header common.PacketHeader) network.IncomingPacket {
 	return packets[header]
 }

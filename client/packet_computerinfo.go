@@ -7,20 +7,21 @@ import (
 )
 
 type ComputerInfoPacket struct {
-	OutgoingPacket
+	Username                   string
+	Hostname                   string
+	OperatingSystemName        string
+	OperatingSystemDisplayName string
 }
 
-func (packet ComputerInfoPacket) GetHeader() common.PacketHeader {
+func (packet ComputerInfoPacket) Header() common.PacketHeader {
 	return common.ComputerInfoHeader
 }
 
-func (packet ComputerInfoPacket) Write(c *Connection) error {
+func (packet ComputerInfoPacket) Init() {
 	u := computer.GetComputerInformation()
 
-	c.WriteString(u.Username)
-	c.WriteString(u.Hostname)
-	c.WriteString(oslib.Name)
-	c.WriteString(oslib.GetDisplay())
-
-	return nil
+	packet.Username = u.Username
+	packet.Hostname = u.Hostname
+	packet.OperatingSystemName = oslib.Name
+	packet.OperatingSystemDisplayName = oslib.GetDisplay()
 }

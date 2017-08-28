@@ -8,33 +8,24 @@ import (
 )
 
 type UploadPacket struct {
-	File  string
-	Final bool
-	Data  []byte
-	Total int64
+	File  string `both`
+	Final bool   `send`
+	Data  []byte `send`
+	Total int64  `send`
 }
 
-func (packet UploadPacket) GetHeader() common.PacketHeader {
+func (packet UploadPacket) Header() common.PacketHeader {
 	return common.GetFileHeader
 }
 
-func (packet UploadPacket) Write(c *Connection) error {
-	c.WriteString(packet.File)
+func (packet UploadPacket) Init() {
 
-	c.WriteInt64(packet.Total)
-	c.WriteBool(packet.Final)
-
-	c.WriteInt(len(packet.Data))
-	c.Conn.Write(packet.Data)
-	return nil
 }
 
-func (packet UploadPacket) Read(c *Connection) error {
-	file, _ := c.ReadString()
-
+func (packet UploadPacket) OnReceive() error {
 	go func() {
 		final := false
-		local, err := os.Open(file)
+		local, err := os.Open(packet.File)
 		defer local.Close()
 		if err != nil {
 			fmt.Println(err.Error())
@@ -57,7 +48,7 @@ func (packet UploadPacket) Read(c *Connection) error {
 				fmt.Println(err.Error())
 				return
 			}
-			Queue <- UploadPacket{file, final, data[:read], stat.Size()}
+			Queue <- UploadPacket{packet.File, final, data[:read], stat.Size()}
 		}
 	}()
 
