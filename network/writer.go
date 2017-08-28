@@ -12,12 +12,16 @@ type Writer struct {
 	Writer io.Writer
 }
 
-func (w Writer) WriteInt(i int) error {
+func (w Writer) WriteInt32(i int32) error {
 	return binary.Write(w.Writer, common.ByteOrder, int32(i))
 }
 
+func (w Writer) WriteInt64(i int64) error {
+	return binary.Write(w.Writer, common.ByteOrder, int64(i))
+}
+
 func (w Writer) WriteString(s string) error {
-	w.WriteInt(len(s))
+	w.WriteInt32(int32(len(s)))
 
 	w.Writer.Write([]byte(s))
 
@@ -44,7 +48,11 @@ func serialize(w Writer, data interface{}) error {
 		case reflect.String:
 			w.WriteString(field.String())
 		case reflect.Int:
-			w.WriteInt(int(field.Int()))
+			fallthrough
+		case reflect.Int32:
+			w.WriteInt32(int32(field.Int()))
+		case reflect.Int64:
+			w.WriteInt64(field.Int())
 		case reflect.Struct:
 			err = serialize(w, field.Interface())
 			if err != nil {

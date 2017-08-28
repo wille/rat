@@ -18,7 +18,7 @@ func (p TestPacket) header() int {
 	return 0
 }
 
-func TestS(t *testing.T) {
+func TestPacketSerialization(t *testing.T) {
 	test := TestPacket{
 		Text:   "Text",
 		Number: 15,
@@ -32,7 +32,8 @@ func TestS(t *testing.T) {
 
 	writer.WritePacket(test)
 
-	fmt.Println("[", b.Len(), "]", b.Bytes())
+	fmt.Println(test)
+	fmt.Println()
 
 	reader := Reader{b}
 	packet, err := reader.ReadPacket(TestPacket{})

@@ -18,14 +18,20 @@ func (r Reader) ReadBool() (bool, error) {
 	return n, err
 }
 
-func (r Reader) ReadInt() (int, error) {
+func (r Reader) ReadInt32() (int32, error) {
 	var n int32
 	err := binary.Read(r.Reader, common.ByteOrder, &n)
-	return int(n), err
+	return n, err
+}
+
+func (r Reader) ReadInt64() (int64, error) {
+	var n int64
+	err := binary.Read(r.Reader, common.ByteOrder, &n)
+	return n, err
 }
 
 func (r Reader) ReadString() (string, error) {
-	len, err := r.ReadInt()
+	len, err := r.ReadInt32()
 	buf := make([]byte, len)
 	io.ReadFull(r.Reader, buf)
 
@@ -47,7 +53,7 @@ func deserialize(r Reader, data interface{}) (interface{}, error) {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		fmt.Println("setting", fieldType.Name, "("+field.Type().Name()+")")
+		fmt.Print("setting ", fieldType.Name, " ("+field.Type().Name()+") ")
 
 		switch fieldType.Type.Kind() {
 		case reflect.String:
@@ -55,9 +61,15 @@ func deserialize(r Reader, data interface{}) (interface{}, error) {
 			s, err = r.ReadString()
 			field.SetString(s)
 		case reflect.Int:
-			var n int
-			n, err = r.ReadInt()
+			fallthrough
+		case reflect.Int32:
+			var n int32
+			n, err = r.ReadInt32()
 			field.SetInt(int64(n))
+		case reflect.Int64:
+			var n int64
+			n, err = r.ReadInt64()
+			field.SetInt(n)
 		case reflect.Struct:
 			var e interface{}
 			e, err = deserialize(r, field.Interface())
@@ -68,7 +80,7 @@ func deserialize(r Reader, data interface{}) (interface{}, error) {
 			field.Set(reflect.ValueOf(e))
 		}
 
-		fmt.Println("\tto", field.Interface())
+		fmt.Println("=>", field.Interface())
 
 		if err != nil {
 			break
