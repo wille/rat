@@ -7,10 +7,10 @@ type KeyPacket struct {
 	Event  int `send`
 }
 
-func (packet *KeyPacket) Header() common.PacketHeader {
+func (packet KeyPacket) Header() common.PacketHeader {
 	return common.KeyHeader
 }
 
-func (packet *KeyPacket) Init(c *Client) {
+func (packet KeyPacket) Init(c *Client) {
 
 }

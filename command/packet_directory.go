@@ -22,11 +22,11 @@ type DirectoryPacket struct {
 	Files []FileData `receive`
 }
 
-func (packet *DirectoryPacket) Header() common.PacketHeader {
+func (packet DirectoryPacket) Header() common.PacketHeader {
 	return common.DirectoryHeader
 }
 
-func (packet *DirectoryPacket) Init(c *Client) {
+func (packet DirectoryPacket) Init(c *Client) {
 
 }
 
@@ -37,7 +37,7 @@ type File struct {
 	Time string `json:"time"`
 }
 
-func (packet *DirectoryPacket) OnReceive(c *Client) error {
+func (packet DirectoryPacket) OnReceive(c *Client) error {
 	dirs := make([]File, 0)
 	files := make([]File, 0)
 

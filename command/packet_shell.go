@@ -11,15 +11,15 @@ type ShellPacket struct {
 	Command string `both`
 }
 
-func (packet *ShellPacket) Header() common.PacketHeader {
+func (packet ShellPacket) Header() common.PacketHeader {
 	return common.ShellHeader
 }
 
-func (packet *ShellPacket) Init(c *Client) {
+func (packet ShellPacket) Init(c *Client) {
 
 }
 
-func (packet *ShellPacket) OnReceive(c *Client) error {
+func (packet ShellPacket) OnReceive(c *Client) error {
 	if ws, ok := c.Listeners[common.ShellHeader]; ok {
 		event := newEvent(Shell, c.Id, packet.Command)
 

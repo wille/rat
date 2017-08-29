@@ -13,15 +13,15 @@ type MonitorsPacket struct {
 	Monitors []Monitor
 }
 
-func (packet *MonitorsPacket) Header() common.PacketHeader {
+func (packet MonitorsPacket) Header() common.PacketHeader {
 	return common.MonitorsHeader
 }
 
-func (packet *MonitorsPacket) Init(c *Client) {
+func (packet MonitorsPacket) Init(c *Client) {
 
 }
 
-func (packet *MonitorsPacket) OnReceive(c *Client) error {
+func (packet MonitorsPacket) OnReceive(c *Client) error {
 	c.Monitors = packet.Monitors
 
 	if ws, ok := c.Listeners[common.MonitorsHeader]; ok {
@@ -39,6 +39,8 @@ func (packet *MonitorsPacket) OnReceive(c *Client) error {
 			return err
 		}
 	}
+
+	fmt.Println("Monitors",c.Monitors)
 
 	delete(c.Listeners, common.MonitorsHeader)
 

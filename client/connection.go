@@ -40,7 +40,10 @@ func (c *Connection) WriteHeader(header common.PacketHeader) error {
 
 func (c *Connection) WritePacket(packet OutgoingPacket) error {
 	err := c.WriteHeader(packet.Header())
-
+	fmt.Println("Wrote header", packet.Header())
+	if packet.Header() == common.ComputerInfoHeader {
+		fmt.Println("Outside init()", packet)
+	}
 	if err != nil {
 		return err
 	}
@@ -60,6 +63,7 @@ type OutgoingPacket interface {
 func (c Connection) ReadPacket() (IncomingPacket, error) {
 	header, _ := c.ReadHeader()
 	packet := GetIncomingPacket(header)
+	fmt.Println("Received header", header)
 
 	e, err := network.Deserialize(c.Reader, packet)
 	if err != nil {

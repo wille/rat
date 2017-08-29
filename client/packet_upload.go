@@ -14,7 +14,7 @@ type UploadPacket struct {
 	Total int64  `send`
 }
 
-func (packet *UploadPacket) Header() common.PacketHeader {
+func (packet UploadPacket) Header() common.PacketHeader {
 	return common.GetFileHeader
 }
 
@@ -22,7 +22,7 @@ func (packet *UploadPacket) Init() {
 
 }
 
-func (packet *UploadPacket) OnReceive() error {
+func (packet UploadPacket) OnReceive() error {
 	go func() {
 		final := false
 		local, err := os.Open(packet.File)

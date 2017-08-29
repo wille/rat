@@ -18,11 +18,11 @@ type ScreenPacket struct {
 	Buffer  []byte  `send`
 }
 
-func (packet *ScreenPacket) Header() common.PacketHeader {
+func (packet ScreenPacket) Header() common.PacketHeader {
 	return common.ScreenHeader
 }
 
-func (packet *ScreenPacket) OnReceive() error {
+func (packet ScreenPacket) OnReceive() error {
 	if packet.Run {
 		// Dispatch one screen packet
 		screenStream = false

@@ -12,15 +12,15 @@ type ScreenPacket struct {
 	Buffer []byte `receive`
 }
 
-func (packet *ScreenPacket) Header() common.PacketHeader {
+func (packet ScreenPacket) Header() common.PacketHeader {
 	return common.ScreenHeader
 }
 
-func (packet *ScreenPacket) Init(c *Client) {
+func (packet ScreenPacket) Init(c *Client) {
 
 }
 
-func (packet *ScreenPacket) OnReceive(c *Client) error {
+func (packet ScreenPacket) OnReceive(c *Client) error {
 	c.Screen.Buffer = packet.Buffer
 
 	c.Screen.New = true

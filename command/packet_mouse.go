@@ -8,10 +8,10 @@ type MousePacket struct {
 	Event   int `send`
 }
 
-func (packet *MousePacket) Header() common.PacketHeader {
+func (packet MousePacket) Header() common.PacketHeader {
 	return common.MouseHeader
 }
 
-func (packet *MousePacket) Init(c *Client) {
+func (packet MousePacket) Init(c *Client) {
 
 }

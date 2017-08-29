@@ -14,11 +14,11 @@ type FilePacket struct {
 	Destination string `receive`
 }
 
-func (packet *FilePacket) Header() common.PacketHeader {
+func (packet FilePacket) Header() common.PacketHeader {
 	return common.FileHeader
 }
 
-func (packet *FilePacket) OnReceive() error {
+func (packet FilePacket) OnReceive() error {
 	file := packet.File
 	task := common.FileTask(packet.Task)
 

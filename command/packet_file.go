@@ -8,10 +8,10 @@ type FilePacket struct {
 	Destination string          `send`
 }
 
-func (packet *FilePacket) Header() common.PacketHeader {
+func (packet FilePacket) Header() common.PacketHeader {
 	return common.FileHeader
 }
 
-func (packet *FilePacket) Init(c *Client) {
+func (packet FilePacket) Init(c *Client) {
 
 }

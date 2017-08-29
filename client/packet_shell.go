@@ -20,15 +20,15 @@ var current struct {
 	stdout  io.ReadCloser
 }
 
-func (packet *ShellPacket) Header() common.PacketHeader {
+func (packet ShellPacket) Header() common.PacketHeader {
 	return common.ShellHeader
 }
 
-func (packet *ShellPacket) Init() {
+func (packet ShellPacket) Init() {
 
 }
 
-func (packet *ShellPacket) OnReceive() error {
+func (packet ShellPacket) OnReceive() error {
 	switch packet.Action {
 	case common.StartShell:
 		current.process = exec.Command(shell.GetDefault())

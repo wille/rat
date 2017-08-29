@@ -36,15 +36,15 @@ type DownloadPacket struct {
 	Part  []byte `receive`
 }
 
-func (packet *DownloadPacket) Header() common.PacketHeader {
+func (packet DownloadPacket) Header() common.PacketHeader {
 	return common.GetFileHeader
 }
 
-func (packet *DownloadPacket) Init(c *Client) {
+func (packet DownloadPacket) Init(c *Client) {
 
 }
 
-func (packet *DownloadPacket) OnReceive(c *Client) error {
+func (packet DownloadPacket) OnReceive(c *Client) error {
 	transfer := Transfers[packet.File]
 	transfer.Total = packet.Total
 	transfer.Read += int64(len(packet.Part))

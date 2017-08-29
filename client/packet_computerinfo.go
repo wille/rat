@@ -14,7 +14,7 @@ type ComputerInfoPacket struct {
 	OperatingSystemDisplayName string `send`
 }
 
-func (packet *ComputerInfoPacket) Header() common.PacketHeader {
+func (packet ComputerInfoPacket) Header() common.PacketHeader {
 	return common.ComputerInfoHeader
 }
 
@@ -25,4 +25,6 @@ func (packet *ComputerInfoPacket) Init() {
 	packet.Hostname = u.Hostname
 	packet.OperatingSystemName = oslib.Name
 	packet.OperatingSystemDisplayName = oslib.GetDisplay()
+
+	fmt.Println("Inside init()", packet)
 }

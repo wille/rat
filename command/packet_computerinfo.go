@@ -7,7 +7,7 @@ type ComputerInfoPacket struct {
 	OperatingSystemDisplay string `receive`
 }
 
-func (packet *ComputerInfoPacket) OnReceive(c *Client) error {
+func (packet ComputerInfoPacket) OnReceive(c *Client) error {
 	c.Computer.Username = packet.Username
 	c.Computer.Hostname = packet.Hostname
 	c.Computer.OperatingSystemType = packet.OperatingSystemType

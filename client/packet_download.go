@@ -19,11 +19,11 @@ func init() {
 	Transfers = make(TransfersMap)
 }
 
-func (packet *DownloadPacket) Header() common.PacketHeader {
+func (packet DownloadPacket) Header() common.PacketHeader {
 	return common.PutFileHeader
 }
 
-func (packet *DownloadPacket) OnReceive() error {
+func (packet DownloadPacket) OnReceive() error {
 	file := packet.File
 
 	var err error

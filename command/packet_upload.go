@@ -10,14 +10,14 @@ type UploadPacket struct {
 	Data  []byte `send`
 }
 
-func (packet *UploadPacket) Header() common.PacketHeader {
+func (packet UploadPacket) Header() common.PacketHeader {
 	return common.PutFileHeader
 }
 
-func (packet *UploadPacket) Init(c *Client) {
+func (packet UploadPacket) Init(c *Client) {
 
 }
 
-func (packet *UploadPacket) OnReceive(c *Client) error {
+func (packet UploadPacket) OnReceive(c *Client) error {
 	return nil
 }

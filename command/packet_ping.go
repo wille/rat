@@ -9,16 +9,16 @@ import (
 type Ping struct {
 }
 
-func (packet *Ping) Header() common.PacketHeader {
+func (packet Ping) Header() common.PacketHeader {
 	return common.PingHeader
 }
 
-func (packet *Ping) Init(c *Client) {
+func (packet Ping) Init(c *Client) {
 	c.Ping.Start = time.Now()
 	c.Ping.Received = false
 }
 
-func (packet *Ping) OnReceive(c *Client) error {
+func (packet Ping) OnReceive(c *Client) error {
 	c.Ping.Current = int(utils.GetMilliseconds(time.Now()) - utils.GetMilliseconds(c.Ping.Start))
 	c.Ping.Received = true
 

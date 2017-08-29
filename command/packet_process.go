@@ -18,15 +18,15 @@ type ProcessPacket struct {
 	Processes []Process `both`
 }
 
-func (packet *ProcessPacket) Header() common.PacketHeader {
+func (packet ProcessPacket) Header() common.PacketHeader {
 	return common.ProcessHeader
 }
 
-func (packet *ProcessPacket) Init(c *Client) {
+func (packet ProcessPacket) Init(c *Client) {
 
 }
 
-func (packet *ProcessPacket) OnReceive(c *Client) error {
+func (packet ProcessPacket) OnReceive(c *Client) error {
 	for _, proc := range packet.Processes {
 		if ws, ok := c.Listeners[common.ProcessHeader]; ok {
 			message := ProcessMessage{proc.PID, proc.Path}

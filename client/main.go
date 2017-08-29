@@ -73,6 +73,7 @@ func start(config common.BinaryConfig) {
 		go func() {
 			for {
 				packet := <-Queue
+				//ptr := &packet
 				packet.Init()
 				con.WritePacket(packet)
 			}

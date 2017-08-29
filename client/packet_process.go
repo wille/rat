@@ -16,7 +16,7 @@ type ProcessPacket struct {
 	Processes []Process `both`
 }
 
-func (packet *ProcessPacket) Header() common.PacketHeader {
+func (packet ProcessPacket) Header() common.PacketHeader {
 	return common.ProcessHeader
 }
 
@@ -28,7 +28,7 @@ func (packet *ProcessPacket) Init() {
 	}
 }
 
-func (packet *ProcessPacket) OnReceive() error {
+func (packet ProcessPacket) OnReceive() error {
 	t := packet.Action
 
 	for _, proc := range packet.Processes {

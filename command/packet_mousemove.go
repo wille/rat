@@ -8,10 +8,10 @@ type MouseMovePacket struct {
 	Y       int `send`
 }
 
-func (packet *MouseMovePacket) Header() common.PacketHeader {
+func (packet MouseMovePacket) Header() common.PacketHeader {
 	return common.MouseMoveHeader
 }
 
-func (packet *MouseMovePacket) Init(c *Client) {
+func (packet MouseMovePacket) Init(c *Client) {
 
 }

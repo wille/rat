@@ -21,7 +21,7 @@ type DirectoryPacket struct {
 	Files []FileData `send`
 }
 
-func (packet *DirectoryPacket) Header() common.PacketHeader {
+func (packet DirectoryPacket) Header() common.PacketHeader {
 	return common.DirectoryHeader
 }
 
@@ -56,7 +56,7 @@ func (packet *DirectoryPacket) Init() {
 	}
 }
 
-func (packet *DirectoryPacket) OnReceive() error {
+func (packet DirectoryPacket) OnReceive() error {
 	go func() {
 		Queue <- &DirectoryPacket{Path: packet.Path}
 	}()

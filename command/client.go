@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"fmt"
+	"log"
 	"math/rand"
 	"net"
 	"rat/common"
@@ -126,6 +127,7 @@ func (c *Client) GetPathSep() string {
 func (client *Client) PacketReader() {
 	for {
 		header, err := client.ReadHeader()
+		fmt.Println("Received header", header)
 
 		if err != nil {
 			fmt.Println(err.Error())
@@ -134,6 +136,9 @@ func (client *Client) PacketReader() {
 		}
 
 		packet := GetIncomingPacket(header)
+		if packet == nil {
+			log.Fatal("nil package")
+		}
 		e, err := network.Deserialize(client.Reader, packet)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -177,6 +182,7 @@ func (c *Client) WriteHeader(header common.PacketHeader) error {
 
 func (c *Client) WritePacket(packet OutgoingPacket) error {
 	err := c.WriteHeader(packet.Header())
+	fmt.Println("Wrote header", packet.Header())
 
 	if err != nil {
 		return err
