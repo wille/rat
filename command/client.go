@@ -137,8 +137,9 @@ func (client *Client) PacketReader() {
 
 		packet := GetIncomingPacket(header)
 		if packet == nil {
-			log.Fatal("nil package")
+			log.Fatal("packet from header was nil", header)
 		}
+		fmt.Println("PACKET", packet)
 		e, err := network.Deserialize(client.Reader, packet)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -165,6 +166,7 @@ func (client *Client) Heartbeat() {
 func (client *Client) PacketQueue() {
 	for {
 		packet := <-client.Queue
+		packet.Init(client)
 		client.WritePacket(packet)
 	}
 }
@@ -187,8 +189,6 @@ func (c *Client) WritePacket(packet OutgoingPacket) error {
 	if err != nil {
 		return err
 	}
-
-	packet.Init(c)
 
 	return c.Writer.WritePacket(packet)
 }

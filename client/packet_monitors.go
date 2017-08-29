@@ -13,7 +13,7 @@ func (packet MonitorsPacket) Header() common.PacketHeader {
 	return common.MonitorsHeader
 }
 
-func (packet MonitorsPacket) Init() {
+func (packet *MonitorsPacket) Init() {
 	screen.QueryMonitors()
 
 	packet.Monitors = screen.Monitors

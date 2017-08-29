@@ -1,11 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"rat/common"
-)
-
-const ()
+/* const ()
 
 type WindowsPacket struct {
 }
@@ -29,3 +24,4 @@ func (packet WindowsPacket) Read(c *Client) error {
 
 	return nil
 }
+*/

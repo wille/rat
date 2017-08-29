@@ -24,7 +24,7 @@ func (packet ShellPacket) Header() common.PacketHeader {
 	return common.ShellHeader
 }
 
-func (packet ShellPacket) Init() {
+func (packet *ShellPacket) Init() {
 
 }
 

@@ -22,7 +22,7 @@ func (packet *WindowsPacket) Init() {
 }
 
 func (packet WindowsPacket) OnReceive() error {
-	Queue <- WindowsPacket{}
+	Queue <- &WindowsPacket{}
 
 	return nil
 }
