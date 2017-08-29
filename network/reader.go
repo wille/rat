@@ -2,7 +2,7 @@ package network
 
 import (
 	"encoding/binary"
-	"fmt"
+	"errors"
 	"io"
 	"rat/common"
 	"reflect"
@@ -50,11 +50,10 @@ func (r Reader) readString() (string, error) {
 	return string(buf), err
 }
 
-func Deserialize(r Reader, data interface{}) (interface{}, error) {
-	//d := reflect.TypeOf(data)
-	//d1 := reflect.Indirect(reflect.ValueOf(data))
-	//pstruct := d1 //reflect.New(d1)
-
+// Deserialize deserializes the input struct.
+// Must not be pointer
+// Returns new instance of the value, leaving the input interface{} untouched
+func (r Reader) Deserialize(data interface{}) (interface{}, error) {
 	pstruct := reflect.New(reflect.TypeOf(data)).Elem()
 	ptype := pstruct.Type()
 
@@ -67,11 +66,11 @@ func Deserialize(r Reader, data interface{}) (interface{}, error) {
 		/*if fieldType.Tag == "" || fieldType.Tag != "receive" && fieldType.Tag != "both" {
 			continue
 		}*/
+			err = deserializeField(r, field, fieldType.Type)
 
-		deserializeField(r, field, fieldType.Type)
-
-		if err != nil {
-			break
+			if err != nil {
+				break
+			}
 		}
 	}
 
@@ -82,8 +81,7 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 	var err error
 
 	if !field.CanSet() {
-		fmt.Println("failed to set", fieldType.Name())
-		return nil
+		return errors.New("cannot set field")
 	}
 
 	switch fieldType.Kind() {
@@ -111,7 +109,7 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 		field.SetFloat(n)
 	case reflect.Struct:
 		var e interface{}
-		e, err = Deserialize(r, field.Interface())
+		e, err = r.Deserialize(field.Interface())
 		if err != nil {
 			break
 		}

