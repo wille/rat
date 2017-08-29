@@ -21,7 +21,7 @@ func (d MouseMessage) Handle(ws *websocket.Conn, client *Client, data string) er
 		return err
 	}
 
-	client.Queue <- MousePacket{mouseEvent.Monitor, mouseEvent.Button, mouseEvent.Event}
+	client.Queue <- &MousePacket{mouseEvent.Monitor, mouseEvent.Button, mouseEvent.Event}
 
 	return nil
 }

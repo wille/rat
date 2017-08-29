@@ -20,7 +20,7 @@ func (d KeyMessage) Handle(ws *websocket.Conn, client *Client, data string) erro
 		return err
 	}
 
-	client.Queue <- KeyPacket{keyEvent.Key, keyEvent.Event}
+	client.Queue <- &KeyPacket{keyEvent.Key, keyEvent.Event}
 
 	return nil
 }

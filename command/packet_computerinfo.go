@@ -1,23 +1,17 @@
 package main
 
 type ComputerInfoPacket struct {
-	IncomingPacket
+	Username               string `receive`
+	Hostname               string `receive`
+	OperatingSystemType    string `receive`
+	OperatingSystemDisplay string `receive`
 }
 
-func (packet ComputerInfoPacket) Read(c *Client) error {
-	username, err := c.ReadString()
-	hostname, err := c.ReadString()
-	ostype, err := c.ReadString()
-	os, err := c.ReadString()
-
-	if err != nil {
-		return err
-	}
-
-	c.Computer.Username = username
-	c.Computer.Hostname = hostname
-	c.Computer.OperatingSystemType = ostype
-	c.Computer.OperatingSystem = os
+func (packet *ComputerInfoPacket) OnReceive(c *Client) error {
+	c.Computer.Username = packet.Username
+	c.Computer.Hostname = packet.Hostname
+	c.Computer.OperatingSystemType = packet.OperatingSystemType
+	c.Computer.OperatingSystem = packet.OperatingSystemDisplay
 
 	if !c.Authenticated {
 		add(c)

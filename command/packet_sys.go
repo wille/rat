@@ -6,13 +6,13 @@ import (
 )
 
 type SysPacket struct {
-	action system.Action
+	Action system.Action `send`
 }
 
-func (packet SysPacket) GetHeader() common.PacketHeader {
+func (packet *SysPacket) Header() common.PacketHeader {
 	return common.SysHeader
 }
 
-func (packet SysPacket) Write(c *Client) error {
-	return c.WriteInt(int(packet.action))
+func (packet *SysPacket) Init(c *Client) {
+
 }

@@ -9,11 +9,11 @@ type MousePacket struct {
 	Type        int `receive`
 }
 
-func (packet MousePacket) Header() common.PacketHeader {
+func (packet *MousePacket) Header() common.PacketHeader {
 	return common.MouseHeader
 }
 
-func (packet MousePacket) OnReceive() error {
+func (packet *MousePacket) OnReceive() error {
 	screen.Mouse(packet.MonitorID, packet.MouseButton, packet.Type)
 	return nil
 }

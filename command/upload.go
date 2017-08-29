@@ -19,7 +19,7 @@ func StartTransfer(c *Client, local multipart.File, remote string) error {
 			return err
 		}
 
-		c.Queue <- UploadPacket{remote, final, data[:read]}
+		c.Queue <- &UploadPacket{remote, final, data[:read]}
 	}
 
 	return nil

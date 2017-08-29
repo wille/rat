@@ -5,25 +5,19 @@ import (
 )
 
 type UploadPacket struct {
-	File  string
-	Final bool
-	Data  []byte
+	File  string `send`
+	Final bool   `send`
+	Data  []byte `send`
 }
 
-func (packet UploadPacket) GetHeader() common.PacketHeader {
+func (packet *UploadPacket) Header() common.PacketHeader {
 	return common.PutFileHeader
 }
 
-func (packet UploadPacket) Write(c *Client) error {
-	c.WriteString(packet.File)
-	c.WriteBool(packet.Final)
+func (packet *UploadPacket) Init(c *Client) {
 
-	c.WriteInt(len(packet.Data))
-	c.Conn.Write(packet.Data)
-
-	return nil
 }
 
-func (packet UploadPacket) Read(c *Client) error {
+func (packet *UploadPacket) OnReceive(c *Client) error {
 	return nil
 }

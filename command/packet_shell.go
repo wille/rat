@@ -7,30 +7,23 @@ import (
 )
 
 type ShellPacket struct {
-	Action  int
-	Command string
+	Action  int    `send`
+	Command string `both`
 }
 
-func (packet ShellPacket) GetHeader() common.PacketHeader {
+func (packet *ShellPacket) Header() common.PacketHeader {
 	return common.ShellHeader
 }
 
-func (packet ShellPacket) Write(c *Client) error {
-	c.WriteInt(packet.Action)
-	return c.WriteString(packet.Command)
+func (packet *ShellPacket) Init(c *Client) {
+
 }
 
-func (packet ShellPacket) Read(c *Client) error {
-	line, err := c.ReadString()
-
-	if err != nil {
-		return err
-	}
-
+func (packet *ShellPacket) OnReceive(c *Client) error {
 	if ws, ok := c.Listeners[common.ShellHeader]; ok {
-		event := newEvent(Shell, c.Id, line)
+		event := newEvent(Shell, c.Id, packet.Command)
 
-		err = websocket.JSON.Send(ws, &event)
+		return websocket.JSON.Send(ws, &event)
 	}
 
 	return nil

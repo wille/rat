@@ -10,16 +10,24 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type DirectoryPacket struct {
-	Path string
+type FileData struct {
+	Dir    bool   `receive`
+	Name   string `receive`
+	Edited string `receive`
+	Size   int64  `receive`
 }
 
-func (packet DirectoryPacket) GetHeader() common.PacketHeader {
+type DirectoryPacket struct {
+	Path  string     `both`
+	Files []FileData `receive`
+}
+
+func (packet *DirectoryPacket) Header() common.PacketHeader {
 	return common.DirectoryHeader
 }
 
-func (packet DirectoryPacket) Write(c *Client) error {
-	return c.WriteString(packet.Path)
+func (packet *DirectoryPacket) Init(c *Client) {
+
 }
 
 type File struct {
@@ -29,29 +37,14 @@ type File struct {
 	Time string `json:"time"`
 }
 
-func (packet DirectoryPacket) Read(c *Client) error {
-	len, _ := c.ReadInt()
-
+func (packet *DirectoryPacket) OnReceive(c *Client) error {
 	dirs := make([]File, 0)
 	files := make([]File, 0)
 
-	for i := 0; i < len; i++ {
-		isDir, _ := c.ReadBool()
-		path, err := c.ReadString()
-		mod, err := c.ReadString()
+	for _, file := range packet.Files {
+		file := File{file.Dir, file.Name, humanize.Bytes(uint64(file.Size)), file.Edited}
 
-		var size int64
-		if !isDir {
-			size, _ = c.ReadInt64()
-		}
-
-		if err != nil {
-			fmt.Println("directory:", err.Error())
-		}
-
-		file := File{isDir, path, humanize.Bytes(uint64(size)), mod}
-
-		if isDir {
+		if file.Dir {
 			dirs = append(dirs, file)
 		} else {
 			files = append(files, file)

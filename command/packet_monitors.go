@@ -10,30 +10,19 @@ import (
 )
 
 type MonitorsPacket struct {
+	Monitors []Monitor
 }
 
-func (packet MonitorsPacket) GetHeader() common.PacketHeader {
+func (packet *MonitorsPacket) Header() common.PacketHeader {
 	return common.MonitorsHeader
 }
 
-func (packet MonitorsPacket) Write(c *Client) error {
-	return nil
+func (packet *MonitorsPacket) Init(c *Client) {
+
 }
 
-func (packet MonitorsPacket) Read(c *Client) error {
-	len, _ := c.ReadInt()
-
-	c.Monitors = make([]Monitor, len)
-
-	for i := 0; i < len; i++ {
-		id, _ := c.ReadInt()
-		width, _ := c.ReadInt()
-		height, _ := c.ReadInt()
-
-		monitor := Monitor{id, width, height}
-
-		c.Monitors[i] = monitor
-	}
+func (packet *MonitorsPacket) OnReceive(c *Client) error {
+	c.Monitors = packet.Monitors
 
 	if ws, ok := c.Listeners[common.MonitorsHeader]; ok {
 		json, err := json.Marshal(&c.Monitors)

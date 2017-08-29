@@ -3,19 +3,15 @@ package main
 import "rat/common"
 
 type MouseMovePacket struct {
-	Monitor, X, Y int
+	Monitor int `send`
+	X       int `send`
+	Y       int `send`
 }
 
-func (packet MouseMovePacket) GetHeader() common.PacketHeader {
+func (packet *MouseMovePacket) Header() common.PacketHeader {
 	return common.MouseMoveHeader
 }
 
-func (packet MouseMovePacket) Write(c *Client) error {
-	c.WriteInt(packet.Monitor)
-	c.WriteInt(packet.X)
-	return c.WriteInt(packet.Y)
-}
+func (packet *MouseMovePacket) Init(c *Client) {
 
-func (packet MouseMovePacket) Read(c *Client) error {
-	return nil
 }

@@ -3,19 +3,14 @@ package main
 import "rat/common"
 
 type KeyPacket struct {
-	Button int
-	Event  int
+	Button int `send`
+	Event  int `send`
 }
 
-func (packet KeyPacket) GetHeader() common.PacketHeader {
+func (packet *KeyPacket) Header() common.PacketHeader {
 	return common.KeyHeader
 }
 
-func (packet KeyPacket) Write(c *Client) error {
-	c.WriteInt(packet.Button)
-	return c.WriteInt(packet.Event)
-}
+func (packet *KeyPacket) Init(c *Client) {
 
-func (packet KeyPacket) Read(c *Client) error {
-	return nil
 }

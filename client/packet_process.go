@@ -7,20 +7,20 @@ import (
 )
 
 type Process struct {
-	PID  int    `send`
-	Path string `send`
+	PID  int    `both`
+	Path string `both`
 }
 
 type ProcessPacket struct {
-	Action    int       `receive`
-	Processes []Process `send`
+	Action    int       `both`
+	Processes []Process `both`
 }
 
-func (packet ProcessPacket) Header() common.PacketHeader {
+func (packet *ProcessPacket) Header() common.PacketHeader {
 	return common.ProcessHeader
 }
 
-func (packet ProcessPacket) Init() {
+func (packet *ProcessPacket) Init() {
 	process.QueryProcesses()
 
 	for _, proc := range process.Processes {
@@ -28,7 +28,7 @@ func (packet ProcessPacket) Init() {
 	}
 }
 
-func (packet ProcessPacket) OnReceive() error {
+func (packet *ProcessPacket) OnReceive() error {
 	t := packet.Action
 
 	for _, proc := range packet.Processes {
@@ -39,7 +39,7 @@ func (packet ProcessPacket) OnReceive() error {
 
 	switch t {
 	case processes.Query:
-		Queue <- ProcessPacket{}
+		Queue <- &ProcessPacket{}
 	default:
 		// error
 	}

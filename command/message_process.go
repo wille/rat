@@ -23,6 +23,13 @@ func (d ProcessQueryMessage) Handle(ws *websocket.Conn, client *Client, data str
 	json.Unmarshal([]byte(data), &j)
 
 	client.Listeners[common.ProcessHeader] = ws
-	client.Queue <- ProcessPacket{j.Type, j.PIDs}
+
+	pids := []Process{}
+
+	for _, pid := range j.PIDs {
+		pids = append(pids, Process{PID: pid})
+	}
+
+	client.Queue <- &ProcessPacket{j.Type, pids}
 	return nil
 }

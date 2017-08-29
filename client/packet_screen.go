@@ -18,15 +18,15 @@ type ScreenPacket struct {
 	Buffer  []byte  `send`
 }
 
-func (packet ScreenPacket) Header() common.PacketHeader {
+func (packet *ScreenPacket) Header() common.PacketHeader {
 	return common.ScreenHeader
 }
 
-func (packet ScreenPacket) OnReceive() error {
+func (packet *ScreenPacket) OnReceive() error {
 	if packet.Run {
 		// Dispatch one screen packet
 		screenStream = false
-		Queue <- ScreenPacket{Scale: packet.Scale, Monitor: packet.Monitor}
+		Queue <- &ScreenPacket{Scale: packet.Scale, Monitor: packet.Monitor}
 	}
 
 	screenStream = packet.Run
@@ -34,7 +34,7 @@ func (packet ScreenPacket) OnReceive() error {
 	return nil
 }
 
-func (packet ScreenPacket) Init() {
+func (packet *ScreenPacket) Init() {
 	screen.QueryMonitors()
 
 	var w bytes.Buffer

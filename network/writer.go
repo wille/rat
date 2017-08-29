@@ -2,6 +2,7 @@ package network
 
 import (
 	"encoding/binary"
+	"fmt"
 	"io"
 	"rat/common"
 	"reflect"
@@ -19,6 +20,14 @@ func (w Writer) writeInt64(i int64) error {
 	return binary.Write(w.Writer, common.ByteOrder, int64(i))
 }
 
+func (w Writer) writeFloat32(i float32) error {
+	return binary.Write(w.Writer, common.ByteOrder, &i)
+}
+
+func (w Writer) writeFloat64(i float64) error {
+	return binary.Write(w.Writer, common.ByteOrder, &i)
+}
+
 func (w Writer) writeString(s string) error {
 	w.writeInt32(int32(len(s)))
 
@@ -27,12 +36,21 @@ func (w Writer) writeString(s string) error {
 	return nil
 }
 
-func (w Writer) WritePacket(packet Packet) error {
+func (w Writer) writeBytes(b []byte) error {
+	w.writeInt32(int32(len(b)))
+
+	_, err := w.Writer.Write(b)
+
+	return err
+}
+
+func (w Writer) WritePacket(packet interface{}) error {
+	fmt.Println("write", packet)
 	return Serialize(w, packet)
 }
 
 func Serialize(w Writer, data interface{}) error {
-	pstruct := reflect.ValueOf(data)
+	pstruct := reflect.Indirect(reflect.ValueOf(data))
 	ptype := pstruct.Type()
 
 	var err error
@@ -41,9 +59,9 @@ func Serialize(w Writer, data interface{}) error {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		if fieldType.Tag == "" || fieldType.Tag != "send" && fieldType.Tag != "both" {
+		/*if fieldType.Tag == "" || fieldType.Tag != "send" && fieldType.Tag != "both" {
 			continue
-		}
+		}*/
 
 		err = serializeField(w, field, fieldType.Type)
 
@@ -67,6 +85,10 @@ func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
 		w.writeInt32(int32(field.Int()))
 	case reflect.Int64:
 		w.writeInt64(field.Int())
+	case reflect.Float32:
+		w.writeFloat32(float32(field.Float()))
+	case reflect.Float64:
+		w.writeFloat64(field.Float())
 	case reflect.Struct:
 		err = Serialize(w, field.Interface())
 	case reflect.Array:
@@ -74,9 +96,14 @@ func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
 	case reflect.Slice:
 		w.writeInt32(int32(field.Len()))
 
-		for i := 0; i < field.Len(); i++ {
-			serializeField(w, field.Index(i), field.Index(i).Type())
+		if b, ok := field.Interface().([]byte); ok {
+			w.writeBytes(b)
+		} else {
+			for i := 0; i < field.Len(); i++ {
+				serializeField(w, field.Index(i), field.Index(i).Type())
+			}
 		}
+
 	}
 
 	return err

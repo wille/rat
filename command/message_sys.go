@@ -19,7 +19,7 @@ func (sys SysMessage) Handle(ws *websocket.Conn, client *Client, data string) er
 		return err
 	}
 
-	client.Queue <- SysPacket{system.Action(action)}
+	client.Queue <- &SysPacket{system.Action(action)}
 
 	if action == int(system.Disconnect) {
 		go func() {

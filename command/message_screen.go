@@ -49,8 +49,8 @@ func (d ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client, data str
 
 	client.Listeners[common.MonitorsHeader] = ws
 
-	packet := ScreenPacket{stream, scale, monitor}
-	client.Queue <- packet
+	packet := ScreenPacket{Activate:stream, Scale:scale, Monitor:monitor}
+	client.Queue <- &packet
 
 	if !client.Screen.Streaming {
 		go ScreenStream(client, ws)

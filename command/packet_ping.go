@@ -7,21 +7,18 @@ import (
 )
 
 type Ping struct {
-	IncomingPacket
-	OutgoingPacket
 }
 
-func (packet Ping) GetHeader() common.PacketHeader {
+func (packet *Ping) Header() common.PacketHeader {
 	return common.PingHeader
 }
 
-func (packet Ping) Write(c *Client) error {
+func (packet *Ping) Init(c *Client) {
 	c.Ping.Start = time.Now()
 	c.Ping.Received = false
-	return nil
 }
 
-func (packet Ping) Read(c *Client) error {
+func (packet *Ping) OnReceive(c *Client) error {
 	c.Ping.Current = int(utils.GetMilliseconds(time.Now()) - utils.GetMilliseconds(c.Ping.Start))
 	c.Ping.Received = true
 

@@ -3,26 +3,15 @@ package main
 import "rat/common"
 
 type FilePacket struct {
-	Task        common.FileTask
-	Path        string
-	Destination string
+	Task        common.FileTask `send`
+	Path        string          `send`
+	Destination string          `send`
 }
 
-func (packet FilePacket) GetHeader() common.PacketHeader {
+func (packet *FilePacket) Header() common.PacketHeader {
 	return common.FileHeader
 }
 
-func (packet FilePacket) Write(c *Client) error {
-	c.WriteString(packet.Path)
-	c.WriteInt(int(packet.Task))
+func (packet *FilePacket) Init(c *Client) {
 
-	if packet.Task == common.Copy || packet.Task == common.Move {
-		c.WriteString(packet.Destination)
-	}
-
-	return nil
-}
-
-func (packet FilePacket) Read(c *Client) error {
-	return nil
 }

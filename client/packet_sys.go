@@ -13,7 +13,7 @@ type SysPacket struct {
 	Action int
 }
 
-func (packet SysPacket) OnReceive() error {
+func (packet *SysPacket) OnReceive() error {
 	switch system.Action(packet.Action) {
 	case system.Disconnect:
 		conn.Close()

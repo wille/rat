@@ -40,13 +40,13 @@ func TestPacketSerialization(t *testing.T) {
 	b := bytes.NewBuffer(buf)
 	writer := Writer{b}
 
-	err := writer.WritePacket(test)
+	err := Serialize(writer, test)
 	if err != nil {
 		t.Error(err)
 	}
 
 	reader := Reader{b}
-	packet, err := reader.ReadPacket(TestPacket{})
+	packet, err := Deserialize(reader, TestPacket{})
 	if err != nil {
 		t.Error(err)
 	}
@@ -69,13 +69,13 @@ func TestNullSerialization(t *testing.T) {
 	b := bytes.NewBuffer(buf)
 	writer := Writer{b}
 
-	err := writer.WritePacket(test)
+	err := Serialize(writer, test)
 	if err != nil {
 		t.Error(err)
 	}
 
 	reader := Reader{b}
-	packet, err := reader.ReadPacket(TestPacket{})
+	packet, err := Deserialize(reader, TestPacket{})
 	if err != nil {
 		t.Error(err)
 	}

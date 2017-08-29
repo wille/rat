@@ -29,6 +29,18 @@ func (r Reader) readInt64() (int64, error) {
 	return n, err
 }
 
+func (r Reader) readFloat32() (float32, error) {
+	var n float32
+	err := binary.Read(r.Reader, common.ByteOrder, &n)
+	return n, err
+}
+
+func (r Reader) readFloat64() (float64, error) {
+	var n float64
+	err := binary.Read(r.Reader, common.ByteOrder, &n)
+	return n, err
+}
+
 func (r Reader) readString() (string, error) {
 	len, err := r.readInt32()
 	buf := make([]byte, len)
@@ -38,7 +50,9 @@ func (r Reader) readString() (string, error) {
 }
 
 func Deserialize(r Reader, data interface{}) (interface{}, error) {
-	pstruct := reflect.New(reflect.TypeOf(data)).Elem()
+	//d := reflect.TypeOf(data)
+	d1 := reflect.Indirect(reflect.ValueOf(data))
+	pstruct := d1 //reflect.New(d1)
 	ptype := pstruct.Type()
 
 	var err error
@@ -47,9 +61,9 @@ func Deserialize(r Reader, data interface{}) (interface{}, error) {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		if fieldType.Tag == "" || fieldType.Tag != "receive" && fieldType.Tag != "both" {
+		/*if fieldType.Tag == "" || fieldType.Tag != "receive" && fieldType.Tag != "both" {
 			continue
-		}
+		}*/
 
 		deserializeField(r, field, fieldType.Type)
 
@@ -79,6 +93,14 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 		var n int64
 		n, err = r.readInt64()
 		field.SetInt(n)
+	case reflect.Float32:
+		var n float32
+		n, err = r.readFloat32()
+		field.SetFloat(float64(n))
+	case reflect.Float64:
+		var n float64
+		n, err = r.readFloat64()
+		field.SetFloat(n)
 	case reflect.Struct:
 		var e interface{}
 		e, err = Deserialize(r, field.Interface())
@@ -94,6 +116,9 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 		slice := reflect.MakeSlice(fieldType, int(len), int(len))
 
 		field.Set(slice)
+		if b, ok := slice.Interface().([]byte); ok {
+			io.ReadFull(r.Reader, b)
+		}
 		for i := 0; i < int(len); i++ {
 			deserializeField(r, slice.Index(i), fieldType.Elem())
 		}
