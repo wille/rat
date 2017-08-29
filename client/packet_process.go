@@ -7,8 +7,8 @@ import (
 )
 
 type Process struct {
-	PID  int    `both`
 	Path string `both`
+	PID  int    `both`
 }
 
 type ProcessPacket struct {
@@ -24,7 +24,10 @@ func (packet *ProcessPacket) Init() {
 	process.QueryProcesses()
 
 	for _, proc := range process.Processes {
-		packet.Processes = append(packet.Processes, Process{proc.PID, proc.Path})
+		packet.Processes = append(packet.Processes, Process{
+			PID:  proc.PID,
+			Path: proc.Path,
+		})
 	}
 }
 

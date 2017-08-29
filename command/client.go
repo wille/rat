@@ -139,7 +139,7 @@ func (client *Client) PacketReader() {
 		if packet == nil {
 			log.Fatal("packet from header was nil", header)
 		}
-		fmt.Println("PACKET", packet)
+
 		e, err := network.Deserialize(client.Reader, packet)
 		if err != nil {
 			fmt.Println(err.Error())
