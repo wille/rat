@@ -52,7 +52,7 @@ type Client struct {
 
 	Listeners listenerMap
 
-	Monitors []Monitor
+	Monitors []common.Monitor
 
 	Authenticated bool
 }
@@ -69,7 +69,7 @@ func NewClient(conn net.Conn) *Client {
 	client.Writer = network.Writer{conn}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
 	client.Listeners = make(map[common.PacketHeader]*websocket.Conn)
-	client.Monitors = make([]Monitor, 0)
+	client.Monitors = make([]common.Monitor, 0)
 
 	return client
 }

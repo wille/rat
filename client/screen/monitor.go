@@ -5,19 +5,19 @@ package screen
 */
 import "C"
 
-type Monitor struct {
-	ID, X, Y, Width, Height int
-}
+import (
+	"rat/common"
+)
 
 var (
-	Monitors []Monitor
+	Monitors []common.Monitor
 )
 
 func init() {
-	Monitors = make([]Monitor, 0)
+	Monitors = make([]common.Monitor, 0)
 }
 
-func cMonitor(monitor Monitor) C.Monitor {
+func cMonitor(monitor common.Monitor) C.Monitor {
 	var m C.Monitor
 
 	m.id = C.int(monitor.ID)

@@ -10,7 +10,7 @@ import (
 )
 
 type MonitorsPacket struct {
-	Monitors []Monitor
+	Monitors []common.Monitor
 }
 
 func (packet MonitorsPacket) Header() common.PacketHeader {
@@ -40,7 +40,7 @@ func (packet MonitorsPacket) OnReceive(c *Client) error {
 		}
 	}
 
-	fmt.Println("Monitors",c.Monitors)
+	fmt.Println("Monitors", c.Monitors)
 
 	delete(c.Listeners, common.MonitorsHeader)
 

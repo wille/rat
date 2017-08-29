@@ -11,12 +11,13 @@ import (
 	"bytes"
 	"fmt"
 	"image"
+	"rat/common"
 	"unsafe"
 
 	"golang.org/x/image/bmp"
 )
 
-func Capture(monitor Monitor) image.Image {
+func Capture(monitor common.Monitor) image.Image {
 	m := cMonitor(monitor)
 
 	var len C.int

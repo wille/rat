@@ -4,10 +4,11 @@ package screen
 #include "screen.h"
 */
 import "C"
+import "rat/common"
 
 //export MonitorCallback
 func MonitorCallback(cm C.Monitor) {
-	monitor := Monitor{
+	monitor := common.Monitor{
 		int(cm.id),
 		int(cm.coordinates.x),
 		int(cm.coordinates.y),
@@ -18,6 +19,6 @@ func MonitorCallback(cm C.Monitor) {
 }
 
 func QueryMonitors() {
-	Monitors = make([]Monitor, 0)
+	Monitors = make([]common.Monitor, 0)
 	C.QueryMonitors()
 }
