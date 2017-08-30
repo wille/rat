@@ -46,10 +46,10 @@ func (w Writer) writeBytes(b []byte) error {
 
 func (w Writer) WritePacket(packet interface{}) error {
 	fmt.Println("write", packet)
-	return Serialize(w, packet)
+	return w.serialize(packet)
 }
 
-func Serialize(w Writer, data interface{}) error {
+func (w Writer) serialize(data interface{}) error {
 	pstruct := reflect.Indirect(reflect.ValueOf(data))
 	ptype := pstruct.Type()
 
@@ -63,7 +63,7 @@ func Serialize(w Writer, data interface{}) error {
 			continue
 		}*/
 
-		err = serializeField(w, field, fieldType.Type)
+		err = w.serializeField(field, fieldType.Type)
 
 		if err != nil {
 			break
@@ -73,7 +73,7 @@ func Serialize(w Writer, data interface{}) error {
 	return err
 }
 
-func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
+func (w Writer) serializeField(field reflect.Value, d reflect.Type) error {
 	var err error
 
 	switch d.Kind() {
@@ -90,7 +90,7 @@ func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
 	case reflect.Float64:
 		w.writeFloat64(field.Float())
 	case reflect.Struct:
-		err = Serialize(w, field.Interface())
+		err = w.serialize(field.Interface())
 	case reflect.Array:
 		fallthrough
 	case reflect.Slice:
@@ -100,7 +100,7 @@ func serializeField(w Writer, field reflect.Value, d reflect.Type) error {
 			w.writeBytes(b)
 		} else {
 			for i := 0; i < field.Len(); i++ {
-				serializeField(w, field.Index(i), field.Index(i).Type())
+				w.serializeField(field.Index(i), field.Index(i).Type())
 			}
 		}
 

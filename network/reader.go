@@ -50,10 +50,14 @@ func (r Reader) readString() (string, error) {
 	return string(buf), err
 }
 
-// Deserialize deserializes the input struct.
+func (r Reader) ReadPacket(data interface{}) (interface{}, error) {
+	return r.deserialize(data)
+}
+
+// deserialize deserializes the input struct.
 // Must not be pointer
 // Returns new instance of the value, leaving the input interface{} untouched
-func (r Reader) Deserialize(data interface{}) (interface{}, error) {
+func (r Reader) deserialize(data interface{}) (interface{}, error) {
 	pstruct := reflect.New(reflect.TypeOf(data)).Elem()
 	ptype := pstruct.Type()
 
@@ -63,10 +67,8 @@ func (r Reader) Deserialize(data interface{}) (interface{}, error) {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		/*if fieldType.Tag == "" || fieldType.Tag != "receive" && fieldType.Tag != "both" {
-			continue
-		}*/
-			err = deserializeField(r, field, fieldType.Type)
+		if fieldType.Tag == "receive" || fieldType.Tag == "both" {
+			err = r.deserializeField(field, fieldType.Type)
 
 			if err != nil {
 				break
@@ -77,7 +79,7 @@ func (r Reader) Deserialize(data interface{}) (interface{}, error) {
 	return pstruct.Interface(), err
 }
 
-func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) error {
+func (r Reader) deserializeField(field reflect.Value, fieldType reflect.Type) error {
 	var err error
 
 	if !field.CanSet() {
@@ -109,7 +111,7 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 		field.SetFloat(n)
 	case reflect.Struct:
 		var e interface{}
-		e, err = r.Deserialize(field.Interface())
+		e, err = r.deserialize(field.Interface())
 		if err != nil {
 			break
 		}
@@ -126,7 +128,7 @@ func deserializeField(r Reader, field reflect.Value, fieldType reflect.Type) err
 			io.ReadFull(r.Reader, b)
 		}
 		for i := 0; i < int(len); i++ {
-			deserializeField(r, slice.Index(i), fieldType.Elem())
+			r.deserializeField(slice.Index(i), fieldType.Elem())
 		}
 	}
 

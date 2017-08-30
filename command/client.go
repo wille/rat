@@ -143,7 +143,7 @@ func (c *Client) PacketReader() {
 			goto err
 		}
 
-		packet, err = c.Reader.Deserialize(packet)
+		packet, err = c.Reader.ReadPacket(packet)
 		if err != nil {
 			goto err
 		}
