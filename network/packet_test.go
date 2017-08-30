@@ -3,6 +3,7 @@ package network
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"rat/common"
 	"reflect"
 	"testing"
@@ -26,6 +27,21 @@ func (p TestPacket) OnReceive() error {
 	return nil
 }
 
+func serialize(what interface{}) (*bytes.Buffer, error) {
+	buf := make([]byte, 0)
+	b := bytes.NewBuffer(buf)
+	writer := Writer{b}
+
+	err := writer.serialize(what)
+	return b, err
+}
+
+func deserialize(from io.Reader, what interface{}) (interface{}, error) {
+	reader := Reader{from}
+	return reader.deserialize(what)
+}
+
+// Test basic serialization
 func TestPacketSerialization(t *testing.T) {
 	test := TestPacket{
 		Text:    "Text",
@@ -36,19 +52,14 @@ func TestPacketSerialization(t *testing.T) {
 	test.Sub.SubInt = 10
 	test.Array = []string{"test1", "test2"}
 
-	buf := make([]byte, 0)
-	b := bytes.NewBuffer(buf)
-	writer := Writer{b}
-
-	err := writer.serialize(test)
+	b, err := serialize(test)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	reader := Reader{b}
-	packet, err := reader.deserialize(TestPacket{})
+	packet, err := deserialize(b, TestPacket{})
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	if !reflect.DeepEqual(test, packet) {
@@ -58,6 +69,7 @@ func TestPacketSerialization(t *testing.T) {
 	}
 }
 
+// Test serialization with nil/not set values in struct
 func TestNullSerialization(t *testing.T) {
 	test := TestPacket{
 		Text: "Text",
@@ -65,19 +77,14 @@ func TestNullSerialization(t *testing.T) {
 
 	test.Array = []string{"test2"}
 
-	buf := make([]byte, 0)
-	b := bytes.NewBuffer(buf)
-	writer := Writer{b}
-
-	err := writer.serialize(test)
+	b, err := serialize(test)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	reader := Reader{b}
-	packet, err := reader.deserialize(TestPacket{})
+	packet, err := deserialize(b, TestPacket{})
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	if !reflect.DeepEqual(test, packet) {
