@@ -37,8 +37,6 @@ func (w Writer) writeString(s string) error {
 }
 
 func (w Writer) writeBytes(b []byte) error {
-	w.writeInt32(int32(len(b)))
-
 	_, err := w.Writer.Write(b)
 
 	return err

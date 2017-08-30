@@ -86,35 +86,3 @@ func TestNullSerialization(t *testing.T) {
 		t.Fail()
 	}
 }
-
-func BenchmarkSerialization(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		test := TestPacket{
-			Text:    "Text",
-			Number:  15,
-			Another: 1,
-		}
-
-		test.Sub.SubInt = 10
-		test.Array = []string{"test1", "test2"}
-
-		buf := make([]byte, 0)
-		bd := bytes.NewBuffer(buf)
-		writer := Writer{bd}
-
-		err := writer.serialize(test)
-		if err != nil {
-			b.Error(err)
-		}
-
-		reader := Reader{bd}
-		packet, err := reader.deserialize(TestPacket{})
-		if err != nil {
-			b.Error(err)
-		}
-
-		if !reflect.DeepEqual(test, packet) {
-			b.Fail()
-		}
-	}
-}

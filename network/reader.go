@@ -67,13 +67,13 @@ func (r Reader) deserialize(data interface{}) (interface{}, error) {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		if fieldType.Tag == "receive" || fieldType.Tag == "both" {
-			err = r.deserializeField(field, fieldType.Type)
+		//if fieldType.Tag == "receive" || fieldType.Tag == "both" {
+		err = r.deserializeField(field, fieldType.Type)
 
-			if err != nil {
-				break
-			}
+		if err != nil {
+			break
 		}
+		//}
 	}
 
 	return pstruct.Interface(), err
@@ -126,9 +126,10 @@ func (r Reader) deserializeField(field reflect.Value, fieldType reflect.Type) er
 		field.Set(slice)
 		if b, ok := slice.Interface().([]byte); ok {
 			io.ReadFull(r.Reader, b)
-		}
-		for i := 0; i < int(len); i++ {
-			r.deserializeField(slice.Index(i), fieldType.Elem())
+		} else {
+			for i := 0; i < int(len); i++ {
+				r.deserializeField(slice.Index(i), fieldType.Elem())
+			}
 		}
 	}
 
