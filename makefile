@@ -71,6 +71,20 @@ fakebin:
 	touch command/bin/linux_amd64
 	touch command/bin/linux_x86
 
+test:
+	go test \
+	rat/network \
+	rat/command \
+	rat/client \
+	rat/client/computer \
+	rat/client/drives \
+	rat/client/install \
+	rat/client/process \
+	rat/client/shell \
+	rat/client/startup \
+	rat/client/screen \
+	rat/client/windows
+
 clean:
 	cd client/screen/ && rm -f *.bmp *.jpg
 	rm -f debug.bmp
