@@ -87,6 +87,10 @@ func (r Reader) deserializeField(field reflect.Value, fieldType reflect.Type) er
 	}
 
 	switch fieldType.Kind() {
+	case reflect.Bool:
+		var b bool
+		b, err = r.readBool()
+		field.SetBool(b)
 	case reflect.String:
 		var s string
 		s, err = r.readString()

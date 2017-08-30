@@ -12,6 +12,10 @@ type Writer struct {
 	Writer io.Writer
 }
 
+func (w Writer) writeBool(b bool) error {
+	return binary.Write(w.Writer, common.ByteOrder, b)
+}
+
 func (w Writer) writeInt32(i int32) error {
 	return binary.Write(w.Writer, common.ByteOrder, int32(i))
 }
@@ -75,6 +79,8 @@ func (w Writer) serializeField(field reflect.Value, d reflect.Type) error {
 	var err error
 
 	switch d.Kind() {
+	case reflect.Bool:
+		w.writeBool(field.Bool())
 	case reflect.String:
 		w.writeString(field.String())
 	case reflect.Int:
