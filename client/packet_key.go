@@ -2,7 +2,7 @@ package main
 
 import (
 	"rat/client/screen"
-	"rat/common"
+	"rat/shared"
 )
 
 type KeyPacket struct {
@@ -10,8 +10,8 @@ type KeyPacket struct {
 	Type int `network:"receive"`
 }
 
-func (packet KeyPacket) Header() common.PacketHeader {
-	return common.KeyHeader
+func (packet KeyPacket) Header() shared.PacketHeader {
+	return shared.KeyHeader
 }
 
 func (packet KeyPacket) OnReceive() error {

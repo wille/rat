@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"rat/common"
+	"rat/shared"
 	"reflect"
 	"testing"
 )
@@ -19,7 +19,7 @@ type TestPacket struct {
 	Another int `network:"send,receive"`
 }
 
-func (p TestPacket) Header() common.PacketHeader {
+func (p TestPacket) Header() shared.PacketHeader {
 	return 0
 }
 

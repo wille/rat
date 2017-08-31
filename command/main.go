@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 	"rat/command/utils"
-	"rat/common"
+	"rat/shared"
 	"strconv"
 )
 
@@ -35,7 +35,7 @@ func addDownload(tf TempFile) string {
 }
 
 func main() {
-	fmt.Println("tsm rat", common.Version)
+	fmt.Println("tsm rat", shared.Version)
 
 	if !CertExists() {
 		fmt.Println("generating certificate...")
@@ -54,7 +54,7 @@ func main() {
 	go Listen(&Config)
 
 	funcMap := template.FuncMap{
-		"Version": func() string { return common.Version },
+		"Version": func() string { return shared.Version },
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

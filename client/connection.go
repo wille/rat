@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"net"
-	"rat/common"
+	"rat/shared"
 	"rat/network"
 )
 
@@ -26,15 +26,15 @@ func (c *Connection) Close() {
 	c.Conn.Close()
 }
 
-func (c *Connection) ReadHeader() (common.PacketHeader, error) {
-	var h common.PacketHeader
-	err := binary.Read(c, common.ByteOrder, &h)
+func (c *Connection) ReadHeader() (shared.PacketHeader, error) {
+	var h shared.PacketHeader
+	err := binary.Read(c, shared.ByteOrder, &h)
 
 	return h, err
 }
 
-func (c *Connection) WriteHeader(header common.PacketHeader) error {
-	return binary.Write(c.Conn, common.ByteOrder, header)
+func (c *Connection) WriteHeader(header shared.PacketHeader) error {
+	return binary.Write(c.Conn, shared.ByteOrder, header)
 }
 
 func (c *Connection) WritePacket(packet OutgoingPacket) error {
@@ -53,7 +53,7 @@ type IncomingPacket interface {
 
 type OutgoingPacket interface {
 	Init()
-	Header() common.PacketHeader
+	Header() shared.PacketHeader
 }
 
 func (c Connection) ReadPacket() (IncomingPacket, error) {

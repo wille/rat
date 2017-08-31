@@ -1,4 +1,4 @@
-package common
+package shared
 
 // Desktop window dimensions
 type Rect struct {

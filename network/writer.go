@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"rat/common"
+	"rat/shared"
 	"reflect"
 	"strings"
 )
@@ -14,23 +14,23 @@ type Writer struct {
 }
 
 func (w Writer) writeBool(b bool) error {
-	return binary.Write(w.Writer, common.ByteOrder, b)
+	return binary.Write(w.Writer, shared.ByteOrder, b)
 }
 
 func (w Writer) writeInt32(i int32) error {
-	return binary.Write(w.Writer, common.ByteOrder, int32(i))
+	return binary.Write(w.Writer, shared.ByteOrder, int32(i))
 }
 
 func (w Writer) writeInt64(i int64) error {
-	return binary.Write(w.Writer, common.ByteOrder, int64(i))
+	return binary.Write(w.Writer, shared.ByteOrder, int64(i))
 }
 
 func (w Writer) writeFloat32(i float32) error {
-	return binary.Write(w.Writer, common.ByteOrder, &i)
+	return binary.Write(w.Writer, shared.ByteOrder, &i)
 }
 
 func (w Writer) writeFloat64(i float64) error {
-	return binary.Write(w.Writer, common.ByteOrder, &i)
+	return binary.Write(w.Writer, shared.ByteOrder, &i)
 }
 
 func (w Writer) writeString(s string) error {

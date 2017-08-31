@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"rat/common"
+	"rat/shared"
 
 	humanize "github.com/dustin/go-humanize"
 
@@ -22,8 +22,8 @@ type DirectoryPacket struct {
 	Files []FileData `network:"receive"`
 }
 
-func (packet DirectoryPacket) Header() common.PacketHeader {
-	return common.DirectoryHeader
+func (packet DirectoryPacket) Header() shared.PacketHeader {
+	return shared.DirectoryHeader
 }
 
 func (packet DirectoryPacket) Init(c *Client) {
@@ -51,7 +51,7 @@ func (packet DirectoryPacket) OnReceive(c *Client) error {
 		}
 	}
 
-	if ws, ok := c.Listeners[common.DirectoryHeader]; ok {
+	if ws, ok := c.Listeners[shared.DirectoryHeader]; ok {
 		json, err := json.Marshal(append(dirs, files...))
 
 		if err != nil {
@@ -67,7 +67,7 @@ func (packet DirectoryPacket) OnReceive(c *Client) error {
 		}
 	}
 
-	delete(c.Listeners, common.DirectoryHeader)
+	delete(c.Listeners, shared.DirectoryHeader)
 
 	return nil
 }

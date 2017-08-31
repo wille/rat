@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net"
-	"rat/common"
+	"rat/shared"
 	"rat/network"
 	"strconv"
 	"strings"
@@ -16,7 +16,7 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type listenerMap map[common.PacketHeader]*websocket.Conn
+type listenerMap map[shared.PacketHeader]*websocket.Conn
 
 type Monitor struct {
 	ID     int `json:"id"`
@@ -32,7 +32,7 @@ type Client struct {
 
 	Id int
 
-	common.Computer
+	shared.Computer
 	Country     string
 	CountryCode string
 
@@ -52,7 +52,7 @@ type Client struct {
 
 	Listeners listenerMap
 
-	Monitors []common.Monitor
+	Monitors []shared.Monitor
 
 	Authenticated bool
 }
@@ -63,13 +63,13 @@ func NewClient(conn net.Conn) *Client {
 	client.Queue = make(chan OutgoingPacket)
 
 	client.Id = int(rand.Int31())
-	client.Computer = common.Computer{}
+	client.Computer = shared.Computer{}
 	client.Conn = conn
 	client.Reader = network.Reader{conn}
 	client.Writer = network.Writer{conn}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
-	client.Listeners = make(map[common.PacketHeader]*websocket.Conn)
-	client.Monitors = make([]common.Monitor, 0)
+	client.Listeners = make(map[shared.PacketHeader]*websocket.Conn)
+	client.Monitors = make([]shared.Monitor, 0)
 
 	return client
 }
@@ -117,7 +117,7 @@ func (c *Client) GetPing() string {
 }
 
 func (c *Client) GetPathSep() string {
-	if c.Computer.OperatingSystemType == common.Windows {
+	if c.Computer.OperatingSystemType == shared.Windows {
 		return "\\"
 	}
 
@@ -185,15 +185,15 @@ func (client *Client) PacketQueue() {
 	}
 }
 
-func (c *Client) ReadHeader() (common.PacketHeader, error) {
-	var h common.PacketHeader
-	err := binary.Read(c.Conn, common.ByteOrder, &h)
+func (c *Client) ReadHeader() (shared.PacketHeader, error) {
+	var h shared.PacketHeader
+	err := binary.Read(c.Conn, shared.ByteOrder, &h)
 
 	return h, err
 }
 
-func (c *Client) WriteHeader(header common.PacketHeader) error {
-	return binary.Write(c.Conn, common.ByteOrder, header)
+func (c *Client) WriteHeader(header shared.PacketHeader) error {
+	return binary.Write(c.Conn, shared.ByteOrder, header)
 }
 
 func (c *Client) WritePacket(packet OutgoingPacket) error {

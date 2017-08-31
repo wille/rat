@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/common"
+	"rat/shared"
 
 	"encoding/json"
 
@@ -18,8 +18,8 @@ type ProcessPacket struct {
 	Processes []Process `network:"send,receive"`
 }
 
-func (packet ProcessPacket) Header() common.PacketHeader {
-	return common.ProcessHeader
+func (packet ProcessPacket) Header() shared.PacketHeader {
+	return shared.ProcessHeader
 }
 
 func (packet ProcessPacket) Init(c *Client) {
@@ -28,7 +28,7 @@ func (packet ProcessPacket) Init(c *Client) {
 
 func (packet ProcessPacket) OnReceive(c *Client) error {
 	for _, proc := range packet.Processes {
-		if ws, ok := c.Listeners[common.ProcessHeader]; ok {
+		if ws, ok := c.Listeners[shared.ProcessHeader]; ok {
 			message := ProcessMessage{proc.PID, proc.Path}
 			mstr, _ := json.Marshal(&message)
 			event := newEvent(ProcessQueryEvent, c.Id, string(mstr))
@@ -41,7 +41,7 @@ func (packet ProcessPacket) OnReceive(c *Client) error {
 		}
 	}
 
-	delete(c.Listeners, common.ProcessHeader)
+	delete(c.Listeners, shared.ProcessHeader)
 
 	return nil
 }

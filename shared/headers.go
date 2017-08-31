@@ -1,4 +1,4 @@
-package common
+package shared
 
 const (
 	PingHeader         PacketHeader = 0

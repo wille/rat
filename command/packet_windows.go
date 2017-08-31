@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"rat/common"
+	"rat/shared"
 )
 
 type WindowsPacket struct {
-	Windows []common.Window `network:"receive"`
+	Windows []shared.Window `network:"receive"`
 }
 
-func (packet WindowsPacket) Header() common.PacketHeader {
-	return common.WindowsHeader
+func (packet WindowsPacket) Header() shared.PacketHeader {
+	return shared.WindowsHeader
 }
 
 func (packet WindowsPacket) Init(c *Client) {

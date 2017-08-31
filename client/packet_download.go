@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"rat/common"
+	"rat/shared"
 )
 
 type DownloadPacket struct {
@@ -19,8 +19,8 @@ func init() {
 	Transfers = make(TransfersMap)
 }
 
-func (packet DownloadPacket) Header() common.PacketHeader {
-	return common.PutFileHeader
+func (packet DownloadPacket) Header() shared.PacketHeader {
+	return shared.PutFileHeader
 }
 
 func (packet DownloadPacket) OnReceive() error {

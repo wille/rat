@@ -1,6 +1,6 @@
 package main
 
-import "rat/common"
+import "rat/shared"
 import "rat/client/screen"
 
 type MousePacket struct {
@@ -9,8 +9,8 @@ type MousePacket struct {
 	Type        int `network:"receive"`
 }
 
-func (packet MousePacket) Header() common.PacketHeader {
-	return common.MouseHeader
+func (packet MousePacket) Header() shared.PacketHeader {
+	return shared.MouseHeader
 }
 
 func (packet MousePacket) OnReceive() error {

@@ -10,9 +10,9 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"rat/common"
-	"rat/common/crypto"
-	"rat/common/installpath"
+	"rat/shared"
+	"rat/shared/crypto"
+	"rat/shared/installpath"
 )
 
 // Config is received from the websocket
@@ -58,7 +58,7 @@ func Build(c *Config) (string, string, error) {
 		archs = []string{c.TargetArch}
 	}
 
-	config := common.BinaryConfig{
+	config := shared.BinaryConfig{
 		Host:       c.Host,
 		Delay:      c.Delay,
 		Name:       c.Name,
@@ -144,7 +144,7 @@ func Build(c *Config) (string, string, error) {
 
 			temp.Write(key)
 			temp.Write(iv)
-			binary.Write(temp, common.ByteOrder, offset) // write offset as int32 (4 bytes)
+			binary.Write(temp, shared.ByteOrder, offset) // write offset as int32 (4 bytes)
 
 			temp.Close()
 

@@ -6,18 +6,18 @@ package screen
 import "C"
 
 import (
-	"rat/common"
+	"rat/shared"
 )
 
 var (
-	Monitors []common.Monitor
+	Monitors []shared.Monitor
 )
 
 func init() {
-	Monitors = make([]common.Monitor, 0)
+	Monitors = make([]shared.Monitor, 0)
 }
 
-func cMonitor(monitor common.Monitor) C.Monitor {
+func cMonitor(monitor shared.Monitor) C.Monitor {
 	var m C.Monitor
 
 	m.id = C.int(monitor.ID)

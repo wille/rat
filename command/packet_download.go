@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
-	"rat/common"
+	"rat/shared"
 
 	"path/filepath"
 
@@ -36,8 +36,8 @@ type DownloadPacket struct {
 	Part  []byte `network:"receive"`
 }
 
-func (packet DownloadPacket) Header() common.PacketHeader {
-	return common.GetFileHeader
+func (packet DownloadPacket) Header() shared.PacketHeader {
+	return shared.GetFileHeader
 }
 
 func (packet DownloadPacket) Init(c *Client) {
@@ -59,7 +59,7 @@ func (packet DownloadPacket) OnReceive(c *Client) error {
 		return err
 	}
 
-	if ws, ok := c.Listeners[common.GetFileHeader]; ok {
+	if ws, ok := c.Listeners[shared.GetFileHeader]; ok {
 		e := DownloadProgressEvent{packet.File, transfer.Read, transfer.Total, ""}
 
 		if packet.Final {
@@ -88,7 +88,7 @@ func (packet DownloadPacket) OnReceive(c *Client) error {
 
 	if packet.Final {
 		defer delete(Transfers, packet.File)
-		defer delete(c.Listeners, common.GetFileHeader)
+		defer delete(c.Listeners, shared.GetFileHeader)
 
 		err = transfer.Local.Sync()
 		if err != nil {

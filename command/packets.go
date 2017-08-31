@@ -1,15 +1,15 @@
 package main
 
 import (
-	"rat/common"
+	"rat/shared"
 )
 
-type PacketMap map[common.PacketHeader]IncomingPacket
+type PacketMap map[shared.PacketHeader]IncomingPacket
 
 var packets PacketMap
 
 type OutgoingPacket interface {
-	Header() common.PacketHeader
+	Header() shared.PacketHeader
 	Init(c *Client)
 }
 
@@ -21,18 +21,18 @@ type Packet struct{}
 
 func InitPackets() {
 	packets = make(PacketMap)
-	packets[common.PingHeader] = Ping{}
-	packets[common.ComputerInfoHeader] = ComputerInfoPacket{}
-	packets[common.ScreenHeader] = ScreenPacket{}
-	packets[common.ProcessHeader] = ProcessPacket{}
-	packets[common.MonitorsHeader] = MonitorsPacket{}
-	packets[common.DirectoryHeader] = DirectoryPacket{}
-	packets[common.PutFileHeader] = UploadPacket{}
-	packets[common.GetFileHeader] = DownloadPacket{}
-	packets[common.ShellHeader] = ShellPacket{}
-	packets[common.WindowsHeader] = WindowsPacket{}
+	packets[shared.PingHeader] = Ping{}
+	packets[shared.ComputerInfoHeader] = ComputerInfoPacket{}
+	packets[shared.ScreenHeader] = ScreenPacket{}
+	packets[shared.ProcessHeader] = ProcessPacket{}
+	packets[shared.MonitorsHeader] = MonitorsPacket{}
+	packets[shared.DirectoryHeader] = DirectoryPacket{}
+	packets[shared.PutFileHeader] = UploadPacket{}
+	packets[shared.GetFileHeader] = DownloadPacket{}
+	packets[shared.ShellHeader] = ShellPacket{}
+	packets[shared.WindowsHeader] = WindowsPacket{}
 }
 
-func GetIncomingPacket(header common.PacketHeader) IncomingPacket {
+func GetIncomingPacket(header shared.PacketHeader) IncomingPacket {
 	return packets[header]
 }

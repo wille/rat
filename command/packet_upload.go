@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/common"
+	"rat/shared"
 )
 
 type UploadPacket struct {
@@ -10,8 +10,8 @@ type UploadPacket struct {
 	Data  []byte `network:"send"`
 }
 
-func (packet UploadPacket) Header() common.PacketHeader {
-	return common.PutFileHeader
+func (packet UploadPacket) Header() shared.PacketHeader {
+	return shared.PutFileHeader
 }
 
 func (packet UploadPacket) Init(c *Client) {

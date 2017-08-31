@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"rat/common/system"
+	"rat/shared/system"
 
 	"time"
 

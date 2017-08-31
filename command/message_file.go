@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"rat/common"
+	"rat/shared"
 
 	"golang.org/x/net/websocket"
 )
@@ -22,7 +22,7 @@ func (d FileMessage) Handle(ws *websocket.Conn, client *Client, data string) err
 		return err
 	}
 
-	client.Queue <- &FilePacket{common.FileTask(fileEvent.Task), fileEvent.File, fileEvent.Destination}
+	client.Queue <- &FilePacket{shared.FileTask(fileEvent.Task), fileEvent.File, fileEvent.Destination}
 
 	return nil
 }
