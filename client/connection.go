@@ -63,7 +63,6 @@ type OutgoingPacket interface {
 func (c Connection) ReadPacket() (IncomingPacket, error) {
 	header, _ := c.ReadHeader()
 	packet := GetIncomingPacket(header)
-	fmt.Println("Received header", header)
 
 	e, err := c.Reader.ReadPacket(packet)
 	if err != nil {

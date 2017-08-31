@@ -82,14 +82,7 @@ func start(config common.BinaryConfig) {
 		con.Init()
 
 		for {
-			packet, err := con.ReadPacket()
-			if err != nil {
-				fmt.Println(err.Error())
-				con.Close()
-				break
-			}
-
-			err = packet.OnReceive()
+			_, err := con.ReadPacket()
 			if err != nil {
 				fmt.Println(err.Error())
 				con.Close()
