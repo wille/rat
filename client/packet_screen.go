@@ -26,7 +26,7 @@ func (packet ScreenPacket) OnReceive() error {
 	if packet.Run {
 		// Dispatch one screen packet
 		screenStream = false
-		Queue <- &ScreenPacket{Scale: packet.Scale, Monitor: packet.Monitor}
+		Queue <- &ScreenPacket{}
 	}
 
 	screenStream = packet.Run

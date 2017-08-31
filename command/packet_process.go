@@ -9,7 +9,7 @@ import (
 )
 
 type Process struct {
-	Path string `network:"send,receive"`
+	Path string `network:"send"`
 	PID  int    `network:"send,receive"`
 }
 

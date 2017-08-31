@@ -11,10 +11,10 @@ import (
 )
 
 type FileData struct {
-	Dir    bool   `network:"receive"`
-	Name   string `network:"receive"`
-	Edited string `network:"receive"`
-	Size   int64  `network:"receive"`
+	Dir    bool
+	Name   string
+	Edited string
+	Size   int64
 }
 
 type DirectoryPacket struct {

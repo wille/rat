@@ -32,13 +32,13 @@ func serialize(what interface{}) (*bytes.Buffer, error) {
 	b := bytes.NewBuffer(buf)
 	writer := Writer{b}
 
-	err := writer.serialize(what)
+	err := writer.serialize(what, unknown)
 	return b, err
 }
 
 func deserialize(from io.Reader, what interface{}) (interface{}, error) {
 	reader := Reader{from}
-	return reader.deserialize(what)
+	return reader.deserialize(what, unknown)
 }
 
 // Test basic serialization

@@ -10,7 +10,7 @@ import (
 )
 
 type SysPacket struct {
-	Action int
+	Action int `network:"receive"`
 }
 
 func (packet SysPacket) OnReceive() error {

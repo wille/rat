@@ -1,7 +1,9 @@
 package main
 
-import "rat/common"
-import "rat/client/screen"
+import (
+	"rat/client/screen"
+	"rat/common"
+)
 
 type KeyPacket struct {
 	Key  int `network:"receive"`
