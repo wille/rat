@@ -7,38 +7,25 @@ import "C"
 
 import (
 	"rat/client/utils"
+	"rat/common"
 )
 
-type Rect struct {
-	X      int
-	Y      int
-	Width  int
-	Height int
-}
-
-// Window struct exposed to Go
-type Window struct {
-	Handle int
-	Title  string
-	Rect   Rect
-}
-
 // Windows array, will be populated after call to QueryWindows()
-var Windows []Window
+var Windows []common.Window
 
 // Callback for each window
 //export WindowCallback
 func WindowCallback(w C.Window) {
 	title := utils.WcharToString((*uint16)(w.title), -1)
 
-	window := Window{
+	window := common.Window{
 		Handle: int(w.handle),
 		Title:  title,
-		Rect: Rect{
-			int(w.rect.x),
-			int(w.rect.y),
-			int(w.rect.width),
-			int(w.rect.height),
+		Rect: common.Rect{
+			X:      int(w.rect.x),
+			Y:      int(w.rect.y),
+			Width:  int(w.rect.width),
+			Height: int(w.rect.height),
 		},
 	}
 
@@ -46,7 +33,7 @@ func WindowCallback(w C.Window) {
 }
 
 func QueryWindows() {
-	Windows = make([]Window, 1)
+	Windows = make([]common.Window, 1)
 
 	C.QueryWindows()
 }

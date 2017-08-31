@@ -1,27 +1,26 @@
 package main
 
-/* const ()
+import (
+	"fmt"
+	"rat/common"
+)
 
 type WindowsPacket struct {
+	Windows []common.Window `network:"receive"`
 }
 
 func (packet WindowsPacket) Header() common.PacketHeader {
 	return common.WindowsHeader
 }
 
-func (packet WindowsPacket) Write(c *Client) error {
-	return nil
+func (packet WindowsPacket) Init(c *Client) {
+
 }
 
-func (packet WindowsPacket) Read(c *Client) error {
-	len, _ := c.ReadInt()
-
-	for i := 0; i < len; i++ {
-		title, _ := c.ReadString()
-
-		fmt.Println(title)
+func (packet WindowsPacket) OnReceive(c *Client) error {
+	for _, window := range packet.Windows {
+		fmt.Println(window)
 	}
 
 	return nil
 }
-*/

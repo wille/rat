@@ -72,7 +72,7 @@ func init() {
 	Messages[Shell] = ShellMessage{}
 	Messages[ModifyFileEvent] = FileMessage{}
 	Messages[Exit] = ExitMessage{}
-	//Messages[Windows] = WindowMessage{}
+	Messages[Windows] = WindowMessage{}
 }
 
 func newEvent(event int, clientID int, data string) *Event {

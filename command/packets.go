@@ -30,7 +30,7 @@ func InitPackets() {
 	packets[common.PutFileHeader] = UploadPacket{}
 	packets[common.GetFileHeader] = DownloadPacket{}
 	packets[common.ShellHeader] = ShellPacket{}
-	//packets[common.WindowsHeader] = WindowsPacket{}
+	packets[common.WindowsHeader] = WindowsPacket{}
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {

@@ -22,7 +22,7 @@ func init() {
 	packets[common.KeyHeader] = KeyPacket{}
 	packets[common.FileHeader] = FilePacket{}
 	packets[common.ShellHeader] = ShellPacket{}
-	//packets[common.WindowsHeader] = WindowsPacket{}
+	packets[common.WindowsHeader] = WindowsPacket{}
 }
 
 func GetIncomingPacket(header common.PacketHeader) IncomingPacket {
