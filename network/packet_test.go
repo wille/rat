@@ -10,13 +10,13 @@ import (
 )
 
 type TestPacket struct {
-	Text   string   `both`
-	Number int      `both`
-	Array  []string `both`
+	Text   string   `network:"send,receive"`
+	Number int      `network:"send,receive"`
+	Array  []string `network:"send,receive"`
 	Sub    struct {
-		SubInt int `both`
-	} `both`
-	Another int `both`
+		SubInt int `network:"send,receive"`
+	} `network:"send,receive"`
+	Another int `network:"send,receive"`
 }
 
 func (p TestPacket) Header() common.PacketHeader {

@@ -7,8 +7,8 @@ import (
 )
 
 type ShellPacket struct {
-	Action  int    `send`
-	Command string `both`
+	Action  int    `network:"send"`
+	Command string `network:"send,receive"`
 }
 
 func (packet ShellPacket) Header() common.PacketHeader {

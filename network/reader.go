@@ -3,9 +3,11 @@ package network
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"io"
 	"rat/common"
 	"reflect"
+	"strings"
 )
 
 type Reader struct {
@@ -51,13 +53,13 @@ func (r Reader) readString() (string, error) {
 }
 
 func (r Reader) ReadPacket(data interface{}) (interface{}, error) {
-	return r.deserialize(data)
+	return r.deserialize(data, unknown)
 }
 
 // deserialize deserializes the input struct.
 // Must not be pointer
 // Returns new instance of the value, leaving the input interface{} untouched
-func (r Reader) deserialize(data interface{}) (interface{}, error) {
+func (r Reader) deserialize(data interface{}, parentTag tagType) (interface{}, error) {
 	pstruct := reflect.New(reflect.TypeOf(data)).Elem()
 	ptype := pstruct.Type()
 
@@ -67,19 +69,31 @@ func (r Reader) deserialize(data interface{}) (interface{}, error) {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		//if fieldType.Tag == "receive" || fieldType.Tag == "both" {
-		err = r.deserializeField(field, fieldType.Type)
+		if parentTag != receive {
+			t := fieldType.Tag.Get(tag)
+			tags := strings.Split(t, ",")
 
+			for _, tag := range tags {
+				if tag == "receive" {
+					parentTag = receive
+					goto run
+				} else if tag == "" {
+					fmt.Println("empty tag for field", fieldType.Name)
+				}
+			}
+		}
+
+	run:
+		err := r.deserializeField(field, fieldType.Type, parentTag)
 		if err != nil {
 			break
 		}
-		//}
 	}
 
 	return pstruct.Interface(), err
 }
 
-func (r Reader) deserializeField(field reflect.Value, fieldType reflect.Type) error {
+func (r Reader) deserializeField(field reflect.Value, fieldType reflect.Type, parentTag tagType) error {
 	var err error
 
 	if !field.CanSet() {
@@ -115,7 +129,7 @@ func (r Reader) deserializeField(field reflect.Value, fieldType reflect.Type) er
 		field.SetFloat(n)
 	case reflect.Struct:
 		var e interface{}
-		e, err = r.deserialize(field.Interface())
+		e, err = r.deserialize(field.Interface(), parentTag)
 		if err != nil {
 			break
 		}
@@ -132,7 +146,7 @@ func (r Reader) deserializeField(field reflect.Value, fieldType reflect.Type) er
 			io.ReadFull(r.Reader, b)
 		} else {
 			for i := 0; i < int(len); i++ {
-				r.deserializeField(slice.Index(i), fieldType.Elem())
+				r.deserializeField(slice.Index(i), fieldType.Elem(), parentTag)
 			}
 		}
 	}

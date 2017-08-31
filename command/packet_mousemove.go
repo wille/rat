@@ -3,9 +3,9 @@ package main
 import "rat/common"
 
 type MouseMovePacket struct {
-	Monitor int `send`
-	X       int `send`
-	Y       int `send`
+	Monitor int `network:"send"`
+	X       int `network:"send"`
+	Y       int `network:"send"`
 }
 
 func (packet MouseMovePacket) Header() common.PacketHeader {

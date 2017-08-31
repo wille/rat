@@ -8,10 +8,10 @@ import (
 )
 
 type ComputerInfoPacket struct {
-	Username                   string `send`
-	Hostname                   string `send`
-	OperatingSystemName        string `send`
-	OperatingSystemDisplayName string `send`
+	Username                   string `network:"send"`
+	Hostname                   string `network:"send"`
+	OperatingSystemName        string `network:"send"`
+	OperatingSystemDisplayName string `network:"send"`
 }
 
 func (packet ComputerInfoPacket) Header() common.PacketHeader {

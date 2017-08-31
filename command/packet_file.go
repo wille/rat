@@ -3,9 +3,9 @@ package main
 import "rat/common"
 
 type FilePacket struct {
-	Task        common.FileTask `send`
-	Path        string          `send`
-	Destination string          `send`
+	Task        common.FileTask `network:"send"`
+	Path        string          `network:"send"`
+	Destination string          `network:"send"`
 }
 
 func (packet FilePacket) Header() common.PacketHeader {

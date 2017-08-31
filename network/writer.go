@@ -6,6 +6,7 @@ import (
 	"io"
 	"rat/common"
 	"reflect"
+	"strings"
 )
 
 type Writer struct {
@@ -47,11 +48,10 @@ func (w Writer) writeBytes(b []byte) error {
 }
 
 func (w Writer) WritePacket(packet interface{}) error {
-	fmt.Println("write", packet)
-	return w.serialize(packet)
+	return w.serialize(packet, unknown)
 }
 
-func (w Writer) serialize(data interface{}) error {
+func (w Writer) serialize(data interface{}, parentTag tagType) error {
 	pstruct := reflect.Indirect(reflect.ValueOf(data))
 	ptype := pstruct.Type()
 
@@ -61,11 +61,22 @@ func (w Writer) serialize(data interface{}) error {
 		field := pstruct.Field(i)
 		fieldType := ptype.Field(i)
 
-		/*if fieldType.Tag == "" || fieldType.Tag != "send" && fieldType.Tag != "both" {
-			continue
-		}*/
+		if parentTag != send {
+			t := fieldType.Tag.Get(tag)
+			tags := strings.Split(t, ",")
 
-		err = w.serializeField(field, fieldType.Type)
+			for _, tag := range tags {
+				if tag == "send" {
+					parentTag = send
+					goto run
+				} else if tag == "" {
+					fmt.Println("empty tag for field", fieldType.Name)
+				}
+			}
+		}
+
+	run:
+		err = w.serializeField(field, fieldType.Type, parentTag)
 
 		if err != nil {
 			break
@@ -75,7 +86,7 @@ func (w Writer) serialize(data interface{}) error {
 	return err
 }
 
-func (w Writer) serializeField(field reflect.Value, d reflect.Type) error {
+func (w Writer) serializeField(field reflect.Value, d reflect.Type, parentTag tagType) error {
 	var err error
 
 	switch d.Kind() {
@@ -94,7 +105,7 @@ func (w Writer) serializeField(field reflect.Value, d reflect.Type) error {
 	case reflect.Float64:
 		w.writeFloat64(field.Float())
 	case reflect.Struct:
-		err = w.serialize(field.Interface())
+		err = w.serialize(field.Interface(), parentTag)
 	case reflect.Array:
 		fallthrough
 	case reflect.Slice:
@@ -104,7 +115,7 @@ func (w Writer) serializeField(field reflect.Value, d reflect.Type) error {
 			w.writeBytes(b)
 		} else {
 			for i := 0; i < field.Len(); i++ {
-				w.serializeField(field.Index(i), field.Index(i).Type())
+				w.serializeField(field.Index(i), field.Index(i).Type(), parentTag)
 			}
 		}
 

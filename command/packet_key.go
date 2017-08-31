@@ -3,8 +3,8 @@ package main
 import "rat/common"
 
 type KeyPacket struct {
-	Button int `send`
-	Event  int `send`
+	Button int `network:"send"`
+	Event  int `network:"send"`
 }
 
 func (packet KeyPacket) Header() common.PacketHeader {

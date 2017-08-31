@@ -6,7 +6,7 @@ import (
 )
 
 type SysPacket struct {
-	Action system.Action `send`
+	Action system.Action `network:"send"`
 }
 
 func (packet SysPacket) Header() common.PacketHeader {

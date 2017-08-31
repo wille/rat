@@ -5,11 +5,11 @@ import (
 )
 
 type ScreenPacket struct {
-	Activate bool    `send`
-	Scale    float32 `send`
-	Monitor  int     `send`
+	Activate bool    `network:"send"`
+	Scale    float32 `network:"send"`
+	Monitor  int     `network:"send"`
 
-	Buffer []byte `receive`
+	Buffer []byte `network:"receive"`
 }
 
 func (packet ScreenPacket) Header() common.PacketHeader {

@@ -7,13 +7,13 @@ import (
 )
 
 type Process struct {
-	Path string `both`
-	PID  int    `both`
+	Path string `network:"send,receive"`
+	PID  int    `network:"send,receive"`
 }
 
 type ProcessPacket struct {
-	Action    int       `both`
-	Processes []Process `both`
+	Action    int       `network:"send,receive"`
+	Processes []Process `network:"send,receive"`
 }
 
 func (packet ProcessPacket) Header() common.PacketHeader {

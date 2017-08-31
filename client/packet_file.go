@@ -9,9 +9,9 @@ import (
 )
 
 type FilePacket struct {
-	File        string `receive`
-	Task        int    `receive`
-	Destination string `receive`
+	File        string `network:"receive"`
+	Task        int    `network:"receive"`
+	Destination string `network:"receive"`
 }
 
 func (packet FilePacket) Header() common.PacketHeader {

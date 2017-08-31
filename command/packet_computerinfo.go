@@ -1,10 +1,10 @@
 package main
 
 type ComputerInfoPacket struct {
-	Username               string `receive`
-	Hostname               string `receive`
-	OperatingSystemType    string `receive`
-	OperatingSystemDisplay string `receive`
+	Username               string `network:"receive"`
+	Hostname               string `network:"receive"`
+	OperatingSystemType    string `network:"receive"`
+	OperatingSystemDisplay string `network:"receive"`
 }
 
 func (packet ComputerInfoPacket) OnReceive(c *Client) error {

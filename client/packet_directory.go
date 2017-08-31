@@ -10,15 +10,15 @@ import (
 )
 
 type FileData struct {
-	Dir    bool   `send`
-	Name   string `send`
-	Edited string `send`
-	Size   int64  `send`
+	Dir    bool   `network:"send"`
+	Name   string `network:"send"`
+	Edited string `network:"send"`
+	Size   int64  `network:"send"`
 }
 
 type DirectoryPacket struct {
-	Path  string     `both`
-	Files []FileData `send`
+	Path  string     `network:"send,receive"`
+	Files []FileData `network:"send"`
 }
 
 func (packet DirectoryPacket) Header() common.PacketHeader {

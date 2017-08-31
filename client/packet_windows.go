@@ -6,7 +6,7 @@ import (
 )
 
 type WindowsPacket struct {
-	Titles []string `send`
+	Titles []string `network:"send"`
 }
 
 func (packet WindowsPacket) Header() common.PacketHeader {

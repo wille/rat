@@ -6,7 +6,7 @@ import (
 )
 
 type MonitorsPacket struct {
-	Monitors []common.Monitor
+	Monitors []common.Monitor `network:"send"`
 }
 
 func (packet MonitorsPacket) Header() common.PacketHeader {

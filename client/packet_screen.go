@@ -12,10 +12,10 @@ import (
 var screenStream bool
 
 type ScreenPacket struct {
-	Run     bool    `receive`
-	Scale   float32 `receive`
-	Monitor int     `receive`
-	Buffer  []byte  `send`
+	Run     bool    `network:"receive"`
+	Scale   float32 `network:"receive"`
+	Monitor int     `network:"receive"`
+	Buffer  []byte  `network:"send"`
 }
 
 func (packet ScreenPacket) Header() common.PacketHeader {

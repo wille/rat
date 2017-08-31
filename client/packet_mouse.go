@@ -4,9 +4,9 @@ import "rat/common"
 import "rat/client/screen"
 
 type MousePacket struct {
-	MonitorID   int `receive`
-	MouseButton int `receive`
-	Type        int `receive`
+	MonitorID   int `network:"receive"`
+	MouseButton int `network:"receive"`
+	Type        int `network:"receive"`
 }
 
 func (packet MousePacket) Header() common.PacketHeader {

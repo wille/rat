@@ -4,8 +4,8 @@ import "rat/common"
 import "rat/client/screen"
 
 type KeyPacket struct {
-	Key  int `receive`
-	Type int `receive`
+	Key  int `network:"receive"`
+	Type int `network:"receive"`
 }
 
 func (packet KeyPacket) Header() common.PacketHeader {

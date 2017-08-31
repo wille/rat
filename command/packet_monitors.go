@@ -10,7 +10,7 @@ import (
 )
 
 type MonitorsPacket struct {
-	Monitors []common.Monitor
+	Monitors []common.Monitor `network:"receive"`
 }
 
 func (packet MonitorsPacket) Header() common.PacketHeader {

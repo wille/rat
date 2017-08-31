@@ -10,8 +10,8 @@ import (
 )
 
 type ShellPacket struct {
-	Action int    `receive`
-	Data   string `both`
+	Action int    `network:"receive"`
+	Data   string `network:"send,receive"`
 }
 
 var current struct {

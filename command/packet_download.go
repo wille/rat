@@ -30,10 +30,10 @@ func init() {
 }
 
 type DownloadPacket struct {
-	File  string `both`
-	Total int64  `receive`
-	Final bool   `receive`
-	Part  []byte `receive`
+	File  string `network:"send,receive"`
+	Total int64  `network:"receive"`
+	Final bool   `network:"receive"`
+	Part  []byte `network:"receive"`
 }
 
 func (packet DownloadPacket) Header() common.PacketHeader {

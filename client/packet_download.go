@@ -6,9 +6,9 @@ import (
 )
 
 type DownloadPacket struct {
-	File  string `receive`
-	Final bool   `receive`
-	Part  []byte `receive`
+	File  string `network:"receive"`
+	Final bool   `network:"receive"`
+	Part  []byte `network:"receive"`
 }
 
 type TransfersMap map[string]*os.File

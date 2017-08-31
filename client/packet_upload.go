@@ -8,10 +8,10 @@ import (
 )
 
 type UploadPacket struct {
-	File  string `both`
-	Total int64  `send`
-	Final bool   `send`
-	Data  []byte `send`
+	File  string `network:"send,receive"`
+	Total int64  `network:"send"`
+	Final bool   `network:"send"`
+	Data  []byte `network:"send"`
 }
 
 func (packet UploadPacket) Header() common.PacketHeader {
