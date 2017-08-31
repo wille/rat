@@ -9,9 +9,9 @@ import (
 
 type UploadPacket struct {
 	File  string `both`
+	Total int64  `send`
 	Final bool   `send`
 	Data  []byte `send`
-	Total int64  `send`
 }
 
 func (packet UploadPacket) Header() common.PacketHeader {
@@ -48,7 +48,7 @@ func (packet UploadPacket) OnReceive() error {
 				fmt.Println(err.Error())
 				return
 			}
-			Queue <- &UploadPacket{packet.File, final, data[:read], stat.Size()}
+			Queue <- &UploadPacket{packet.File, stat.Size(), final, data[:read]}
 		}
 	}()
 

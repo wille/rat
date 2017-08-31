@@ -46,6 +46,11 @@ func (packet DownloadPacket) Init(c *Client) {
 
 func (packet DownloadPacket) OnReceive(c *Client) error {
 	transfer := Transfers[packet.File]
+
+	if transfer == nil {
+		return nil
+	}
+
 	transfer.Total = packet.Total
 	transfer.Read += int64(len(packet.Part))
 	_, err := transfer.Local.Write(packet.Part)
@@ -57,7 +62,7 @@ func (packet DownloadPacket) OnReceive(c *Client) error {
 	if ws, ok := c.Listeners[common.GetFileHeader]; ok {
 		e := DownloadProgressEvent{packet.File, transfer.Read, transfer.Total, ""}
 
-		if transfer.Complete() && packet.Final {
+		if packet.Final {
 			// Set temp file mapping so that we can download it from the web panel
 			tempKey := addDownload(TempFile{
 				Path: transfer.Local.Name(),
