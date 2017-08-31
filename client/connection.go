@@ -57,7 +57,11 @@ type OutgoingPacket interface {
 }
 
 func (c Connection) ReadPacket() (IncomingPacket, error) {
-	header, _ := c.ReadHeader()
+	header, err := c.ReadHeader()
+	if err != nil {
+		return nil, err
+	}
+
 	packet := GetIncomingPacket(header)
 
 	e, err := c.Reader.ReadPacket(packet)
