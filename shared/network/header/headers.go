@@ -1,4 +1,7 @@
-package shared
+package header
+
+// PacketHeader is the identifier for each packet
+type PacketHeader uint16
 
 const (
 	PingHeader         PacketHeader = 0

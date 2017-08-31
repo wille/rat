@@ -6,7 +6,7 @@ import (
 	"os"
 	"oslib"
 	"rat/client/drives"
-	"rat/shared"
+	"rat/shared/network/header"
 )
 
 type FileData struct {
@@ -21,8 +21,8 @@ type DirectoryPacket struct {
 	Files []FileData `network:"send"`
 }
 
-func (packet DirectoryPacket) Header() shared.PacketHeader {
-	return shared.DirectoryHeader
+func (packet DirectoryPacket) Header() header.PacketHeader {
+	return header.DirectoryHeader
 }
 
 func (packet *DirectoryPacket) Init() {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/shared"
+	"rat/shared/network/header"
 )
 
 type ScreenPacket struct {
@@ -12,8 +12,8 @@ type ScreenPacket struct {
 	Buffer []byte `network:"receive"`
 }
 
-func (packet ScreenPacket) Header() shared.PacketHeader {
-	return shared.ScreenHeader
+func (packet ScreenPacket) Header() header.PacketHeader {
+	return header.ScreenHeader
 }
 
 func (packet ScreenPacket) Init(c *Client) {

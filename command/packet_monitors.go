@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"rat/shared"
+	"rat/shared/network/header"
 
 	"encoding/json"
 
@@ -13,8 +14,8 @@ type MonitorsPacket struct {
 	Monitors []shared.Monitor `network:"receive"`
 }
 
-func (packet MonitorsPacket) Header() shared.PacketHeader {
-	return shared.MonitorsHeader
+func (packet MonitorsPacket) Header() header.PacketHeader {
+	return header.MonitorsHeader
 }
 
 func (packet MonitorsPacket) Init(c *Client) {
@@ -24,7 +25,7 @@ func (packet MonitorsPacket) Init(c *Client) {
 func (packet MonitorsPacket) OnReceive(c *Client) error {
 	c.Monitors = packet.Monitors
 
-	if ws, ok := c.Listeners[shared.MonitorsHeader]; ok {
+	if ws, ok := c.Listeners[header.MonitorsHeader]; ok {
 		json, err := json.Marshal(&c.Monitors)
 
 		if err != nil {
@@ -42,7 +43,7 @@ func (packet MonitorsPacket) OnReceive(c *Client) error {
 
 	fmt.Println("Monitors", c.Monitors)
 
-	delete(c.Listeners, shared.MonitorsHeader)
+	delete(c.Listeners, header.MonitorsHeader)
 
 	return nil
 }

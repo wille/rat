@@ -2,7 +2,7 @@ package main
 
 import (
 	"rat/client/process"
-	"rat/shared"
+	"rat/shared/network/header"
 	"rat/shared/processes"
 )
 
@@ -16,8 +16,8 @@ type ProcessPacket struct {
 	Processes []Process `network:"send,receive"`
 }
 
-func (packet ProcessPacket) Header() shared.PacketHeader {
-	return shared.ProcessHeader
+func (packet ProcessPacket) Header() header.PacketHeader {
+	return header.ProcessHeader
 }
 
 func (packet *ProcessPacket) Init() {

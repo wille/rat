@@ -1,6 +1,9 @@
 package main
 
-import "rat/shared"
+import (
+	"rat/shared"
+	"rat/shared/network/header"
+)
 
 type FilePacket struct {
 	Task        shared.FileTask `network:"send"`
@@ -8,8 +11,8 @@ type FilePacket struct {
 	Destination string          `network:"send"`
 }
 
-func (packet FilePacket) Header() shared.PacketHeader {
-	return shared.FileHeader
+func (packet FilePacket) Header() header.PacketHeader {
+	return header.FileHeader
 }
 
 func (packet FilePacket) Init(c *Client) {

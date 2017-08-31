@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"rat/client/shell"
 	"rat/shared"
+	"rat/shared/network/header"
 )
 
 type ShellPacket struct {
@@ -20,8 +21,8 @@ var current struct {
 	stdout  io.ReadCloser
 }
 
-func (packet ShellPacket) Header() shared.PacketHeader {
-	return shared.ShellHeader
+func (packet ShellPacket) Header() header.PacketHeader {
+	return header.ShellHeader
 }
 
 func (packet *ShellPacket) Init() {

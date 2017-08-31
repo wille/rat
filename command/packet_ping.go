@@ -2,15 +2,16 @@ package main
 
 import (
 	"rat/command/utils"
-	"rat/shared"
+	"rat/shared/network/header"
+
 	"time"
 )
 
 type Ping struct {
 }
 
-func (packet Ping) Header() shared.PacketHeader {
-	return shared.PingHeader
+func (packet Ping) Header() header.PacketHeader {
+	return header.PingHeader
 }
 
 func (packet Ping) Init(c *Client) {

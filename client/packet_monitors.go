@@ -3,14 +3,15 @@ package main
 import (
 	"rat/client/screen"
 	"rat/shared"
+	"rat/shared/network/header"
 )
 
 type MonitorsPacket struct {
 	Monitors []shared.Monitor `network:"send"`
 }
 
-func (packet MonitorsPacket) Header() shared.PacketHeader {
-	return shared.MonitorsHeader
+func (packet MonitorsPacket) Header() header.PacketHeader {
+	return header.MonitorsHeader
 }
 
 func (packet *MonitorsPacket) Init() {

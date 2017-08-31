@@ -7,7 +7,3 @@ import (
 var (
 	ByteOrder binary.ByteOrder = binary.LittleEndian
 )
-
-type (
-	PacketHeader uint16
-)

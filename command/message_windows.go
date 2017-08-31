@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/shared"
+	"rat/shared/network/header"
 
 	"golang.org/x/net/websocket"
 )
@@ -9,7 +9,7 @@ import (
 type WindowMessage Message
 
 func (d WindowMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
-	client.Listeners[shared.WindowsHeader] = ws
+	client.Listeners[header.WindowsHeader] = ws
 	client.Queue <- &WindowsPacket{}
 
 	return nil

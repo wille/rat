@@ -1,12 +1,14 @@
 package main
 
-import "rat/shared"
+import (
+	"rat/shared/network/header"
+)
 
 type PingPacket struct {
 }
 
-func (packet PingPacket) Header() shared.PacketHeader {
-	return shared.PingHeader
+func (packet PingPacket) Header() header.PacketHeader {
+	return header.PingHeader
 }
 
 func (packet *PingPacket) Init() {

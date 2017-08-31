@@ -1,6 +1,8 @@
 package main
 
-import "rat/shared"
+import (
+	"rat/shared/network/header"
+)
 
 type MousePacket struct {
 	Monitor int `network:"send"`
@@ -8,8 +10,8 @@ type MousePacket struct {
 	Event   int `network:"send"`
 }
 
-func (packet MousePacket) Header() shared.PacketHeader {
-	return shared.MouseHeader
+func (packet MousePacket) Header() header.PacketHeader {
+	return header.MouseHeader
 }
 
 func (packet MousePacket) Init(c *Client) {

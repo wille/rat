@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"rat/shared"
+	"rat/shared/network/header"
 	"strings"
 )
 
@@ -14,8 +15,8 @@ type FilePacket struct {
 	Destination string `network:"receive"`
 }
 
-func (packet FilePacket) Header() shared.PacketHeader {
-	return shared.FileHeader
+func (packet FilePacket) Header() header.PacketHeader {
+	return header.FileHeader
 }
 
 func (packet FilePacket) OnReceive() error {

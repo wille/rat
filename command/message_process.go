@@ -1,9 +1,8 @@
 package main
 
 import (
-	"rat/shared"
-
 	"encoding/json"
+	"rat/shared/network/header"
 
 	"golang.org/x/net/websocket"
 )
@@ -22,7 +21,7 @@ func (d ProcessQueryMessage) Handle(ws *websocket.Conn, client *Client, data str
 	var j ProcessQueryMessage
 	json.Unmarshal([]byte(data), &j)
 
-	client.Listeners[shared.ProcessHeader] = ws
+	client.Listeners[header.ProcessHeader] = ws
 
 	pids := []Process{}
 

