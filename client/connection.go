@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"net"
 	"rat/shared"
-	"rat/network"
+	"rat/shared/network"
 )
 
 type Connection struct {

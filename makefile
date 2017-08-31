@@ -73,7 +73,7 @@ fakebin:
 
 test:
 	go test \
-	rat/network \
+	rat/shared/network \
 	rat/command \
 	rat/client \
 	rat/client/computer \

@@ -8,7 +8,7 @@ import (
 	"math/rand"
 	"net"
 	"rat/shared"
-	"rat/network"
+	"rat/shared/network"
 	"strconv"
 	"strings"
 	"time"

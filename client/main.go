@@ -9,7 +9,7 @@ import (
 	"rat/client/startup"
 	"rat/shared"
 	"rat/shared/installpath"
-	"rat/network"
+	"rat/shared/network"
 	"time"
 )
 
