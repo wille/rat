@@ -74,6 +74,7 @@ fakebin:
 test:
 	go test \
 	rat/shared/network \
+	rat/shared/crypto \
 	rat/command \
 	rat/client \
 	rat/client/computer \
