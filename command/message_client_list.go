@@ -8,10 +8,14 @@ const (
 	Remove
 )
 
-type ClientEvent struct {
+type ClientMessage struct {
 	Type UpdateType  `json:"type"`
 	ID   int         `json:"id"`
 	Data interface{} `json:"data,omitempty"`
+}
+
+func (m ClientMessage) Header() MessageHeader {
+	return ClientUpdateEvent
 }
 
 type ClientData struct {
@@ -23,6 +27,6 @@ type ClientData struct {
 	OperatingSystem string `json:"operatingSystem,omitempty"`
 }
 
-func NewClientEvent(t UpdateType, client *Client, data interface{}) ClientEvent {
-	return ClientEvent{t, client.Id, data}
+func NewClientEvent(t UpdateType, client *Client, data interface{}) ClientMessage {
+	return ClientMessage{t, client.Id, data}
 }

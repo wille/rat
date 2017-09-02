@@ -1,13 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"os"
 	"rat/shared/network/header"
 
 	"path/filepath"
-
-	"golang.org/x/net/websocket"
 )
 
 type Transfer struct {
@@ -72,14 +69,7 @@ func (packet DownloadPacket) OnReceive(c *Client) error {
 			e.Key = tempKey
 		}
 
-		data, err := json.Marshal(&e)
-		if err != nil {
-			return err
-		}
-
-		event := newEvent(DownloadProgressUpdateEvent, c.Id, string(data))
-
-		err = websocket.JSON.Send(ws, &event)
+		sendMessage(ws, c, e)
 
 		if err != nil {
 			return err

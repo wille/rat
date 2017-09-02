@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"rat/shared/system"
 
 	"time"
@@ -9,19 +8,14 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type SysMessage Message
+type SysMessage struct {
+	Action system.Action `json:"action"`
+}
 
 func (sys SysMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
-	var action int
+	client.Queue <- &SysPacket{sys.Action}
 
-	err := json.Unmarshal([]byte(data), &action)
-	if err != nil {
-		return err
-	}
-
-	client.Queue <- &SysPacket{system.Action(action)}
-
-	if action == int(system.Disconnect) {
+	if sys.Action == system.Disconnect {
 		go func() {
 			time.Sleep(time.Second)
 			client.Conn.Close()

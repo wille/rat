@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-
 	"golang.org/x/net/websocket"
 )
 
@@ -16,12 +14,17 @@ type DisplayTransfer struct {
 	Key      string  `json:"key,omitempty"`
 }
 
-type DisplayTransferEvent Message
+type DisplayTransferMessage struct {
+	DisplayTransfers []DisplayTransfer `json:"transfers"`
+}
 
 var DisplayTransfers []DisplayTransfer
 
-func (d DisplayTransferEvent) Handle(ws *websocket.Conn, client *Client, data string) error {
-	err := json.Unmarshal([]byte(data), &DisplayTransfers)
+func (m DisplayTransferMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+	DisplayTransfers = m.DisplayTransfers
+	return nil
+}
 
-	return err
+func (m DisplayTransferMessage) Header() MessageHeader {
+	return TransfersEvent
 }

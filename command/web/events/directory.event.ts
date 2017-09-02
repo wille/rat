@@ -1,17 +1,24 @@
 /// <reference path="../views/view.ts" />
 
-interface DirectoryMessageParameters {
+interface FileEntry {
 	path: string;
 	directory: boolean;
-	size, time: string;
+	size: string;
+	time: string;
 }
 
-class DirectoryEvent implements IncomingEvent<DirectoryMessageParameters[]> {
+interface DirectoryMessageParameters {
+	files: FileEntry[];
+}
+
+class DirectoryEvent implements IncomingEvent<DirectoryMessageParameters> {
 
 	constructor(private view: DirectoryView) { }
 
-	public emit(data: DirectoryMessageParameters[]) {
+	public emit(d: DirectoryMessageParameters) {
 		this.view.table.innerHTML = "";
+
+		var data = d.files;
 
 		for (let i = 0; i < data.length; i++) {
 			let entry = data[i];

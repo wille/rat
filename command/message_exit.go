@@ -6,7 +6,8 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type ExitMessage Message
+type ExitMessage struct {
+}
 
 func (d ExitMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
 	os.Exit(0)

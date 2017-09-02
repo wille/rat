@@ -56,7 +56,7 @@ namespace Control {
 	interface MessageParameters {
 		event: EventType;
 		id: number;
-		data: string;
+		data: any;
 	}
 
 	interface LoginParameters {
@@ -88,15 +88,20 @@ namespace Control {
 				id = client.id;
 			}
 
-			this.write({
+			this.writeMessage({
 				event: data.header,
 				id: id,
-				data: Message.stringify(data)
+				data: data.params
 			} as MessageParameters);
 		}
 
 		public stop() {
 			this.socket.close();
+		}
+
+		private writeMessage(data: MessageParameters) {
+			this.socket.send(JSON.stringify({ id: data.id, event: data.event }));
+			this.socket.send(JSON.stringify(data.data));
 		}
 
 		private write(data: any) {
@@ -122,9 +127,18 @@ namespace Control {
 			this.write({ key: "key" } as LoginParameters);
 		}
 
+		private latest;
+
 		private onMessage(event: MessageEvent) {
+
 			let data: MessageParameters = JSON.parse(event.data);
-			Control.emit(data.event, data.data);
+			console.log(data);
+			if (data.event) {
+				this.latest = data.event;
+				return;
+			}
+
+			Control.emit(this.latest, data);
 		}
 
 		private onClose() {

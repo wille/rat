@@ -1,13 +1,9 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"rat/shared/network/header"
 
 	humanize "github.com/dustin/go-humanize"
-
-	"golang.org/x/net/websocket"
 )
 
 type FileData struct {
@@ -52,15 +48,7 @@ func (packet DirectoryPacket) OnReceive(c *Client) error {
 	}
 
 	if ws, ok := c.Listeners[header.DirectoryHeader]; ok {
-		json, err := json.Marshal(append(dirs, files...))
-
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		event := newEvent(DirectoryQueryEvent, c.Id, string(json))
-
-		err = websocket.JSON.Send(ws, &event)
+		err := sendMessage(ws, c, DirectoryListMessage{append(dirs, files...)})
 
 		if err != nil {
 			return err
