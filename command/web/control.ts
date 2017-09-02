@@ -1,10 +1,10 @@
-/// <reference path="events/downloadProgress.event.ts" />
-/// <reference path="events/transfers.event.ts" />
-/// <reference path="events/client.event.ts" />
+/// <reference path="messages/incoming/downloadProgress.event.ts" />
+/// <reference path="messages/incoming/transfers.event.ts" />
+/// <reference path="messages/incoming/client.event.ts" />
 
 namespace Control {
 
-	let events: IncomingEvent<any>[] = [];
+	let events: IncomingMessage<any>[] = [];
 
 	export enum EventType {
 		CLIENT_UPDATE = 1,
@@ -27,7 +27,7 @@ namespace Control {
 		WINDOWS = 18
 	}
 
-	export function addEvent(eventType: EventType, event: IncomingEvent<any>) {
+	export function addEvent(eventType: EventType, event: IncomingMessage<any>) {
 		events[eventType] = event;
 	}
 
@@ -81,7 +81,7 @@ namespace Control {
 			this.reconnect();
 		}
 
-		public send(data: Message<any>, client?: Client) {
+		public send(data: OutgoingMessage<any>, client?: Client) {
 			let id = 0;
 
 			if (client) {

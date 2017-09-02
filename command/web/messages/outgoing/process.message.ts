@@ -1,4 +1,4 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 enum ProcessRequestType {
 	QUERY = 0,
@@ -10,7 +10,7 @@ interface ProcessMessageParameters {
     pids?: ProcessId[];
 }
 
-class ProcessMessage extends Message<ProcessMessageParameters> {
+class ProcessMessage extends OutgoingMessage<ProcessMessageParameters> {
 
     constructor(params: ProcessMessageParameters) {
         super(Control.EventType.PROCESS, params);

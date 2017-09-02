@@ -4,7 +4,7 @@ interface TransfersParameters {
 	key, remote, local: string;
 }
 
-class TransfersEvent implements IncomingEvent<TransfersParameters[]> {
+class TransfersEvent implements IncomingMessage<TransfersParameters[]> {
 
 	public emit(data: TransfersParameters[]) {
 		for (let i = 0; i < data.length; i++) {

@@ -1,4 +1,4 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 interface MouseInputMessageParameters {
     monitorId: MonitorId;
@@ -6,7 +6,7 @@ interface MouseInputMessageParameters {
     state: InputState;
 }
 
-class MouseInputMessage extends Message<MouseInputMessageParameters> {
+class MouseInputMessage extends OutgoingMessage<MouseInputMessageParameters> {
 
     constructor(params: MouseInputMessageParameters) {
         super(Control.EventType.MOUSE_MOVE, params);

@@ -1,6 +1,6 @@
 type TerminalParameter = string
 
-class TerminalEvent implements IncomingEvent<TerminalParameter> {
+class TerminalEvent implements IncomingMessage<TerminalParameter> {
 
 	constructor(private view: TerminalView) {
 

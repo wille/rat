@@ -1,4 +1,4 @@
-/// <reference path="../messages/terminal.message.ts" />
+/// <reference path="../messages/outgoing/terminal.message.ts" />
 
 class TerminalView extends SubView {
 

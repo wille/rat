@@ -1,4 +1,4 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 enum FileAction {
 	// Touch file
@@ -20,7 +20,7 @@ interface FileMessageParameters {
     destination?: string;
 }
 
-class FileMessage extends Message<FileMessageParameters> {
+class FileMessage extends OutgoingMessage<FileMessageParameters> {
 
     constructor(params: FileMessageParameters) {
         super(Control.EventType.FILE, params);

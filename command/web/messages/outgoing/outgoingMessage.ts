@@ -1,4 +1,4 @@
-abstract class Message<T> {
+abstract class OutgoingMessage<T> {
 
     /**
      * Outgoing websocket message
@@ -7,9 +7,5 @@ abstract class Message<T> {
      */
     constructor(public readonly header: Control.EventType, public readonly params: T) {
 
-    }
-
-    public static stringify(msg: Message<any>): string {
-        return JSON.stringify(msg.params);
     }
 }

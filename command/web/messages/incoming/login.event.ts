@@ -1,10 +1,10 @@
-/// <reference path="../views/login.view.ts" />
+/// <reference path="../../views/login.view.ts" />
 
 interface LoginParameters {
 	result: boolean;
 }
 
-class LoginEvent implements IncomingEvent<LoginParameters> {
+class LoginEvent implements IncomingMessage<LoginParameters> {
 
 	constructor(private view: LoginView) {
 

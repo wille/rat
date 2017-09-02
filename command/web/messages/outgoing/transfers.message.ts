@@ -1,6 +1,6 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
-class TransfersMessage extends Message<Transfer[]> {
+class TransfersMessage extends OutgoingMessage<Transfer[]> {
 
     /**
      * Send all transfers cached to the server

@@ -1,4 +1,4 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 interface ScreenMessageParameters {
     active: boolean;
@@ -6,7 +6,7 @@ interface ScreenMessageParameters {
     monitor?: number;
 }
 
-class ScreenMessage extends Message<ScreenMessageParameters> {
+class ScreenMessage extends OutgoingMessage<ScreenMessageParameters> {
 
     constructor(params: ScreenMessageParameters) {
         super(Control.EventType.SCREEN, params);

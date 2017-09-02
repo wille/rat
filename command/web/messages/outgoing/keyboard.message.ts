@@ -1,11 +1,11 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 interface KeyMessageParameters {
     keyCode: number;
     state: InputState;
 }
 
-class KeyMessage extends Message<KeyMessageParameters> {
+class KeyMessage extends OutgoingMessage<KeyMessageParameters> {
 
     constructor(params: KeyMessageParameters) {
         super(Control.EventType.KEY, params);

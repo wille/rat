@@ -1,5 +1,5 @@
-/// <reference path="events/login.event.ts" />
-/// <reference path="events/autologin.event.ts" />
+/// <reference path="messages/incoming/login.event.ts" />
+/// <reference path="messages/incoming/autologin.event.ts" />
 
 /// <reference path="containers/mainview.container.ts" />
 /// <reference path="containers/subview.container.ts" />

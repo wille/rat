@@ -1,4 +1,4 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 enum TerminalAction {
     START = 0,
@@ -11,7 +11,7 @@ interface TerminalMessageParameters {
     command?: string;
 }
 
-class TerminalMessage extends Message<TerminalMessageParameters> {
+class TerminalMessage extends OutgoingMessage<TerminalMessageParameters> {
 
     /**
      * Remote Shell

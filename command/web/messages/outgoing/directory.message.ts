@@ -1,10 +1,10 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 interface DirectoryMessageParameters {
     path: string;
 }
 
-class DirectoryMessage extends Message<DirectoryMessageParameters> {
+class DirectoryMessage extends OutgoingMessage<DirectoryMessageParameters> {
 
     /**
      * Browse remote file system

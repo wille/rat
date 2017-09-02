@@ -1,10 +1,10 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 interface DownloadMessageParameters {
     file: string;
 }
 
-class DownloadMessage extends Message<DownloadMessageParameters> {
+class DownloadMessage extends OutgoingMessage<DownloadMessageParameters> {
 
     /**
      * Request remote file download
