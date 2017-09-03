@@ -14,8 +14,8 @@ type Window struct {
 	Handle int `json:"handle"`
 
 	// Window title
-	Title string `json:"title"`
+	Title string `json:"title,omitempty"`
 
 	// Window dimensions
-	Rect Rect `json:"rect"`
+	Rect Rect `json:"rect,omitempty"`
 }

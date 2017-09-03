@@ -13,5 +13,4 @@ class WindowsIncomingMessage implements IncomingMessage<WindowsParameters> {
             this.view.addFrame(frame);
         }
     }
-
 }

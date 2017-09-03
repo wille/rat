@@ -27,8 +27,19 @@ class WindowView extends SubView {
     }
 
     public addFrame(window: Frame) {
-        let row = this.table.insertRow();
-        row.insertCell().innerText = window.title;
+        let row: HTMLTableRowElement;
+        let title;
+
+        if (window.title) {
+            row = this.table.insertRow(0);
+            title = window.title;
+        } else {
+            row = this.table.insertRow();
+            title = "Undefined";
+            row.className = "undefined";
+        }
+
+        row.insertCell().innerText = title;        
     }
 
     public get table(): HTMLTableElement {

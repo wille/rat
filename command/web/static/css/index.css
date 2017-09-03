@@ -65,3 +65,8 @@ body {
 .scale {
 	display: inline-block;
 }
+
+tr.undefined {
+	font-style: italic;
+	color: #AEAEAE;
+}
