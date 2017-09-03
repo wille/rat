@@ -30,7 +30,7 @@ class WindowView extends SubView {
         let row: HTMLTableRowElement;
         let title;
 
-        if (window.title) {
+        if (window.title && window.title.length > 0) {
             row = this.table.insertRow(0);
             title = window.title;
         } else {
