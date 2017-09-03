@@ -5,12 +5,12 @@
 
 #include "window.h"
 
-LPWSTR GetWindowTitle(HWND handle) {
+LPSTR GetWindowTitle(HWND handle) {
     int length = GetWindowTextLengthA(handle) + 1;
 
-    LPWSTR buffer = (LPWSTR)malloc(length * sizeof(WCHAR));
+    LPSTR buffer = (LPSTR)malloc(length * sizeof(WCHAR));
 
-    GetWindowTextW(handle, buffer, length + 1);
+    GetWindowTextA(handle, buffer, length + 1);
 
     return buffer;
 }
