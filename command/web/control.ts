@@ -53,10 +53,9 @@ namespace Control {
 		}
 	}
 
-	interface MessageParameters {
+	interface MessageHeader {
 		event: EventType;
 		id: number;
-		data: any;
 	}
 
 	interface LoginParameters {
@@ -69,6 +68,8 @@ namespace Control {
 		
 		private key: string;
 		private socket: WebSocket;
+
+		private currentType: EventType;
 
 		constructor() {
 			addEvent(EventType.DOWNLOAD_PROGRESS, new DownloadProgressEvent());
@@ -87,21 +88,22 @@ namespace Control {
 			if (client) {
 				id = client.id;
 			}
-
-			this.writeMessage({
+			
+			let header: MessageHeader = {
 				event: data.header,
-				id: id,
-				data: data.params
-			} as MessageParameters);
+				id: id
+			}
+
+			this.writeMessage(header, data.params);
 		}
 
 		public stop() {
 			this.socket.close();
 		}
 
-		private writeMessage(data: MessageParameters) {
-			this.socket.send(JSON.stringify({ id: data.id, event: data.event }));
-			this.socket.send(JSON.stringify(data.data));
+		private writeMessage(header: MessageHeader, data: any) {
+			this.socket.send(JSON.stringify(header));
+			this.socket.send(JSON.stringify(data));
 		}
 
 		private write(data: any) {
@@ -127,18 +129,28 @@ namespace Control {
 			this.write({ key: "key" } as LoginParameters);
 		}
 
-		private latest;
-
 		private onMessage(event: MessageEvent) {
+			let data: MessageHeader = JSON.parse(event.data);
 
-			let data: MessageParameters = JSON.parse(event.data);
-			console.log(data);
 			if (data.event) {
-				this.latest = data.event;
-				return;
-			}
+				if (this.currentType) {
+					this.close();
+					return;
+				}
 
-			Control.emit(this.latest, data);
+				this.currentType = data.event;
+			} else {
+				Control.emit(this.currentType, data);
+				this.currentType = null;
+			}
+		}
+
+		private close(reason?: string) {
+			this.socket.close();
+
+			if (reason) {
+				console.error("closed websocket:", reason);
+			}
 		}
 
 		private onClose() {
