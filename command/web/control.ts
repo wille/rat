@@ -1,6 +1,6 @@
-/// <reference path="messages/incoming/downloadProgress.event.ts" />
-/// <reference path="messages/incoming/transfers.event.ts" />
-/// <reference path="messages/incoming/client.event.ts" />
+/// <reference path="messages/incoming/downloadProgress.message.ts" />
+/// <reference path="messages/incoming/transfers.message.ts" />
+/// <reference path="messages/incoming/client.message.ts" />
 
 namespace Control {
 
