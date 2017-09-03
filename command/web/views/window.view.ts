@@ -4,7 +4,12 @@ class WindowView extends SubView {
         super("static/window.html", "Window List", client);
     }
 
+    private clear() {
+        this.table.innerHTML = "";
+    }
+
     private reload() {
+        this.clear();
         Control.instance.send(new WindowsOutgoingMessage(this), this.client);
     }
 
@@ -19,6 +24,11 @@ class WindowView extends SubView {
 
     public onLeave() {
 
+    }
+
+    public addFrame(window: Frame) {
+        let row = this.table.insertRow();
+        row.insertCell().innerText = window.title;
     }
 
     public get table(): HTMLTableElement {

@@ -9,7 +9,9 @@ class WindowsIncomingMessage implements IncomingMessage<WindowsParameters> {
     }
 
 	public emit(data: WindowsParameters) {
-        console.log(data);
+        for (let frame of data.frames) {
+            this.view.addFrame(frame);
+        }
     }
 
 }
