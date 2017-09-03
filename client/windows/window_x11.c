@@ -25,10 +25,16 @@ Rect GetWindowDimensions(Display *display, Window window) {
 void EnumWindows(Display *display, Window window) {
 	XTextProperty text;
 	XGetWMName(display, window, &text);
+
+	char *title = text.value;
+
+	if (title == NULL) {
+		XFetchName(display, window, &title);
+	}
 	
 	Frame frame;
 	frame.handle = window;
-	frame.title = text.value;
+	frame.title = title;
 	frame.rect = GetWindowDimensions(display, window);
 	WindowCallback(frame);
 
