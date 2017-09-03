@@ -108,7 +108,7 @@ class ClientContextMenu extends ContextMenu {
 
 	private onViewWindows() {
 		this.forEach((client) => {
-			Control.instance.send(new WindowsMessage({}), client);
+			sub.setView(new WindowView(client));
 			return true;
 		});
 	}
