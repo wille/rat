@@ -1,4 +1,4 @@
-#include <wchar.h>
+#define HANDLE int
 
 typedef struct {
     int x;
@@ -8,20 +8,19 @@ typedef struct {
 } Rect;
 
 typedef struct {
-    wchar_t *title;
-    int handle;
+    char *title;
+    HANDLE handle;
     Rect rect;
-} Window;
-
+} Frame;
 
 // Callback function defined in Go
-extern void WindowCallback(Window window);
+extern void WindowCallback(Frame);
 
 // Query all windows and populate windows array
 void QueryWindows(void);
 
 // Get window coordinates and dimensions
-Rect GetWindowDimensions(int handle);
+Rect GetWindowDimensions(HANDLE handle);
 
 // Move window to coordinates
-void SetWindowPosition(int handle, Rect rect);
+void SetWindowPosition(HANDLE handle, Rect rect);

