@@ -3,8 +3,8 @@
 typedef struct {
     int x;
     int y;
-    int width;
-    int height;
+    unsigned int width;
+    unsigned int height;
 } Rect;
 
 typedef struct {
@@ -18,9 +18,6 @@ extern void WindowCallback(Frame);
 
 // Query all windows and populate windows array
 void QueryWindows(void);
-
-// Get window coordinates and dimensions
-Rect GetWindowDimensions(HANDLE handle);
 
 // Move window to coordinates
 void SetWindowPosition(HANDLE handle, Rect rect);

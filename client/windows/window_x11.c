@@ -6,6 +6,21 @@
 
 #include "window.h"
 
+Rect GetWindowDimensions(Display *display, Window window) {
+	Window root;
+	int x, y;
+	unsigned int width, height;
+	unsigned int border_width, depth;
+
+	XGetGeometry(display, window, &root, &x, &y, &width, &height, &border_width, &depth);
+
+	Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.width = width;
+	rect.height = height;
+	return rect;
+}
 
 void EnumWindows(Display *display, Window window) {
 	XTextProperty text;
@@ -14,7 +29,7 @@ void EnumWindows(Display *display, Window window) {
 	Frame frame;
 	frame.handle = window;
 	frame.title = text.value;
-	frame.rect = GetWindowDimensions(window);
+	frame.rect = GetWindowDimensions(display, window);
 	WindowCallback(frame);
 
 	Window root, parent;
@@ -35,15 +50,6 @@ void QueryWindows(void) {
 	Display *display = XOpenDisplay(NULL);
 	Window root = XDefaultRootWindow(display);
 	EnumWindows(display, root);
-}
-
-Rect GetWindowDimensions(int handle) {
-	Rect rect;
-	rect.x = 0;
-	rect.y = 0;
-	rect.width = 0;
-	rect.height = 0;
-	return rect;
 }
 
 void SetWindowPosition(int handle, Rect rect) {
