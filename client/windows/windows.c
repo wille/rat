@@ -16,10 +16,10 @@ LPWSTR GetWindowTitle(HWND handle) {
 }
 
 BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
-    Window window;
+    Frame window;
 
     window.title = GetWindowTitle(handle);
-    window.handle = (int)handle;
+    window.handle = (HANDLE)handle;
     window.rect = GetWindowDimensions(handle);
 
     WindowCallback(window);
@@ -33,7 +33,7 @@ void QueryWindows(void) {
     EnumWindows(EnumWindowsCallback, 0);
 }
 
-Rect GetWindowDimensions(int handle) {
+Rect GetWindowDimensions(HANDLE handle) {
     RECT wrect;
     GetWindowRect((HWND) handle, &wrect);
 
@@ -46,6 +46,6 @@ Rect GetWindowDimensions(int handle) {
     return rect;
 }
 
-void SetWindowPosition(int handle, Rect rect) {
+void SetWindowPosition(HANDLE handle, Rect rect) {
     MoveWindow((HWND) handle, rect.x, rect.y, rect.width, rect.height, TRUE);
 }
