@@ -8,6 +8,6 @@ interface KeyMessageParameters {
 class KeyMessage extends OutgoingMessage<KeyMessageParameters> {
 
     constructor(params: KeyMessageParameters) {
-        super(Control.EventType.KEY, params);
+        super(Control.MessageType.KEY, params);
     }
 }

@@ -30,8 +30,8 @@ class DirectoryView extends SubView {
 	}
 
 	public onEnter() {
-		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
-		Control.addEvent(Control.EventType.DIRECTORY, new DirectoryEvent(this));
+		Control.addEvent(Control.MessageType.DOWNLOAD, new DownloadEvent());
+		Control.addEvent(Control.MessageType.DIRECTORY, new DirectoryEvent(this));
 
 		this.backElement.onclick = () => this.back();
 
@@ -48,8 +48,8 @@ class DirectoryView extends SubView {
 	}
 
 	public onLeave() {
-		Control.removeEvent(Control.EventType.DOWNLOAD);
-		Control.removeEvent(Control.EventType.DIRECTORY);
+		Control.removeEvent(Control.MessageType.DOWNLOAD);
+		Control.removeEvent(Control.MessageType.DIRECTORY);
 	}
 
 	public get current(): string {

@@ -9,6 +9,6 @@ interface ScreenMessageParameters {
 class ScreenMessage extends OutgoingMessage<ScreenMessageParameters> {
 
     constructor(params: ScreenMessageParameters) {
-        super(Control.EventType.SCREEN, params);
+        super(Control.MessageType.SCREEN, params);
     }
 }

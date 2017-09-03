@@ -11,6 +11,6 @@ class DirectoryMessage extends OutgoingMessage<DirectoryMessageParameters> {
      * @param path Absolute path to the remote directory
      */
     constructor(path: string) {
-        super(Control.EventType.DIRECTORY, { path: path } as DirectoryMessageParameters);
+        super(Control.MessageType.DIRECTORY, { path: path } as DirectoryMessageParameters);
     }
 }

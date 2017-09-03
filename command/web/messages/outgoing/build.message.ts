@@ -22,6 +22,6 @@ interface BuildMessageParameters {
 class BuildMessage extends OutgoingMessage<BuildMessageParameters> {
 
     constructor(params: BuildMessageParameters) {
-        super(Control.EventType.BUILD, params);
+        super(Control.MessageType.BUILD, params);
     }
 }

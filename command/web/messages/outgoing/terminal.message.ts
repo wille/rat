@@ -19,6 +19,6 @@ class TerminalMessage extends OutgoingMessage<TerminalMessageParameters> {
      * @param command Command string, may be empty
      */
     constructor(action: TerminalAction, command: string = "") {
-        super(Control.EventType.TERMINAL, { action: action, command: command } as TerminalMessageParameters);
+        super(Control.MessageType.TERMINAL, { action: action, command: command } as TerminalMessageParameters);
     }
 }

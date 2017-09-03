@@ -30,11 +30,11 @@ class BuildView extends SubView {
 		this.iconElement = <HTMLInputElement>document.getElementById("icon");
 		this.iconElement.onchange = () => this.updateIcon();
 
-		Control.addEvent(Control.EventType.DOWNLOAD, new DownloadEvent());
+		Control.addEvent(Control.MessageType.DOWNLOAD, new DownloadEvent());
 	}
 
 	public onLeave() {
-		Control.removeEvent(Control.EventType.DOWNLOAD);
+		Control.removeEvent(Control.MessageType.DOWNLOAD);
 	}
 
 	private get name() {

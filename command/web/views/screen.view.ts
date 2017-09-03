@@ -37,7 +37,7 @@ class ScreenView extends SubView {
 
 		// Setup monitor dropdown button
 		let monitorsElement = super.getElementById("monitors");
-		Control.addEvent(Control.EventType.MONITOR, new MonitorEvent(this));
+		Control.addEvent(Control.MessageType.MONITOR, new MonitorEvent(this));
 
 		// Setup input events
 		this.screenElement = <HTMLImageElement>super.getElementById("screen");
@@ -54,7 +54,7 @@ class ScreenView extends SubView {
 			// Set FPS label text
 			this.fps.innerHTML = fps + " FPS";
 		});
-		Control.addEvent(Control.EventType.SCREEN, this.screenEvent);
+		Control.addEvent(Control.MessageType.SCREEN, this.screenEvent);
 
 		Statusbar.addElement(this.fps);
 
@@ -71,8 +71,8 @@ class ScreenView extends SubView {
 	}
 
 	public onLeave() {
-		Control.removeEvent(Control.EventType.SCREEN);
-		Control.removeEvent(Control.EventType.MONITOR);
+		Control.removeEvent(Control.MessageType.SCREEN);
+		Control.removeEvent(Control.MessageType.MONITOR);
 
 		Statusbar.removeElement(this.fps);
 

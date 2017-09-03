@@ -9,6 +9,6 @@ interface MouseInputMessageParameters {
 class MouseInputMessage extends OutgoingMessage<MouseInputMessageParameters> {
 
     constructor(params: MouseInputMessageParameters) {
-        super(Control.EventType.MOUSE_MOVE, params);
+        super(Control.MessageType.MOUSE_MOVE, params);
     }
 }

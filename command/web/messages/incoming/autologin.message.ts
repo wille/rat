@@ -7,7 +7,7 @@ class AutoLoginEvent implements IncomingMessage<AutoLoginParameters> {
 	public emit(data: AutoLoginParameters) {
 		let authenticated = data.result;
 
-		Control.removeEvent(Control.EventType.LOGIN);
+		Control.removeEvent(Control.MessageType.LOGIN);
 
 		if (authenticated) {
 			console.log("logged in successfully");

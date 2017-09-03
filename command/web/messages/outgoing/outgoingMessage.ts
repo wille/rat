@@ -5,7 +5,7 @@ abstract class OutgoingMessage<T> {
      * @param header The message numeric header
      * @param params The message parameters
      */
-    constructor(public readonly header: Control.EventType, public readonly params: T) {
+    constructor(public readonly header: Control.MessageType, public readonly params: T) {
 
     }
 }

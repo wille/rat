@@ -10,7 +10,7 @@ class ProcessView extends SubView {
 	public onEnter() {
 		this.table = <HTMLTableElement>this.getElementById("processes");
 
-		Control.addEvent(Control.EventType.PROCESS, new ProcessEvent(this.table));
+		Control.addEvent(Control.MessageType.PROCESS, new ProcessEvent(this.table));
 		this.update();
 
 		let killElement = this.getElementById("kill");
@@ -24,7 +24,7 @@ class ProcessView extends SubView {
 	}
 
 	public onLeave() {
-		Control.removeEvent(Control.EventType.PROCESS);
+		Control.removeEvent(Control.MessageType.PROCESS);
 	}
 
 	public getSelectedProcesses() {

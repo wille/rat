@@ -23,6 +23,6 @@ interface FileMessageParameters {
 class FileMessage extends OutgoingMessage<FileMessageParameters> {
 
     constructor(params: FileMessageParameters) {
-        super(Control.EventType.FILE, params);
+        super(Control.MessageType.FILE, params);
     }
 }

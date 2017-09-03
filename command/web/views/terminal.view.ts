@@ -24,13 +24,13 @@ class TerminalView extends SubView {
 			this.terminal.innerHTML = "";
 		};
 	
-		Control.addEvent(Control.EventType.TERMINAL, new TerminalEvent(this));
+		Control.addEvent(Control.MessageType.TERMINAL, new TerminalEvent(this));
 
 		this.start();
 	}
 
 	public onLeave() {
-		Control.removeEvent(Control.EventType.TERMINAL);
+		Control.removeEvent(Control.MessageType.TERMINAL);
 
 		this.stop();
 	}

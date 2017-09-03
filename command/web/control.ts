@@ -6,7 +6,7 @@ namespace Control {
 
 	let events: IncomingMessage<any>[] = [];
 
-	export enum EventType {
+	export enum MessageType {
 		CLIENT_UPDATE = 1,
 		SYS = 2,
 		DIRECTORY = 3, // directory.event.ts
@@ -27,15 +27,15 @@ namespace Control {
 		WINDOWS = 18
 	}
 
-	export function addEvent(eventType: EventType, event: IncomingMessage<any>) {
+	export function addEvent(eventType: MessageType, event: IncomingMessage<any>) {
 		events[eventType] = event;
 	}
 
-	export function removeEvent(eventType: EventType) {
+	export function removeEvent(eventType: MessageType) {
 		delete events[eventType];
 	}
 
-	export function emit(eventType: EventType, data: any) {
+	export function emit(eventType: MessageType, data: any) {
 		let event = events[eventType];
 
 		if (event) {
@@ -54,7 +54,7 @@ namespace Control {
 	}
 
 	interface MessageHeader {
-		event: EventType;
+		event: MessageType;
 		id: number;
 	}
 
@@ -69,12 +69,12 @@ namespace Control {
 		private key: string;
 		private socket: WebSocket;
 
-		private currentType: EventType;
+		private currentType: MessageType;
 
 		constructor() {
-			addEvent(EventType.DOWNLOAD_PROGRESS, new DownloadProgressEvent());
-			addEvent(EventType.TRANSFERS, new TransfersEvent());
-			addEvent(EventType.CLIENT_UPDATE, new ClientUpdateEvent());
+			addEvent(MessageType.DOWNLOAD_PROGRESS, new DownloadProgressEvent());
+			addEvent(MessageType.TRANSFERS, new TransfersEvent());
+			addEvent(MessageType.CLIENT_UPDATE, new ClientUpdateEvent());
 		}
 
 		public start(key: string) {
@@ -95,10 +95,6 @@ namespace Control {
 			}
 
 			this.writeMessage(header, data.params);
-		}
-
-		public stop() {
-			this.socket.close();
 		}
 
 		private writeMessage(header: MessageHeader, data: any) {
@@ -145,7 +141,7 @@ namespace Control {
 			}
 		}
 
-		private close(reason?: string) {
+		public close(reason?: string) {
 			this.socket.close();
 
 			if (reason) {
@@ -168,7 +164,7 @@ namespace Control {
 		Control.instance.start(key);
 	}
 
-	export function stop() {
-		Control.instance.stop();
+	export function stop(reason?: string) {
+		Control.instance.close(reason);
 	}
 }

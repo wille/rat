@@ -8,6 +8,6 @@ interface MouseMotionMessageParameters {
 class MouseMotionMessage extends OutgoingMessage<MouseMotionMessageParameters> {
 
     constructor(params: MouseMotionMessageParameters) {
-        super(Control.EventType.MOUSE_MOVE, params);
+        super(Control.MessageType.MOUSE_MOVE, params);
     }
 }

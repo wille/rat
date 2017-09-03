@@ -11,6 +11,6 @@ class DownloadMessage extends OutgoingMessage<DownloadMessageParameters> {
      * @param file Path to the remote file to be downloaded
      */
     constructor(file: string) {
-        super(Control.EventType.DOWNLOAD, { file: file } as DownloadMessageParameters);
+        super(Control.MessageType.DOWNLOAD, { file: file } as DownloadMessageParameters);
     }
 }

@@ -13,6 +13,6 @@ interface ProcessMessageParameters {
 class ProcessMessage extends OutgoingMessage<ProcessMessageParameters> {
 
     constructor(params: ProcessMessageParameters) {
-        super(Control.EventType.PROCESS, params);
+        super(Control.MessageType.PROCESS, params);
     }
 }

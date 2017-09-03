@@ -7,6 +7,6 @@ class TransfersMessage extends OutgoingMessage<Transfer[]> {
      * @param transfers
      */
     constructor(transfers: Transfer[]) {
-        super(Control.EventType.TRANSFERS, transfers);
+        super(Control.MessageType.TRANSFERS, transfers);
     }
 }

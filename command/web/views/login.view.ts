@@ -17,13 +17,13 @@ class LoginView extends MainView {
 
 		this.submitElement.onclick = () => this.login();
 
-		Control.addEvent(Control.EventType.LOGIN, new LoginEvent(this));
+		Control.addEvent(Control.MessageType.LOGIN, new LoginEvent(this));
 
 		Statusbar.hide();
 	}
 
 	public onLeave() {
-		Control.removeEvent(Control.EventType.LOGIN);
+		Control.removeEvent(Control.MessageType.LOGIN);
 		Statusbar.show();
 	}
 
