@@ -4,7 +4,7 @@ interface DownloadProgressParameters {
 	key: string;
 }
 
-class DownloadProgressEvent implements IncomingMessage<DownloadProgressParameters> {
+class DownloadProgressEvent implements IncomingEvent<DownloadProgressParameters> {
 
 	public emit(data: DownloadProgressParameters) {
 		for (let t of Transfers.TRANSFERS) {

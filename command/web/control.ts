@@ -1,10 +1,10 @@
-/// <reference path="messages/incoming/downloadProgress.message.ts" />
-/// <reference path="messages/incoming/transfers.message.ts" />
-/// <reference path="messages/incoming/client.message.ts" />
+/// <reference path="events/downloadProgress.event.ts" />
+/// <reference path="events/client.event.ts" />
+/// <reference path="messages/transfers.message.ts" />
 
 namespace Control {
 
-	let events: IncomingMessage<any>[] = [];
+	let events: IncomingEvent<any>[] = [];
 
 	export enum MessageType {
 		CLIENT_UPDATE = 1,
@@ -27,7 +27,7 @@ namespace Control {
 		WINDOWS = 18
 	}
 
-	export function addEvent(eventType: MessageType, event: IncomingMessage<any>) {
+	export function addEvent(eventType: MessageType, event: IncomingEvent<any>) {
 		events[eventType] = event;
 	}
 

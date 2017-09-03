@@ -2,7 +2,7 @@ interface MonitorParameters {
 	id, w, h: number;
 }
 
-class MonitorEvent implements IncomingMessage<MonitorParameters[]> {
+class MonitorEvent implements IncomingEvent<MonitorParameters[]> {
 
 	constructor(private parent: ScreenView) {
 

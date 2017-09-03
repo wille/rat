@@ -18,7 +18,7 @@ interface ClientUpdateParameters {
 	data: ClientFields;
 }
 
-class ClientUpdateEvent implements IncomingMessage<ClientUpdateParameters> {
+class ClientUpdateEvent implements IncomingEvent<ClientUpdateParameters> {
 
 	public emit(data: ClientUpdateParameters) {
 		let params = data.data;

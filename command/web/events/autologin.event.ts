@@ -2,7 +2,7 @@ interface AutoLoginParameters {
 	result: boolean;
 }
 
-class AutoLoginEvent implements IncomingMessage<AutoLoginParameters> {
+class AutoLoginEvent implements IncomingEvent<AutoLoginParameters> {
 
 	public emit(data: AutoLoginParameters) {
 		let authenticated = data.result;

@@ -1,4 +1,4 @@
-/// <reference path="../../views/view.ts" />
+/// <reference path="../views/view.ts" />
 
 interface FileEntry {
 	path: string;
@@ -11,7 +11,7 @@ interface DirectoryMessageParameters {
 	files: FileEntry[];
 }
 
-class DirectoryEvent implements IncomingMessage<DirectoryMessageParameters> {
+class DirectoryEvent implements IncomingEvent<DirectoryMessageParameters> {
 
 	constructor(private view: DirectoryView) { }
 

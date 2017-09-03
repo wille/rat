@@ -2,7 +2,7 @@ interface WindowsParameters {
 	frames: Frame[];
 }
 
-class WindowsIncomingMessage implements IncomingMessage<WindowsParameters> {
+class WindowsIncomingMessage implements IncomingEvent<WindowsParameters> {
 
     constructor(private view: WindowView) {
 

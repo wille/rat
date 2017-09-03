@@ -4,7 +4,7 @@
 
 type ScreenParameter = string
 
-class ScreenEvent implements IncomingMessage<ScreenParameter> {
+class ScreenEvent implements IncomingEvent<ScreenParameter> {
 
 	private fps = 0;
 	private interval: number;
