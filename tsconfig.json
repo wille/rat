@@ -4,7 +4,9 @@
         "noImplicitAny": false,
         "sourceMap": true,
 		"outFile": "command/web/static/lib.js",
-		"removeComments": true,
-		"rootDir": "command/web/"
-    }
+		"removeComments": true
+    },
+    "include": [
+        "command/web/**/*"
+    ]
 }
