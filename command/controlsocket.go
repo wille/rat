@@ -3,91 +3,55 @@ package main
 import (
 	"fmt"
 	"net/http"
-
-	"encoding/json"
+	"reflect"
 
 	"golang.org/x/net/websocket"
-)
-
-const (
-	ClientUpdateEvent           = 1
-	ClientSysEvent              = 2
-	DirectoryQueryEvent         = 3
-	DownloadQueryEvent          = 4
-	TransfersEvent              = 5
-	DownloadProgressUpdateEvent = 6
-	ScreenUpdateEvent           = 7
-	ProcessQueryEvent           = 8
-	MonitorQueryEvent           = 9
-	MouseMove                   = 10
-	Mouse                       = 11
-	Key                         = 12
-	Build                       = 13
-	Shell                       = 14
-	ModifyFileEvent             = 15
-	Exit                        = 16
-	AuthenticationEvent         = 17
-	Windows                     = 18
 )
 
 // Event incoming message data
 type Event struct {
 	// Event code
-	Event int `json:"event"`
+	Event MessageHeader `json:"event"`
 
 	// ClientID
 	ClientID int `json:"id"`
-
-	// Data is the event data (might be JSON)
-	Data string `json:"data"`
 }
 
-// EventHandler handles incoming websocket message
-type EventHandler interface {
-	Handle(ws *websocket.Conn, client *Client, data string) error
+func sendMessage(ws *websocket.Conn, c *Client, message OutgoingMessage) error {
+	id := 0
+
+	if c != nil {
+		id = c.Id
+	}
+
+	event := Event{message.Header(), id}
+
+	err := websocket.JSON.Send(ws, &event)
+	if err != nil {
+		return err
+	}
+
+	err = websocket.JSON.Send(ws, &message)
+	return err
 }
 
-// Message empty message struct
-type Message struct {
-}
+func readMessage(ws *websocket.Conn, s interface{}) error {
+	err := websocket.JSON.Receive(ws, s)
 
-// MessageMap is a map with event handlers and their codes
-type MessageMap map[int]EventHandler
-
-// Messages contains all incoming messages mapped with their codes
-var Messages MessageMap
-
-func init() {
-	Messages = make(MessageMap)
-	Messages[TransfersEvent] = DisplayTransferEvent{}
-	Messages[ClientSysEvent] = SysMessage{}
-	Messages[MouseMove] = MouseMoveMessage{}
-	Messages[DownloadQueryEvent] = DownloadMessage{}
-	Messages[DirectoryQueryEvent] = DirectoryRequestMessage{}
-	Messages[ProcessQueryEvent] = ProcessQueryMessage{}
-	Messages[ScreenUpdateEvent] = ScreenUpdateMessage{}
-	Messages[Mouse] = MouseMessage{}
-	Messages[Key] = KeyMessage{}
-	Messages[Build] = BuildMessage{}
-	Messages[Shell] = ShellMessage{}
-	Messages[ModifyFileEvent] = FileMessage{}
-	Messages[Exit] = ExitMessage{}
-	Messages[Windows] = WindowMessage{}
-}
-
-func newEvent(event int, clientID int, data string) *Event {
-	return &Event{event, clientID, data}
+	return err
 }
 
 var globalws *websocket.Conn
 
 func incomingWebSocket(ws *websocket.Conn) {
+	globalws = ws
+
 	defer func() {
 		ws.Close()
 	}()
 
 	var auth LoginMessage
-	err := websocket.JSON.Receive(ws, &auth)
+	err := readMessage(ws, &auth)
 	if err != nil {
 		fmt.Println("error while authenticating", err.Error())
 		return
@@ -96,13 +60,11 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 	authenticated := Authenticate(auth.Key)
 
-	result, err := json.Marshal(LoginResultMessage{authenticated})
+	err = sendMessage(ws, nil, LoginResultMessage{authenticated})
 	if err != nil {
 		fmt.Println("auth", err.Error())
 		return
 	}
-	event := newEvent(AuthenticationEvent, 0, string(result))
-	websocket.JSON.Send(ws, &event)
 
 	if !authenticated {
 		fmt.Println("Not authenticated!")
@@ -111,19 +73,11 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 	fmt.Println("authenticated with key", auth.Key)
 
-	transfers, err := json.Marshal(&DisplayTransfers)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
+	if len(DisplayTransfers) > 0 {
+		sendMessage(ws, nil, DisplayTransferMessage{
+			DisplayTransfers,
+		})
 	}
-
-	stransfers := string(transfers)
-	if stransfers != "null" {
-		event = newEvent(TransfersEvent, 0, string(transfers))
-		websocket.JSON.Send(ws, &event)
-	}
-
-	globalws = ws
 
 	updateAll()
 	for {
@@ -138,7 +92,17 @@ func incomingWebSocket(ws *websocket.Conn) {
 		client := get(event.ClientID)
 
 		if handler, ok := Messages[event.Event]; ok {
-			err = handler.Handle(ws, client, event.Data)
+			fmt.Println(event)
+
+			i := reflect.New(reflect.TypeOf(handler)).Interface()
+
+			err = websocket.JSON.Receive(ws, &i)
+			if err != nil {
+				fmt.Println("failed decode", err.Error())
+			}
+
+			err = i.(IncomingMessage).Handle(ws, client, "")
+
 			if err != nil {
 				fmt.Println("websocket message:", err.Error())
 			}

@@ -9,9 +9,9 @@ const enum SysAction {
     REBOOT
 }
 
-class SysMessage extends Message<SysAction> {
+class SysMessage extends OutgoingMessage<SysAction> {
 
     constructor(action: SysAction) {
-        super(Control.EventType.SYS, action);
+        super(Control.MessageType.SYS, action);
     }
 }

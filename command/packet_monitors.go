@@ -4,10 +4,6 @@ import (
 	"fmt"
 	"rat/shared"
 	"rat/shared/network/header"
-
-	"encoding/json"
-
-	"golang.org/x/net/websocket"
 )
 
 type MonitorsPacket struct {
@@ -26,15 +22,7 @@ func (packet MonitorsPacket) OnReceive(c *Client) error {
 	c.Monitors = packet.Monitors
 
 	if ws, ok := c.Listeners[header.MonitorsHeader]; ok {
-		json, err := json.Marshal(&c.Monitors)
-
-		if err != nil {
-			fmt.Println("json:", err)
-		}
-
-		event := newEvent(MonitorQueryEvent, c.Id, string(json))
-
-		err = websocket.JSON.Send(ws, &event)
+		err := sendMessage(ws, c, MonitorMessage{c.Monitors})
 
 		if err != nil {
 			return err

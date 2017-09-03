@@ -17,6 +17,10 @@ type ProcessMessage struct {
 	Path string `json:"path"`
 }
 
+func (m ProcessMessage) Header() MessageHeader {
+	return ProcessQueryEvent
+}
+
 func (d ProcessQueryMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
 	var j ProcessQueryMessage
 	json.Unmarshal([]byte(data), &j)

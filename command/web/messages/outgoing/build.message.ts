@@ -1,4 +1,4 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 type Base64Image = string;
 
@@ -19,9 +19,9 @@ interface BuildMessageParameters {
     manifest?: Win32Manifest;
 }
 
-class BuildMessage extends Message<BuildMessageParameters> {
+class BuildMessage extends OutgoingMessage<BuildMessageParameters> {
 
     constructor(params: BuildMessageParameters) {
-        super(Control.EventType.BUILD, params);
+        super(Control.MessageType.BUILD, params);
     }
 }

@@ -1,12 +1,12 @@
-/// <reference path="events/downloadProgress.event.ts" />
-/// <reference path="events/transfers.event.ts" />
-/// <reference path="events/client.event.ts" />
+/// <reference path="messages/incoming/downloadProgress.message.ts" />
+/// <reference path="messages/incoming/transfers.message.ts" />
+/// <reference path="messages/incoming/client.message.ts" />
 
 namespace Control {
 
-	let events: IncomingEvent<any>[] = [];
+	let events: IncomingMessage<any>[] = [];
 
-	export enum EventType {
+	export enum MessageType {
 		CLIENT_UPDATE = 1,
 		SYS = 2,
 		DIRECTORY = 3, // directory.event.ts
@@ -27,15 +27,15 @@ namespace Control {
 		WINDOWS = 18
 	}
 
-	export function addEvent(eventType: EventType, event: IncomingEvent<any>) {
+	export function addEvent(eventType: MessageType, event: IncomingMessage<any>) {
 		events[eventType] = event;
 	}
 
-	export function removeEvent(eventType: EventType) {
+	export function removeEvent(eventType: MessageType) {
 		delete events[eventType];
 	}
 
-	export function emit(eventType: EventType, data: any) {
+	export function emit(eventType: MessageType, data: any) {
 		let event = events[eventType];
 
 		if (event) {
@@ -53,10 +53,9 @@ namespace Control {
 		}
 	}
 
-	interface MessageParameters {
-		event: EventType;
+	interface MessageHeader {
+		event: MessageType;
 		id: number;
-		data: string;
 	}
 
 	interface LoginParameters {
@@ -70,10 +69,12 @@ namespace Control {
 		private key: string;
 		private socket: WebSocket;
 
+		private currentType: MessageType;
+
 		constructor() {
-			addEvent(EventType.DOWNLOAD_PROGRESS, new DownloadProgressEvent());
-			addEvent(EventType.TRANSFERS, new TransfersEvent());
-			addEvent(EventType.CLIENT_UPDATE, new ClientUpdateEvent());
+			addEvent(MessageType.DOWNLOAD_PROGRESS, new DownloadProgressEvent());
+			addEvent(MessageType.TRANSFERS, new TransfersEvent());
+			addEvent(MessageType.CLIENT_UPDATE, new ClientUpdateEvent());
 		}
 
 		public start(key: string) {
@@ -81,22 +82,24 @@ namespace Control {
 			this.reconnect();
 		}
 
-		public send(data: Message<any>, client?: Client) {
+		public send(data: OutgoingMessage<any>, client?: Client) {
 			let id = 0;
 
 			if (client) {
 				id = client.id;
 			}
-
-			this.write({
+			
+			let header: MessageHeader = {
 				event: data.header,
-				id: id,
-				data: Message.stringify(data)
-			} as MessageParameters);
+				id: id
+			}
+
+			this.writeMessage(header, data.params);
 		}
 
-		public stop() {
-			this.socket.close();
+		private writeMessage(header: MessageHeader, data: any) {
+			this.socket.send(JSON.stringify(header));
+			this.socket.send(JSON.stringify(data));
 		}
 
 		private write(data: any) {
@@ -123,8 +126,27 @@ namespace Control {
 		}
 
 		private onMessage(event: MessageEvent) {
-			let data: MessageParameters = JSON.parse(event.data);
-			Control.emit(data.event, data.data);
+			let data: MessageHeader = JSON.parse(event.data);
+
+			if (data.event) {
+				if (this.currentType) {
+					this.close();
+					return;
+				}
+
+				this.currentType = data.event;
+			} else {
+				Control.emit(this.currentType, data);
+				this.currentType = null;
+			}
+		}
+
+		public close(reason?: string) {
+			this.socket.close();
+
+			if (reason) {
+				console.error("closed websocket:", reason);
+			}
 		}
 
 		private onClose() {
@@ -142,7 +164,7 @@ namespace Control {
 		Control.instance.start(key);
 	}
 
-	export function stop() {
-		Control.instance.stop();
+	export function stop(reason?: string) {
+		Control.instance.close(reason);
 	}
 }

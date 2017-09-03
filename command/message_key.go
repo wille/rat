@@ -1,26 +1,16 @@
 package main
 
 import (
-	"encoding/json"
-
 	"golang.org/x/net/websocket"
 )
 
-type KeyEvent struct {
+type KeyMessage struct {
 	Key   int `json:"keyCode"`
 	Event int `json:"state"`
 }
 
-type KeyMessage Message
-
-func (d KeyMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
-	var keyEvent KeyEvent
-	err := json.Unmarshal([]byte(data), &keyEvent)
-	if err != nil {
-		return err
-	}
-
-	client.Queue <- &KeyPacket{keyEvent.Key, keyEvent.Event}
+func (m KeyMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+	client.Queue <- &KeyPacket{m.Key, m.Event}
 
 	return nil
 }

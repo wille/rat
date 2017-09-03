@@ -9,3 +9,7 @@ type LoginMessage struct {
 type LoginResultMessage struct {
 	Result bool `json:"result"`
 }
+
+func (m LoginResultMessage) Header() MessageHeader {
+	return AuthenticationEvent
+}

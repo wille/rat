@@ -1,11 +1,11 @@
-/// <reference path="../views/view.ts" />
+/// <reference path="../../views/view.ts" />
 
 interface ProcessParameters {
 	pid: number;
 	path: string;
 }
 
-class ProcessEvent implements IncomingEvent<ProcessParameters> {
+class ProcessEvent implements IncomingMessage<ProcessParameters> {
 
 	constructor(private table: HTMLTableElement) { }
 

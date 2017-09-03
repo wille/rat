@@ -1,4 +1,4 @@
-/// <reference path="message.ts" />
+/// <reference path="outgoingMessage.ts" />
 
 enum TerminalAction {
     START = 0,
@@ -11,7 +11,7 @@ interface TerminalMessageParameters {
     command?: string;
 }
 
-class TerminalMessage extends Message<TerminalMessageParameters> {
+class TerminalMessage extends OutgoingMessage<TerminalMessageParameters> {
 
     /**
      * Remote Shell
@@ -19,6 +19,6 @@ class TerminalMessage extends Message<TerminalMessageParameters> {
      * @param command Command string, may be empty
      */
     constructor(action: TerminalAction, command: string = "") {
-        super(Control.EventType.TERMINAL, { action: action, command: command } as TerminalMessageParameters);
+        super(Control.MessageType.TERMINAL, { action: action, command: command } as TerminalMessageParameters);
     }
 }

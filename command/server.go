@@ -2,10 +2,7 @@ package main
 
 import (
 	"crypto/tls"
-	"encoding/json"
 	"fmt"
-
-	"golang.org/x/net/websocket"
 )
 
 var (
@@ -57,20 +54,8 @@ func remove(client *Client) {
 	update(NewClientEvent(Remove, client, nil))
 }
 
-func update(e ClientEvent) error {
-	data, err := json.Marshal(&e)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(data))
-
-	event := newEvent(ClientUpdateEvent, 0, string(data))
-	if globalws != nil {
-		websocket.JSON.Send(globalws, &event)
-	}
-
-	return nil
+func update(e ClientMessage) error {
+	return sendMessage(globalws, nil, e)
 }
 
 func updateAll() {

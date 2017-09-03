@@ -134,7 +134,7 @@ func (c *Client) PacketReader() {
 		var err error
 
 		header, err := c.ReadHeader()
-		fmt.Println("Received header", header)
+
 		if err != nil {
 			goto err
 		}
@@ -200,7 +200,6 @@ func (c *Client) WriteHeader(header header.PacketHeader) error {
 
 func (c *Client) WritePacket(packet OutgoingPacket) error {
 	err := c.WriteHeader(packet.Header())
-	fmt.Println("Wrote header", packet.Header())
 
 	if err != nil {
 		return err
