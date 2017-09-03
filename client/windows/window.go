@@ -1,7 +1,6 @@
 package windows
 
 /*
-#cgo LDFLAGS: -lX11
 #include "window.h"
 */
 import "C"

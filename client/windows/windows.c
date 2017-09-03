@@ -15,6 +15,19 @@ LPWSTR GetWindowTitle(HWND handle) {
     return buffer;
 }
 
+Rect GetWindowDimensions(HANDLE handle) {
+    RECT wrect;
+    GetWindowRect((HWND) handle, &wrect);
+
+    Rect rect;
+    rect.x = wrect.left;
+    rect.y = wrect.top;
+    rect.width = wrect.right - wrect.left;
+    rect.height = wrect.bottom - wrect.top;
+
+    return rect;
+}
+
 BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
     Frame window;
 
@@ -31,19 +44,6 @@ BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
 
 void QueryWindows(void) {
     EnumWindows(EnumWindowsCallback, 0);
-}
-
-Rect GetWindowDimensions(HANDLE handle) {
-    RECT wrect;
-    GetWindowRect((HWND) handle, &wrect);
-
-    Rect rect;
-    rect.x = wrect.left;
-    rect.y = wrect.top;
-    rect.width = wrect.right - wrect.left;
-    rect.height = wrect.bottom - wrect.top;
-
-    return rect;
 }
 
 void SetWindowPosition(HANDLE handle, Rect rect) {
