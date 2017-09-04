@@ -10,6 +10,7 @@ class WindowsIncomingMessage implements IncomingEvent<WindowsParameters> {
     }
 
 	public emit(data: WindowsParameters) {
-        console.log(data);
+        this.view.addFrame(data.frames);        
+        this.view.addMonitors(data.monitors);
     }
 }
