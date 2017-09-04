@@ -17,6 +17,14 @@ type Event struct {
 	ClientID int `json:"id"`
 }
 
+var (
+	WebSockets []*websocket.Conn
+)
+
+func init() {
+	WebSockets = make([]*websocket.Conn, 0)
+}
+
 func sendMessage(ws *websocket.Conn, c *Client, message OutgoingMessage) error {
 	id := 0
 
@@ -31,7 +39,7 @@ func sendMessage(ws *websocket.Conn, c *Client, message OutgoingMessage) error {
 		return err
 	}
 
-	err = websocket.JSON.Send(ws, &message)
+	err = websocket.JSON.Send(ws, message)
 	return err
 }
 
@@ -41,37 +49,46 @@ func readMessage(ws *websocket.Conn, s interface{}) error {
 	return err
 }
 
-var globalws *websocket.Conn
+func broadcast(message OutgoingMessage) {
+	for _, ws := range WebSockets {
+		sendMessage(ws, nil, message)
+	}
+}
 
 func incomingWebSocket(ws *websocket.Conn) {
-	globalws = ws
+	WebSockets = append(WebSockets, ws)
 
-	defer func() {
+	close := func() {
 		ws.Close()
-	}()
+
+		for k, v := range WebSockets {
+			if v == ws {
+				WebSockets = append(WebSockets[:k], WebSockets[k+1:]...)
+				break
+			}
+		}
+	}
+	defer close()
 
 	var auth LoginMessage
 	err := readMessage(ws, &auth)
 	if err != nil {
-		fmt.Println("error while authenticating", err.Error())
+		fmt.Println("auth", err)
 		return
 	}
-	fmt.Println("client login with:", auth)
 
 	authenticated := Authenticate(auth.Key)
 
 	err = sendMessage(ws, nil, LoginResultMessage{authenticated})
 	if err != nil {
-		fmt.Println("auth", err.Error())
+		fmt.Println("auth", err)
 		return
 	}
 
 	if !authenticated {
-		fmt.Println("Not authenticated!")
+		fmt.Println("Not authenticated")
 		return
 	}
-
-	fmt.Println("authenticated with key", auth.Key)
 
 	if len(DisplayTransfers) > 0 {
 		sendMessage(ws, nil, DisplayTransferMessage{
@@ -80,6 +97,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 	}
 
 	updateAll()
+
 	for {
 		var event Event
 		err := websocket.JSON.Receive(ws, &event)
@@ -99,15 +117,16 @@ func incomingWebSocket(ws *websocket.Conn) {
 			err = websocket.JSON.Receive(ws, &i)
 			if err != nil {
 				fmt.Println("failed decode", err.Error())
+				return
 			}
 
 			err = i.(IncomingMessage).Handle(ws, client, "")
 
 			if err != nil {
-				fmt.Println("websocket message:", err.Error())
+				fmt.Println("message handle", err)
 			}
 		} else {
-			fmt.Println("Unknown message:", event.Event)
+			fmt.Println("unknown message:", event.Event)
 		}
 	}
 }

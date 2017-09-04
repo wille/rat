@@ -3,8 +3,13 @@ package main
 type UpdateType int
 
 const (
+	// Add a client
 	Add UpdateType = iota
+
+	// Update a clients information
 	Update
+
+	// Remove a client (disconnect)
 	Remove
 )
 

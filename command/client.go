@@ -159,7 +159,7 @@ func (c *Client) PacketReader() {
 
 	err:
 		fmt.Println("remove", err.Error())
-		remove(c)
+		removeClient(c)
 		break
 	}
 }

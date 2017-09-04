@@ -40,10 +40,10 @@ func Listen(server *Server) error {
 func add(client *Client) {
 	Clients = append(Clients, client)
 
-	update(NewClientEvent(Add, client, client.GetClientData()))
+	broadcast(NewClientEvent(Add, client, client.GetClientData()))
 }
 
-func remove(client *Client) {
+func removeClient(client *Client) {
 	for k, v := range Clients {
 		if v.Id == client.Id {
 			Clients = append(Clients[:k], Clients[k+1:]...)
@@ -51,19 +51,17 @@ func remove(client *Client) {
 		}
 	}
 
-	update(NewClientEvent(Remove, client, nil))
+	broadcast(NewClientEvent(Remove, client, nil))
 }
 
-func update(e ClientMessage) error {
-	return sendMessage(globalws, nil, e)
-}
-
+// Send new information from all connected clients
 func updateAll() {
 	for _, client := range Clients {
-		update(NewClientEvent(Add, client, client.GetClientData()))
+		broadcast(NewClientEvent(Add, client, client.GetClientData()))
 	}
 }
 
+// Get a client from ID
 func get(id int) *Client {
 	for _, v := range Clients {
 
