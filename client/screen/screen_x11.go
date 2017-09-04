@@ -13,13 +13,14 @@ import (
 	"bytes"
 	"fmt"
 	"image"
+	"rat/shared"
 	"unsafe"
 
 	"github.com/disintegration/imaging"
 	"golang.org/x/image/bmp"
 )
 
-func Capture(monitor Monitor) image.Image {
+func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
 	var len C.int
