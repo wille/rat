@@ -7,7 +7,10 @@ import (
 	"golang.org/x/net/websocket"
 )
 
-type WindowMessage []shared.Window
+type WindowMessage struct {
+	Monitors []shared.Monitor `json:"monitors"`
+	Frames   []shared.Window  `json:"frames"`
+}
 
 func (m WindowMessage) Header() MessageHeader {
 	return Windows

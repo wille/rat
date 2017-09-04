@@ -15,7 +15,7 @@ class WindowView extends SubView {
 
     public onEnter() {
         Control.addEvent(Control.MessageType.WINDOWS, new WindowsIncomingMessage(this));
-        5
+
         let searchElement = this.getElementById("search") as HTMLInputElement;
 		new TableSearch(searchElement, this.table);
 
@@ -23,6 +23,10 @@ class WindowView extends SubView {
     }
 
     public onLeave() {
+
+    }
+
+    public addMonitors(monitors: Monitor[]) {
 
     }
 

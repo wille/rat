@@ -19,7 +19,10 @@ func (packet WindowsPacket) Init(c *Client) {
 
 func (packet WindowsPacket) OnReceive(c *Client) error {
 	if ws, ok := c.Listeners[header.WindowsHeader]; ok {
-		return sendMessage(ws, c, WindowMessage(packet.Windows))
+		return sendMessage(ws, c, WindowMessage{
+			Monitors: c.Monitors,
+			Frames:   packet.Windows,
+		})
 	}
 
 	return nil
