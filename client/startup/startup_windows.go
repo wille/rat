@@ -10,3 +10,7 @@ func Install(name, path string) error {
 
 	return nil
 }
+
+func Uninstall(name string) {
+	C.Uninstall(C.CString(name))
+}
