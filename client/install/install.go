@@ -1,7 +1,6 @@
 package install
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"oslib"
@@ -75,8 +74,6 @@ func IsInstalled(p installpath.Path) bool {
 	current = filepath.Clean(current)
 
 	install := getPath(p)
-	fmt.Println("Current:", current)
-	fmt.Println("Install:", install)
 
 	return install == current
 }
