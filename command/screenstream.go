@@ -17,7 +17,7 @@ func ScreenStream(client *Client, ws *websocket.Conn) {
 
 		client.Screen.New = false
 
-		err := sendMessage(ws, client, ScreenFrameMessage{client.GetEncodedScreen()})
+		err := sendMessage(ws, client, ScreenFrameMessage(client.GetEncodedScreen()))
 
 		if err != nil {
 			fmt.Println("screenstream:", err.Error())

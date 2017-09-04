@@ -1,8 +1,6 @@
 package main
 
-type ScreenFrameMessage struct {
-	Frame string `json:"frame"`
-}
+type ScreenFrameMessage string
 
 func (m ScreenFrameMessage) Header() MessageHeader {
 	return ScreenUpdateEvent
