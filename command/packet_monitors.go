@@ -22,7 +22,7 @@ func (packet MonitorsPacket) OnReceive(c *Client) error {
 	c.Monitors = packet.Monitors
 
 	if ws, ok := c.Listeners[header.MonitorsHeader]; ok {
-		err := sendMessage(ws, c, MonitorMessage{c.Monitors})
+		err := sendMessage(ws, c, MonitorMessage(c.Monitors))
 
 		if err != nil {
 			return err

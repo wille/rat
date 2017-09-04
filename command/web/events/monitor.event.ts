@@ -1,5 +1,9 @@
 interface MonitorParameters {
-	id, w, h: number;
+	id: number;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
 }
 
 class MonitorEvent implements IncomingEvent<MonitorParameters[]> {
@@ -9,6 +13,7 @@ class MonitorEvent implements IncomingEvent<MonitorParameters[]> {
 	}
 
 	public emit(data: MonitorParameters[]) {
+		console.log(data);
 		let selected = this.parent.selectedMonitor;
 
 		let element = this.parent.monitorsElement;
@@ -29,7 +34,7 @@ class MonitorEvent implements IncomingEvent<MonitorParameters[]> {
 				selected = monitor.id;
 			}
 
-			let str = monitor.id + ": " + monitor.w + "x" + monitor.h;
+			let str = monitor.id + ": " + monitor.width + "x" + monitor.height;
 
 			let child = document.createElement("li");
 			let a = document.createElement("a");

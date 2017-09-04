@@ -4,9 +4,7 @@ import (
 	"rat/shared"
 )
 
-type MonitorMessage struct {
-	Monitors []shared.Monitor `json:"monitors"`
-}
+type MonitorMessage []shared.Monitor
 
 func (m MonitorMessage) Header() MessageHeader {
 	return MonitorQueryEvent

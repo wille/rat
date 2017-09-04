@@ -1,8 +1,6 @@
 package main
 
-type DirectoryListMessage struct {
-	Files []File `json:"files"`
-}
+type DirectoryListMessage []File
 
 func (m DirectoryListMessage) Header() MessageHeader {
 	return DirectoryQueryEvent
