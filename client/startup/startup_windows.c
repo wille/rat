@@ -1,5 +1,3 @@
-#include <windows.h>
-
 #include "startup_windows.h"
 
 int Install(char *name, char *path) {
