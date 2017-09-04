@@ -1,6 +1,7 @@
 /// <reference path="events/downloadProgress.event.ts" />
 /// <reference path="events/client.event.ts" />
 /// <reference path="messages/transfers.message.ts" />
+/// <reference path="events/transfers.event.ts" />
 
 namespace Control {
 
