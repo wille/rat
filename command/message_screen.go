@@ -16,9 +16,7 @@ func (m ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client, data str
 	stream := m.Activate
 
 	if stream {
-		err := sendMessage(ws, client, MonitorMessage{
-			client.Monitors,
-		})
+		err := sendMessage(ws, client, MonitorMessage(client.Monitors))
 
 		if err != nil {
 			return err

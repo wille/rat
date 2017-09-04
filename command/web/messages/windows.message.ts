@@ -1,8 +1,8 @@
 /// <reference path="outgoingMessage.ts" />
 
-class WindowsOutgoingMessage extends OutgoingMessage<{}> {
+class WindowsOutgoingMessage extends OutgoingMessage<any[]> {
 
-    constructor(params: {}) {
-        super(Control.MessageType.WINDOWS, params);
+    constructor() {
+        super(Control.MessageType.WINDOWS, []);
     }
 }

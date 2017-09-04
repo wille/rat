@@ -7,18 +7,12 @@ interface FileEntry {
 	time: string;
 }
 
-interface DirectoryMessageParameters {
-	files: FileEntry[];
-}
-
-class DirectoryEvent implements IncomingEvent<DirectoryMessageParameters> {
+class DirectoryEvent implements IncomingEvent<FileEntry[]> {
 
 	constructor(private view: DirectoryView) { }
 
-	public emit(d: DirectoryMessageParameters) {
+	public emit(data: FileEntry[]) {
 		this.view.table.innerHTML = "";
-
-		var data = d.files;
 
 		for (let i = 0; i < data.length; i++) {
 			let entry = data[i];

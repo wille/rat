@@ -48,7 +48,7 @@ func (packet DirectoryPacket) OnReceive(c *Client) error {
 	}
 
 	if ws, ok := c.Listeners[header.DirectoryHeader]; ok {
-		err := sendMessage(ws, c, DirectoryListMessage{append(dirs, files...)})
+		err := sendMessage(ws, c, DirectoryListMessage(append(dirs, files...)))
 
 		if err != nil {
 			return err

@@ -1,6 +1,4 @@
-interface WindowsParameters {
-	frames: Frame[];
-}
+type WindowsParameters = Frame[];
 
 class WindowsIncomingMessage implements IncomingEvent<WindowsParameters> {
 
@@ -9,7 +7,7 @@ class WindowsIncomingMessage implements IncomingEvent<WindowsParameters> {
     }
 
 	public emit(data: WindowsParameters) {
-        for (let frame of data.frames) {
+        for (let frame of data) {
             this.view.addFrame(frame);
         }
     }
