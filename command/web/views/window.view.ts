@@ -10,12 +10,12 @@ class WindowView extends SubView {
 
     private reload() {
         this.clear();
-        Control.instance.send(new WindowsOutgoingMessage(this), this.client);
+        Control.instance.send(new WindowsOutgoingMessage(), this.client);
     }
 
     public onEnter() {
         Control.addEvent(Control.MessageType.WINDOWS, new WindowsIncomingMessage(this));
-        
+        5
         let searchElement = this.getElementById("search") as HTMLInputElement;
 		new TableSearch(searchElement, this.table);
 
