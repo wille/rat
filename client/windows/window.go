@@ -18,8 +18,9 @@ func WindowCallback(w C.Frame) {
 	title := C.GoString(w.title)
 
 	window := shared.Window{
-		Handle: int(w.handle),
-		Title:  title,
+		Handle:  int(w.handle),
+		Title:   title,
+		Visible: bool(w.visible),
 		Rect: shared.Rect{
 			X:      int(w.rect.x),
 			Y:      int(w.rect.y),

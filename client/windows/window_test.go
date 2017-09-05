@@ -1,6 +1,7 @@
 package windows
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -17,7 +18,7 @@ func TestQuery(t *testing.T) {
 	for _, w := range Windows {
 		if w.Title != "" {
 			foundTitle = true
-			break
+			fmt.Println(w)
 		}
 	}
 

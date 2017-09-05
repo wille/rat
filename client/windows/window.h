@@ -1,3 +1,7 @@
+#include <windows.h>
+#include <psapi.h>
+#include <stdbool.h>
+
 #define HANDLE int
 
 typedef struct {
@@ -10,6 +14,7 @@ typedef struct {
 typedef struct {
     char *title;
     HANDLE handle;
+    bool visible;
     Rect rect;
 } Frame;
 
@@ -18,6 +23,8 @@ extern void WindowCallback(Frame);
 
 // Query all windows and populate windows array
 void QueryWindows(void);
+
+bool IsVisible(HANDLE handle);
 
 // Move window to coordinates
 void SetWindowPosition(HANDLE handle, Rect rect);
