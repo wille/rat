@@ -22,6 +22,10 @@ Rect GetWindowDimensions(Display *display, Window window) {
 	return rect;
 }
 
+bool IsVisible(Display *disp, Window window) {
+	return false;
+}
+
 void EnumWindows(Display *display, Window window) {
 	XTextProperty text;
 	XGetWMName(display, window, &text);
@@ -34,6 +38,7 @@ void EnumWindows(Display *display, Window window) {
 	
 	Frame frame;
 	frame.handle = window;
+	frame.visible = IsVisible(display, window);
 	frame.title = title;
 	frame.rect = GetWindowDimensions(display, window);
 	WindowCallback(frame);
