@@ -40,3 +40,7 @@ func Install(name, path string) error {
 
 	return err
 }
+
+func Uninstall(name string) {
+
+}
