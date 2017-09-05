@@ -1,5 +1,8 @@
 //+build windows
 
+#include <windows.h>
+#include <psapi.h>
+
 #include "window.h"
 
 LPSTR GetWindowTitle(HWND handle) {

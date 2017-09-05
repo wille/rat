@@ -1,5 +1,4 @@
-#include <windows.h>
-#include <psapi.h>
+
 #include <stdbool.h>
 
 #define HANDLE int
