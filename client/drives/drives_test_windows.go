@@ -8,7 +8,7 @@ import (
 
 func TestDrives(t *testing.T) {
 	if oslib.Name != oslib.Windows {
-		t.Error("Test should only run on Windows")
+		t.Fail()
 		return
 	}
 
