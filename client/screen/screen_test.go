@@ -9,14 +9,6 @@ import (
 	"testing"
 )
 
-func TestQueryMonitors(t *testing.T) {
-	QueryMonitors()
-
-	for _, monitor := range Monitors {
-		fmt.Println(monitor)
-	}
-}
-
 func TestScreenshot(t *testing.T) {
 	for _, monitor := range Monitors {
 		fmt.Println("Capturing monitor", monitor.ID)
