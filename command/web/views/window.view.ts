@@ -27,6 +27,9 @@ class WindowView extends SubView {
         desktopDiv.appendChild(this.desktop.element);
         this.desktop.frameClick = (frame: Frame) => this.onclick(frame);
 
+        let reloadElement = this.getElementById("reload");
+        reloadElement.onclick = () => this.reload();
+
         this.reload();
     }
 
