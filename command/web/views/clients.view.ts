@@ -248,7 +248,7 @@ class ClientsView extends MainView {
 		osCell.appendChild(osIconElement);
 
 		let osTextElement = document.createElement("span");
-		osTextElement.innerText = " " + client.operatingSystem;
+		osTextElement.innerText = " " + client.operatingSystem.display;
 		osCell.appendChild(osTextElement);
 
 		let pingCell = row.insertCell(TableCell.PING);
