@@ -9,6 +9,7 @@ interface Frame {
     handle: number;
     title: string;
     rect: Rect;
+    visible: boolean;
 }
 
 interface Monitor {
