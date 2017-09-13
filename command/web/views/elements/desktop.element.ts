@@ -11,7 +11,11 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
 
     public frameClick: (frame: Frame) => void;
 
-    constructor() {
+    /**
+     * A client is needed to remove some OS specific windows like "Program Manager" on Windows
+     * @param client
+     */
+    constructor(private client: Client) {
         super("canvas");
         this.backing.onclick = (event: MouseEvent) => this.onclick(event);
     }
@@ -31,8 +35,11 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
 
         for (let frame of frames) {
             if (frame.visible && frame.title && frame.title.length > 0 && frame.rect.w > 0 && frame.rect.h > 0) {
-                if (frame.title === "Program Manager") continue;
-                this.frames.push(frame);
+                if (this.client.operatingSystem.type === OperatingSystemType.Windows && frame.title === "Program Manager") {
+                    continue;
+                }
+
+                this.frames.push(frame);                
             }
         }
     }

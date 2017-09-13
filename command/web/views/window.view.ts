@@ -1,9 +1,11 @@
 class WindowView extends SubView {
 
-    private desktop = new DesktopElement();
+    private desktop: DesktopElement;
 
     constructor(client: Client) {
         super("static/window.html", "Window List", client);
+
+        this.desktop = new DesktopElement(client);
     }
 
     private clear() {
