@@ -244,7 +244,7 @@ class ClientsView extends MainView {
 		let osCell = row.insertCell(TableCell.OS);
 		
 		let osIconElement = document.createElement("img");
-		osIconElement.src = Icons.getOperatingSystemIcon(client.operatingSystem);
+		osIconElement.src = Icons.getOperatingSystemIcon(client.operatingSystem.display);
 		osCell.appendChild(osIconElement);
 
 		let osTextElement = document.createElement("span");

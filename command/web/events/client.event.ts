@@ -15,7 +15,15 @@ interface ClientUpdateParameters {
 	// client id
 	id: number;
 
-	data: ClientFields;
+	data: {
+		ping: number;
+		flag?: string;
+		country?: string;
+		host?: string;
+		computerName?: string;
+		osType?: string;
+		operatingSystem?: string;
+	}
 }
 
 class ClientUpdateEvent implements IncomingEvent<ClientUpdateParameters> {
@@ -28,7 +36,8 @@ class ClientUpdateEvent implements IncomingEvent<ClientUpdateParameters> {
 
 		switch (data.type) {
 			case ClientUpdateType.ADD:
-				client = new Client(data.id, data.data);
+				client = new Client(data.id, params.flag, params.country, params.host, params.computerName, params.osType, params.operatingSystem);
+
 				Client.clients.push(client);
 				MainViewContainer.clientsView.add(client);
 				break;
