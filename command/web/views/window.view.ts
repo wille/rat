@@ -64,6 +64,7 @@ class WindowView extends SubView {
 
             if (row.cells[0].innerText === frame.title) {
                 row.className += "selected";
+                row.scrollIntoView(true);
             } else {
                 row.className = row.className.replace(" selected", "");
             }
