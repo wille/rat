@@ -16,12 +16,12 @@ namespace Sample {
         let id = 0;
 
         let clients = [
-           /*  new Client(id++, { ping: randomPing(), host: randomIp(), flag: "gb", country: "Great Britain", computerName: "test@test", operatingSystem: "Ubuntu Linux" } as ClientFields),
-            new Client(id++, { ping: randomPing(), host: randomIp(), flag: "us", country: "United States", computerName: "test@test", operatingSystem: "macOS 10.12" } as ClientFields),
-            new Client(id++, { ping: randomPing(), host: randomIp(), flag: "nl", country: "Netherlands", computerName: "DOMAIN\\test", operatingSystem: "Windows 10" } as ClientFields),
-            new Client(id++, { ping: randomPing(), host: randomIp(), flag: "gb", country: "Great Britain", computerName: "test@test", operatingSystem: "Debian 8.0" } as ClientFields),
-            new Client(id++, { ping: randomPing(), host: randomIp(), flag: "gb", country: "Great Britain", computerName: "test@test", operatingSystem: "Arch Linux" } as ClientFields),
-         */]
+            new Client(id++, randomIp(), "gb", "Great Britain", "test@test", "Linux", "Ubuntu Linux"),
+            new Client(id++, randomIp(), "us", "United States", "test@test", "macOS", "macOS 10.12"),
+            new Client(id++, randomIp(), "nl", "Netherlands", "DOMAIN\\test", "Windows", "Windows 10"),
+            new Client(id++, randomIp(), "gb", "Great Britain", "test@test", "Linux", "Debian 8.0"),
+            new Client(id++, randomIp(), "gb", "Great Britain", "test@test", "Linux", "Arch Linux"),
+        ]
 
         for (let client of clients) {
             MainViewContainer.clientsView.add(client);
