@@ -34,7 +34,7 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
                 continue;
             }
 
-            if (window.rect.w === 0 ||window.rect.h === 0) {
+            if (window.rect.w === 0 || window.rect.h === 0) {
                 continue;
             }
 
@@ -49,14 +49,15 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
         }
     }
 
-    getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
+    private getRandomColor() {
+        let hex = "0123456789abcdef";
+        let color = "#";
         for (var i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
+            color += hex[Math.floor(Math.random() * 16)];
         }
+
         return color;
-      }
+    }
 
     private calculate() {
         let totalWidth = 0;
