@@ -62,3 +62,13 @@ void QueryWindows(void) {
 	Window root = XDefaultRootWindow(display);
 	EnumWindows(display, root);
 }
+
+void SetDisplayState(HANDLE handle, bool visible) {
+	Display *display = XOpenDisplay(NULL);
+	
+	if (visible) {
+		XMapWindow(display, (Window) handle);
+	} else {
+		XUnmapWindow(display, (Window) handle);
+	}
+}

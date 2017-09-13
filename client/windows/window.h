@@ -21,3 +21,5 @@ extern void WindowCallback(Frame);
 
 // Query all windows and populate windows array
 void QueryWindows(void);
+
+void SetDisplayState(HANDLE, bool visible);
