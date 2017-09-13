@@ -53,7 +53,3 @@ bool IsVisible(HANDLE handle) {
 
 	return IsWindowVisible(handle) && rect.left > -32000 && rect.top > -32000;
 }
-
-void SetWindowPosition(HANDLE handle, Rect rect) {
-    MoveWindow((HWND) handle, rect.x, rect.y, rect.width, rect.height, TRUE);
-}

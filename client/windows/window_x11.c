@@ -62,7 +62,3 @@ void QueryWindows(void) {
 	Window root = XDefaultRootWindow(display);
 	EnumWindows(display, root);
 }
-
-void SetWindowPosition(int handle, Rect rect) {
-
-}

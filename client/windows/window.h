@@ -1,4 +1,3 @@
-
 #include <stdbool.h>
 
 #define HANDLE int
@@ -22,6 +21,3 @@ extern void WindowCallback(Frame);
 
 // Query all windows and populate windows array
 void QueryWindows(void);
-
-// Move window to coordinates
-void SetWindowPosition(HANDLE handle, Rect rect);
