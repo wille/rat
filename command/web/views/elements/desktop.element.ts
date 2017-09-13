@@ -21,10 +21,40 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
         this.calculate();
     }
 
+    /**
+     * Set the frames this desktop element should display
+     * Remove elements with empty titles, zero width or height
+     * @param frames
+     */
     public setFrames(frames: Frame[]) {
-        this.frames = frames;
+        this.frames = [];
+
+        for (let frame of frames) {
+            if (frame.visible && frame.title && frame.title.length > 0 && frame.rect.w > 0 && frame.rect.h > 0) {
+                if (frame.title === "Program Manager") continue;
+                this.frames.push(frame);
+            }
+        }
     }
 
+    /**
+     * Returns the position and dimensions of this frame, scaled to desktop element
+     * @param frame 
+     */
+    private getScaledDimensions(frame: Frame): Rect {
+        const ratio = this.ratio;
+
+        return {
+            x: (frame.rect.x + this.offsetX) * ratio,
+            y: (frame.rect.y + this.offsetY) * ratio,
+            w: frame.rect.w * ratio,
+            h: frame.rect.h * ratio
+        }
+    }
+
+    /**
+     * Renders all visible frames with a title
+     */
     private render() {
         const graphics = this.backing.getContext("2d");
         const ratio = this.ratio;
@@ -33,48 +63,31 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
         graphics.fillRect(0, 0, this.width, this.height);
 
         for (let i = 0; i < this.frames.length; i++) {
-            let window = this.frames[i];
-
-            if (!window.title || window.title.length == 0) {
-                continue;
-            }
-
-            if (window.rect.w === 0 || window.rect.h === 0) {
-                continue;
-            }
-
-            let rx = (window.rect.x + this.offsetX) * ratio;
-            let ry = (window.rect.y + this.offsetY) * ratio;
-            let rw = window.rect.w * ratio;
-            let rh = window.rect.h * ratio;
+            let frame = this.frames[i];
 
             graphics.fillStyle = this.getRandomColor();
-            graphics.fillRect(rx, ry, rw, rh);
+
+            let dimension = this.getScaledDimensions(frame);
+            graphics.fillRect(dimension.x, dimension.y, dimension.w, dimension.h);
         }
     }
 
+    /**
+     * When this element is clicked, find the topmost frame that was clicked
+     * @param event 
+     */
     private onclick(event: MouseEvent) {
         const ratio = this.ratio;
         
         for (let i = this.frames.length - 1; i >= 0; i--) {
-            let window = this.frames[i];
+            let frame = this.frames[i];
+            
+            let dimensions = this.getScaledDimensions(frame);
 
-            if (!window.title || window.title.length == 0) {
-                continue;
-            }
-
-            if (window.rect.w === 0 || window.rect.h === 0) {
-                continue;
-            }
-
-            let rx = (window.rect.x + this.offsetX) * ratio;
-            let ry = (window.rect.y + this.offsetY) * ratio;
-            let rw = window.rect.w * ratio;
-            let rh = window.rect.h * ratio;
-
-            if (event.offsetX >= rx && event.offsetX <= rw && event.offsetY >= ry && event.offsetY <= rh) {
+            if (event.offsetX >= dimensions.x && event.offsetX <= dimensions.x + dimensions.w &&
+                event.offsetY >= dimensions.y && event.offsetY <= dimensions.y + dimensions.h) {              
                 if (this.frameClick) {
-                    this.frameClick(window);
+                    this.frameClick(frame);
                 }
                 break;
             }
