@@ -9,8 +9,11 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
     private offsetY;
     private offsetX;
 
+    public frameClick: (frame: Frame) => void;
+
     constructor() {
         super("canvas");
+        this.backing.onclick = (event: MouseEvent) => this.onclick(event);
     }
 
     public setMonitors(monitors: Monitor[]) {
@@ -28,8 +31,10 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
 
         graphics.fillStyle = "#ffffff";
         graphics.fillRect(0, 0, this.width, this.height);
-        	let i = 0;
-        for (let window of this.frames) {
+
+        for (let i = 0; i < this.frames.length; i++) {
+            let window = this.frames[i];
+
             if (!window.title || window.title.length == 0) {
                 continue;
             }
@@ -43,9 +48,36 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
             let rw = window.rect.w * ratio;
             let rh = window.rect.h * ratio;
 
-            console.log(window.title, "fill", rx, ry, rw, rh);
             graphics.fillStyle = this.getRandomColor();
             graphics.fillRect(rx, ry, rw, rh);
+        }
+    }
+
+    private onclick(event: MouseEvent) {
+        const ratio = this.ratio;
+        
+        for (let i = this.frames.length - 1; i >= 0; i--) {
+            let window = this.frames[i];
+
+            if (!window.title || window.title.length == 0) {
+                continue;
+            }
+
+            if (window.rect.w === 0 || window.rect.h === 0) {
+                continue;
+            }
+
+            let rx = (window.rect.x + this.offsetX) * ratio;
+            let ry = (window.rect.y + this.offsetY) * ratio;
+            let rw = window.rect.w * ratio;
+            let rh = window.rect.h * ratio;
+
+            if (event.offsetX >= rx && event.offsetX <= rw && event.offsetY >= ry && event.offsetY <= rh) {
+                if (this.frameClick) {
+                    this.frameClick(window);
+                }
+                break;
+            }
         }
     }
 

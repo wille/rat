@@ -23,6 +23,7 @@ class WindowView extends SubView {
         
         let desktopDiv = document.getElementById("desktop");
         desktopDiv.appendChild(this.desktop.element);
+        this.desktop.frameClick = (frame: Frame) => this.onclick(frame);
 
         this.reload();
     }
@@ -52,6 +53,19 @@ class WindowView extends SubView {
             row.insertCell().innerText = title;   
         }
         this.desktop.setFrames(frames);
+    }
+
+    // A frame is clicked in the desktop element
+    private onclick(frame: Frame) {
+        let rows = this.table.rows;
+
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+
+            if (row.cells[0].innerText === frame.title) {
+                console.log("found row for", frame.title);
+            }
+        }
     }
 
     public get table(): HTMLTableElement {
