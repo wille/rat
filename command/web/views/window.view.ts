@@ -63,7 +63,9 @@ class WindowView extends SubView {
             let row = rows[i];
 
             if (row.cells[0].innerText === frame.title) {
-                console.log("found row for", frame.title);
+                row.className = "selected";
+            } else {
+                row.className = "";
             }
         }
     }
