@@ -23,7 +23,7 @@ class WindowView extends SubView {
         let searchElement = this.getElementById("search") as HTMLInputElement;
         new TableSearch(searchElement, this.table);
         
-        let desktopDiv = document.getElementById("desktop");
+        let desktopDiv = this.getElementById("desktop");
         desktopDiv.appendChild(this.desktop.element);
         this.desktop.frameClick = (frame: Frame) => this.onclick(frame);
 
