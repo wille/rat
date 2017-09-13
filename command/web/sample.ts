@@ -24,6 +24,7 @@ namespace Sample {
         ]
 
         for (let client of clients) {
+            client.ping = randomPing();
             MainViewContainer.clientsView.add(client);
         }
     }
