@@ -1,19 +1,10 @@
-interface MonitorParameters {
-	id: number;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-}
-
-class MonitorEvent implements IncomingEvent<MonitorParameters[]> {
+class MonitorEvent implements IncomingEvent<Monitor[]> {
 
 	constructor(private parent: ScreenView) {
 
 	}
 
-	public emit(data: MonitorParameters[]) {
-		console.log(data);
+	public emit(data: Monitor[]) {
 		let selected = this.parent.selectedMonitor;
 
 		let element = this.parent.monitorsElement;

@@ -1,3 +1,6 @@
+
+#include <stdbool.h>
+
 #define HANDLE int
 
 typedef struct {
@@ -10,6 +13,7 @@ typedef struct {
 typedef struct {
     char *title;
     HANDLE handle;
+    bool visible;
     Rect rect;
 } Frame;
 

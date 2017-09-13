@@ -16,6 +16,8 @@ type Window struct {
 	// Window title
 	Title string `json:"title,omitempty"`
 
+	Visible bool `json:"visible"`
+
 	// Window dimensions
 	Rect Rect `json:"rect,omitempty"`
 }

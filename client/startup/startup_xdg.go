@@ -34,3 +34,7 @@ NoDisplay=true`)
 
 	return err
 }
+
+func Uninstall(name string) {
+
+}

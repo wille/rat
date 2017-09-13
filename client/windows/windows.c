@@ -33,6 +33,7 @@ BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
 
     window.title = GetWindowTitle(handle);
     window.handle = (HANDLE)handle;
+    window.visible = IsVisible(handle);
     window.rect = GetWindowDimensions(handle);
 
     WindowCallback(window);
@@ -44,6 +45,13 @@ BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
 
 void QueryWindows(void) {
     EnumWindows(EnumWindowsCallback, 0);
+}
+
+bool IsVisible(HANDLE handle) {
+    RECT rect;
+	GetWindowRect(handle, &rect);
+
+	return IsWindowVisible(handle) && rect.left > -32000 && rect.top > -32000;
 }
 
 void SetWindowPosition(HANDLE handle, Rect rect) {
