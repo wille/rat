@@ -23,7 +23,7 @@ Rect GetWindowDimensions(Display *display, Window window) {
 }
 
 bool IsVisible(Display *disp, Window window) {
-	return false;
+	return true;
 }
 
 void EnumWindows(Display *display, Window window) {
