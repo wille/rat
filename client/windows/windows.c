@@ -53,3 +53,11 @@ BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam) {
 void QueryWindows(void) {
     EnumWindows(EnumWindowsCallback, 0);
 }
+
+void SetDisplayState(HANDLE handle, bool visible) {	
+	if (visible) {
+		ShowWindow(handle, SW_SHOW);
+	} else {
+		ShowWindow(handle, SW_MINIMIZE);
+	}
+}
