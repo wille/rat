@@ -12,7 +12,7 @@ type SysMessage struct {
 	Action system.Action `json:"action"`
 }
 
-func (sys SysMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (sys SysMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Queue <- &SysPacket{sys.Action}
 
 	if sys.Action == system.Disconnect {

@@ -120,7 +120,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 				return
 			}
 
-			err = i.(IncomingMessage).Handle(ws, client, "")
+			err = i.(IncomingMessage).Handle(ws, client)
 
 			if err != nil {
 				fmt.Println("message handle", err)

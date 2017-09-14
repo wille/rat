@@ -17,7 +17,7 @@ func (m WindowMessage) Header() MessageHeader {
 	return Windows
 }
 
-func (d WindowMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (d WindowMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Listeners[header.WindowsHeader] = ws
 
 	packet := &WindowsPacket{}

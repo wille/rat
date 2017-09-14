@@ -12,7 +12,7 @@ type FileMessage struct {
 	Task        int    `json:"task"`
 }
 
-func (m FileMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (m FileMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Queue <- &FilePacket{shared.FileTask(m.Task), m.File, m.Destination}
 
 	return nil

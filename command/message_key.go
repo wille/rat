@@ -9,7 +9,7 @@ type KeyMessage struct {
 	Event int `json:"state"`
 }
 
-func (m KeyMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (m KeyMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Queue <- &KeyPacket{m.Key, m.Event}
 
 	return nil

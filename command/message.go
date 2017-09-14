@@ -32,7 +32,7 @@ type OutgoingMessage interface {
 }
 
 type IncomingMessage interface {
-	Handle(ws *websocket.Conn, client *Client, data string) error
+	Handle(ws *websocket.Conn, client *Client) error
 }
 
 // MessageMap is a map with event handlers and their codes

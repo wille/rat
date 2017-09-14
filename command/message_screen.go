@@ -12,7 +12,7 @@ type ScreenUpdateMessage struct {
 	Monitor  int     `json:"monitor"`
 }
 
-func (m ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (m ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client) error {
 	stream := m.Activate
 
 	if stream {

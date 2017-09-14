@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"rat/shared/network/header"
 
 	"golang.org/x/net/websocket"
@@ -21,18 +20,15 @@ func (m ProcessMessage) Header() MessageHeader {
 	return ProcessQueryEvent
 }
 
-func (d ProcessQueryMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
-	var j ProcessQueryMessage
-	json.Unmarshal([]byte(data), &j)
-
+func (d ProcessQueryMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Listeners[header.ProcessHeader] = ws
 
 	pids := []Process{}
 
-	for _, pid := range j.PIDs {
+	for _, pid := range d.PIDs {
 		pids = append(pids, Process{PID: pid})
 	}
 
-	client.Queue <- &ProcessPacket{j.Type, pids}
+	client.Queue <- &ProcessPacket{d.Type, pids}
 	return nil
 }

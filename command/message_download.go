@@ -11,7 +11,7 @@ type DownloadMessage struct {
 	File string `json:"file"`
 }
 
-func (d DownloadMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (d DownloadMessage) Handle(ws *websocket.Conn, client *Client) error {
 	file, err := ioutil.TempFile("", "download")
 	if err != nil {
 		return err

@@ -11,7 +11,7 @@ type ShellMessage struct {
 	Command string `json:"command"`
 }
 
-func (m ShellMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (m ShellMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Listeners[header.ShellHeader] = ws
 	client.Queue <- &ShellPacket{m.Action, m.Command}
 

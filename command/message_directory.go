@@ -10,7 +10,7 @@ type DirectoryRequestMessage struct {
 	Path string `json:"path"`
 }
 
-func (d DirectoryRequestMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (d DirectoryRequestMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Listeners[header.DirectoryHeader] = ws
 	client.Queue <- &DirectoryPacket{Path: d.Path}
 

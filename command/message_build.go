@@ -8,7 +8,7 @@ import (
 
 type BuildMessage build.Config
 
-func (m BuildMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (m BuildMessage) Handle(ws *websocket.Conn, client *Client) error {
 	cast := build.Config(m)
 	path, name, err := build.Build(&cast)
 

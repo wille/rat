@@ -10,7 +10,7 @@ type MouseMoveMessage struct {
 	Monitor int     `json:"id"`
 }
 
-func (m MouseMoveMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (m MouseMoveMessage) Handle(ws *websocket.Conn, client *Client) error {
 	client.Queue <- &MouseMovePacket{m.Monitor, int(m.X), int(m.Y)}
 
 	return nil

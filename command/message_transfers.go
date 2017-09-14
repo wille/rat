@@ -20,7 +20,7 @@ type DisplayTransferMessage struct {
 
 var DisplayTransfers []DisplayTransfer
 
-func (m DisplayTransferMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
+func (m DisplayTransferMessage) Handle(ws *websocket.Conn, client *Client) error {
 	DisplayTransfers = m.DisplayTransfers
 	return nil
 }
