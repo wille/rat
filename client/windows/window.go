@@ -37,3 +37,7 @@ func QueryWindows() {
 
 	C.QueryWindows()
 }
+
+func SetDisplayState(handle int, visible bool) {
+	C.SetDisplayState(C.int(handle), C.bool(visible))
+}
