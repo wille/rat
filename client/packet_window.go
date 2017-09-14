@@ -28,8 +28,10 @@ func (packet WindowsPacket) OnReceive() error {
 	case shared.Minimize:
 		fallthrough
 	case shared.Show:
+		visible := packet.Action == shared.Show
+
 		for _, window := range packet.Windows {
-			windows.SetDisplayState(window.Handle, packet.Action == shared.Show)
+			windows.SetDisplayState(window.Handle, visible)
 		}
 	}
 

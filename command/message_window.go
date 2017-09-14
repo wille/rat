@@ -21,14 +21,11 @@ func (d WindowMessage) Handle(ws *websocket.Conn, client *Client, data string) e
 	client.Listeners[header.WindowsHeader] = ws
 
 	packet := &WindowsPacket{}
-
-	packet.Windows = d.Frames
 	packet.Action = d.Action
 
-	switch d.Action {
-	case shared.Show:
-	case shared.Minimize:
-	case shared.Reload:
+	// If not a reload action, attach frames that will be modified
+	if d.Action != shared.Reload {
+		packet.Windows = d.Frames
 	}
 
 	client.Queue <- packet
