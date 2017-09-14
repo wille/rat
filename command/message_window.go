@@ -8,8 +8,9 @@ import (
 )
 
 type WindowMessage struct {
-	Monitors []shared.Monitor `json:"monitors"`
-	Frames   []shared.Window  `json:"frames"`
+	Monitors []shared.Monitor `json:"monitors,omitempty"`
+	Frames   []shared.Window  `json:"frames,omitempty"`
+	Action   int              `json:"action,omitempty"`
 }
 
 func (m WindowMessage) Header() MessageHeader {
@@ -18,7 +19,19 @@ func (m WindowMessage) Header() MessageHeader {
 
 func (d WindowMessage) Handle(ws *websocket.Conn, client *Client, data string) error {
 	client.Listeners[header.WindowsHeader] = ws
-	client.Queue <- &WindowsPacket{}
+
+	packet := &WindowsPacket{}
+
+	packet.Windows = d.Frames
+	packet.Action = d.Action
+
+	switch d.Action {
+	case shared.Show:
+	case shared.Minimize:
+	case shared.Reload:
+	}
+
+	client.Queue <- packet
 
 	return nil
 }

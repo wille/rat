@@ -1,5 +1,11 @@
 package shared
 
+const (
+	Reload = iota
+	Show
+	Minimize
+)
+
 // Desktop window dimensions
 type Rect struct {
 	X      int `json:"x"`

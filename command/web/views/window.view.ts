@@ -35,7 +35,9 @@ class WindowView extends SubView {
 
     private reload() {
         this.clear();
-        Control.instance.send(new WindowsOutgoingMessage(), this.client);
+        Control.instance.send(new WindowsOutgoingMessage({
+            action: WindowAction.RELOAD
+        }), this.client);
     }
 
     public onEnter() {
@@ -135,15 +137,18 @@ class WindowView extends SubView {
     }
 
     public show() {
-        this.getSelectedFrames().forEach(element => {
-            console.log("Show", element.title);
-        });
+        this.doAction(WindowAction.SHOW, this.getSelectedFrames());
     }
 
     public minimize() {
-        this.getSelectedFrames().forEach(element => {
-            console.log("Minimizing", element.title);
-        });
+        this.doAction(WindowAction.MINIMIZE, this.getSelectedFrames());
+    }
+
+    private doAction(action: WindowAction, frames: Frame[]) {
+        Control.instance.send(new WindowsOutgoingMessage({
+            action: action,
+            frames: frames
+        }), this.client);
     }
 
     public get table(): HTMLTableElement {

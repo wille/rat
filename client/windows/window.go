@@ -6,6 +6,7 @@ package windows
 import "C"
 
 import (
+	"fmt"
 	"rat/shared"
 )
 
@@ -39,5 +40,6 @@ func QueryWindows() {
 }
 
 func SetDisplayState(handle int, visible bool) {
+	fmt.Println("Setting displaystate", handle, visible)
 	C.SetDisplayState(C.int(handle), C.bool(visible))
 }

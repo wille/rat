@@ -7,7 +7,8 @@ import (
 )
 
 type WindowsPacket struct {
-	Windows []shared.Window `network:"send"`
+	Windows []shared.Window `network:"send,receive"`
+	Action  int             `network:"receive"`
 }
 
 func (packet WindowsPacket) Header() header.PacketHeader {
@@ -21,7 +22,16 @@ func (packet *WindowsPacket) Init() {
 }
 
 func (packet WindowsPacket) OnReceive() error {
-	Queue <- &WindowsPacket{}
+	switch packet.Action {
+	case shared.Reload:
+		Queue <- &WindowsPacket{}
+	case shared.Minimize:
+		fallthrough
+	case shared.Show:
+		for _, window := range packet.Windows {
+			windows.SetDisplayState(window.Handle, packet.Action == shared.Show)
+		}
+	}
 
 	return nil
 }

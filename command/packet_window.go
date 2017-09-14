@@ -6,7 +6,8 @@ import (
 )
 
 type WindowsPacket struct {
-	Windows []shared.Window `network:"receive"`
+	Windows []shared.Window `network:"receive,send"`
+	Action  int             `network:"send"`
 }
 
 func (packet WindowsPacket) Header() header.PacketHeader {

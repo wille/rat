@@ -1,8 +1,19 @@
 /// <reference path="outgoingMessage.ts" />
 
-class WindowsOutgoingMessage extends OutgoingMessage<{}> {
+const enum WindowAction {
+    RELOAD,
+    SHOW,
+    MINIMIZE
+}
 
-    constructor() {
-        super(Control.MessageType.WINDOWS, {});
+interface WindowsMessageParameters {
+    action: WindowAction;
+    frames?: Frame[];
+}
+
+class WindowsOutgoingMessage extends OutgoingMessage<WindowsMessageParameters> {
+
+    constructor(params: WindowsMessageParameters) {
+        super(Control.MessageType.WINDOWS, params);
     }
 }
