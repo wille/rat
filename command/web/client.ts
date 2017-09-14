@@ -1,36 +1,27 @@
-interface ClientFields {
-    ping?: number;
-    flag?: string;
-    country?: string;
-    host?: string;
-    computerName?: string;
-    operatingSystem: string;
-}
 
-class Client implements ClientFields {
+class Client {
 
     public static clients: Client[] = [];
 
-    public readonly flag: string;
-    public readonly country: string;
-    public readonly host: string;
-    public readonly computerName: string;
-    public readonly operatingSystem: string;
-
     public ping: number;
+    public readonly operatingSystem: OperatingSystem;
 
-    constructor(public readonly id: ClientId, fields?: ClientFields) {
-        if (fields) {
-            for (let p in fields) {
-                if (fields.hasOwnProperty(p)) {
-                    this[p] = fields[p];
-                }
-            }
+    constructor(public readonly id: ClientId,
+                public readonly flag: string,
+                public readonly country: string,
+                public readonly host: string,
+                public readonly computerName: string,
+                private osType: string,
+                private osDisplay: string) {
+        
+        this.operatingSystem = {
+            type: OperatingSystemType[osType],
+            display: osDisplay
         }
     }
 
     public get separator() {
-        return this.operatingSystem.indexOf("Windows") !== -1 ? "\\" : "/";
+        return this.operatingSystem.type === OperatingSystemType.Windows ? "\\" : "/";
     }
     
     private sys(action: SysAction) {

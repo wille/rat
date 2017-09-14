@@ -24,12 +24,13 @@ func (m ClientMessage) Header() MessageHeader {
 }
 
 type ClientData struct {
-	Ping            int    `json:"ping"`
-	Country         string `json:"country,omitempty"`
-	Flag            string `json:"flag,omitempty"`
-	Host            string `json:"host,omitempty"`
-	ComputerName    string `json:"computerName,omitempty"`
-	OperatingSystem string `json:"operatingSystem,omitempty"`
+	Ping                int    `json:"ping"`
+	Country             string `json:"country,omitempty"`
+	Flag                string `json:"flag,omitempty"`
+	Host                string `json:"host,omitempty"`
+	ComputerName        string `json:"computerName,omitempty"`
+	OperatingSystemType string `json:"osType,omitempty"`
+	OperatingSystem     string `json:"operatingSystem,omitempty"`
 }
 
 func NewClientEvent(t UpdateType, client *Client, data interface{}) ClientMessage {
