@@ -7,13 +7,13 @@ typedef struct {
     int y;
     unsigned int width;
     unsigned int height;
-} Rect;
+} WindowRectangle;
 
 typedef struct {
     char *title;
     HANDLE handle;
     bool visible;
-    Rect rect;
+    WindowRectangle rect;
 } Frame;
 
 // Callback function defined in Go
