@@ -15,6 +15,7 @@ import (
 	"bytes"
 	"fmt"
 	"image"
+	"rat/shared"
 	"unsafe"
 
 	"github.com/disintegration/imaging"
@@ -29,7 +30,7 @@ func init() {
 	dataOffset = int(C.sizeof_BITMAPFILEHEADER) + int(C.sizeof_BITMAPINFOHEADER)
 }
 
-func Capture(monitor Monitor) image.Image {
+func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
 	var len C.int
