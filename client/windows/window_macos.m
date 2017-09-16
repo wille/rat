@@ -7,11 +7,21 @@
 void QueryWindows(void) {
 	CFArrayRef windows = CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements | kCGWindowListOptionOnScreenOnly, kCGNullWindowID);	
 
-	Frame frame;
-	frame.handle = 0;
-	frame.visible = false;
-	frame.title = "test";
-	WindowCallback(frame);
+	//CFArrayApplyFunction(windows, CFRangeMake(0, CFArrayGetCount(windows)), &ProcessWindow, NULL);
+
+	for (NSDictionary *entry in (NSArray*) windows) {
+		int number = [[entry objectForKey: (id) kCGWindowNumber] intValue];
+		NSString* ownerName = [entry objectForKey: (id) kCGWindowName];
+
+		Frame frame;
+		frame.handle = number;
+		frame.visible = false;
+		frame.title = [ownerName UTF8String];
+
+		WindowCallback(frame);
+	}
+
+	CFRelease(windows);
 }
 	
 void SetDisplayState(HANDLE handle, bool visible) {
