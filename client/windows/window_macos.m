@@ -6,7 +6,7 @@
 #include "window.h"
 
 void QueryWindows(void) {
-	CFArrayRef windows = CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements | kCGWindowListOptionOnScreenOnly, kCGNullWindowID);	
+	CFArrayRef windows = CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements, kCGNullWindowID);	
 
 	for (NSDictionary *entry in (NSArray*) windows) {
 		int number = [[entry objectForKey: (id) kCGWindowNumber] intValue];
@@ -18,7 +18,7 @@ void QueryWindows(void) {
 
 		Frame frame;
 		frame.handle = number;
-		frame.visible = false;
+		frame.visible = [[entry objectForKey: (id) kCGWindowIsOnscreen] boolValue];
 		frame.title = [[NSString stringWithFormat:@"%@ - %@", title, ownerName] UTF8String];
 		frame.rect.x = bounds.origin.x;
 		frame.rect.y = bounds.origin.y;
