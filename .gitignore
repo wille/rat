@@ -3,9 +3,6 @@ tests/
 tslint.json
 prod/
 
-# geoip database
-GeoLite2-Country.mmdb
-
 # go build generated files
 debug
 debug.test
