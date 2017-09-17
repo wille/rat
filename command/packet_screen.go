@@ -7,7 +7,12 @@ import (
 type ScreenPacket struct {
 	Activate bool    `network:"send"`
 	Scale    float32 `network:"send"`
-	Monitor  int     `network:"send"`
+
+	// Monitor is true if this is a whole screenshot, or a single window
+	Monitor bool `network:"send"`
+
+	// Handle to monitor or window
+	Handle int `network:"send"`
 
 	Buffer []byte `network:"receive"`
 }

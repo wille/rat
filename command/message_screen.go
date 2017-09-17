@@ -9,7 +9,8 @@ import (
 type ScreenUpdateMessage struct {
 	Activate bool    `json:"active"`
 	Scale    float32 `json:"scale"`
-	Monitor  int     `json:"monitor"`
+	Monitor  bool    `json:"monitor"`
+	Handle_  int     `json:"handle"`
 }
 
 func (m ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client) error {
@@ -23,12 +24,14 @@ func (m ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client) error {
 		}
 	}
 
-	scale := m.Scale
-	monitor := m.Monitor
-
 	client.Listeners[header.MonitorsHeader] = ws
 
-	packet := ScreenPacket{Activate: stream, Scale: scale, Monitor: monitor}
+	packet := ScreenPacket{
+		Activate: stream,
+		Scale:    m.Scale,
+		Handle:   m.Handle_,
+		Monitor:  m.Monitor,
+	}
 	client.Queue <- &packet
 
 	if !client.Screen.Streaming {

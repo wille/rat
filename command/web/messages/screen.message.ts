@@ -3,7 +3,12 @@
 interface ScreenMessageParameters {
     active: boolean;
     scale?: number;
-    monitor?: number;
+
+    // Whole monitor or just a window?
+    monitor?: boolean;
+
+    // Monitor/window handle
+    handle?: number;
 }
 
 class ScreenMessage extends OutgoingMessage<ScreenMessageParameters> {

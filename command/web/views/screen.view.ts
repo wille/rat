@@ -145,7 +145,8 @@ class ScreenView extends SubView {
 		let params: ScreenMessageParameters = {
 			active: true,
 			scale: this.scale / 100,
-			monitor: this.selectedMonitor
+			monitor: true,
+			handle: this.selectedMonitor
 		};
 
 		Control.instance.send(new ScreenMessage(params), this.client);
