@@ -1,6 +1,7 @@
 //+build darwin
 
 #import <ApplicationServices/ApplicationServices.h>
+#import <Foundation/Foundation.h>
 
 #include "window.h"
 
@@ -9,7 +10,8 @@ void QueryWindows(void) {
 
 	for (NSDictionary *entry in (NSArray*) windows) {
 		int number = [[entry objectForKey: (id) kCGWindowNumber] intValue];
-		NSString* ownerName = [entry objectForKey: (id) kCGWindowName];
+		NSString* ownerName = [entry objectForKey: (id) kCGWindowOwnerName];
+		NSString* title = [entry objectForKey: (id) kCGWindowName];
 
 		CGRect bounds;
         CGRectMakeWithDictionaryRepresentation([entry objectForKey: (id) kCGWindowBounds], &bounds);
@@ -17,7 +19,7 @@ void QueryWindows(void) {
 		Frame frame;
 		frame.handle = number;
 		frame.visible = false;
-		frame.title = [ownerName UTF8String];
+		frame.title = [[NSString stringWithFormat:@"%@ - %@", title, ownerName] UTF8String];
 		frame.rect.x = bounds.origin.x;
 		frame.rect.y = bounds.origin.y;
 		frame.rect.width = bounds.size.width;
