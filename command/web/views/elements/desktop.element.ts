@@ -37,7 +37,7 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
             if (frame.visible && frame.title && frame.title.length > 0 && frame.rect.w > 0 && frame.rect.h > 0) {
                 if (this.client.operatingSystem.type === OperatingSystemType.Windows && frame.title === "Program Manager") {
                     continue;
-                } else if (this.client.operatingSystem.type == OperatingSystemType.MacOS && frame.title === "Dock - Dock") {
+                } else if (this.client.operatingSystem.type === OperatingSystemType.macOS && frame.title === "Dock - Dock") {
                     continue;
                 }
 

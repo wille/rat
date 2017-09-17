@@ -1,6 +1,6 @@
 enum OperatingSystemType {
     Windows,
-    MacOS,
+    macOS,
     Linux,
     FreeBSD,
     OpenBSD,
