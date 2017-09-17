@@ -1,0 +1,25 @@
+.vscode/
+tests/
+tslint.json
+prod/
+
+# go build generated files
+debug
+debug.test
+
+# user generated certs
+*.pem
+*.key
+
+# generated files
+*.exe
+*.bin
+command/command
+client/client
+command/web/scripts/
+debug.bmp
+test*.jpg
+lib.js
+lib.js.map
+command/bin
+
