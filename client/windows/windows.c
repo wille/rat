@@ -22,11 +22,11 @@ LPSTR GetWindowTitle(HWND handle) {
     return buffer;
 }
 
-Rect GetWindowDimensions(HANDLE handle) {
+WindowRectangle GetWindowDimensions(HANDLE handle) {
     RECT wrect;
     GetWindowRect((HWND) handle, &wrect);
 
-    Rect rect;
+    WindowRectangle rect;
     rect.x = wrect.left;
     rect.y = wrect.top;
     rect.width = wrect.right - wrect.left;
