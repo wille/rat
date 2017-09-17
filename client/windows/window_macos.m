@@ -10,8 +10,8 @@ void QueryWindows(void) {
 
 	for (NSDictionary *entry in (NSArray*) windows) {
 		int number = [[entry objectForKey: (id) kCGWindowNumber] intValue];
-		NSString* ownerName = [entry objectForKey: (id) kCGWindowOwnerName];
-		NSString* title = [entry objectForKey: (id) kCGWindowName];
+		NSString *windowOwnerName = [entry objectForKey: (id) kCGWindowOwnerName];
+		NSString *windowTitle = [entry objectForKey: (id) kCGWindowName];
 
 		CGRect bounds;
         CGRectMakeWithDictionaryRepresentation([entry objectForKey: (id) kCGWindowBounds], &bounds);
@@ -19,7 +19,17 @@ void QueryWindows(void) {
 		Frame frame;
 		frame.handle = number;
 		frame.visible = [[entry objectForKey: (id) kCGWindowIsOnscreen] boolValue];
-		frame.title = [[NSString stringWithFormat:@"%@ - %@", title, ownerName] UTF8String];
+		
+		NSString *title;
+		if (windowTitle == NULL) {
+			title = windowOwnerName;
+		} else if (windowOwnerName == NULL) {
+			title = windowTitle;
+		} else {
+			title = [NSString stringWithFormat: @"%@ - %@", windowTitle, windowOwnerName];
+		}
+
+		frame.title = [title UTF8String];
 		frame.rect.x = bounds.origin.x;
 		frame.rect.y = bounds.origin.y;
 		frame.rect.width = bounds.size.width;
