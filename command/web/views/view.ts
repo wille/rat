@@ -20,7 +20,7 @@ abstract class AbstractView {
 			}
 		}
 
-		throw new Error("element " + id + " not found");
+		return null;
 	}
 }
 
