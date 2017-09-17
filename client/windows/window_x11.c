@@ -6,7 +6,7 @@
 
 #include "window.h"
 
-Rect GetWindowDimensions(Display *display, Window window) {
+WindowRectangle GetWindowDimensions(Display *display, Window window) {
 	Window root;
 	int x, y;
 	unsigned int width, height;
@@ -14,7 +14,7 @@ Rect GetWindowDimensions(Display *display, Window window) {
 
 	XGetGeometry(display, window, &root, &x, &y, &width, &height, &border_width, &depth);
 
-	Rect rect;
+	WindowRectangle rect;
 	rect.x = x;
 	rect.y = y;
 	rect.width = width;
