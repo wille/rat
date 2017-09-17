@@ -18,6 +18,4 @@ extern void MonitorCallback(Monitor m);
 // Uses MonitorCallback() for callback
 void QueryMonitors(void);
 
-char *GetScreenshot(Monitor m, int *size);
-
 #endif

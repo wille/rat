@@ -8,6 +8,7 @@
 
 #include "bitmap.h"
 #include "screen.h"
+#include "screen_x11.h"
 
 void QueryMonitors(void) {
 	Display *display;
@@ -40,7 +41,7 @@ void QueryMonitors(void) {
 	XCloseDisplay(display);
 }
 
-char *GetScreenshot(Monitor monitor, int *size) {
+XImage* CaptureMonitor(Monitor monitor) {
 	Display *display;
     int screen;
     Window root;
@@ -50,10 +51,11 @@ char *GetScreenshot(Monitor monitor, int *size) {
 
     XImage *img = XGetImage(display, root, monitor.coordinates.x, monitor.coordinates.y, monitor.coordinates.width, monitor.coordinates.height, AllPlanes, ZPixmap);
 
-	char *buffer = GetBitmap(img->data, size, img->width, img->height);
+    XCloseDisplay(display);
+    
+    return img;
+}
 
-	XDestroyImage(img);
-	XCloseDisplay(display);
-
-	return buffer;
+void DestroyImage(XImage *image) {
+    XDestroyImage(image);
 }
