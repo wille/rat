@@ -24,7 +24,7 @@ class SubViewContainer extends TabbedContainer<SubView> {
 					this.closeView(view);
 				};
 			} else {
-				throw new Error("#close not found");
+				console.log(view.title + ": no close element found");
 			}
 		});
 	}
