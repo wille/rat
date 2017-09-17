@@ -15,6 +15,13 @@ class WindowContextMenu extends ContextMenu {
 
         this.deleteItem = document.getElementById("item-minimize");
         this.deleteItem.onclick = () => parent.minimize();
+
+        document.getElementById("item-stream").addEventListener("click", () => {
+            let frames = parent.getSelectedFrames();
+            if (frames.length > 0) {
+                sub.setView(new SingleWindowView(parent.client, frames[0].handle));                
+            }
+        });
     }
 }
 
@@ -113,7 +120,7 @@ class WindowView extends SubView {
         }
     }
 
-    private getSelectedFrames(): Frame[] {
+    public getSelectedFrames(): Frame[] {
         let rows = this.table.rows;
 
         let frames: Frame[] = [];

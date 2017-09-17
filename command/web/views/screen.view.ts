@@ -1,9 +1,7 @@
-class ScreenView extends SubView {
+/// <reference path="streaming.view.ts" />
 
-	private fps: HTMLElement;
-	private screenElement;
-	private screenEvent: ScreenEvent;
-	
+class ScreenView extends StreamingView {
+
 	private scaleSlider: Slider;
 
 	private moveMouse: boolean;
@@ -12,12 +10,12 @@ class ScreenView extends SubView {
 	public selectedMonitor: number;
 
 	constructor(client: Client) {
-		super("static/screen.html", "Screen", client);
-
-		this.fps = document.createElement("p");
+		super(StreamingType.MONITOR, "static/screen.html", "Screen", client);
 	}
 
 	public onEnter() {
+		super.onEnter();
+
 		// Initialize slider
 		this.scaleSlider = new Slider(super.getElementById("scale"), {
 			formatter: (value) => {
@@ -49,15 +47,6 @@ class ScreenView extends SubView {
 		document.onkeydown = (event) => this.keyEvent(event.keyCode, InputState.PRESS);
 		document.onkeyup = (event) => this.keyEvent(event.keyCode, InputState.RELEASE);
 
-		// Setup screen event
-		this.screenEvent = new ScreenEvent(this.screenElement, (fps) => {
-			// Set FPS label text
-			this.fps.innerHTML = fps + " FPS";
-		});
-		Control.addEvent(Control.MessageType.SCREEN, this.screenEvent);
-
-		Statusbar.addElement(this.fps);
-
 		// Setup mouse and keyboard input toggles
 		let mouseToggle = new ToggleButton(super.getElementById("cursor"));
 		mouseToggle.onclick = () => {
@@ -71,14 +60,9 @@ class ScreenView extends SubView {
 	}
 
 	public onLeave() {
-		Control.removeEvent(Control.MessageType.SCREEN);
+		super.onLeave();
+
 		Control.removeEvent(Control.MessageType.MONITOR);
-
-		Statusbar.removeElement(this.fps);
-
-		Control.instance.send(new ScreenMessage({ active: false } as ScreenMessageParameters), this.client);
-
-		this.screenEvent.stop();
 
 		document.onkeydown = undefined;
 		document.onkeyup = undefined;
@@ -89,8 +73,12 @@ class ScreenView extends SubView {
 		return super.getElementById("monitors");
 	}
 
+	protected get handle(): number {
+		return this.selectedMonitor;
+	}
+
 	// returns the current scale in percent
-	private get scale(): number {
+	protected get scale(): number {
 		return this.scaleSlider.getValue();
 	}
 
@@ -138,17 +126,5 @@ class ScreenView extends SubView {
 
 			Control.instance.send(new KeyMessage(params), this.client);
 		}
-	}
-
-	// Sends screen event with new configuration
-	public initStream() {
-		let params: ScreenMessageParameters = {
-			active: true,
-			scale: this.scale / 100,
-			monitor: true,
-			handle: this.selectedMonitor
-		};
-
-		Control.instance.send(new ScreenMessage(params), this.client);
 	}
 }
