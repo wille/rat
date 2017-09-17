@@ -2,6 +2,7 @@
 
 #import <ApplicationServices/ApplicationServices.h>
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 #include "window.h"
 
@@ -40,7 +41,8 @@ void QueryWindows(void) {
 
 	CFRelease(windows);
 }
-	
+
 void SetDisplayState(HANDLE handle, bool visible) {
-	
+	NSWindow *window = [NSApp windowWithWindowNumber: handle];
+	[ window minitaturize ];
 }
