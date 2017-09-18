@@ -17,12 +17,21 @@ import (
 func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
-	image := C.CaptureMonitor(m)
+	defer C.Release()
+	return handleCapture(C.CaptureMonitor(m))
+}
 
-	len := monitor.Width * monitor.Height * 4
-	buf := C.GoBytes(unsafe.Pointer(image), C.int(len))
+func CaptureWindow(handle int) image.Image {
+	defer C.Release()
+	return handleCapture(C.CaptureWindow(C.int(handle)))
+}
 
-	C.Release()
+func handleCapture(data C.Capture) image.Image {
+	width := int(data.width)
+	height := int(data.height)
+	size := width * height * 4
 
-	return imageFromBitmap(buf, monitor.Width, monitor.Height)
+	buf := C.GoBytes(unsafe.Pointer(data.data), C.int(size))
+
+	return imageFromBitmap(buf, width, height)
 }

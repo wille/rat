@@ -39,7 +39,44 @@ static HDC m_HDC;
 static HBITMAP m_hBmp;
 static HGDIOBJ o;
 
-char *CaptureMonitor(Monitor monitor) {
+Capture CaptureWindow(int hwnd) {
+    RECT rect;
+    GetWindowRect(hwnd, &rect);
+
+    int x = rect.left;
+    int y = rect.top;
+    int width = rect.right - rect.left;
+    int height = rect.bottom - rect.top;
+
+    BITMAPINFO bt;
+	bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bt.bmiHeader.biWidth = width;
+	bt.bmiHeader.biHeight = -height;
+	bt.bmiHeader.biPlanes = 1;
+	bt.bmiHeader.biBitCount = 32;
+    bt.bmiHeader.biCompression = BI_RGB;
+    
+    void *ptr = NULL;
+
+    hDC = GetDC(hwnd);
+    m_HDC = CreateCompatibleDC(hDC);
+    m_hBmp = CreateDIBSection(m_HDC, &bt, DIB_RGB_COLORS, &ptr, 0, 0);
+    o = SelectObject(m_HDC, m_hBmp);
+
+    BitBlt(m_HDC, 0, 0, width, height, hDC, 0, 0, SRCCOPY);
+    
+    int len = width * height * 4;
+    PixelSwap((char*) ptr, width * height * 4);
+
+    Capture cap;
+    cap.width = width;
+    cap.height = height;
+    cap.data = (char*) ptr;
+
+    return cap;
+}
+
+Capture CaptureMonitor(Monitor monitor) {
     int x = monitor.coordinates.x;
     int y = monitor.coordinates.y;
     int width = monitor.coordinates.width;
@@ -65,7 +102,12 @@ char *CaptureMonitor(Monitor monitor) {
     int len = width * height * 4;
     PixelSwap((char*) ptr, width * height * 4);
 
-    return (char*) ptr;
+    Capture cap;
+    cap.width = width;
+    cap.height = height;
+    cap.data = (char*) ptr;
+
+    return cap;
 }
 
 void Release(void) {

@@ -4,7 +4,9 @@ package screen
 #include "screen.h"
 */
 import "C"
-import "rat/shared"
+import (
+	"rat/shared"
+)
 
 //export MonitorCallback
 func MonitorCallback(cm C.Monitor) {
