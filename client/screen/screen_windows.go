@@ -4,36 +4,23 @@ package screen
 #cgo LDFLAGS: -lGdi32 -lgdiplus
 #include <windows.h>
 #include "screen.h"
+#include "screen_windows.h"
 */
 import "C"
 
 import (
-	"bytes"
-	"fmt"
 	"image"
 	"rat/shared"
 	"unsafe"
-
-	"golang.org/x/image/bmp"
 )
 
 func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
-	var len C.int
+	image := C.CaptureMonitor(m)
 
-	buf := C.GetScreenshot(m, &len)
+	len := monitor.Width * monitor.Height * 4
+	buf := C.GoBytes(unsafe.Pointer(image.data), C.int(len))
 
-	buf1 := C.GoBytes(unsafe.Pointer(buf), len)
-
-	img, err := bmp.Decode(bytes.NewReader(buf1))
-
-	C.free(unsafe.Pointer(buf))
-
-	if err != nil {
-		fmt.Println(err.Error())
-		return nil
-	}
-
-	return img
+	return imageFromBitmap(buf, monitor.Width, monitor.Height)
 }
