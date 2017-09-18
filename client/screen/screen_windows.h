@@ -6,4 +6,7 @@
 // Captures monitor screenshot 
 char *CaptureMonitor(Monitor m);
 
+// Releases all resources
+void Release(void);
+
 #endif

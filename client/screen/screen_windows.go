@@ -22,5 +22,7 @@ func Capture(monitor shared.Monitor) image.Image {
 	len := monitor.Width * monitor.Height * 4
 	buf := C.GoBytes(unsafe.Pointer(image), C.int(len))
 
+	C.Release()
+
 	return imageFromBitmap(buf, monitor.Width, monitor.Height)
 }

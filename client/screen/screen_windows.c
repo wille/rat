@@ -3,6 +3,7 @@
 
 #include "screen.h"
 #include "screen_windows.h"
+#include "bitmap.h"
 
 static int monitor = 0;
 
@@ -33,6 +34,11 @@ void QueryMonitors(void) {
 	ReleaseDC(NULL, hdc);
 }
 
+static HDC hDC;
+static HDC m_HDC;
+static HBITMAP m_hBmp;
+static HGDIOBJ o;
+
 char *CaptureMonitor(Monitor monitor) {
     int x = monitor.coordinates.x;
     int y = monitor.coordinates.y;
@@ -49,33 +55,27 @@ char *CaptureMonitor(Monitor monitor) {
     
     void *ptr = NULL;
 
-    HDC hDC = GetDC(0);
-    HDC m_HDC = CreateCompatibleDC(hDC);
+    hDC = GetDC(0);
+    m_HDC = CreateCompatibleDC(hDC);
+    m_hBmp = CreateDIBSection(m_HDC, &bt, DIB_RGB_COLORS, &ptr, 0, 0);
+    o = SelectObject(m_HDC, m_hBmp);
 
-    HBITMAP m_hBmp = CreateDIBSection(m_HDC, &bt, DIB_RGB_COLORS, &ptr, 0, 0);
-
-    HGDIOBJ o = SelectObject(m_HDC, m_hBmp);
-
-    BitBlt(m_HDC, 0, 0, width, height, hDC, x, y, SRCCOPY); // w, h
-    
+    BitBlt(m_HDC, 0, 0, width, height, hDC, x, y, SRCCOPY);
     
     int len = width * height * 4;
-    char *c = (char*) ptr;
-    
-    for (int i = 0; i < len; i += 4) {
-        int r = c[i];
-        int b = c[i + 2];
-    
-        c[i] = b;
-        c[i + 2] = r;        
-    }
+    PixelSwap((char*) ptr, width * height * 4);
 
-    /*
+    return (char*) ptr;
+}
+
+void Release(void) {
     ReleaseDC(0, hDC);
     DeleteDC(m_HDC);
     DeleteObject(m_hBmp);
     DeleteObject(o);
-    */
 
-    return c;
+    hDC = NULL;
+    m_HDC = NULL;
+    m_hBmp = NULL;
+    o = NULL;
 }
