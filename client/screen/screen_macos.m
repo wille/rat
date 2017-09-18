@@ -1,8 +1,12 @@
 //+build darwin
 
 #import <ApplicationServices/ApplicationServices.h>
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 
 #include "screen.h"
+#include "screen_macos.h"
+#include "bitmap.h"
 
 void QueryMonitors(void) {
     CGDisplayCount displayCount;
@@ -12,7 +16,6 @@ void QueryMonitors(void) {
 
     for (int i = 0; i < displayCount; i++) {
 		CGDirectDisplayID display = displays[i];
-		CGImageRef image = CGDisplayCreateImage(display);
 
 		int width = CGDisplayPixelsWide(display);
 		int height = CGDisplayPixelsHigh(display);
@@ -31,7 +34,29 @@ void QueryMonitors(void) {
 
 static CFDataRef dataRef;
 
-char *CaptureMonitor(Monitor monitor) {
+Capture CaptureWindow(int handle) {
+	CGImageRef image = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, handle, kCGWindowImageShouldBeOpaque);
+	int width = CGImageGetWidth(image) - 1;
+	int height = CGImageGetHeight(image) - 1;
+
+	// resize image to prevent it scrambled (spent hours to investigate so I don't give a fuck)
+	CGRect rect = CGRectMake(0, 0, width, height);
+	image = CGImageCreateWithImageInRect(image, rect);
+
+	CFDataRef ref = CGDataProviderCopyData(CGImageGetDataProvider(image));
+	char *c = CFDataGetBytePtr(ref);
+
+	PixelSwap(c, width * height * 4);
+
+	Capture cap;
+	cap.data = c;
+	cap.width = width;
+    cap.height = height;
+
+    return cap;
+}
+
+Capture CaptureMonitor(Monitor monitor) {
 	CGDisplayCount displayCount;
     CGDirectDisplayID displays[32];
     CGGetActiveDisplayList(32, displays, &displayCount);
@@ -55,10 +80,15 @@ char *CaptureMonitor(Monitor monitor) {
 
 	PixelSwap(c, monitor.coordinates.width * monitor.coordinates.height * 4);
 
-	return c;
+	Capture cap;
+	cap.width = monitor.coordinates.width;
+	cap.height = monitor.coordinates.height;
+	cap.data = c;
+
+	return cap;
 }
 
 void Release() {
-	CFRelease(dataRef);
+
 }
 
