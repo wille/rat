@@ -29,6 +29,8 @@ void QueryMonitors(void) {
     }
 }
 
+static CFDataRef dataRef;
+
 char *CaptureMonitor(Monitor monitor) {
 	CGDisplayCount displayCount;
     CGDirectDisplayID displays[32];
@@ -47,7 +49,16 @@ char *CaptureMonitor(Monitor monitor) {
 
 	CGImageRef image = CGDisplayCreateImage(display);
 
-	CFDataRef data = CGDataProviderCopyData(CGImageGetDataProvider(image));
+	dataRef = CGDataProviderCopyData(CGImageGetDataProvider(image));
 
-	return CFDataGetBytePtr(data);
+	char* c = CFDataGetBytePtr(dataRef);
+
+	PixelSwap(c, monitor.coordinates.width * monitor.coordinates.height * 4);
+
+	return c;
 }
+
+void Release() {
+	CFRelease(dataRef);
+}
+
