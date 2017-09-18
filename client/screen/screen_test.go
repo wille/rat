@@ -3,7 +3,6 @@ package screen
 import (
 	"fmt"
 	"image/jpeg"
-	"io/ioutil"
 	"os"
 	"strconv"
 	"testing"
@@ -25,14 +24,4 @@ func TestScreenshot(t *testing.T) {
 		})
 		file.Close()
 	}
-}
-
-func BenchmarkScreenshot(b *testing.B) {
-	monitor := Monitors[0]
-
-	img := Capture(monitor)
-
-	jpeg.Encode(ioutil.Discard, img, &jpeg.Options{
-		Quality: 75,
-	})
 }
