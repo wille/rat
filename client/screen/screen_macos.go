@@ -7,58 +7,27 @@ package screen
 
 #include <stdlib.h>
 #include "screen.h"
-#include "bitmap.h"
+#include "screen_macos.h"
 */
 import "C"
 
 import (
-	"bytes"
-	"fmt"
 	"image"
 	"rat/shared"
 	"unsafe"
-
-	"github.com/disintegration/imaging"
-
-	"golang.org/x/image/bmp"
 )
 
-// Offset where the bitmap data begins (after file and info header)
-var dataOffset int
-
-func init() {
-	dataOffset = int(C.sizeof_BITMAPFILEHEADER) + int(C.sizeof_BITMAPINFOHEADER)
+func CaptureWindow(handle int) image.Image {
+		return nil
 }
 
 func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
-	var len C.int
+	image := C.CaptureMonitor(m)
 
-	buf := C.GetScreenshot(m, &len)
-	buf1 := C.GoBytes(unsafe.Pointer(buf), len)
+	len := monitor.Width * monitor.Height * 4
+	buf := C.GoBytes(unsafe.Pointer(image), C.int(len))
 
-	for i := dataOffset; i < int(len); i += 4 {
-		r := buf1[i]
-		b := buf1[i+2]
-
-		temp := r
-
-		buf1[i] = b
-		buf1[i+2] = temp
-	}
-
-	img, err := bmp.Decode(bytes.NewReader(buf1))
-
-	C.free(unsafe.Pointer(buf))
-
-	if err != nil {
-		fmt.Println("error decoding bitmap:", err.Error())
-		return nil
-	}
-
-	rotated := imaging.Rotate180(img)
-	rotated = imaging.FlipH(rotated)
-
-	return rotated
+	return imageFromBitmap(buf, monitor.Width, monitor.Height)
 }
