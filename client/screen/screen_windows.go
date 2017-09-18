@@ -17,13 +17,17 @@ import (
 func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
-	defer C.Release()
-	return handleCapture(C.CaptureMonitor(m))
+	cap := C.CaptureMonitor(m)
+	defer C.Release(cap)
+
+	return handleCapture(cap)
 }
 
 func CaptureWindow(handle int) image.Image {
-	defer C.Release()
-	return handleCapture(C.CaptureWindow(C.int(handle)))
+	cap := C.CaptureWindow(C.int(handle))
+	defer C.Release(cap)
+
+	return handleCapture(cap)
 }
 
 func handleCapture(data C.Capture) image.Image {

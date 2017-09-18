@@ -48,6 +48,10 @@ Capture CaptureWindow(int hwnd) {
     int width = rect.right - rect.left;
     int height = rect.bottom - rect.top;
 
+    Capture cap;
+    cap.width = width;
+    cap.height = height;
+
     BITMAPINFO bt;
 	bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bt.bmiHeader.biWidth = width;
@@ -68,9 +72,10 @@ Capture CaptureWindow(int hwnd) {
     int len = width * height * 4;
     PixelSwap((char*) ptr, width * height * 4);
 
-    Capture cap;
-    cap.width = width;
-    cap.height = height;
+    cap.hDC = hDC;
+    cap.cHDC = m_HDC;
+    cap.bitmap = m_hBmp;
+    cap.o = o;
     cap.data = (char*) ptr;
 
     return cap;
@@ -81,6 +86,10 @@ Capture CaptureMonitor(Monitor monitor) {
     int y = monitor.coordinates.y;
     int width = monitor.coordinates.width;
     int height = monitor.coordinates.height;
+
+    Capture cap;
+    cap.width = width;
+    cap.height = height;
 
     BITMAPINFO bt;
 	bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
@@ -102,22 +111,18 @@ Capture CaptureMonitor(Monitor monitor) {
     int len = width * height * 4;
     PixelSwap((char*) ptr, width * height * 4);
 
-    Capture cap;
-    cap.width = width;
-    cap.height = height;
+    cap.hDC = hDC;
+    cap.cHDC = m_HDC;
+    cap.bitmap = m_hBmp;
+    cap.o = o;
     cap.data = (char*) ptr;
 
     return cap;
 }
 
-void Release(void) {
-    ReleaseDC(0, hDC);
-    DeleteDC(m_HDC);
-    DeleteObject(m_hBmp);
-    DeleteObject(o);
-
-    hDC = NULL;
-    m_HDC = NULL;
-    m_hBmp = NULL;
-    o = NULL;
+void Release(Capture cap) {
+    ReleaseDC(0, cap.hDC);
+    DeleteDC(cap.cHDC);
+    DeleteObject(cap.bitmap);
+    DeleteObject(cap.o);
 }
