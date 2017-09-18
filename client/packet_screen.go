@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"image/jpeg"
 	"rat/client/screen"
 	"rat/shared/network/header"
@@ -36,7 +35,6 @@ func (packet ScreenPacket) OnReceive() error {
 	screenStream = packet.Run
 	monitor = packet.Monitor
 	handle = packet.Handle
-
 
 	return nil
 }
