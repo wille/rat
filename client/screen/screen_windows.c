@@ -59,7 +59,7 @@ char *CaptureMonitor(Monitor monitor) {
     BitBlt(m_HDC, 0, 0, width, height, hDC, x, y, SRCCOPY); // w, h
     
     
-    int len = x * y * 4;
+    int len = width * height * 4;
     char *c = (char*) ptr;
     
     for (int i = 0; i < len; i += 4) {
