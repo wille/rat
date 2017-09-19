@@ -2,7 +2,6 @@
 
 class ScreenView extends StreamingView {
 
-	private scaleSlider: Slider;
 
 	private moveMouse: boolean;
 	private keyboard: boolean;
@@ -16,25 +15,9 @@ class ScreenView extends StreamingView {
 	public onEnter() {
 		super.onEnter();
 
-		// Initialize slider
-		this.scaleSlider = new Slider(super.getElementById("scale"), {
-			formatter: (value) => {
-				return value + "%";
-			}
-		});
-
-		// On slider value change, reinit stream
-		this.scaleSlider.on("change", () => {
-			if (this.scaleSlider) {
-				this.initStream();
-			}
-		});
-
 		// Start stream
 		this.initStream();
 
-		// Setup monitor dropdown button
-		let monitorsElement = super.getElementById("monitors");
 		Control.addEvent(Control.MessageType.MONITOR, new MonitorEvent(this));
 
 		// Setup input events
@@ -75,11 +58,6 @@ class ScreenView extends StreamingView {
 
 	protected get handle(): number {
 		return this.selectedMonitor;
-	}
-
-	// returns the current scale in percent
-	protected get scale(): number {
-		return this.scaleSlider.getValue();
 	}
 
 	// Set badge displaying number of monitors. If just one, hide the badge

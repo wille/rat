@@ -5,6 +5,8 @@ const enum StreamingType {
 
 abstract class StreamingView extends SubView {
 
+    private scaleSlider: Slider;
+    
     private fps: HTMLElement;
     private screenEvent: ScreenEvent;
     
@@ -26,7 +28,24 @@ abstract class StreamingView extends SubView {
 		});
 		Control.addEvent(Control.MessageType.SCREEN, this.screenEvent);
 
-		Statusbar.addElement(this.fps);
+        Statusbar.addElement(this.fps);
+        
+        let sliderElement = super.getElementById("scale");
+        if (sliderElement) {
+            // Initialize slider
+            this.scaleSlider = new Slider(sliderElement, {
+                formatter: (value) => {
+                    return value + "%";
+                }
+            });
+
+            // On slider value change, reinit stream
+            this.scaleSlider.on("change", () => {
+                if (this.scaleSlider) {
+                    this.initStream();
+                }
+            });
+        }
     }
 
     public onLeave() {
@@ -40,7 +59,13 @@ abstract class StreamingView extends SubView {
      * Requested scale of image. Defaults to 100% (unchanged)
      */
     protected get scale(): number {
-        return 100;
+        let value = 100;
+
+        if (this.scaleSlider) {
+            value = this.scaleSlider.getValue();
+        }
+
+        return value;
     }
 
     /**
