@@ -12,6 +12,8 @@ typedef struct {
 	int type;
 } KeyEvent;
 
+void perror(char *c);
+
 static void Invoke(int m, void *param, void (*func)(Display*, Window, void*)) {
 	Display *display;
     Screen *screen;
