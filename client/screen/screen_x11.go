@@ -16,6 +16,10 @@ import (
 	"unsafe"
 )
 
+func CaptureWindow(handle int) image.Image {
+	return nil
+}
+
 func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
