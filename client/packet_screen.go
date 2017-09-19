@@ -13,6 +13,7 @@ import (
 var screenStream bool
 var monitor bool
 var handle int
+var scale float32
 
 type ScreenPacket struct {
 	Run     bool    `network:"receive"`
@@ -36,6 +37,7 @@ func (packet ScreenPacket) OnReceive() error {
 	screenStream = packet.Run
 	monitor = packet.Monitor
 	handle = packet.Handle
+	scale = packet.Scale
 
 	return nil
 }
@@ -57,9 +59,9 @@ func (packet *ScreenPacket) Init() {
 		img = screen.CaptureWindow(handle)
 	}
 
-	if packet.Scale > 0 && packet.Scale < 1.0 {
-		width := float32(img.Bounds().Max.X) * packet.Scale
-		height := float32(img.Bounds().Max.Y) * packet.Scale
+	if scale > 0 && scale < 1.0 {
+		width := float32(img.Bounds().Max.X) * scale
+		height := float32(img.Bounds().Max.Y) * scale
 
 		img = imaging.Resize(img, int(width), int(height), imaging.NearestNeighbor)
 	}
