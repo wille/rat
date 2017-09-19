@@ -52,6 +52,8 @@ XImage* CaptureMonitor(Monitor monitor) {
 
     XImage *img = XGetImage(display, root, monitor.coordinates.x, monitor.coordinates.y, monitor.coordinates.width, monitor.coordinates.height, AllPlanes, ZPixmap);
 
+    PixelSwap(*img->data, monitor.coordinates.width * monitor.coordinates.y * 4);
+
     XCloseDisplay(display);
     
     return img;
