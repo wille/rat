@@ -7,8 +7,6 @@
 
 static int monitor = 0;
 
-char *GetBitmap(HBITMAP, HDC, int *size);
-
 BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
 	Monitor m;
 
