@@ -5,10 +5,18 @@
 
 #include "screen.h"
 
+typedef struct {
+    XImage *image;
+    int width;
+    int height;
+} Capture;
+
 // Destroy XImage after being processed
-void DestroyImage(XImage *image);
+void DestroyImage(Capture cap);
+
+Capture CaptureWindow(int handle);
 
 // Captures monitor screenshot 
-XImage *CaptureMonitor(Monitor m);
+Capture CaptureMonitor(Monitor m);
 
 #endif

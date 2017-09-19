@@ -17,7 +17,10 @@ import (
 )
 
 func CaptureWindow(handle int) image.Image {
-	panic("not implemented")
+	image := C.CaptureWindow(C.int(handle))
+	defer C.DestroyImage(image)
+
+	return handleImage(image)
 }
 
 func Capture(monitor shared.Monitor) image.Image {
@@ -25,10 +28,17 @@ func Capture(monitor shared.Monitor) image.Image {
 
 	image := C.CaptureMonitor(m)
 
-	len := monitor.Width * monitor.Height * 4
-	buf := C.GoBytes(unsafe.Pointer(image.data), C.int(len))
-
 	defer C.DestroyImage(image)
 
-	return imageFromBitmap(buf, monitor.Width, monitor.Height)
+	return handleImage(image)
+}
+
+func handleImage(cap C.Capture) image.Image {
+	width := int(cap.width)
+	height := int(cap.height)
+
+	len := width * height * 4
+	buf := C.GoBytes(unsafe.Pointer(cap.image.data), C.int(len))
+
+	return imageFromBitmap(buf, width, height)
 }

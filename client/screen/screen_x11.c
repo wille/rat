@@ -42,7 +42,13 @@ void QueryMonitors(void) {
 	XCloseDisplay(display);
 }
 
-XImage *CaptureMonitor(Monitor monitor) {
+Capture CaptureWindow(int handle) {
+    Capture cap;
+
+    return cap;
+}
+
+Capture CaptureMonitor(Monitor monitor) {
 	Display *display;
     int screen;
     Window root;
@@ -55,10 +61,15 @@ XImage *CaptureMonitor(Monitor monitor) {
     PixelSwap(img->data, monitor.coordinates.width * monitor.coordinates.height * 4);
 
     XCloseDisplay(display);
+
+    Capture cap;
+    cap.width = monitor.coordinates.width;
+    cap.height = monitor.coordinates.height;
+    cap.image = img;
     
-    return img;
+    return cap;
 }
 
-void DestroyImage(XImage *image) {
-    XDestroyImage(image);
+void DestroyImage(Capture cap) {
+    XDestroyImage(cap.image);
 }
