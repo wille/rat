@@ -8,5 +8,8 @@
     },
     "include": [
         "command/web/**/*"
+    ],
+    "exclude": [
+        "command/web/static/**/*"
     ]
 }
