@@ -13,7 +13,6 @@
 	- gcc
 	- X11 development headers and libraries
 - `go get github.com/oschwald/geoip2-golang`
-- `go get golang.org/x/image/bmp`
 - `go get github.com/disintegration/imaging`
 - `go get golang.org/x/net/websocket`
 - `go get github.com/dustin/go-humanize`
