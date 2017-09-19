@@ -111,7 +111,7 @@ namespace Control {
 			if (this.socket !== undefined) {
 				this.socket.close();
 			}
-			this.socket = new WebSocket("wss://localhost:7777/control");
+			this.socket = new WebSocket(Config.controller + "/control");
 			this.socket.onmessage = (event: MessageEvent) => this.onMessage(event);
 
 			this.socket.onclose = () => this.onClose();
