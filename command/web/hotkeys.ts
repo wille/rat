@@ -8,6 +8,8 @@ namespace KeyCode {
 
 class Hotkey {
 
+    private readonly lambdaListener = (event: KeyboardEvent) => this.listener(event);
+
     /**
      * @param keyCode keyCode to trigger callback
      * @param callback method called when keyCode is pressed
@@ -21,14 +23,14 @@ class Hotkey {
      * Listen for keydown event
      */
     public register() {
-        document.addEventListener("keydown", this.listener);
+        document.addEventListener("keydown", this.lambdaListener);
     }
 
     /**
      * Remove keydown event listener
      */
     public teardown() {
-        document.removeEventListener("keydown", this.listener);
+        document.removeEventListener("keydown", this.lambdaListener);
     }
 
     /**
