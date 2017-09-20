@@ -27,23 +27,18 @@ class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
 
     /**
      * Set the frames this desktop element should display
-     * Remove elements with empty titles, zero width or height
      * @param frames
      */
-    public setFrames(frames: Frame[]) {
-        this.frames = [];
+    public setFrames(allFrames: Frame[]) {
+        let frames = [];
 
-        for (let frame of frames) {
-            if (frame.visible && frame.title && frame.title.length > 0 && frame.rect.w > 0 && frame.rect.h > 0) {
-                if (this.client.operatingSystem.type === OperatingSystemType.Windows && frame.title === "Program Manager") {
-                    continue;
-                } else if (this.client.operatingSystem.type === OperatingSystemType.macOS && frame.title === "Dock - Dock") {
-                    continue;
-                }
-
-                this.frames.push(frame);                
+        for (let frame of allFrames) {
+            if (frame.visible && frame.rect.w > 0 && frame.rect.h > 0) {
+                frames.push(frame);
             }
         }
+
+        this.frames = frames;
     }
 
     /**

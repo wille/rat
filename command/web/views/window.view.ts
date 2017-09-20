@@ -69,28 +69,24 @@ class WindowView extends SubView {
         this.desktop.setMonitors(monitors);
     }
 
-    public addFrame(frames: Frame[]) {
-        for (let window of frames) {
-            let row: HTMLTableRowElement;
-            let title;
+    public addFrame(allFrames: Frame[]) {
+        let frames: Frame[] = [];
 
-            if (window.title && window.title.length > 0) {
-                row = this.table.insertRow(0);
-                title = window.title;
-            } else {
-                row = this.table.insertRow();
-                title = "Undefined";
-                row.className = "undefined";
-            }
+        for (let window of allFrames) {
+            if (Desktop.displayFrame(this.client.operatingSystem.type, window)) {
+                frames.push(window);
+                
+                let row = this.table.insertRow(0);
 
-            row.insertCell().innerText = title;
-            row.insertCell().innerText = window.handle + "";
+                row.insertCell().innerText = window.title;
+                row.insertCell().innerText = window.handle + "";
 
-            row.onclick = () => {
-                if (row.className.indexOf("selected") === -1) {
-                    row.className += " selected";
-                } else {
-                    row.className = row.className.replace(" selected", "");
+                row.onclick = () => {
+                    if (row.className.indexOf("selected") === -1) {
+                        row.className += " selected";
+                    } else {
+                        row.className = row.className.replace(" selected", "");
+                    }
                 }
             }
         }
@@ -152,7 +148,7 @@ class WindowView extends SubView {
         if (frames.length > 0) {
             let frame = frames[0];
 
-            sub.setView(new SingleWindowView(this.client, frames, frame));                
+            sub.setView(new SingleWindowView(this.client, frames, frame));
         }
     }
 

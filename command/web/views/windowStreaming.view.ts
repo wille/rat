@@ -20,6 +20,13 @@ class SingleWindowView extends StreamingView {
         super.onEnter();
         super.initStream();
 
+        this.setupWindowDropdown();
+    }
+
+    /**
+     * Setup the window dropdown menu
+     */
+    private setupWindowDropdown() {
         let element = this.windowsElement;
 
         // Remove all menu items from dropdown
@@ -37,6 +44,7 @@ class SingleWindowView extends StreamingView {
             a.innerText = str;
             child.onclick = () => {
                 this.selectedFrame = frame;
+                this.setupWindowDropdown();
                 this.initStream();
             };
 
