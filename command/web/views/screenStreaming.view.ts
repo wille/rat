@@ -2,9 +2,11 @@
 
 class ScreenView extends StreamingView {
 
-
 	private moveMouse: boolean;
-	private keyboard: boolean;
+    private keyboard: boolean;
+    
+    private readonly keyDownEvent = (event: KeyboardEvent) => this.keyEvent(event.which || event.keyCode, InputState.PRESS);
+    private readonly keyUpEvent = (event: KeyboardEvent) => this.keyEvent(event.which || event.keyCode, InputState.RELEASE);
 
 	public selectedMonitor: number;
 
@@ -27,8 +29,8 @@ class ScreenView extends StreamingView {
 		this.screenElement.onmousedown = (event) => this.mouseEvent(event.button, InputState.PRESS);
 		this.screenElement.onmouseup = (event) => this.mouseEvent(event.button, InputState.RELEASE);
 
-		document.onkeydown = (event) => this.keyEvent(event.keyCode, InputState.PRESS);
-		document.onkeyup = (event) => this.keyEvent(event.keyCode, InputState.RELEASE);
+		document.addEventListener("keydown", this.keyDownEvent);
+		document.addEventListener("keyup", this.keyUpEvent);
 
 		// Setup mouse and keyboard input toggles
 		let mouseToggle = new ToggleButton(super.getElementById("cursor"));
@@ -47,8 +49,8 @@ class ScreenView extends StreamingView {
 
 		Control.removeEvent(Control.MessageType.MONITOR);
 
-		document.onkeydown = undefined;
-		document.onkeyup = undefined;
+        document.removeEventListener("keydown", this.keyDownEvent);
+        document.removeEventListener("keyup", this.keyUpEvent);
 	}
 
 	// returns the monitor selector element
