@@ -21,7 +21,9 @@ class DirectoryContextMenu extends ContextMenu {
 class DirectoryView extends SubView {
 
 	private currentDirectory: string;
-	private separator: string;
+    private separator: string;
+    
+    private reloadHotkey = new Hotkey(KeyCode.F5, () => this.reload());
 
 	constructor(client: Client) {
 		super("static/files.html", "File Browser", client);
@@ -44,12 +46,16 @@ class DirectoryView extends SubView {
 		new TableSearch(searchElement, this.table);
 
 		let menu = new DirectoryContextMenu(this);
-		menu.hook();
+        menu.hook();
+        
+        this.reloadHotkey.register();
 	}
 
 	public onLeave() {
 		Control.removeEvent(Control.MessageType.DOWNLOAD);
-		Control.removeEvent(Control.MessageType.DIRECTORY);
+        Control.removeEvent(Control.MessageType.DIRECTORY);
+        
+        this.reloadHotkey.teardown();
 	}
 
 	public get current(): string {
