@@ -22,6 +22,8 @@ and ungzip it to the `command` folder
 - **Windows**
 	- Windows 10 Pro x64
 - **macOS**
+    - macOS 10.12 Sierra
 	- Mac OS X 10.10 Yosemite
 - **Linux**
-	- Debian 8 x64
+    - Debian 9 stretch x64
+	- Debian 8 jessie x64
