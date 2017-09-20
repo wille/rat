@@ -73,12 +73,8 @@ Capture CaptureWindow(int handle) {
 }
 
 Capture CaptureMonitor(Monitor monitor) {
-	Display *display;
-    int screen;
-    Window root;
-    display = XOpenDisplay(NULL);
-    screen = DefaultScreen(display);
-    root = RootWindow(display, screen);
+    Display *display = XOpenDisplay(NULL);
+    Window root = DefaultRootWindow(display);
 
     XImage *img = XGetImage(display, root, monitor.coordinates.x, monitor.coordinates.y, monitor.coordinates.width, monitor.coordinates.height, AllPlanes, ZPixmap);
 
