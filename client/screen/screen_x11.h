@@ -6,6 +6,7 @@
 #include "screen.h"
 
 typedef struct {
+    int error;
     XImage *image;
     int width;
     int height;

@@ -22,12 +22,12 @@ func CaptureWindow(handle int) image.Image {
 	}
 
 	cap := C.CaptureWindow(C.int(handle))
+	defer C.DestroyImage(cap)
 
-	if cap.image == nil {
+	if int(cap.error) != 0 || cap.image == nil {
+
 		return nil
 	}
-
-	defer C.DestroyImage(cap)
 
 	return handleImage(cap)
 }
