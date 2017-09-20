@@ -9,7 +9,7 @@ import (
 
 // Errorln prints to stderr
 func Errorln(format string, a ...interface{}) {
-	fmt.Fprintf(os.Stderr, format, a)
+	fmt.Fprintf(os.Stderr, format, a...)
 	fmt.Fprintf(os.Stderr, "\n")
 }
 

