@@ -33,15 +33,17 @@ func TestWindows(t *testing.T) {
 	for _, window := range windows.Windows {
 		img := CaptureWindow(window.Handle)
 
-		file, err := os.Create("window" + strconv.Itoa(window.Handle) + ".jpg")
-		if err != nil {
-			t.Error(err)
+		if img != nil {
+			file, err := os.Create("window" + strconv.Itoa(window.Handle) + ".jpg")
+			if err != nil {
+				t.Error(err)
+			}
+
+			jpeg.Encode(file, img, &jpeg.Options{
+				Quality: 75,
+			})
+
+			file.Close()
 		}
-
-		jpeg.Encode(file, img, &jpeg.Options{
-			Quality: 75,
-		})
-
-		file.Close()
 	}
 }

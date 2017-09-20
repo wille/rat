@@ -43,11 +43,16 @@ void QueryMonitors(void) {
 }
 
 Capture CaptureWindow(int handle) {
+    Capture cap;
+    cap.image = NULL;
+
     Display *display = XOpenDisplay(NULL);
     Window window = (Window) handle;
 
     XWindowAttributes attr;
-    XGetWindowAttributes(display, window, &attr);
+    if (XGetWindowAttributes(display, window, &attr) != Success) {
+        return cap;
+    }
 
     int x = attr.x;
     int y = attr.y;
@@ -60,7 +65,6 @@ Capture CaptureWindow(int handle) {
     
     XCloseDisplay(display);
 
-    Capture cap;
     cap.width = width;
     cap.height = height;
     cap.image = img;

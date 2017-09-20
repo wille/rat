@@ -17,10 +17,19 @@ import (
 )
 
 func CaptureWindow(handle int) image.Image {
-	image := C.CaptureWindow(C.int(handle))
-	defer C.DestroyImage(image)
+	if handle == 0 {
+		return nil
+	}
 
-	return handleImage(image)
+	cap := C.CaptureWindow(C.int(handle))
+
+	if cap.image == nil {
+		return nil
+	}
+
+	defer C.DestroyImage(cap)
+
+	return handleImage(cap)
 }
 
 func Capture(monitor shared.Monitor) image.Image {
