@@ -9,7 +9,7 @@ import (
 type FileMessage struct {
 	File        string `json:"file"`
 	Destination string `json:"destination,omitempty"`
-	Task        int    `json:"task"`
+	Task        int    `json:"action"`
 }
 
 func (m FileMessage) Handle(ws *websocket.Conn, client *Client) error {

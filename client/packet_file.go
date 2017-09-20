@@ -10,9 +10,9 @@ import (
 )
 
 type FilePacket struct {
-	File        string `network:"receive"`
-	Task        int    `network:"receive"`
-	Destination string `network:"receive"`
+	Task        shared.FileTask `network:"receive"`
+	File        string          `network:"receive"`
+	Destination string          `network:"receive"`
 }
 
 func (packet FilePacket) Header() header.PacketHeader {
