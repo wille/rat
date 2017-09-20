@@ -55,7 +55,7 @@ class DirectoryView extends SubView {
 		Control.removeEvent(Control.MessageType.DOWNLOAD);
         Control.removeEvent(Control.MessageType.DIRECTORY);
         
-        this.reloadHotkey.teardown();
+        this.reloadHotkey.unregister();
 	}
 
 	public get current(): string {

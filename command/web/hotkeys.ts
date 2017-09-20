@@ -29,7 +29,7 @@ class Hotkey {
     /**
      * Remove keydown event listener
      */
-    public teardown() {
+    public unregister() {
         document.removeEventListener("keydown", this.lambdaListener);
     }
 
