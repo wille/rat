@@ -25,6 +25,82 @@ WindowRectangle GetWindowDimensions(Display *display, Window window) {
 bool IsVisible(Display *disp, Window window) {
 	return true;
 }
+#include <stdio.h>
+void PixelSwap(unsigned char *data, int len) {
+	 for (int i = 0; i < len; i += 4) {
+        unsigned char a = data[i];
+		unsigned char r = data[i + 1];
+		unsigned char g = data[i + 2];
+		unsigned char b = data[i + 3];
+
+		data[i + 0] = g;//data[i + 2];
+		//data[i + 1] = data[i + 1];
+		data[i + 2] = a; //data[i + 0];
+		//data[i + 3] = data[i + 3];
+	}
+	return;
+	/* int i = 0;
+	unsigned long *offset = data;
+	while (i++ < len) {
+		unsigned long argb = data[i];
+		unsigned long rgba = (argb << 8 | argb >> 24);
+		data[i] = rgba;
+
+		/* *offset = rgba >> 24;
+		++offset;
+		
+		*offset = (rgba >> 16) & 0xff;
+		++offset;
+
+		*offset = (rgba >> 8) & 0xff;
+		++offset;
+
+		*offset = rgba && 0xff;
+		++offset;
+		
+		++i; */
+	//}
+}
+Icon GetWindowIcon(Display *display, Window window) {
+	Atom atom = XInternAtom(display, "_NET_WM_ICON", true);
+
+	Icon icon;
+	icon.data = NULL;
+	
+	Atom type = None;
+	int format = 0;
+	int nitems = 0;
+	int bytes_after = 0;
+	unsigned char *data = NULL;
+
+	int result = XGetWindowProperty(display, window, atom, 0, 1024 * 1024, false,
+									XA_CARDINAL, &type, &format, &nitems,
+									&bytes_after, (void*)&data);
+
+	if (result != Success) {
+		printf("error on XGetWindowProperty: %d\n", result);
+	}
+
+	if (nitems == 0 || data == NULL) {
+		return icon;
+	}
+
+	unsigned long *data1 = (unsigned long*) data;
+
+
+	icon.width = *data1;
+	icon.height = *(data1 + 1);	
+	icon.data = (unsigned char*) (data1 + 2);
+
+	int size = icon.width * icon.height * 4;
+	for (int i = 0; i < size; i++) {
+		icon.data[i] = icon.data[i * 2];
+	}
+
+	PixelSwap(data1, icon.width * icon.height * 4);
+
+	return icon;
+}
 
 void EnumWindows(Display *display, Window window) {
 	XTextProperty text;
@@ -41,6 +117,7 @@ void EnumWindows(Display *display, Window window) {
 	frame.visible = IsVisible(display, window);
 	frame.title = title;
 	frame.rect = GetWindowDimensions(display, window);
+	frame.icon = GetWindowIcon(display, window);
 	WindowCallback(frame);
 
 	Window root, parent;
