@@ -1,9 +1,18 @@
-abstract class Component<T extends HTMLElement, K extends keyof HTMLElementTagNameMap> {
+/**
+ * Custom HTML component
+ */
+abstract class Component<K extends keyof HTMLElementTagNameMap> {
     
-    protected backing: T;
+    /**
+     * The backing element
+     */
+    protected backing: HTMLElementTagNameMap[K];
 
+    /**
+     * @param tagName HTML tag
+     */
     constructor(tagName: K) {
-        this.backing = document.createElement(tagName) as T;
+        this.backing = document.createElement(tagName) as HTMLElementTagNameMap[K];
     }
 
     public get element() {

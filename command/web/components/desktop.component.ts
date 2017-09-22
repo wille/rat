@@ -1,6 +1,6 @@
 /// <reference path="component.ts" />
 
-class DesktopComponent extends Component<HTMLCanvasElement, "canvas"> {
+class DesktopComponent extends Component<"canvas"> {
 
     private monitors: Monitor[];
     private frames: Frame[];
