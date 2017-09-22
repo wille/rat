@@ -22,13 +22,13 @@ class WindowContextMenu extends ContextMenu {
 
 class WindowView extends SubView {
 
-    private desktop: DesktopElement;
+    private desktop: DesktopComponent;
     private frames: Frame[];
 
     constructor(client: Client) {
         super("static/window.html", "Window List", client);
 
-        this.desktop = new DesktopElement(client);
+        this.desktop = new DesktopComponent(client);
     }
 
     private clear() {

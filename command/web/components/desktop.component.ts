@@ -1,6 +1,6 @@
-/// <reference path="elementWrapper.ts" />
+/// <reference path="component.ts" />
 
-class DesktopElement extends ElementWrapper<HTMLCanvasElement, "canvas"> {
+class DesktopComponent extends Component<HTMLCanvasElement, "canvas"> {
 
     private monitors: Monitor[];
     private frames: Frame[];

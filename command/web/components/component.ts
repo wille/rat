@@ -1,4 +1,4 @@
-abstract class ElementWrapper<T extends HTMLElement, K extends keyof HTMLElementTagNameMap> {
+abstract class Component<T extends HTMLElement, K extends keyof HTMLElementTagNameMap> {
     
     protected backing: T;
 
