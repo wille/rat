@@ -83,8 +83,10 @@ class WindowView extends SubView {
                 if (window.icon !== "") {
                     titleCell.appendChild(Desktop.getIcon(window));
                 }
-
-                //titleCell.innerText = window.title;
+                
+                let titleElement = document.createElement("span");
+                titleElement.innerText = window.title;                
+                titleCell.appendChild(titleElement);
                 
                 row.insertCell().innerText = window.handle + "";
 

@@ -8,7 +8,6 @@ import "C"
 import (
 	"bytes"
 	"encoding/base64"
-	"fmt"
 	"image"
 	"image/jpeg"
 	"rat/shared"
@@ -35,8 +34,6 @@ func WindowCallback(w C.Frame) {
 		},
 		Icon: getEncodedIcon(w.icon),
 	}
-
-	fmt.Println("encoded icon, is", len(window.Icon))
 
 	Windows = append(Windows, window)
 }
