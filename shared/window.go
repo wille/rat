@@ -14,12 +14,6 @@ type Rect struct {
 	Height int `json:"h"`
 }
 
-type Icon struct {
-	Width  int    `json:"w"`
-	Height int    `json:"h"`
-	Data   []byte `json:"data"`
-}
-
 // A desktop window
 type Window struct {
 	// Window handle, identifier for window
@@ -33,9 +27,9 @@ type Window struct {
 	// Window dimensions
 	Rect Rect `json:"rect,omitempty"`
 
-	Icon Icon `json:"icon,omitempty"`
+	Icon string `json:"icon,omitempty"`
 }
 
 func (w Window) HasIcon() bool {
-	return w.Icon.Data != nil
+	return w.Icon != ""
 }

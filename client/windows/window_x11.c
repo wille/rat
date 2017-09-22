@@ -26,7 +26,7 @@ bool IsVisible(Display *disp, Window window) {
 	return true;
 }
 #include <stdio.h>
-void PixelSwap(unsigned char *data, int len) {
+void swap_pixels(unsigned char *data, int len) {
 	 for (int i = 0; i < len; i += 4) {
         unsigned char a = data[i];
 		unsigned char r = data[i + 1];
@@ -97,7 +97,7 @@ Icon GetWindowIcon(Display *display, Window window) {
 		icon.data[i] = icon.data[i * 2];
 	}
 
-	PixelSwap(data1, icon.width * icon.height * 4);
+	swap_pixels(data1, icon.width * icon.height * 4);
 
 	return icon;
 }
