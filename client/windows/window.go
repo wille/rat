@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"image"
-	"image/jpeg"
+	"image/png"
 	"rat/shared"
 	"unsafe"
 
@@ -80,9 +80,7 @@ func getEncodedIcon(icon C.Icon) string {
 	}
 
 	var buffer bytes.Buffer
-	jpeg.Encode(&buffer, img, &jpeg.Options{
-		Quality: 75,
-	})
+	png.Encode(&buffer, img)
 
 	return base64.StdEncoding.EncodeToString(buffer.Bytes())
 }

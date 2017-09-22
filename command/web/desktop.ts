@@ -58,7 +58,7 @@ namespace Desktop {
      */
     export function getIcon(frame: Frame): HTMLImageElement {
         let element = document.createElement("img");
-        element.src = "data:image/jpeg;base64," + frame.icon;
+        element.src = "data:image/png;base64," + frame.icon;
         return element;
     }
 }
