@@ -8,6 +8,7 @@ import "C"
 import (
 	"bytes"
 	"encoding/base64"
+	"fmt"
 	"image"
 	"image/png"
 	"rat/shared"
@@ -80,7 +81,10 @@ func getEncodedIcon(icon C.Icon) string {
 	}
 
 	var buffer bytes.Buffer
-	png.Encode(&buffer, img)
+	err := png.Encode(&buffer, img)
+	if err != nil {
+		fmt.Println("err")
+	}
 
 	return base64.StdEncoding.EncodeToString(buffer.Bytes())
 }

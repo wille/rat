@@ -10,8 +10,8 @@ typedef struct {
 } WindowRectangle;
 
 typedef struct {
-    long width;
-    long height;
+    int width;
+    int height;
     unsigned char *data;
 } Icon;
 
