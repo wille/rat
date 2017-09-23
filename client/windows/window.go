@@ -20,7 +20,7 @@ import (
 // Windows array, will be populated after call to QueryWindows()
 var Windows []shared.Window
 
-const MaxIconWidth = 32
+const MaxIconWidth = 16
 
 // Callback for each window
 //export WindowCallback
