@@ -10,8 +10,9 @@ interface Rect {
 interface Frame {
     handle: number;
     title: string;
+    visible: boolean;    
     rect: Rect;
-    visible: boolean;
+    icon: string;
 }
 
 namespace Desktop {
@@ -49,6 +50,16 @@ namespace Desktop {
         }
 
         return frame.title && frame.title.length > 0;
+    }
+
+    /**
+     * Creates an HTMLImageElement from a frames icon
+     * @param frame 
+     */
+    export function getIcon(frame: Frame): HTMLImageElement {
+        let element = document.createElement("img");
+        element.src = "data:image/png;base64," + frame.icon;
+        return element;
     }
 }
 

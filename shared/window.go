@@ -26,4 +26,10 @@ type Window struct {
 
 	// Window dimensions
 	Rect Rect `json:"rect,omitempty"`
+
+	Icon string `json:"icon,omitempty"`
+}
+
+func (w Window) HasIcon() bool {
+	return w.Icon != ""
 }

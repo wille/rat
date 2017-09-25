@@ -10,10 +10,17 @@ typedef struct {
 } WindowRectangle;
 
 typedef struct {
+    int width;
+    int height;
+    unsigned char *data;
+} Icon;
+
+typedef struct {
     char *title;
     HANDLE handle;
     bool visible;
     WindowRectangle rect;
+    Icon icon;
 } Frame;
 
 // Callback function defined in Go

@@ -78,7 +78,16 @@ class WindowView extends SubView {
                 
                 let row = this.table.insertRow(0);
 
-                row.insertCell().innerText = window.title;
+                let titleCell = row.insertCell();
+                
+                if (window.icon !== "") {
+                    titleCell.appendChild(Desktop.getIcon(window));
+                }
+                
+                let titleElement = document.createElement("span");
+                titleElement.innerText = window.title;                
+                titleCell.appendChild(titleElement);
+                
                 row.insertCell().innerText = window.handle + "";
 
                 row.onclick = () => {
