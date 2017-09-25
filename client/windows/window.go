@@ -83,7 +83,7 @@ func getEncodedIcon(icon C.Icon) string {
 	var buffer bytes.Buffer
 	err := png.Encode(&buffer, img)
 	if err != nil {
-		fmt.Println("err")
+		return ""
 	}
 
 	return base64.StdEncoding.EncodeToString(buffer.Bytes())

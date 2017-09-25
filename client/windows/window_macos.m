@@ -35,6 +35,7 @@ void QueryWindows(void) {
 		frame.rect.y = bounds.origin.y;
 		frame.rect.width = bounds.size.width;
 		frame.rect.height = bounds.size.height;
+		frame.icon.data = NULL;
 
 		WindowCallback(frame);
 	}
