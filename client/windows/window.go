@@ -8,7 +8,6 @@ import "C"
 import (
 	"bytes"
 	"encoding/base64"
-	"fmt"
 	"image"
 	"image/png"
 	"rat/shared"
