@@ -144,8 +144,8 @@ void SetDisplayState(HANDLE handle, bool visible) {
 	Display *display = XOpenDisplay(NULL);
 	
 	if (visible) {
-		XMapWindow(display, (Window) handle);
+		XRaiseWindow(display, (Window) handle);
 	} else {
-		XUnmapWindow(display, (Window) handle);
+		XIconifyWindow(display, (Window) handle, DefaultScreen(display));
 	}
 }
