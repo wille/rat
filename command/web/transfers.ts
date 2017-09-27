@@ -17,7 +17,9 @@ namespace Transfers {
 	}
 
 	export function update() {
-		Control.instance.send(new TransfersMessage(TRANSFERS));
+		Control.instance.send(new TransfersMessage({
+            transfers: TRANSFERS
+        }));
 	}
 
 	export function getTransfers(): Transfer[] {

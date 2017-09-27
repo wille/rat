@@ -1,12 +1,16 @@
 /// <reference path="outgoingMessage.ts" />
 
-class TransfersMessage extends OutgoingMessage<Transfer[]> {
+interface TransfersMessageParameters {
+    transfers: Transfer[];
+}
+
+class TransfersMessage extends OutgoingMessage<TransfersMessageParameters> {
 
     /**
      * Send all transfers cached to the server
      * @param transfers
      */
-    constructor(transfers: Transfer[]) {
+    constructor(transfers: TransfersMessageParameters) {
         super(Control.MessageType.TRANSFERS, transfers);
     }
 }
