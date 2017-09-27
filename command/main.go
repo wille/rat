@@ -56,7 +56,6 @@ func main() {
 }
 
 func init() {
-	InitPackets()
 	TempFiles = make(map[string]TempFile)
 }
 

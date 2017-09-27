@@ -19,7 +19,7 @@ type IncomingPacket interface {
 
 type Packet struct{}
 
-func InitPackets() {
+func init() {
 	packets = make(PacketMap)
 	packets[header.PingHeader] = Ping{}
 	packets[header.ComputerInfoHeader] = ComputerInfoPacket{}
