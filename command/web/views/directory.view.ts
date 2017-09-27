@@ -129,19 +129,19 @@ class DirectoryView extends SubView {
 			}
 		}
 
-		let paths = path.split(this.separator);
+        let paths = path.split(this.separator);
+        let depth = "";
 
 		if (this.separator === "/") {
-			paths = paths.splice(0, 1);
+            paths.splice(0, 1);
+            depth = "/";
 		}
 
-		let breadcrumb = document.getElementById("path");
+		let breadcrumb = super.getElementById("path");
 		breadcrumb.innerHTML = "";
 		let root = document.createElement("li");
 		breadcrumb.appendChild(root);
-
-		let depth = "";
-
+        
 		for (let i = 0; i < paths.length; i++) {
 			let li = document.createElement("li");
 
@@ -162,7 +162,7 @@ class DirectoryView extends SubView {
 				depth += this.separator;
 			}
 
-			let c = depth;
+            let c = depth;
 			li.onclick = () => this.browse(c, true);
 
 			breadcrumb.appendChild(li);
