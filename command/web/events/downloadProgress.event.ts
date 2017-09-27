@@ -20,7 +20,7 @@ class DownloadProgressEvent implements IncomingEvent<DownloadProgressParameters>
 					document.location.href = "/download?key=" + data.key;
 				}
 
-				Transfers.update();
+				//Transfers.update();
 
 				break;
 			}
