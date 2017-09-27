@@ -10,7 +10,7 @@ import (
 )
 
 func setup(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'unsafe-inline' 'self'; connect-src 'self' wss://*:*")
+	w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'unsafe-inline' 'self'; connect-src 'self' wss://*:*; img-src 'self' data:")
 }
 
 func init() {
