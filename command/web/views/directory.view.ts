@@ -26,7 +26,6 @@ class DirectoryView extends SubView {
 	private readonly reloadHotkey = new Hotkey(KeyCode.F5, () => this.reload());
 	private readonly renameHotkey = new Hotkey(KeyCode.F2, () => console.error("not implemented"));
 	private readonly deleteHotkey = new Hotkey(KeyCode.DELETE, () => this.delete());
-	private readonly backHotkey = new Hotkey(KeyCode.BACKSPACE, () => this.back());
 
 	constructor(client: Client) {
 		super("static/files.html", "File Browser", client);
@@ -54,7 +53,6 @@ class DirectoryView extends SubView {
 		this.reloadHotkey.register();
 		this.renameHotkey.register();
 		this.deleteHotkey.register();
-		this.backHotkey.register();
 	}
 
 	public onLeave() {
@@ -64,7 +62,6 @@ class DirectoryView extends SubView {
 		this.reloadHotkey.unregister();
 		this.renameHotkey.unregister();
 		this.deleteHotkey.unregister();
-		this.backHotkey.unregister();
 	}
 
 	public get current(): string {
