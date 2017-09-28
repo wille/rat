@@ -252,7 +252,7 @@ class ClientsView extends MainView {
 		osCell.appendChild(osTextElement);
 
 		let pingCell = row.insertCell(TableCell.PING);
-		this.setCell(client, TableCell.PING, client.ping);
+		this.setCell(client, TableCell.PING, 0);
 	}
 
 	/**
