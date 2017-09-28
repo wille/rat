@@ -40,8 +40,6 @@ func WindowCallback(w C.Frame) {
 		Icon: getEncodedIcon(w.icon),
 	}
 
-	C.free(unsafe.Pointer(w.icon.data))
-
 	Windows = append(Windows, window)
 }
 
