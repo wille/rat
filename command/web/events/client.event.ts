@@ -35,11 +35,13 @@ class ClientUpdateEvent implements IncomingEvent<ClientUpdateParameters> {
 		let client: Client;
 
 		switch (data.type) {
-			case ClientUpdateType.ADD:
-				client = new Client(data.id, params.flag, params.country, params.host, params.computerName, params.osType, params.operatingSystem);
-
-				Client.clients.push(client);
-				MainViewContainer.clientsView.add(client);
+            case ClientUpdateType.ADD:
+                if (!Client.getById(data.id)) {
+                    client = new Client(data.id, params.flag, params.country, params.host, params.computerName, params.osType, params.operatingSystem);
+                    
+                    Client.clients.push(client);
+                    MainViewContainer.clientsView.add(client);
+                }
 				break;
 			case ClientUpdateType.UPDATE:
 				client = Client.getById(data.id);
