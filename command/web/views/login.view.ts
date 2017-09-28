@@ -7,7 +7,7 @@ class LoginView extends MainView {
 	private statusElement: HTMLParagraphElement;
 
 	constructor() {
-		super("static/login.html", "Login");
+		super("login.html", "Login");
 	}
 
 	public onEnter() {

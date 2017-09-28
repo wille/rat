@@ -7,7 +7,7 @@ class BuildView extends SubView {
 	private iconData: ArrayBuffer;
 
 	constructor() {
-		super("static/build.html", "Build");
+		super("build.html", "Build");
 	}
 
 	public onEnter() {

@@ -4,7 +4,7 @@ class ProcessView extends SubView {
 	private table: HTMLTableElement;
 
 	constructor(client: Client) {
-		super("static/processes.html", "Processes", client);
+		super("processes.html", "Processes", client);
 	}
 
 	public onEnter() {

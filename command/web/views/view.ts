@@ -1,15 +1,37 @@
 abstract class AbstractView {
 
-	public tab: HTMLElement;
+    /**
+     * The assigned tab element when opened
+     */
+    public tab: HTMLElement;
+    
+    /**
+     * The assigned view element when opened
+     */
 	public viewElement: HTMLElement;
 
-	constructor(public url: string, public title: string) {
+    /**
+     * @param filename basename of template file
+     * @param _title the desired tab title
+     */
+	constructor(private filename: string, private _title: string) {
 
 	}
 
-	public abstract onEnter();
+    /**
+     * Called when view is opened
+     */
+    public abstract onEnter();
+    
+    /**
+     * Called when view is closed
+     */
 	public abstract onLeave();
 
+    /**
+     * Returns the element from ID just inside this view
+     * @param id 
+     */
 	public getElementById(id: string): HTMLElement {
 		let elements = this.viewElement.getElementsByTagName("*");
 
@@ -21,7 +43,29 @@ abstract class AbstractView {
 		}
 
 		return null;
-	}
+    }
+    
+    /**
+     * @return the template path
+     */
+    public get template() {
+        return "static/templates/" + this.filename;
+    }
+
+    /**
+     * @return the tab title
+     */
+    public get title(): string {
+        return this._title
+    }
+
+    /**
+     * Set the tab title and document title
+     */
+    public set title(t: string) {
+        this._title = t;
+        document.title = t;
+    }
 }
 
 abstract class MainView extends AbstractView {

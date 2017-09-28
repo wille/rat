@@ -3,7 +3,7 @@
 class TerminalView extends SubView {
 
 	constructor(client: Client) {
-		super("static/terminal.html", "Terminal", client);
+		super("terminal.html", "Terminal", client);
 	}
 
 	public onEnter() {

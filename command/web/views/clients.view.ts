@@ -148,7 +148,7 @@ class ClientsView extends MainView {
 	rows: HTMLTableRowElement[] = [];
 
 	constructor() {
-		super("static/clients.html", "Clients");
+		super("clients.html", "Clients");
 	}
 
 	public onEnter() {

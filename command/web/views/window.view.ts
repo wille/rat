@@ -26,7 +26,7 @@ class WindowView extends SubView {
     private frames: Frame[];
 
     constructor(client: Client) {
-        super("static/window.html", "Window List", client);
+        super("window.html", "Window List", client);
 
         this.desktop = new DesktopComponent(client);
     }

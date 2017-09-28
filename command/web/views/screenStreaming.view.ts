@@ -11,7 +11,7 @@ class ScreenView extends StreamingView {
 	public selectedMonitor: number;
 
 	constructor(client: Client) {
-		super(StreamingType.MONITOR, "static/screen.html", "Screen", client);
+		super(StreamingType.MONITOR, "screen.html", "Screen", client);
 	}
 
 	public onEnter() {

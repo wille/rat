@@ -13,7 +13,7 @@ class TabbedContainer<T extends AbstractView> {
 
 		// Create element for the view and load it
 		let viewElement = document.createElement("div");
-		$(viewElement).load(view.url, (response, status) => {
+		$(viewElement).load(view.template, (response, status) => {
 			Connection.setConnectionStatus(status !== "error");
 			view.onEnter();
 

@@ -28,7 +28,7 @@ class DirectoryView extends SubView {
 	private readonly deleteHotkey = new Hotkey(KeyCode.DELETE, () => this.delete());
 
 	constructor(client: Client) {
-		super("static/files.html", "File Browser", client);
+		super("files.html", "File Browser", client);
 
 		this.separator = client.separator;
 	}

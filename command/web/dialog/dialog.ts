@@ -11,7 +11,7 @@ abstract class Dialog extends AbstractView {
 	}
 
 	public abstract onEnter();
-	public abstract onLeave();
+    public abstract onLeave();
 }
 
 interface DialogButton {
@@ -39,7 +39,7 @@ function showDialog(dialog: Dialog) {
 	let element = document.createElement("div");
 	element.id = "dialog";
 
-	$(element).load(dialog.url);
+	$(element).load(dialog.template);
 
 	let buttons = {};
 	for (let button of dialog.dialogButtons) {

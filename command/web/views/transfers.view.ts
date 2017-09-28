@@ -6,7 +6,7 @@ class TransfersView extends SubView {
 	private interval: number;
 
 	constructor() {
-		super("static/transfers.html", "Transfers");
+		super("transfers.html", "Transfers");
 	}
 
 	public onEnter() {

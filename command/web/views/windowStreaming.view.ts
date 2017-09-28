@@ -3,7 +3,7 @@ class SingleWindowView extends StreamingView {
     private selectedFrame: Frame;
 
     constructor(client: Client, private frames: Frame[], preferred?: Frame) {
-        super(StreamingType.WINDOW, "static/window_stream.html", "Window Stream", client);
+        super(StreamingType.WINDOW, "window_stream.html", "Window Stream", client);
 
         this.selectedFrame = preferred;
     }
