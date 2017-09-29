@@ -36,19 +36,38 @@ controller: web ugly
 	cd command && $(PROD) -o ../command$(EXT)
 	$(UPX) command$(EXT)
 
-windows: controller
+windows:
+	# controller
+	cd command && GOOS=windows GOARCH=amd64 $(PROD_WIN32) -o command.exe
+	$(UPX) command/command.exe
+
+	# windows x64
 	cd client && GOOS=windows GOARCH=amd64 $(PROD_WIN32) -o ../command/bin/windows_amd64.exe
 	$(UPX) command/bin/windows_amd64.exe
+
+	# windows x86
 	cd client && GOOS=windows GOARCH=386 $(PROD_WIN32) -o ../command/bin/windows_x86.exe
 	$(UPX) command/bin/windows_x86.exe
 
-macos: controller
+macos:
+	# controller
+	cd command && GOOS=darwin && GOARCH=amd64 $(PROD) -o command_macos
+	$(UPX) command/command_macos
+
+	# client x64s
 	cd client && GOOS=darwin GOARCH=amd64 $(PROD) -o ../command/bin/macos_amd64
 	$(UPX) command/bin/macos_amd64
 
-linux: controller
+linux:
+	# controller
+	cd command && GOOS=linux GOARCH=amd64 $(PROD) -o command_linux
+	$(UPX) command/command_linux
+
+	# client x64
 	cd client && GOOS=linux GOARCH=amd64 $(PROD) -o ../command/bin/linux_amd64
 	$(UPX) command/bin/linux_amd64
+
+	# client x86
 	cd client && GOOS=linux GOARCH=386 $(PROD) -o ../command/bin/linux_x86
 	$(UPX) command/bin/linux_x86
 
@@ -62,7 +81,8 @@ prod:
 	mkdir prod/web
 	cp command/web/*.template.html prod/web/
 	cp -R command/web/static prod/web
-	@echo Move controller binaries for different platforms manually to production folder!
+	cp command/bin/* prod/bin/
+	cp command/command* prod/
 
 fakebin:
 	touch command/bin/windows_amd64.exe
