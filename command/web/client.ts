@@ -11,8 +11,8 @@ class Client {
                 public readonly country: string,
                 public readonly host: string,
                 public readonly computerName: string,
-                private osType: string,
-                private osDisplay: string) {
+                osType: string,
+                osDisplay: string) {
         
         this.operatingSystem = {
             type: OperatingSystemType[osType],
