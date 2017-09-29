@@ -25,7 +25,9 @@ class Client {
     }
     
     private sys(action: SysAction) {
-        Control.instance.send(new SysMessage(action), this);
+        Control.instance.send(new SysMessage({
+            action: action
+        }), this);
     }
 
     public disconnect() {
