@@ -59,6 +59,10 @@ func (packet *ScreenPacket) Init() {
 		img = screen.CaptureWindow(handle)
 	}
 
+	if img == nil {
+		return
+	}
+
 	if scale > 0 && scale < 1.0 {
 		width := float32(img.Bounds().Max.X) * scale
 		height := float32(img.Bounds().Max.Y) * scale
