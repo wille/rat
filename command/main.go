@@ -10,7 +10,9 @@ import (
 )
 
 const (
-	ConfigFile = "config.json"
+	ConfigFile  = "config.json"
+	Password    = "key"
+	HttpAddress = "127.0.0.1:7777"
 )
 
 type TempFile struct {
@@ -21,7 +23,7 @@ type TempFile struct {
 // TempFiles contains mappings to downloaded files in temporary directory
 var (
 	TempFiles map[string]TempFile
-	Config    Server
+	Config    ClientListener = TCPServer{"127.0.0.1:9999"}
 )
 
 func addDownload(tf TempFile) string {
@@ -48,7 +50,7 @@ func main() {
 
 	json.Unmarshal(data, &Config)
 
-	go Listen(&Config)
+	go Config.Listen()
 
 	InitControlSocket()
 
@@ -70,5 +72,5 @@ func GetClient(id int) *Client {
 }
 
 func Authenticate(p string) bool {
-	return p == Config.Password
+	return p == Password
 }
