@@ -1,18 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"rat/command/utils"
 	"rat/shared"
-)
-
-const (
-	ConfigFile  = "config.json"
-	Password    = "key"
-	HttpAddress = "127.0.0.1:7777"
 )
 
 type TempFile struct {
@@ -41,15 +32,6 @@ func main() {
 		GenerateCertificate("localhost")
 	}
 
-	data, err := ioutil.ReadFile(ConfigFile)
-
-	if err != nil {
-		log.Fatal("failed to load", ConfigFile)
-		return
-	}
-
-	json.Unmarshal(data, &Config)
-
 	go Config.Listen()
 
 	InitControlSocket()
@@ -72,5 +54,5 @@ func GetClient(id int) *Client {
 }
 
 func Authenticate(p string) bool {
-	return p == Password
+	return p == GlobalConfig.Password
 }

@@ -80,5 +80,5 @@ func init() {
 }
 
 func startWebserver() {
-	log.Fatal(http.ListenAndServeTLS(HttpAddress, "cert.pem", "private.key", nil))
+	log.Fatal(http.ListenAndServeTLS(GlobalConfig.HTTPAddress, "cert.pem", "private.key", nil))
 }
