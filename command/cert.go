@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+// CertExists checks if a certificate has been generated and saved to disk
 func CertExists() bool {
 	_, err := os.Stat("cert.pem")
 
@@ -25,7 +26,9 @@ func CertExists() bool {
 	return !os.IsNotExist(err)
 }
 
+// GenerateCertificate for the TLS
 func GenerateCertificate(hosts ...string) error {
+	// generate 1024 bit RSA (for speed)
 	priv, err := rsa.GenerateKey(rand.Reader, 1024)
 
 	if err != nil {

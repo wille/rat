@@ -20,12 +20,6 @@ import (
 
 type listenerMap map[header.PacketHeader]*websocket.Conn
 
-type Monitor struct {
-	ID     int `json:"id"`
-	Width  int `json:"w"`
-	Height int `json:"h"`
-}
-
 type Client struct {
 	network.Writer
 	network.Reader
@@ -84,6 +78,9 @@ func (c *Client) GetIP() string {
 	return strings.Split(c.Conn.RemoteAddr().String(), ":")[0]
 }
 
+// GetFlagName returns the flag filename without extension for the client
+// If connection is inside a local network, use "local" icon
+// If a country is not found for this clients IP address, return a "unknown" icon
 func (c *Client) GetFlagName() string {
 	name := strings.ToLower(c.CountryCode)
 
@@ -99,6 +96,7 @@ func (c *Client) GetFlagName() string {
 	return name
 }
 
+// GetCountry returns the full country name for the client
 func (c *Client) GetCountry() string {
 	name := c.Country
 
@@ -114,16 +112,9 @@ func (c *Client) GetCountry() string {
 	return name
 }
 
+// GetPing returns the current ping in milliseconds followed by " ms"
 func (c *Client) GetPing() string {
 	return strconv.Itoa(c.Ping.Current) + " ms"
-}
-
-func (c *Client) GetPathSep() string {
-	if c.Computer.OperatingSystemType == shared.Windows {
-		return "\\"
-	}
-
-	return "/"
 }
 
 // PacketReader is the routine for continuously reading packets for this client
