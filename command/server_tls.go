@@ -8,13 +8,17 @@ import (
 	"strconv"
 )
 
-type TCPServer struct {
+// TLSServer is the default TCP server using TLS encryption
+type TLSServer struct {
 	Address string `json:"host"`
 }
 
-func (server TCPServer) Listen() error {
+func (server TLSServer) Listen() error {
+	// Load local keypair
 	cert, _ := tls.LoadX509KeyPair("cert.pem", "private.key")
 	config := tls.Config{Certificates: []tls.Certificate{cert}}
+
+	// Spawn server
 	listener, _ := tls.Listen("tcp", server.Address, &config)
 
 	for {
@@ -26,7 +30,6 @@ func (server TCPServer) Listen() error {
 		}
 
 		client := NewClient(conn)
-		client.Conn = conn
 		client.Reader = network.Reader{conn}
 		client.Writer = network.Writer{conn}
 
@@ -38,7 +41,7 @@ func (server TCPServer) Listen() error {
 
 // ReadRoutine is the routine for continuously reading packets for this client
 // Removes client on any read error, invalid packet header or deserializing error
-func (server TCPServer) ReadRoutine(c *Client) {
+func (server TLSServer) ReadRoutine(c *Client) {
 	for {
 		var packet interface{}
 		var err error
@@ -76,7 +79,7 @@ func (server TCPServer) ReadRoutine(c *Client) {
 
 // WriteRoutine polls all packets added to the packet channel for a specific client
 // Will call Init() on each packet and write it
-func (server TCPServer) WriteRoutine(client *Client) {
+func (server TLSServer) WriteRoutine(client *Client) {
 	for {
 		packet := <-client.Queue
 		packet.Init(client)

@@ -14,7 +14,7 @@ type TempFile struct {
 // TempFiles contains mappings to downloaded files in temporary directory
 var (
 	TempFiles map[string]TempFile
-	Config    ClientListener = TCPServer{"127.0.0.1:9999"}
+	Config    ClientListener = TLSServer{"127.0.0.1:9999"}
 )
 
 func addDownload(tf TempFile) string {
