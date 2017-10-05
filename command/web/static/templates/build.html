@@ -1,81 +1,81 @@
-	<table class="table table-bordered">
-		<tr>
-			<td>Name</td>
-			<td>
-				<input type="text" id="name" placeholder="name"></input>
-			</td>
-		</tr>
-		<tr>
-			<td>Host</td>
-			<td>
-				<input type="text" id="host" placeholder="127.0.0.1:9999"></input>
-			</td>
-		<tr>
-		<tr>
-			<td>Platform</td>
-			<td>
-				<select id="os">
-					<option value="all">All</option>
-					<option value="windows">Windows</option>
-					<option value="macos">macOS</option>
-					<option value="linux">Linux</option>
-				</select>
+    <table class="table table-bordered">
+        <tr>
+            <td>Name</td>
+            <td>
+                <input type="text" id="name" placeholder="name"></input>
+            </td>
+        </tr>
+        <tr>
+            <td>Host</td>
+            <td>
+                <input type="text" id="host" placeholder="127.0.0.1:9999"></input>
+            </td>
+        <tr>
+        <tr>
+            <td>Platform</td>
+            <td>
+                <select id="os">
+                    <option value="all">All</option>
+                    <option value="windows">Windows</option>
+                    <option value="macos">macOS</option>
+                    <option value="linux">Linux</option>
+                </select>
 
-				<select id="arch">
-					<option value="all">All</option>
-					<option value="amd64" id="amd64">amd64</option>
-					<option value="386" id="386">x86</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>Connection delay</td>
-			<td>
-				<input type="number" id="delay" min=1 max=300 value=15></input>
-			</td>
-		</tr>
-		<tr>
-			<td>Install location</td>
-			<td>
-				<input type="radio" name="path" value="0" checked> Skip Install
-				<br>
-				<input type="radio" name="path" value="1"> Desktop
-				<br>
-				<input type="radio" name="path" value="2"> Home
-			</td>
-		</tr>
+                <select id="arch">
+                    <option value="all">All</option>
+                    <option value="amd64" id="amd64">amd64</option>
+                    <option value="386" id="386">x86</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Connection delay</td>
+            <td>
+                <input type="number" id="delay" min=1 max=300 value=15></input>
+            </td>
+        </tr>
+        <tr>
+            <td>Install location</td>
+            <td>
+                <input type="radio" name="path" value="0" checked> Skip Install
+                <br>
+                <input type="radio" name="path" value="1"> Desktop
+                <br>
+                <input type="radio" name="path" value="2"> Home
+            </td>
+        </tr>
 
-		<!-- Final row -->
-		<tr>
-			<td>
-				<input type="checkbox" id="invalidssl" checked>Accept invalid certificates</input>
-			</td>
-			<td>
-				<input id="submit" type="button" value="Build"></input>
-			</td>
-		</tr>
-	</table>
+        <!-- Final row -->
+        <tr>
+            <td>
+                <input type="checkbox" id="invalidssl" checked>Accept invalid certificates</input>
+            </td>
+            <td>
+                <input id="submit" type="button" value="Build"></input>
+            </td>
+        </tr>
+    </table>
 
-	<br>
+    <br>
 
-	<table class="table table-bordered" id="manifest">
-		<thead>
-			<th>Assembly Information</th>
-			<th></th>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Version</td>
-				<td><input type="text" id="version" placeholder="1.0.0.0"></input></td>
-			</tr>
-			<tr>
-				<td>Icon</td>
-				<td>
-					<input type="file" id="icon"></input>
-					<img id="icon_preview">
-				</td>
-			</tr>
-		</tbody>
-	</table>
+    <table class="table table-bordered" id="manifest">
+        <thead>
+            <th>Assembly Information</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Version</td>
+                <td><input type="text" id="version" placeholder="1.0.0.0"></input></td>
+            </tr>
+            <tr>
+                <td>Icon</td>
+                <td>
+                    <input type="file" id="icon"></input>
+                    <img id="icon_preview">
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-	<br>
+    <br>

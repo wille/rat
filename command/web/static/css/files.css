@@ -1,31 +1,31 @@
 .directory::before {
-	content:url("../images/files/folder.png");
+    content:url("../images/files/folder.png");
 }
 
 .file::before {
-	content:url("../images/files/file.png");
+    content:url("../images/files/file.png");
 }
 
 .archive::before {
-	content:url("../images/files/archive.png");
+    content:url("../images/files/archive.png");
 }
 
 .script::before {
-	content:url("../images/files/script.png");
+    content:url("../images/files/script.png");
 }
 
 .application::before {
-	content:url("../images/files/application.png");
+    content:url("../images/files/application.png");
 }
 
 .image::before {
-	content:url("../images/files/image.png");
+    content:url("../images/files/image.png");
 }
 
 table.files {
-	font-size: 16px;
+    font-size: 16px;
 }
 
 tr.selected {
-	background: #e2edff;
+    background: #e2edff;
 }

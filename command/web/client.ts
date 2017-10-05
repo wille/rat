@@ -1,54 +1,68 @@
+/// <reference path="network/messages/sys.message.ts" />
 
-class Client {
+namespace Web {
 
-    public static clients: Client[] = [];
+    import SysAction = Network.Messages.SysAction;
+    import SysMessage = Network.Messages.SysMessage;
 
-    public ping: number;
-    public readonly operatingSystem: OperatingSystem;
+    export class Client {
 
-    constructor(public readonly id: ClientId,
-                public readonly flag: string,
-                public readonly country: string,
-                public readonly host: string,
-                public readonly computerName: string,
-                osType: string,
-                osDisplay: string) {
-        
-        this.operatingSystem = {
-            type: OperatingSystemType[osType],
-            display: osDisplay
-        }
-    }
+        public static clients: Client[] = [];
 
-    public get separator() {
-        return this.operatingSystem.type === OperatingSystemType.Windows ? "\\" : "/";
-    }
-    
-    private sys(action: SysAction) {
-        Control.instance.send(new SysMessage({
-            action: action
-        }), this);
-    }
-
-    public disconnect() {
-        this.sys(SysAction.DISCONNECT);
-    }
-
-    public shutdown() {
-        this.sys(SysAction.SHUTDOWN);
-    }
-
-    public reboot() {
-        this.sys(SysAction.REBOOT);
-    }
-
-    public static getById(id: number): Client | null {
-        for (let client of Client.clients) {
-            if (client && client.id === id) {
-                return client;
+        /**
+         * Get a client by their unique ID
+         * @param id
+         */
+        public static getById(id: number): Client | null {
+            for (let client of Client.clients) {
+                if (client && client.id === id) {
+                    return client;
+                }
             }
+
+            return null;
         }
 
-        return null;
+        public ping: number;
+        public readonly operatingSystem: OperatingSystem;
+
+        constructor(public readonly id: ClientId,
+            public readonly flag: string,
+            public readonly country: string,
+            public readonly host: string,
+            public readonly computerName: string,
+            osType: string,
+            osDisplay: string) {
+
+            this.operatingSystem = {
+                type: OperatingSystemType[osType],
+                display: osDisplay
+            };
+        }
+
+        /**
+         * The path separator of this clients system
+         */
+        public get separator() {
+            return this.operatingSystem.type === OperatingSystemType.Windows ? "\\" : "/";
+        }
+
+        public disconnect() {
+            this.sys(SysAction.DISCONNECT);
+        }
+
+        public shutdown() {
+            this.sys(SysAction.SHUTDOWN);
+        }
+
+        public reboot() {
+            this.sys(SysAction.REBOOT);
+        }
+
+        private sys(action: SysAction) {
+            Web.Network.Socket.send(new SysMessage({
+                action
+            }), this);
+        }
     }
 }

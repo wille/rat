@@ -1,33 +1,33 @@
 {{ template "head" }}
-	<body>
-		<!-- Current view -->
-		<div id="views-parent">
-			<div id="first">
-				<ul class="nav nav-tabs" id="mainview-tabs">
+    <body>
+        <!-- Current view -->
+        <div id="views-parent">
+            <div id="first">
+                <ul class="nav nav-tabs" id="mainview-tabs">
 
-				</ul>
-				<div id="view-main">
+                </ul>
+                <div id="view-main">
 
-				</div>
-			</div>
+                </div>
+            </div>
 
-			<div id="second" hidden>
-				<ul class="nav nav-tabs" id="subview-tabs">
+            <div id="second" hidden>
+                <ul class="nav nav-tabs" id="subview-tabs">
 
-				</ul>
-				<div id="view-sub">
+                </ul>
+                <div id="view-sub">
 
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
 
-		<!-- Statusbar -->
-		<div id="statusbar" class="statusbar">
-			<p class="version">{{ Version }}</p>
-			<div class="separator"></div>
-			<p id="status"></p>
-			<div class="separator"></div>
-			<p onclick="logout()">Logout</p>
-		</div>
-	</body>
+        <!-- Statusbar -->
+        <div id="statusbar" class="statusbar">
+            <p class="version">{{ Version }}</p>
+            <div class="separator"></div>
+            <p id="status"></p>
+            <div class="separator"></div>
+            <p onclick="logout()">Logout</p>
+        </div>
+    </body>
 {{ template "tail" "index" }}

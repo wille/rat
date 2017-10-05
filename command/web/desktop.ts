@@ -1,21 +1,32 @@
 /// <reference path="operatingsystem.ts" />
 
-interface Rect {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-}
+namespace Web.Desktop {
 
-interface Frame {
-    handle: number;
-    title: string;
-    visible: boolean;    
-    rect: Rect;
-    icon: string;
-}
+    export interface Rect {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    }
 
-namespace Desktop {
+    export interface Frame {
+        handle: number;
+        title: string;
+        visible: boolean;
+        rect: Rect;
+        icon: string;
+    }
+
+    export type MonitorId = number;
+
+    export interface Monitor {
+        id?: MonitorId;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    }
+
 
     /**
      * Disallowed window titles on specific operating systems,
@@ -40,7 +51,7 @@ namespace Desktop {
      */
     export function displayFrame(os: OperatingSystemType, frame: Frame): boolean {
         let disallowed = titles[os];
-        
+
         if (disallowed) {
             for (let title of disallowed) {
                 if (title === frame.title) {
@@ -61,12 +72,4 @@ namespace Desktop {
         element.src = "data:image/png;base64," + frame.icon;
         return element;
     }
-}
-
-interface Monitor {
-    id?: number;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
 }

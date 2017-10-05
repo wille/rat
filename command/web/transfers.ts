@@ -1,78 +1,79 @@
 namespace Transfers {
 
-	export enum Status {
-		COMPLETE,
-		FAIL,
-		IN_PROGRESS
-	}
+    import TransfersMessage = Web.Network.Messages.TransfersMessage;
 
-	export let TRANSFERS: Transfer[] = [];
+    export enum Status {
+        COMPLETE,
+        FAIL,
+        IN_PROGRESS
+    }
 
-	export function addTransfer(transfer: Transfer, update: boolean = true) {
-		TRANSFERS.push(transfer);
-		
-		if (update) {
-			this.update();
-		}
-	}
+    export let TRANSFERS: Transfer[] = [];
 
-	export function update() {
-		Control.instance.send(new TransfersMessage({
+    export function addTransfer(transfer: Transfer, update: boolean = true) {
+        TRANSFERS.push(transfer);
+
+        if (update) {
+            this.update();
+        }
+    }
+
+    export function update() {
+        Web.Network.Socket.send(new TransfersMessage({
             transfers: TRANSFERS
         }));
-	}
+    }
 
-	export function getTransfers(): Transfer[] {
-		return TRANSFERS;
-	}
+    export function getTransfers(): Transfer[] {
+        return TRANSFERS;
+    }
 
-	export function getTransfer(id: number) {
-		for (let t of TRANSFERS) {
-			if (t.id === id) {
-				return t;
-			}
-		}
+    export function getTransfer(id: number) {
+        for (let t of TRANSFERS) {
+            if (t.id === id) {
+                return t;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 }
 
 class Transfer {
 
-	public id: number;
-	public progress: number;
-	public status: Transfers.Status;
-	public key: string;
+    public static create(json: any): Transfer {
+        let t = new Transfer(json.remove, json.local);
+        t.id = json.id;
+        t.status = json.status;
+        t.progress = json.progress;
+        t.remote = json.remote;
+        t.local = json.local;
+        t.key = json.key;
 
-	constructor(public download: boolean, public remote: string, public local?: string) {
-		this.id = Math.random();
-		this.status = Transfers.Status.IN_PROGRESS;
-	}
+        return t;
+    }
 
-	public setStatus(status: Transfers.Status, update: boolean = true) {
-		this.status = status;
+    public id: number;
+    public progress: number;
+    public status: Transfers.Status;
+    public key: string;
 
-		if (update) {
-			Transfers.update();
-		}
-	}
+    constructor(public download: boolean, public remote: string, public local?: string) {
+        this.id = Math.random();
+        this.status = Transfers.Status.IN_PROGRESS;
+    }
 
-	public complete() {
-		this.progress = 100;
-		this.status = Transfers.Status.COMPLETE;
-		Transfers.update();
-	}
+    public setStatus(status: Transfers.Status, update: boolean = true) {
+        this.status = status;
 
-	public static create(json: any): Transfer {
-		let t = new Transfer(json.remove, json.local);
-		t.id = json.id;
-		t.status = json.status;
-		t.progress = json.progress;
-		t.remote = json.remote;
-		t.local = json.local;
-		t.key = json.key;
+        if (update) {
+            Transfers.update();
+        }
+    }
 
-		return t;
-	}
+    public complete() {
+        this.progress = 100;
+        this.status = Transfers.Status.COMPLETE;
+        Transfers.update();
+    }
 }
-

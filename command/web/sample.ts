@@ -1,4 +1,7 @@
-namespace Sample {
+namespace sample {
+
+    import Client = Web.Client;
+    import MainViewContainer = Web.UI.Containers.MainViewContainer;
 
     function randomPing(): number {
         return Math.floor(Math.random() * 500);
@@ -28,8 +31,4 @@ namespace Sample {
             MainViewContainer.clientsView.add(client);
         }
     }
-}
-
-function sample() {
-    Sample.run();
 }
