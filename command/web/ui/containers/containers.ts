@@ -17,7 +17,6 @@ namespace Web.UI.Containers {
     export const mainViewElement = document.getElementById("view-main");
     export const subViewElement = document.getElementById("view-sub");
 
-    export const main = new MainViewContainer();
     export const sub = new SubViewContainer();
 
     export function setMainView(view: MainView) {

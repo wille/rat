@@ -1,3 +1,5 @@
+/// <reference path="events/events.ts" />
+/// <reference path="../ui/statusbar.ts" />
 /// <reference path="events/downloadProgress.event.ts" />
 /// <reference path="events/client.event.ts" />
 /// <reference path="messages/transfers.message.ts" />
@@ -5,7 +7,6 @@
 
 namespace Web.Network {
 
-    import Event = Web.Network.Events;
     import DownloadProgressEvent = Events.DownloadProgressEvent;
     import ClientUpdateEvent = Events.ClientUpdateEvent;
     import TransfersEvent = Events.TransfersEvent;
@@ -37,9 +38,9 @@ namespace Web.Network {
         private currentType: Header;
 
         constructor(private readonly url: string) {
-            Event.addEvent(Header.DownloadProgress, new DownloadProgressEvent());
-            Event.addEvent(Header.FileTransfers, new TransfersEvent());
-            Event.addEvent(Header.ClientUpdate, new ClientUpdateEvent());
+            Events.addEvent(Header.DownloadProgress, new DownloadProgressEvent());
+            Events.addEvent(Header.FileTransfers, new TransfersEvent());
+            Events.addEvent(Header.ClientUpdate, new ClientUpdateEvent());
         }
 
         public open(key: string) {
@@ -120,7 +121,7 @@ namespace Web.Network {
                 this.currentType = object.event as Header;
             } else {
                 // broadcast incoming message to all listeners
-                Event.emit(this.currentType, object);
+                Events.emit(this.currentType, object);
                 this.currentType = null;
             }
         }

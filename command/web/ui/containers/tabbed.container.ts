@@ -31,7 +31,9 @@ namespace Web.UI.Containers {
 
             this.views = temp;
 
-            this.tabs.removeChild(view.tab);
+            if (view.tab) {
+                this.tabs.removeChild(view.tab);
+            }
             this.viewElement.removeChild(view.viewElement);
 
             // Select nearest tab

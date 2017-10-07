@@ -1,3 +1,5 @@
+/// <reference path="../socket.ts" />
+
 namespace Web.Network.Events {
 
     import Socket = Network.Socket;

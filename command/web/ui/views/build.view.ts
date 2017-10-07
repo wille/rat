@@ -6,7 +6,6 @@
 namespace Web.UI.Views {
 
     import Event = Network.Events;
-    import Socket = Network.Socket;
     import DownloadEvent = Network.Events.DownloadEvent;
     import BuildMessage = Network.Messages.BuildMessage;
     import BuildMessageParameters = Network.Messages.BuildMessageParameters;
@@ -143,7 +142,7 @@ namespace Web.UI.Views {
                 params.manifest = manifest;
             }
 
-            Socket.send(new BuildMessage(params));
+            Network.Socket.send(new BuildMessage(params));
         }
     }
 }

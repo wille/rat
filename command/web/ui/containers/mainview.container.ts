@@ -52,4 +52,6 @@ namespace Web.UI.Containers {
             }
         }
     }
+
+    export const main = new MainViewContainer();    
 }
