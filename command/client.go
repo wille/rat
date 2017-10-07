@@ -3,8 +3,6 @@ package main
 import (
 	"encoding/base64"
 	"encoding/binary"
-	"errors"
-	"fmt"
 	"math/rand"
 	"net"
 	"rat/shared"
@@ -58,11 +56,9 @@ func NewClient(conn net.Conn) *Client {
 
 	client.Queue = make(chan OutgoingPacket)
 
+	client.Conn = conn
 	client.Id = int(rand.Int31())
 	client.Computer = shared.Computer{}
-	client.Conn = conn
-	client.Reader = network.Reader{conn}
-	client.Writer = network.Writer{conn}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
 	client.Listeners = make(map[header.PacketHeader]*websocket.Conn)
 	client.Monitors = make([]shared.Monitor, 0)
@@ -117,42 +113,12 @@ func (c *Client) GetPing() string {
 	return strconv.Itoa(c.Ping.Current) + " ms"
 }
 
-// PacketReader is the routine for continuously reading packets for this client
-// Removes client on any read error, invalid packet header or deserializing error
-func (c *Client) PacketReader() {
-	for {
-		var packet interface{}
-		var err error
-
-		header, err := c.ReadHeader()
-
-		if err != nil {
-			goto err
-		}
-
-		packet = GetIncomingPacket(header)
-		if packet == nil {
-			err = errors.New("invalid header " + strconv.Itoa(int(header)))
-			goto err
-		}
-
-		packet, err = c.Reader.ReadPacket(packet)
-		if err != nil {
-			goto err
-		}
-
-		err = packet.(IncomingPacket).OnReceive(c)
-		if err != nil {
-			goto err
-		}
-
-		continue
-
-	err:
-		fmt.Println("remove", err.Error())
-		removeClient(c)
-		break
+func (c *Client) GetPathSep() string {
+	if c.Computer.OperatingSystemType == shared.Windows {
+		return "\\"
 	}
+
+	return "/"
 }
 
 // Heartbeat pings the client and waits
@@ -165,16 +131,6 @@ func (c *Client) Heartbeat() {
 		}
 
 		time.Sleep(time.Second * 2)
-	}
-}
-
-// PacketQueue polls all packets added to the packet channel
-// Will call Init() on each packet and write it
-func (client *Client) PacketQueue() {
-	for {
-		packet := <-client.Queue
-		packet.Init(client)
-		client.WritePacket(packet)
 	}
 }
 

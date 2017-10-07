@@ -3,6 +3,7 @@
 /// <reference path="../views/clients.view.ts" />
 /// <reference path="../views/build.view.ts" />
 /// <reference path="../views/transfers.view.ts" />
+/// <reference path="../views/server.view.ts" />
 
 namespace Web.UI.Containers {
 
@@ -10,12 +11,14 @@ namespace Web.UI.Containers {
     import ClientsView = Views.ClientsView;
     import BuildView = Views.BuildView;
     import TransfersView = Views.TransfersView;
+    import ServerView = Views.ServerView;
 
     export class MainViewContainer extends TabbedContainer<MainView> {
 
         public static readonly clientsView = new ClientsView();
         public static readonly buildView = new BuildView();
         public static readonly transfersView = new TransfersView();
+        public static readonly serverView = new ServerView();
 
         constructor() {
             super(mainViewContainer, mainViewElement, mainViewTabs);
@@ -23,6 +26,7 @@ namespace Web.UI.Containers {
             this.setView(MainViewContainer.clientsView);
             this.setView(MainViewContainer.buildView);
             this.setView(MainViewContainer.transfersView);
+            this.setView(MainViewContainer.serverView);
 
             this.setActiveView(MainViewContainer.clientsView);
         }
@@ -53,5 +57,5 @@ namespace Web.UI.Containers {
         }
     }
 
-    export const main = new MainViewContainer();    
+    export const main = new MainViewContainer();
 }

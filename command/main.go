@@ -1,16 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"rat/command/utils"
 	"rat/shared"
-)
-
-const (
-	ConfigFile = "config.json"
 )
 
 type TempFile struct {
@@ -21,7 +14,7 @@ type TempFile struct {
 // TempFiles contains mappings to downloaded files in temporary directory
 var (
 	TempFiles map[string]TempFile
-	Config    Server
+	Config    ClientListener = TLSServer{"127.0.0.1:9999"}
 )
 
 func addDownload(tf TempFile) string {
@@ -39,16 +32,7 @@ func main() {
 		GenerateCertificate("localhost")
 	}
 
-	data, err := ioutil.ReadFile(ConfigFile)
-
-	if err != nil {
-		log.Fatal("failed to load", ConfigFile)
-		return
-	}
-
-	json.Unmarshal(data, &Config)
-
-	go Listen(&Config)
+	go Config.Listen()
 
 	InitControlSocket()
 
@@ -70,5 +54,5 @@ func GetClient(id int) *Client {
 }
 
 func Authenticate(p string) bool {
-	return p == Config.Password
+	return p == GlobalConfig.Password
 }
