@@ -22,6 +22,8 @@ func (packet SysPacket) OnReceive() error {
 		computer.Shutdown()
 	case system.Reboot:
 		computer.Reboot()
+	case system.Uninstall:
+		Uninstall()
 	default:
 		return errors.New("invalid sysaction " + strconv.Itoa(packet.Action))
 	}

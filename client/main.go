@@ -103,3 +103,7 @@ func Close() {
 		current.process.Process.Kill()
 	}
 }
+
+func Uninstall() {
+	startup.Uninstall(Config.Name)
+}

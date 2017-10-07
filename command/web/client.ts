@@ -48,15 +48,19 @@ namespace Web {
         }
 
         public disconnect() {
-            this.sys(SysAction.DISCONNECT);
+            this.sys(SysAction.Disconnect);
         }
 
         public shutdown() {
-            this.sys(SysAction.SHUTDOWN);
+            this.sys(SysAction.Shutdown);
         }
 
         public reboot() {
-            this.sys(SysAction.REBOOT);
+            this.sys(SysAction.Reboot);
+        }
+
+        public uninstall() {
+            this.sys(SysAction.Uninstall);
         }
 
         private sys(action: SysAction) {

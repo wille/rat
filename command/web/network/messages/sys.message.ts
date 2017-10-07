@@ -4,13 +4,15 @@ namespace Web.Network.Messages {
 
     export const enum SysAction {
         // Kill the connection and process
-        DISCONNECT,
+        Disconnect,
 
         // Shutdown the machine
-        SHUTDOWN,
+        Shutdown,
 
         // Reboot the machine
-        REBOOT
+        Reboot,
+
+        Uninstall
     }
 
     interface SysMessageParameters {

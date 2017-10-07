@@ -30,6 +30,7 @@ namespace Web.UI.Views {
         private systemRebootItem: HTMLElement;
 
         private disconnectItem: HTMLElement;
+        private uninstallItem: HTMLElement;
 
         constructor(private view: ClientsView, tableBody: HTMLTableSectionElement) {
             super(tableBody, view.getElementById("menu"));
@@ -60,6 +61,9 @@ namespace Web.UI.Views {
 
             this.viewWindowsItem = view.getElementById("item-view-windows");
             this.viewWindowsItem.onclick = () => this.onViewWindows();
+
+            this.uninstallItem = view.getElementById("item-uninstall");
+            this.uninstallItem.onclick = () => this.onUninstall();
         }
 
         public onOpen() {
@@ -74,6 +78,7 @@ namespace Web.UI.Views {
             this.disconnectItem.className = className;
             this.systemShutdownItem.className = className;
             this.systemRebootItem.className = className;
+            this.uninstallItem.className = className;
         }
 
         public onClose() {
@@ -142,20 +147,29 @@ namespace Web.UI.Views {
                 });
             }
         }
+
+        private onUninstall() {
+            if (confirm("Uninstall")) {
+                this.forEach((client) => {
+                    client.uninstall();
+                    return true;
+                });
+            }
+        }
     }
 
     export class ClientsView extends MainView {
 
-        private tableBody: HTMLTableSectionElement;
+        public rows: HTMLTableRowElement[] = [];
 
-        rows: HTMLTableRowElement[] = [];
+        private tableBody: HTMLTableSectionElement;
 
         constructor() {
             super("clients.html", "Clients");
         }
 
         public onEnter() {
-            this.tableBody = <HTMLTableSectionElement>super.getElementById("body");
+            this.tableBody = super.getElementById("body") as HTMLTableSectionElement;
 
             let contextMenu = new ClientContextMenu(this, this.tableBody);
             contextMenu.hook();
@@ -163,21 +177,6 @@ namespace Web.UI.Views {
 
         public onLeave() {
 
-        }
-
-        /**
-         * Returns specific cell element for a client
-         * @param client 
-         * @param cell 
-         */
-        private getCellElement(client: Client, cell: TableCell): HTMLElement {
-            let row = this.rows[client.id];
-
-            if (row) {
-                return row.cells.item(cell);
-            }
-
-            return undefined;
         }
 
         public getSelectedClients(): Client[] {
@@ -195,7 +194,7 @@ namespace Web.UI.Views {
 
         /**
          * Update table cell value
-         * @param client 
+         * @param client
          * @param cell Which cell to update
          * @param value Value to change to
          */
@@ -214,7 +213,7 @@ namespace Web.UI.Views {
 
         /**
          * Add client to table, create row and cells, add default readonly values
-         * @param client 
+         * @param client
          */
         public add(client: Client) {
             let row = this.tableBody.insertRow();
@@ -265,6 +264,21 @@ namespace Web.UI.Views {
         public remove(client: Client) {
             this.tableBody.removeChild(this.rows[client.id]);
             delete this.rows[client.id];
+        }
+
+        /**
+         * Returns specific cell element for a client
+         * @param client
+         * @param cell
+         */
+        private getCellElement(client: Client, cell: TableCell): HTMLElement {
+            let row = this.rows[client.id];
+
+            if (row) {
+                return row.cells.item(cell);
+            }
+
+            return undefined;
         }
     }
 }

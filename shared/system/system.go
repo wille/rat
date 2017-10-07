@@ -6,4 +6,5 @@ const (
 	Disconnect Action = iota
 	Shutdown
 	Reboot
+	Uninstall
 )
