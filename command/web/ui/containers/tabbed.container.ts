@@ -56,7 +56,7 @@ namespace Web.UI.Containers {
             // Create element for the view and load it
             let viewElement = document.createElement("div");
             $(viewElement).load(view.template, (response, status) => {
-                Connection.setConnectionStatus(status !== "error");
+                console.log("load", view.template + ":", status);
                 view.onEnter();
 
                 if (onOpen) {

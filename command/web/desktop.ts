@@ -27,7 +27,6 @@ namespace Web.Desktop {
         height: number;
     }
 
-
     /**
      * Disallowed window titles on specific operating systems,
      * windows that have no meaning or always exists
@@ -38,11 +37,11 @@ namespace Web.Desktop {
         "Program Manager",
         "Default IME",
         "MSCTFIME UI"
-    ]
+    ];
 
     titles[OperatingSystemType.macOS] = [
         "Dock - Dock"
-    ]
+    ];
 
     /**
      * Checks if we should care about this frame at all, removes common OS elements etc
@@ -65,7 +64,7 @@ namespace Web.Desktop {
 
     /**
      * Creates an HTMLImageElement from a frames icon
-     * @param frame 
+     * @param frame
      */
     export function getIcon(frame: Frame): HTMLImageElement {
         let element = document.createElement("img");

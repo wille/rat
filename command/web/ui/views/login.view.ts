@@ -25,12 +25,12 @@ namespace Web.UI.Views {
 
             Web.Network.Events.addEvent(Web.Network.Header.Login, new LoginEvent(this));
 
-            Statusbar.hide();
+            Web.UI.Statusbar.hide();
         }
 
         public onLeave() {
             Web.Network.Events.removeEvent(Web.Network.Header.Login);
-            Statusbar.show();
+            Web.UI.Statusbar.show();
         }
 
         public setSuccessful(result: boolean) {

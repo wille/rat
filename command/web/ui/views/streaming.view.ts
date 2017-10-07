@@ -36,7 +36,7 @@ namespace Web.UI.Views {
             });
             Web.Network.Events.addEvent(Web.Network.Header.Screen, this.screenEvent);
 
-            Statusbar.addElement(this.fps);
+            Web.UI.Statusbar.addElement(this.fps);
 
             let sliderElement = super.getElementById("scale");
             if (sliderElement) {
@@ -57,7 +57,7 @@ namespace Web.UI.Views {
         }
 
         public onLeave() {
-            Statusbar.removeElement(this.fps);
+            Web.UI.Statusbar.removeElement(this.fps);
             Web.Network.Events.removeEvent(Web.Network.Header.Screen);
             this.screenEvent.stop();
             Web.Network.Socket.send(new ScreenMessage({ active: false } as ScreenMessageParameters), this.client);

@@ -10,6 +10,7 @@ namespace Web.Network {
     import ClientUpdateEvent = Events.ClientUpdateEvent;
     import TransfersEvent = Events.TransfersEvent;
     import OutgoingMessage = Messages.OutgoingMessage;
+    import Statusbar = UI.Statusbar;
 
     /**
      * A message header is sent as a websocket me
@@ -73,6 +74,10 @@ namespace Web.Network {
             }
         }
 
+        public set connected(b: boolean) {
+            Statusbar.setConnectionStatus(b);
+        }
+
         private writeMessage(header: IMessageHeader, data: any) {
             this.socket.send(JSON.stringify(header));
             this.socket.send(JSON.stringify(data));
@@ -94,7 +99,7 @@ namespace Web.Network {
         }
 
         private onOpen() {
-            Connection.setConnectionStatus(true);
+            this.connected = true;
             console.log("control socket: connected");
 
             this.write({ key: "key" } as ILoginParameters);
@@ -129,7 +134,7 @@ namespace Web.Network {
                 setTimeout(this.connect(), 1000);
             }
 
-            Connection.setConnectionStatus(false);
+            this.connected = false;
         }
     }
 

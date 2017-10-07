@@ -1,14 +1,20 @@
-namespace Statusbar {
+namespace Web.UI.Statusbar {
 
-    const statusbar = <HTMLDivElement>document.getElementById("statusbar");
+    const Statusbar = document.getElementById("statusbar") as HTMLDivElement;
+    const ConnectionStatusElement = document.getElementById("status");
 
     /**
      * Creates a status bar separator, should be between each element
      */
     function createSeparator() {
-        let element = <HTMLDivElement>document.createElement("div");
+        let element = document.createElement("div") as HTMLDivElement;
         element.className = "separator";
         return element;
+    }
+
+    export function setConnectionStatus(connected: boolean) {
+        ConnectionStatusElement.innerHTML = connected ? "Connected" : "Lost Connection";
+        ConnectionStatusElement.className = connected ? "" : "error";
     }
 
     /**
@@ -16,24 +22,24 @@ namespace Statusbar {
      * @param element
      */
     export function addElement(element: HTMLElement) {
-        statusbar.appendChild(createSeparator());
-        statusbar.appendChild(element);
+        Statusbar.appendChild(createSeparator());
+        Statusbar.appendChild(element);
     }
 
     /**
      * Removes element from statusbar and their separator
-     * @param element 
+     * @param element
      */
     export function removeElement(element: HTMLElement) {
-        statusbar.removeChild(element);
-        statusbar.removeChild(statusbar.childNodes[statusbar.childNodes.length - 1]);
+        Statusbar.removeChild(element);
+        Statusbar.removeChild(Statusbar.childNodes[Statusbar.childNodes.length - 1]);
     }
 
     export function hide() {
-        statusbar.hidden = true;
+        Statusbar.hidden = true;
     }
 
     export function show() {
-        statusbar.hidden = false;
+        Statusbar.hidden = false;
     }
 }
