@@ -15,7 +15,8 @@
         "prefer-for-of": false,
         "no-console": false,
         "array-type": false,
-        "interface-name": false
+        "interface-name": false,
+        "no-empty": false
     },
     "rulesDirectory": []
 }
