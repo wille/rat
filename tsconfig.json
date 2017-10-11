@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "target": "es5",
+        "alwaysStrict": true,
+        "pretty": true,
         "noImplicitAny": false,
         "sourceMap": true,
 		"outFile": "command/web/static/lib.js",
