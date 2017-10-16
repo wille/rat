@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"rat/command/log"
 	"rat/command/utils"
 	"rat/shared"
 )
@@ -25,10 +25,10 @@ func addDownload(tf TempFile) string {
 }
 
 func main() {
-	fmt.Println("tsm rat", shared.Version)
+	log.Println("tsm rat", shared.Version)
 
 	if !CertExists() {
-		fmt.Println("generating certificate...")
+		log.Println("generating certificate...")
 		GenerateCertificate("localhost")
 	}
 

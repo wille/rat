@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"rat/command/log"
 	"time"
 
 	"golang.org/x/net/websocket"
@@ -20,7 +20,7 @@ func ScreenStream(client *Client, ws *websocket.Conn) {
 		err := sendMessage(ws, client, ScreenFrameMessage(client.GetEncodedScreen()))
 
 		if err != nil {
-			fmt.Println("screenstream:", err.Error())
+			log.Println("screenstream:", err.Error())
 			return
 		}
 	}

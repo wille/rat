@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"rat/command/log"
 	"rat/shared"
 	"rat/shared/network/header"
 )
@@ -29,7 +29,7 @@ func (packet MonitorsPacket) OnReceive(c *Client) error {
 		}
 	}
 
-	fmt.Println("Monitors", c.Monitors)
+	log.Println("Monitors", c.Monitors)
 
 	delete(c.Listeners, header.MonitorsHeader)
 

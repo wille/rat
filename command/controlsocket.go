@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"rat/command/log"
 	"reflect"
+	"strconv"
 
 	"golang.org/x/net/websocket"
 )
@@ -70,10 +71,14 @@ func incomingWebSocket(ws *websocket.Conn) {
 	}
 	defer close()
 
+	disconnect := func(reason interface{}) {
+		log.Ferror("%s: %s", ws.Request().RemoteAddr, reason)
+	}
+
 	var auth LoginMessage
 	err := readMessage(ws, &auth)
 	if err != nil {
-		fmt.Println("auth", err)
+		disconnect(err)
 		return
 	}
 
@@ -81,14 +86,16 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 	err = sendMessage(ws, nil, LoginResultMessage{authenticated})
 	if err != nil {
-		fmt.Println("auth", err)
+		disconnect(err)
 		return
 	}
 
 	if !authenticated {
-		fmt.Println("Not authenticated")
+		disconnect("authentication failure")
 		return
 	}
+
+	log.Fgreen("%s: connected\n", ws.Request().RemoteAddr)
 
 	if len(DisplayTransfers) > 0 {
 		sendMessage(ws, nil, DisplayTransferMessage{
@@ -103,30 +110,31 @@ func incomingWebSocket(ws *websocket.Conn) {
 		err := websocket.JSON.Receive(ws, &event)
 
 		if err != nil {
-			fmt.Println(err)
+			disconnect(err)
 			return
 		}
 
 		client := get(event.ClientID)
 
 		if handler, ok := Messages[event.Event]; ok {
-			fmt.Println(event)
+			log.Println(event)
 
 			i := reflect.New(reflect.TypeOf(handler)).Interface()
 
 			err = websocket.JSON.Receive(ws, &i)
 			if err != nil {
-				fmt.Println("failed decode", err.Error())
+				disconnect(err)
 				return
 			}
 
 			err = i.(IncomingMessage).Handle(ws, client)
 
 			if err != nil {
-				fmt.Println("message handle", err)
+				disconnect(err)
+				return
 			}
 		} else {
-			fmt.Println("unknown message:", event.Event)
+			disconnect("unknown message: " + strconv.Itoa(int(event.Event)))
 		}
 	}
 }

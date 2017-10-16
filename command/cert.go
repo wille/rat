@@ -6,10 +6,10 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"log"
 	"math/big"
 	"net"
 	"os"
+	"rat/command/log"
 	"time"
 )
 
@@ -72,7 +72,7 @@ func GenerateCertificate(hosts ...string) error {
 	certOut, err := os.Create("cert.pem")
 	defer certOut.Close()
 	if err != nil {
-		log.Fatalf("failed to open cert.pem for writing: %s", err)
+		log.Println("failed to open cert.pem for writing: %s", err)
 	}
 
 	pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes})

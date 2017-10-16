@@ -3,7 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"errors"
-	"fmt"
+	"rat/command/log"
 	"rat/shared/network"
 	"strconv"
 )
@@ -25,7 +25,7 @@ func (server TLSServer) Listen() error {
 		conn, err := listener.Accept()
 
 		if err != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			continue
 		}
 
@@ -71,7 +71,7 @@ func (server TLSServer) ReadRoutine(c *Client) {
 		continue
 
 	err:
-		fmt.Println("remove", err.Error())
+		log.Println("remove", err.Error())
 		removeClient(c)
 		break
 	}
