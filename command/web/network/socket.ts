@@ -89,7 +89,7 @@ namespace Web.Network {
         }
 
         private connect() {
-            if (this.socket !== undefined) {
+            if (this.socket) {
                 this.socket.close();
             }
             this.socket = new WebSocket(this.url);
