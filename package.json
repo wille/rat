@@ -1,0 +1,16 @@
+{
+  "name": "rat",
+  "version": "0.1.0-b2",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^4.5.3",
+    "typescript": "^2.5.3",
+    "uglify-js": "^3.1.4"
+  }
+}
