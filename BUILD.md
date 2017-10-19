@@ -3,8 +3,8 @@
 ## Requirementss
 
 - Go
-- Preferably make (cygwin)
-- TypeScript compiler
+- make
+- npm
 - Windows
 	- [TDM-GCC](http://tdm-gcc.tdragon.net/)
 - macOS
@@ -16,7 +16,18 @@
 - `go get github.com/disintegration/imaging`
 - `go get golang.org/x/net/websocket`
 - `go get github.com/dustin/go-humanize`
-- `npm install uglify-js -g`
+
+### Web building dependencies
+
+- typescript
+- uglify-js
+- sass
+
+Install using
+
+```bash
+$ npm install
+```
 
 ***
 
