@@ -25,3 +25,6 @@ command/bin
 
 # third party web assets, use third.sh
 command/web/static/third/
+
+# generated css
+command/web/static/css/
