@@ -24,7 +24,7 @@ client:
 
 web:
 	tsc
-	node-sass command/web/sass -o command/web/static/css
+	node-sass command/web/sass/index.scss -o command/web/static/css
 
 ugly: web
 	-uglifyjs --compress --mangle -o $(LIB) -- $(LIB)
