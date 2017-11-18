@@ -29,5 +29,5 @@ command/web/static/third/
 # generated css
 command/web/static/css/
 
-app/dist
+dist/
 node_modules/
