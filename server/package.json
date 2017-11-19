@@ -13,12 +13,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bson": "^1.0.4",
     "@types/node": "^8.0.53",
     "@types/tape": "^4.2.31",
+    "@types/ws": "^3.2.0",
     "nodemon": "^1.12.1",
     "tape": "^4.8.0",
     "ts-node": "^3.3.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
+  },
+  "dependencies": {
+    "bson": "^1.0.4",
+    "ws": "^3.3.1"
   }
 }
