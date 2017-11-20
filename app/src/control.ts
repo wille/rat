@@ -2,6 +2,7 @@ import { BSON } from "bson";
 
 class ControlSocket {
 
+    private readonly bson = new BSON();
     private socket: WebSocket;
 
     constructor(private readonly url: string) {
@@ -16,7 +17,7 @@ class ControlSocket {
     }
 
     public send(data: any) {
-        this.socket.send(new BSON().serialize(data));
+        this.socket.send(this.bson.serialize(data));
     }
 
     private onOpen() {
@@ -24,7 +25,7 @@ class ControlSocket {
     }
 
     private handleMessage(e: MessageEvent) {
-        const bson = new BSON().deserialize(e.data);
+        const bson = this.bson.deserialize(e.data);
         console.log("handleMessage", bson);
     }
 
