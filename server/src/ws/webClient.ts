@@ -12,7 +12,7 @@ class WebClient {
         ws.on("message", (data) => this.onMessage(data));
     }
 
-    public emit(m: Message) {
+    public send(m: Message) {
         const buffer = this.bson.serialize(m);
         this.ws.send(buffer);
     }

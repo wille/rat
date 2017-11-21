@@ -7,7 +7,7 @@ class TestHandler implements MessageHandler<any> {
 
     public handle(client: WebClient, data: any) {
         console.log("bounce", data);
-        client.emit({
+        client.send({
             _type: MessageType.Bounce,
             data: "pong"
         });

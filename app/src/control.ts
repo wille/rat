@@ -2,7 +2,7 @@ import { BSON } from "bson";
 import Message from "shared/message";
 import { MessageType } from "../../shared/src/types";
 
-import { handle } from "./messages/handler";
+import * as EventHandler from "../../shared/src/events";
 
 import { setInterval } from "timers";
 
@@ -28,19 +28,29 @@ class ControlSocket {
 
     private onOpen() {
         console.log("[ws] connected");
+        EventHandler.subscribe(MessageType.Bounce, this.onBounce);
+
         setInterval(() => {
             this.send({
                 _type: MessageType.Bounce,
                 data: "ping"
             });
         }, 1000);
+
+        setTimeout(() => {
+            EventHandler.unsubscribe(this.onBounce);
+        }, 3000);
+    }
+
+    private onBounce(data: any) {
+        console.log("bounce", data);
     }
 
     private handleMessage(e: MessageEvent) {
         const reader = new FileReader();
         reader.onloadend = () => {
             const bson = this.bson.deserialize(Buffer.from(reader.result));
-            handle(bson);
+            EventHandler.emit(bson);
         };
 
         reader.readAsArrayBuffer(e.data);

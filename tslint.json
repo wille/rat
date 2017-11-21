@@ -9,7 +9,8 @@
         "no-console": false,
         "interface-name": false,
         "max-classes-per-file": false,
-        "array-type": false
+        "array-type": false,
+        "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }

@@ -1,24 +1,36 @@
 import Message from "./message";
 import { MessageType } from "./types";
 
-export interface MessageHandler<T extends Message> {
-    readonly _type: MessageType;
-    emit(message: T): void;
+interface MessageHandler<T extends Message> {
+    readonly type: MessageType;
+    listener(message: T): void;
 }
 
 const events: MessageHandler<any>[] = [];
 
-export function subscribe<T extends Message>(handler: MessageHandler<T>) {
-    console.log("subscribing", handler._type);
-    events.push(handler);
+export function subscribe<T extends Message>(type: MessageType, listener: (data: T) => void) {
+    console.log("subscribing", type);
+    events.push({
+        type,
+        listener
+    });
 }
 
-export function unsubscribe<T extends Message>(handler: MessageHandler<T>) {
-    console.log("unsubscribing", events.indexOf(handler) !== -1);
-    delete events[events.indexOf(handler)];
+export function unsubscribe<T extends Message>(listener: (data: T) => void) {
+    console.log("unsubscribing");
+
+    events.some((event, index) => {
+        if (event.listener === listener) {
+            events.splice(index, 1);
+            return true;
+        }
+    });
 }
 
 export function emit(message: Message) {
-    console.log("emitting message", message._type);
-    events.filter((event) => event._type === message._type).forEach((event) => event.emit(message));
+    const clients = events.filter((event) => event.type === message._type);
+
+    console.log("emitting", message._type, "to", clients.length, "clients");
+
+    clients.forEach((event) => event.listener(message));
 }
