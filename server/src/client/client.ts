@@ -1,5 +1,6 @@
 import { BSON } from "bson";
 import { TLSSocket } from "tls";
+import { handle } from "./handler";
 
 class Client {
 
@@ -28,17 +29,19 @@ class Client {
 
     private async loop() {
         while (true) {
-            let header: any = await this.read(2);
-            header = header.readInt16LE(0);
-            console.log(header);
+            let buffer = await this.read(2);
+            const header = buffer.readInt16LE(0);
 
-            let size: any = await this.read(4);
-            size = size.readInt32LE(0);
+            buffer = await this.read(4);
+            const size = buffer.readInt32LE(0);
 
-            let bson: any = await this.read(size);
-            bson = new BSON().deserialize(bson);
+            buffer = await this.read(size);
+            const data = new BSON().deserialize(buffer);
 
-            console.log(bson);
+            handle(this, {
+                _type: header,
+                ...data
+            });
         }
     }
 }

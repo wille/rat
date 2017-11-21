@@ -25,8 +25,13 @@ class ControlSocket {
     }
 
     private handleMessage(e: MessageEvent) {
-        const bson = this.bson.deserialize(e.data);
-        console.log("handleMessage", bson);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const bson = this.bson.deserialize(Buffer.from(reader.result));
+            console.log("handleMessage", bson);
+        };
+
+        reader.readAsArrayBuffer(e.data);
     }
 
     private onClose(e: CloseEvent) {

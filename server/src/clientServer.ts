@@ -1,11 +1,12 @@
 import * as fs from "fs";
 import * as tls from "tls";
-import Client from "./client";
+import Client from "./client/client";
+import * as index from "./index";
 
 class ClientServer {
 
+    public readonly clients: Client[] = [];
     private server: tls.Server;
-    private clients: Client[] = [];
 
     constructor(port: number) {
         const options = {
@@ -14,16 +15,18 @@ class ClientServer {
             rejectUnauthorized: false,
             requestCert: true
         };
-        console.log("created server");
+        console.log("[tls] listening on", port);
 
         this.server = tls.createServer(options, (socket) => this.onConnection(socket));
         this.server.listen(port);
     }
 
     private onConnection(socket: tls.TLSSocket) {
+        console.log("[tls] connection from", socket.remoteAddress);
         const client = new Client(socket);
+
         socket.on("close", () => {
-            console.log("socket closed");
+            console.log("[tls] lost", socket.remoteAddress);
             this.clients.splice(this.clients.indexOf(client), 1);
         });
 
