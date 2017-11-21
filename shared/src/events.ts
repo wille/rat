@@ -1,5 +1,5 @@
-import Message from "../../message";
-import { MessageType } from "../../types";
+import Message from "./message";
+import { MessageType } from "./types";
 
 export interface MessageHandler<T extends Message> {
     readonly _type: MessageType;

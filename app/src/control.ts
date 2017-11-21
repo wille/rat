@@ -1,4 +1,10 @@
 import { BSON } from "bson";
+import Message from "shared/message";
+import { MessageType } from "../../shared/src/types";
+
+import { handle } from "./messages/handler";
+
+import { setInterval } from "timers";
 
 class ControlSocket {
 
@@ -16,19 +22,25 @@ class ControlSocket {
         this.socket.onopen = () => this.onOpen();
     }
 
-    public send(data: any) {
+    public send(data: Message) {
         this.socket.send(this.bson.serialize(data));
     }
 
     private onOpen() {
-        console.log("control socket opened");
+        console.log("[ws] connected");
+        setInterval(() => {
+            this.send({
+                _type: MessageType.Bounce,
+                data: "ping"
+            });
+        }, 1000);
     }
 
     private handleMessage(e: MessageEvent) {
         const reader = new FileReader();
         reader.onloadend = () => {
             const bson = this.bson.deserialize(Buffer.from(reader.result));
-            console.log("handleMessage", bson);
+            handle(bson);
         };
 
         reader.readAsArrayBuffer(e.data);

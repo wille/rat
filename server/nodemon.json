@@ -2,7 +2,8 @@
     "restartable": "rs",
     "exec": "ts-node ./src",
     "watch": [
-        "src"
+        "src",
+        "../shared/src"
     ],
     "ignore": [
         "src/**/*.test.ts"

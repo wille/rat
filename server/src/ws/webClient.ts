@@ -1,7 +1,8 @@
 import { BSON } from "bson";
 import * as WebSocket from "ws";
-import Message from "../message";
-import * as message from "../ws/messages";
+import { handle } from "./handler";
+
+import Message from "shared/message";
 
 class WebClient {
 
@@ -18,7 +19,7 @@ class WebClient {
 
     private onMessage(data: WebSocket.Data) {
         const m = this.bson.deserialize(data as Buffer) as Message;
-        message.emit(m);
+        handle(this, m);
     }
 }
 

@@ -4,7 +4,13 @@
         "removeComments": true,
         "module": "commonjs",
         "target": "es2017",
-        "outDir": "dist"
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "shared/*": [
+                "../shared/src/*"
+            ]
+        }
     },
     "include": [
         "src/**/*"

@@ -1,16 +1,16 @@
 import { controlSocket } from "../index";
-import Message from "../message";
 import Client from "./client";
 import ComputerInfoHandler from "./computerInfoHandler";
 
-import { MessageType } from "../types";
+import Message from "shared/message";
+import { PacketType } from "shared/types";
 
 interface PacketMap {
     [index: string]: PacketHandler<any>;
 }
 
 const mapping: PacketMap = {
-    [MessageType.ComputerInfo]: new ComputerInfoHandler()
+    [PacketType.ComputerInfo]: new ComputerInfoHandler()
 };
 
 export interface PacketHandler<T extends Message> {
