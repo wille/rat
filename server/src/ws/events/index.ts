@@ -1,18 +1,20 @@
-import { controlSocket } from "../index";
+import { controlSocket } from "~/index";
 
 import Message from "shared/message";
 import { MessageType } from "shared/types";
 
-import WebClient from "./webClient";
+import WebClient from "../webClient";
 
-import BounceHandler from "./bounceHandler";
+import BounceHandler from "./bounce";
+import SubscribeHandler from "./subscribe";
 
 interface MessageMap {
     [index: string]: MessageHandler<any>;
 }
 
 const mapping: MessageMap = {
-    [MessageType.Bounce]: new BounceHandler()
+    [MessageType.Bounce]: new BounceHandler(),
+    [MessageType.Subscribe]: new SubscribeHandler()
 };
 
 export interface MessageHandler<T extends Message> {

@@ -1,5 +1,6 @@
 export const enum MessageType {
-    Bounce = 1
+    Bounce,
+    Subscribe
 }
 
 export const enum PacketType {

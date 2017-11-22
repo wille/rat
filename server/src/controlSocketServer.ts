@@ -8,7 +8,7 @@ class ControlSocketServer {
 
     public static async broadcast(message: Message) {
         ControlSocketServer.clients.forEach((client) => {
-            client.send(message);
+            client.emit(message);
         });
     }
 

@@ -2,7 +2,7 @@ import { BSON } from "bson";
 import Message from "shared/message";
 import { MessageType } from "../../shared/src/types";
 
-import * as EventHandler from "../../shared/src/events";
+import * as EventHandler from "./events";
 
 import { setInterval } from "timers";
 
@@ -38,7 +38,7 @@ class ControlSocket {
         }, 1000);
 
         setTimeout(() => {
-            EventHandler.unsubscribe(this.onBounce);
+            EventHandler.unsubscribe(MessageType.Bounce, this.onBounce);
         }, 3000);
     }
 

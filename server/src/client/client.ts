@@ -1,6 +1,6 @@
 import { BSON } from "bson";
 import { TLSSocket } from "tls";
-import { handle } from "./handler";
+import { handle } from "./packets";
 
 class Client {
 

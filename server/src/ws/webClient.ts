@@ -1,18 +1,26 @@
 import { BSON } from "bson";
 import * as WebSocket from "ws";
-import { handle } from "./handler";
+import { handle } from "./events";
 
 import Message from "shared/message";
+import { MessageType } from "shared/types";
 
 class WebClient {
 
+    public subscribed: MessageType[] = [];
     private readonly bson = new BSON();
 
     constructor(private ws: WebSocket) {
         ws.on("message", (data) => this.onMessage(data));
     }
 
-    public send(m: Message) {
+    public emit(m: Message) {
+        if (this.subscribed.includes(m._type)) {
+            this.send(m);
+        }
+    }
+
+    private send(m: Message) {
         const buffer = this.bson.serialize(m);
         this.ws.send(buffer);
     }

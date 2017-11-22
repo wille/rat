@@ -1,7 +1,7 @@
-import Client from "./client";
-import { PacketHandler } from "./handler";
+import Client from "../client";
+import { PacketHandler } from "./index";
 
-import ControlSocketServer from "../controlSocketServer";
+import ControlSocketServer from "../../controlSocketServer";
 
 class ComputerInfoHandler implements PacketHandler<any> {
 

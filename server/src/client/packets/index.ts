@@ -1,6 +1,6 @@
-import { controlSocket } from "../index";
-import Client from "./client";
-import ComputerInfoHandler from "./computerInfoHandler";
+import { controlSocket } from "~/index";
+import Client from "../client";
+import ComputerInfoHandler from "./computerInfo";
 
 import Message from "shared/message";
 import { PacketType } from "shared/types";

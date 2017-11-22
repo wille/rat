@@ -1,5 +1,8 @@
-import Message from "./message";
-import { MessageType } from "./types";
+import Message from "shared/message";
+import { MessageType } from "shared/types";
+import ControlSocket from "./control";
+
+import SubscribeMessage from "shared/subscribeMessage";
 
 interface MessageHandler<T extends Message> {
     readonly type: MessageType;
@@ -14,9 +17,14 @@ export function subscribe<T extends Message>(type: MessageType, listener: (data:
         type,
         listener
     });
+    ControlSocket.send({
+        _type: MessageType.Subscribe,
+        type,
+        subscribe: true
+    } as SubscribeMessage);
 }
 
-export function unsubscribe<T extends Message>(listener: (data: T) => void) {
+export function unsubscribe<T extends Message>(type: MessageType, listener: (data: T) => void) {
     console.log("unsubscribing");
 
     events.some((event, index) => {
@@ -25,6 +33,11 @@ export function unsubscribe<T extends Message>(listener: (data: T) => void) {
             return true;
         }
     });
+    ControlSocket.send({
+        _type: MessageType.Subscribe,
+        type,
+        subscribe: false
+    } as SubscribeMessage);
 }
 
 export function emit(message: Message) {
