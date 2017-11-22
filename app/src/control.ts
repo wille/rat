@@ -1,5 +1,5 @@
 import { BSON } from "bson";
-import Message from "shared/message";
+import Message from "shared/messages";
 import { MessageType } from "../../shared/src/types";
 
 import * as EventHandler from "./events";

@@ -1,8 +1,7 @@
-import Message from "shared/message";
 import { MessageType } from "shared/types";
 import ControlSocket from "./control";
 
-import SubscribeMessage from "shared/subscribeMessage";
+import Message, { SubscribeMessage } from "shared/messages";
 
 interface MessageHandler<T extends Message> {
     readonly type: MessageType;
