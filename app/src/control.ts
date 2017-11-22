@@ -10,6 +10,7 @@ class ControlSocket {
 
     private readonly bson = new BSON();
     private socket: WebSocket;
+    private queue: Message[] = [];
 
     constructor(private readonly url: string) {
 
@@ -23,11 +24,21 @@ class ControlSocket {
     }
 
     public send(data: Message) {
-        this.socket.send(this.bson.serialize(data));
+        if (this.socket.readyState === WebSocket.OPEN) {
+            this.socket.send(this.bson.serialize(data));
+        } else {
+            this.queue.push(data);
+        }
     }
 
     private onOpen() {
         console.log("[ws] connected");
+
+        this.queue.forEach((queued) => {
+            this.send(queued);
+        });
+        this.queue = [];
+
         EventHandler.subscribe(MessageType.Bounce, this.onBounce);
 
         setInterval(() => {

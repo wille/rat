@@ -42,7 +42,7 @@ export function unsubscribe<T extends Message>(type: MessageType, listener: (dat
 export function emit(message: Message) {
     const clients = events.filter((event) => event.type === message._type);
 
-    console.log("emitting", message._type, "to", clients.length, "clients");
+    console.log("triggered", message._type);
 
     clients.forEach((event) => event.listener(message));
 }
