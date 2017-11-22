@@ -2,11 +2,13 @@ import { BSON } from "bson";
 import Message from "shared/messages";
 import { MessageType } from "../../shared/src/types";
 
-import * as EventHandler from "./events";
+import * as EventHandler from "./messages";
 
 import { setInterval } from "timers";
 
 class ControlSocket {
+
+    public clients: any[] = [];
 
     private readonly bson = new BSON();
     private socket: WebSocket;
@@ -39,7 +41,7 @@ class ControlSocket {
         });
         this.queue = [];
 
-        EventHandler.subscribe(MessageType.Bounce, this.onBounce);
+        const bounce = EventHandler.subscribe(MessageType.Bounce, { emit: this.onBounce });
 
         setInterval(() => {
             this.send({
@@ -49,7 +51,7 @@ class ControlSocket {
         }, 1000);
 
         setTimeout(() => {
-            EventHandler.unsubscribe(MessageType.Bounce, this.onBounce);
+            EventHandler.unsubscribe(bounce);
         }, 3000);
     }
 

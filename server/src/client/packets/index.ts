@@ -9,7 +9,7 @@ interface PacketMap {
 }
 
 const enum PacketType {
-    ComputerInfo = 5
+    ComputerInfo = 2
 }
 
 const mapping: PacketMap = {

@@ -6,7 +6,7 @@ type PacketHeader uint16
 const (
 	PingHeader         PacketHeader = 0
 	SysHeader          PacketHeader = 2
-	ComputerInfoHeader PacketHeader = 5
+	ComputerInfoHeader PacketHeader = 2
 	ScreenHeader       PacketHeader = 10
 	ProcessHeader      PacketHeader = 11
 	MonitorsHeader     PacketHeader = 12
