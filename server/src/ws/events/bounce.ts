@@ -1,4 +1,4 @@
-import Message from "shared/message";
+import Message from "shared/messages";
 import { MessageType } from "shared/types";
 import { MessageHandler } from "~/ws/events";
 import WebClient from "~/ws/webClient";

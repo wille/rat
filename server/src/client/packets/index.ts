@@ -2,11 +2,14 @@ import { controlSocket } from "~/index";
 import Client from "../client";
 import ComputerInfoHandler from "./computerInfo";
 
-import Message from "shared/message";
-import { PacketType } from "shared/types";
+import Message from "shared/messages";
 
 interface PacketMap {
     [index: string]: PacketHandler<any>;
+}
+
+const enum PacketType {
+    ComputerInfo = 5
 }
 
 const mapping: PacketMap = {

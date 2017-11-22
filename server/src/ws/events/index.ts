@@ -1,6 +1,6 @@
 import { controlSocket } from "~/index";
 
-import Message from "shared/message";
+import Message from "shared/messages";
 import { MessageType } from "shared/types";
 
 import WebClient from "../webClient";

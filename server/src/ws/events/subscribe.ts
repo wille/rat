@@ -1,9 +1,7 @@
-import Message from "shared/message";
+import Message, { SubscribeMessage } from "shared/messages";
 import { MessageType } from "shared/types";
 import WebClient from "~/ws/webClient";
 import { MessageHandler } from "./index";
-
-import SubscribeMessage from "shared/subscribeMessage";
 
 class EventHandler implements MessageHandler<SubscribeMessage> {
 

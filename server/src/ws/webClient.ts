@@ -2,7 +2,7 @@ import { BSON } from "bson";
 import * as WebSocket from "ws";
 import { handle } from "./events";
 
-import Message from "shared/message";
+import Message from "shared/messages";
 import { MessageType } from "shared/types";
 
 class WebClient {

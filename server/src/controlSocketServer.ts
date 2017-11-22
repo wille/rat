@@ -1,5 +1,5 @@
 import { IncomingMessage } from "http";
-import Message from "shared/message";
+import Message from "shared/messages";
 import WebClient from "./ws/webClient";
 
 import * as WebSocket from "ws";
