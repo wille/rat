@@ -1,6 +1,6 @@
 {
     "restartable": "rs",
-    "exec": "ts-node ./src",
+    "exec": "tsc && node dist/server/src",
     "watch": [
         "src",
         "../shared/src"
