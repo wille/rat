@@ -1,34 +1,8 @@
-import { ObjectId } from "bson";
-import Message from "shared/messages/index";
+import ClientMessage, { ClientUpdateType } from "../../../shared/src/messages/client";
+
 import Client from "../client";
 import ControlSocket from "../control";
 import MessageHandler from "./index";
-
-const enum ClientUpdateType {
-    // Add client, on server connect or web panel open
-    ADD = 0,
-
-    // Update client data
-    UPDATE = 1,
-
-    // Remove client
-    REMOVE = 2
-}
-
-interface ClientMessage extends Message {
-
-    type: ClientUpdateType;
-    id: ObjectId;
-    data: {
-        ping: number;
-        flag?: string;
-        country?: string;
-        host?: string;
-        computerName?: string;
-        osType?: string;
-        operatingSystem?: string;
-    };
-}
 
 class ClientHandler implements MessageHandler<ClientMessage> {
 
