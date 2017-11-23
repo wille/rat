@@ -1,10 +1,8 @@
 import { BSON } from "bson";
 import Message from "shared/messages";
-import { MessageType } from "../../shared/src/types";
 
 import * as EventHandler from "./messages";
-
-import { setInterval } from "timers";
+import { publishSubscriptions } from "./messages";
 
 class ControlSocket {
 
@@ -35,6 +33,8 @@ class ControlSocket {
 
     private onOpen() {
         console.log("[ws] connected");
+
+        publishSubscriptions();
 
         this.queue.forEach((queued) => {
             this.send(queued);

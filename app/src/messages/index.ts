@@ -67,3 +67,15 @@ export function emit(message: Message) {
 
     clients.forEach((event) => event.listener.emit(message));
 }
+
+export function publishSubscriptions() {
+    events.forEach((event) => {
+        ControlSocket.send({
+            _type: MessageType.Subscribe,
+            type: event.type,
+            subscribe: true
+        } as SubscribeMessage);
+
+        console.log("publishing subscription");
+    });
+}

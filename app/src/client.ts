@@ -4,7 +4,7 @@ class Client {
 
     public ping: number;
 
-    constructor(public readonly id: ObjectId,
+    constructor(public readonly id: number,
                 public readonly flag: string,
                 public readonly country: string,
                 public readonly host: string,

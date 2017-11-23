@@ -7,7 +7,6 @@ import ControlSocketServer from "../../controlSocketServer";
 class ComputerInfoHandler implements PacketHandler<any> {
 
     public handle(client: Client, data: any) {
-        console.log(data);
         data._type = MessageType.Client;
         ControlSocketServer.broadcast(data);
     }
