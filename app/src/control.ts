@@ -40,19 +40,6 @@ class ControlSocket {
             this.send(queued);
         });
         this.queue = [];
-
-        const bounce = EventHandler.subscribe(MessageType.Bounce, { emit: this.onBounce });
-
-        setInterval(() => {
-            this.send({
-                _type: MessageType.Bounce,
-                data: "ping"
-            });
-        }, 1000);
-
-        setTimeout(() => {
-            EventHandler.unsubscribe(bounce);
-        }, 3000);
     }
 
     private onBounce(data: any) {

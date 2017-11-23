@@ -5,7 +5,6 @@ import { MessageType } from "shared/types";
 
 import WebClient from "../webClient";
 
-import BounceHandler from "./bounce";
 import SubscribeHandler from "./subscribe";
 
 interface MessageMap {
@@ -13,7 +12,6 @@ interface MessageMap {
 }
 
 const mapping: MessageMap = {
-    [MessageType.Bounce]: new BounceHandler(),
     [MessageType.Subscribe]: new SubscribeHandler()
 };
 
