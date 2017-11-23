@@ -14,8 +14,8 @@ export enum ClientUpdateType {
 
 export interface ClientTemplate extends MessageTemplate {
     type: ClientUpdateType;
-    id: number;
-    data: {
+    id: string;
+    data?: {
         ping: number;
         flag?: string;
         country?: string;

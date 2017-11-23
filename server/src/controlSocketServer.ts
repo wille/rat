@@ -6,9 +6,9 @@ import * as WebSocket from "ws";
 
 class ControlSocketServer {
 
-    public static async broadcast(message: Message) {
+    public static async broadcast(message: Message, force: boolean = false) {
         ControlSocketServer.clients.forEach((client) => {
-            client.emit(message);
+            client.emit(message, force);
         });
     }
 

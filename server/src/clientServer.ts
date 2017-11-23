@@ -1,7 +1,9 @@
 import * as fs from "fs";
 import * as tls from "tls";
+
+import ClientMessage, { ClientUpdateType } from "../../shared/src/messages/client";
 import Client from "./client/client";
-import * as index from "./index";
+import ControlSocketServer from "./controlSocketServer";
 
 class ClientServer {
 
@@ -28,9 +30,19 @@ class ClientServer {
         socket.on("close", () => {
             console.log("[tls] lost", socket.remoteAddress);
             this.clients.splice(this.clients.indexOf(client), 1);
+
+            ControlSocketServer.broadcast(new ClientMessage({
+                type: ClientUpdateType.REMOVE,
+                id: client.id
+            }), true);
         });
 
         this.clients.push(client);
+
+        ControlSocketServer.broadcast(new ClientMessage({
+            type: ClientUpdateType.ADD,
+            id: client.id
+        }), true);
     }
 }
 

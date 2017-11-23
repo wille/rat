@@ -1,14 +1,20 @@
-import { BSON } from "bson";
+import { BSON, ObjectId } from "bson";
 import { TLSSocket } from "tls";
 import { handle } from "./packets";
 
 class Client {
+
+    private readonly _id = new ObjectId();
 
     private current: Buffer;
     private curr: number;
 
     constructor(private readonly socket: TLSSocket) {
         this.loop();
+    }
+
+    public get id() {
+        return this._id.toHexString();
     }
 
     /**

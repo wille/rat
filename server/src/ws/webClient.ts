@@ -14,20 +14,10 @@ class WebClient {
 
     constructor(private ws: WebSocket) {
         ws.on("message", (data) => this.onMessage(data));
-
-        clientServer.clients.forEach((client) => {
-            this.send(new ClientMessage({
-                type: ClientUpdateType.ADD,
-                id: 0,
-                data: {
-                    ping: 0
-                }
-            }));
-        });
     }
 
-    public emit(m: Message) {
-        if (this.subscribed.includes(m._type)) {
+    public emit(m: Message, force: boolean = false) {
+        if (force || this.subscribed.includes(m._type)) {
             this.send(m);
         }
     }

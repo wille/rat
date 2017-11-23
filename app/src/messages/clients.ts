@@ -8,12 +8,11 @@ class ClientHandler implements MessageHandler<ClientTemplate> {
 
     public emit(data: ClientTemplate) {
         console.log(data);
-        let client: Client;
 
         const params = data.data;
         switch (data.type) {
             case ClientUpdateType.ADD:
-                client = new Client(data.id, params.flag, params.country, params.host, params.computerName,
+                const client = new Client(data.id, params.flag, params.country, params.host, params.computerName,
                     params.osType, params.operatingSystem);
 
                 ControlSocket.clients.push(client);
@@ -21,7 +20,9 @@ class ClientHandler implements MessageHandler<ClientTemplate> {
             case ClientUpdateType.UPDATE:
                 break;
             case ClientUpdateType.REMOVE:
-                console.log("remove");
+                ControlSocket.clients = ControlSocket.clients.filter((client) => {
+                    return client.id !== data.id;
+                });
                 break;
         }
     }
