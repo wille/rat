@@ -1,8 +1,9 @@
-import Message, { SubscribeMessage } from "shared/messages";
 import { MessageType } from "shared/types";
+
+import Message, { MessageTemplate, SubscribeMessage } from "../../../shared/src/messages";
 import ControlSocket from "../control";
 
-export default interface MessageHandler<T> {
+export default interface MessageHandler<T extends MessageTemplate> {
     emit(data: T): void;
 }
 
@@ -16,7 +17,7 @@ interface Subscriber {
 
 const events: Subscriber[] = [];
 
-export function subscribe<T extends Message>(type: MessageType, listener: MessageHandler<T>) {
+export function subscribe<T extends MessageTemplate>(type: MessageType, listener: MessageHandler<T>) {
     console.log("subscribing", type);
 
     if (typeof listener === "function") {
@@ -33,27 +34,25 @@ export function subscribe<T extends Message>(type: MessageType, listener: Messag
         listener
     });
 
-    ControlSocket.send({
-        _type: MessageType.Subscribe,
+    ControlSocket.send(new SubscribeMessage({
         type,
         subscribe: true
-    } as SubscribeMessage);
+    }));
 
     return id;
 }
 
-export function unsubscribe<T extends Message>(id: number) {
+export function unsubscribe<T extends MessageTemplate>(id: number) {
     console.log("unsubscribing");
 
     events.some((event, index) => {
         if (event._id === id) {
             events.splice(index, 1);
 
-            ControlSocket.send({
-                _type: MessageType.Subscribe,
+            ControlSocket.send(new SubscribeMessage({
                 type: event.type,
                 subscribe: false
-            } as SubscribeMessage);
+            }));
 
             return true;
         }
@@ -63,19 +62,14 @@ export function unsubscribe<T extends Message>(id: number) {
 export function emit(message: Message) {
     const clients = events.filter((event) => event.type === message._type);
 
-    console.log("triggered", message._type);
-
     clients.forEach((event) => event.listener.emit(message));
 }
 
 export function publishSubscriptions() {
     events.forEach((event) => {
-        ControlSocket.send({
-            _type: MessageType.Subscribe,
+        ControlSocket.send(new SubscribeMessage({
             type: event.type,
             subscribe: true
-        } as SubscribeMessage);
-
-        console.log("publishing subscription");
+        }));
     });
 }

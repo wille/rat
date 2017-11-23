@@ -1,11 +1,11 @@
-import Message, { SubscribeMessage } from "shared/messages";
+import Message, { SubscribeMessage, SubscribeTemplate } from "shared/messages";
 import { MessageType } from "shared/types";
 import WebClient from "~/ws/webClient";
 import { MessageHandler } from "./index";
 
-class EventHandler implements MessageHandler<SubscribeMessage> {
+class EventHandler implements MessageHandler<SubscribeTemplate> {
 
-    public handle(client: WebClient, data: SubscribeMessage) {
+    public handle(client: WebClient, data: SubscribeTemplate) {
         const index = client.subscribed.indexOf(data.type);
         if (data.subscribe && index === -1) {
             client.subscribed.push(data.type);

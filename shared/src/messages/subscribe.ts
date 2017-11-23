@@ -1,9 +1,16 @@
-import { MessageType } from "shared/types";
-import Message from "./index";
+import { MessageType } from "../types";
+import Message, { MessageTemplate } from "./index";
 
-interface SubscribeMessage extends Message {
+export interface SubscribeTemplate extends MessageTemplate {
     type: MessageType;
     subscribe: boolean;
+}
+
+class SubscribeMessage extends Message<SubscribeTemplate> {
+
+    constructor(message: SubscribeTemplate) {
+        super(MessageType.Subscribe, message);
+    }
 }
 
 export default SubscribeMessage;

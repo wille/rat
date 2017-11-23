@@ -1,5 +1,5 @@
 import { MessageType } from "../types";
-import Message from "./index";
+import Message, { MessageTemplate } from "./index";
 
 export enum ClientUpdateType {
     // Add client, on server connect or web panel open
@@ -12,9 +12,7 @@ export enum ClientUpdateType {
     REMOVE = 2
 }
 
-interface ClientMessage extends Message {
-    _type: MessageType.Client;
-
+export interface ClientTemplate extends MessageTemplate {
     type: ClientUpdateType;
     id: number;
     data: {
@@ -28,4 +26,9 @@ interface ClientMessage extends Message {
     };
 }
 
-export default ClientMessage;
+export default class ClientMessage extends Message<ClientTemplate> {
+
+    constructor(message: ClientTemplate) {
+        super(MessageType.Client, message);
+    }
+}

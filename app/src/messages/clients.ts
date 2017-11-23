@@ -1,12 +1,12 @@
-import ClientMessage, { ClientUpdateType } from "../../../shared/src/messages/client";
+import { ClientTemplate, ClientUpdateType } from "../../../shared/src/messages";
 
 import Client from "../client";
 import ControlSocket from "../control";
 import MessageHandler from "./index";
 
-class ClientHandler implements MessageHandler<ClientMessage> {
+class ClientHandler implements MessageHandler<ClientTemplate> {
 
-    public emit(data: ClientMessage) {
+    public emit(data: ClientTemplate) {
         console.log(data);
         let client: Client;
 

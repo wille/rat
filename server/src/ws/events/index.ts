@@ -15,7 +15,7 @@ const mapping: MessageMap = {
     [MessageType.Subscribe]: new SubscribeHandler()
 };
 
-export interface MessageHandler<T extends Message> {
+export interface MessageHandler<T extends any> {
     handle(client: WebClient, data: T): void;
 }
 

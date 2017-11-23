@@ -1,9 +1,17 @@
 import { MessageType } from "../types";
 
-export { default as SubscribeMessage } from "./subscribe";
-export { default as ClientMessage } from "./client";
-
-export default interface Message {
-    _type: MessageType;
+export interface MessageTemplate {
+    _type?: MessageType;
     [key: string]: any;
 }
+
+export default class Message<T = any> {
+
+    constructor(public readonly _type: MessageType,
+                public readonly data: T) {
+
+    }
+}
+
+export { default as SubscribeMessage, SubscribeTemplate } from "./subscribe";
+export { default as ClientMessage, ClientTemplate, ClientUpdateType } from "./client";

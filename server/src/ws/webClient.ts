@@ -1,9 +1,11 @@
 import { BSON } from "bson";
 import * as WebSocket from "ws";
-import { handle } from "./events";
 
-import Message from "shared/messages";
-import { MessageType } from "shared/types";
+import Message, { ClientMessage } from "../../../shared/src/messages";
+import { ClientUpdateType } from "../../../shared/src/messages/client";
+import { MessageType } from "../../../shared/src/types";
+import { clientServer } from "../index";
+import { handle } from "./events";
 
 class WebClient {
 
@@ -12,6 +14,16 @@ class WebClient {
 
     constructor(private ws: WebSocket) {
         ws.on("message", (data) => this.onMessage(data));
+
+        clientServer.clients.forEach((client) => {
+            this.send(new ClientMessage({
+                type: ClientUpdateType.ADD,
+                id: 0,
+                data: {
+                    ping: 0
+                }
+            }));
+        });
     }
 
     public emit(m: Message) {
