@@ -5,6 +5,8 @@ import Client from "../client";
 import * as EventHandler from "../messages";
 import ClientComponent from "./clientComponent";
 
+import ClientRow from "./ClientRow";
+
 interface State {
     clients: Client[];
 }
@@ -17,21 +19,18 @@ export default class Clients extends ClientComponent<any, State> {
 
     constructor(props: any) {
         super(props);
+    }
 
+    public componentDidMount() {
         this.subscribe(MessageType.Client, new EventHandler.ClientHandler(this));
     }
 
     public render() {
         return (
             <table>
-                {this.state.clients.map((client) => {
-                    return (
-                        <tr key={client.id}>
-                            <td>{client.host}</td>
-                            <td>{client.computerName}</td>
-                        </tr>
-                    );
-                })}
+                <tbody>
+                    {this.state.clients.map((client) => <ClientRow key={client.id} client={client}/>)}
+                </tbody>
             </table>
         );
     }

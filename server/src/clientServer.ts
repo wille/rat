@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as geoip from "geoip-lite";
 import * as tls from "tls";
 
 import ClientMessage, { ClientUpdateType } from "../../shared/src/messages/client";
@@ -27,10 +28,16 @@ class ClientServer {
         console.log("[tls] connection from", socket.remoteAddress);
         const client = new Client(socket);
 
+        const lookup = geoip.lookup(socket.remoteAddress) || {
+            country: "unknown"
+        };
+
         ControlSocketServer.broadcast(new ClientMessage({
             type: ClientUpdateType.ADD,
             id: client.id,
-            host: socket.remoteAddress
+            host: socket.remoteAddress,
+            country: lookup.country,
+            flag: lookup.country.toLowerCase()
         }), true);
 
         socket.on("close", () => {
