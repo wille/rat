@@ -1,7 +1,8 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TSLintPlugin = require("tslint-webpack-plugin");
-const webpack = require('webpack');
+const webpack = require("webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const extractSass = new ExtractTextPlugin({
     filename: "[name].[id].css"
@@ -78,7 +79,13 @@ const config = {
                 "./src/**/*.ts",
                 "./src/**/*.tsx"
             ]
-        })
+        }),
+        new CopyWebpackPlugin([
+            {
+                from: "./src/assets",
+                to: "assets"
+            }
+        ])
     ],
     devServer: {
         hot: true
