@@ -17,9 +17,8 @@ class ComputerInfoHandler implements PacketHandler<ComputerInfoTemplate> {
         ControlSocketServer.broadcast(new ClientMessage({
             type: ClientUpdateType.UPDATE,
             id: client.id,
-            computerName: data.username,
-            flag: "unknown",
-            country: "Country",
+            hostname: data.hostname,
+            username: data.username
         }), true);
     }
 }

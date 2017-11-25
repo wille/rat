@@ -4,5 +4,6 @@ export default interface ClientProperties {
     ping?: number;
     flag?: string;
     country?: string;
-    computerName?: string;
+    username?: string;
+    hostname?: string;
 }

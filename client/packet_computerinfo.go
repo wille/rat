@@ -7,10 +7,10 @@ import (
 )
 
 type ComputerInfoPacket struct {
-	Username                   string `network:"send"`
-	Hostname                   string `network:"send"`
-	OperatingSystemName        string `network:"send"`
-	OperatingSystemDisplayName string `network:"send"`
+	Username                   string
+	Hostname                   string
+	OperatingSystemName        string `operatingSystemName"`
+	OperatingSystemDisplayName string `operatingSystemDisplayName`
 }
 
 func (packet ComputerInfoPacket) Header() header.PacketHeader {

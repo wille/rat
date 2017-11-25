@@ -11,6 +11,12 @@ interface State {
     clients: Client[];
 }
 
+const columns = [
+    "Country",
+    "Host",
+    "Identifier"
+];
+
 export default class Clients extends ClientComponent<any, State> {
 
     public state: State = {
@@ -28,6 +34,11 @@ export default class Clients extends ClientComponent<any, State> {
     public render() {
         return (
             <table>
+                <thead>
+                    <tr>
+                        {columns.map((column) => <th key={column}>{column}</th>)}
+                    </tr>
+                </thead>
                 <tbody>
                     {this.state.clients.map((client) => <ClientRow key={client.id} client={client}/>)}
                 </tbody>

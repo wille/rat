@@ -17,7 +17,7 @@ export default class ClientRow extends React.Component<Props, any> {
                     <img src={"assets/flags/" + client.flag + ".png"}/>
                 </td>
                 <td>{client.host}</td>
-                <td>{client.computerName}</td>
+                <td>{client.identifier}</td>
             </tr>
         );
     }
