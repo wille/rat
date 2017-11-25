@@ -1,12 +1,12 @@
 import { ClientTemplate, ClientUpdateType } from "../../../shared/src/messages";
 import Client from "../client";
-import ConnectionsComponent from "../components/connections";
+import { Clients } from "../components";
 import ControlSocket from "../control";
 import MessageHandler from "./index";
 
 class ClientHandler implements MessageHandler<ClientTemplate> {
 
-    constructor(private view: ConnectionsComponent) {
+    constructor(private view: Clients) {
 
     }
 
@@ -15,12 +15,18 @@ class ClientHandler implements MessageHandler<ClientTemplate> {
 
         switch (data.type) {
             case ClientUpdateType.ADD:
-                const client = new Client(data.id, data.flag, data.country, data.host, data.computerName,
-                    data.osType, data.operatingSystem);
-
+                const client = new Client(data.id, data.host);
+                client.update(data);
                 ControlSocket.clients.push(client);
                 break;
             case ClientUpdateType.UPDATE:
+                ControlSocket.clients.filter((client) => {
+                    if (client.id === data.id) {
+                        return client;
+                    }
+                }).forEach((client) => {
+                    client.update(data);
+                });
                 break;
             case ClientUpdateType.REMOVE:
                 ControlSocket.clients = ControlSocket.clients.filter((client) => {

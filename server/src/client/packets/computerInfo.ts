@@ -1,17 +1,13 @@
 import { MessageType } from "shared/types";
 import { PacketHandler } from "~/client/packets";
 
+import ClientProperties from "../../../../shared/src/clientProperties";
+import { MessageTemplate } from "../../../../shared/src/messages";
 import ClientMessage, { ClientUpdateType } from "../../../../shared/src/messages/client";
-import { MessageTemplate } from "../../../../shared/src/messages/index";
 import ControlSocketServer from "../../controlSocketServer";
 import Client from "../client";
 
-interface ComputerInfoTemplate extends MessageTemplate {
-    hostname: string;
-    operatingsystemdisplayname: string;
-    operatingsystemname: string;
-    username: string;
-}
+type ComputerInfoTemplate = MessageTemplate & ClientProperties;
 
 class ComputerInfoHandler implements PacketHandler<ComputerInfoTemplate> {
 
@@ -19,10 +15,11 @@ class ComputerInfoHandler implements PacketHandler<ComputerInfoTemplate> {
         data._type = MessageType.Client;
 
         ControlSocketServer.broadcast(new ClientMessage({
-            type: ClientUpdateType.ADD,
+            type: ClientUpdateType.UPDATE,
             id: client.id,
-            host: client.remoteAddress,
-            computerName: data.username
+            computerName: data.username,
+            flag: "unknown",
+            country: "Country",
         }), true);
     }
 }

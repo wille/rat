@@ -1,3 +1,4 @@
+import ClientProperties from "../clientProperties";
 import { MessageType } from "../types";
 import Message, { MessageTemplate } from "./index";
 
@@ -12,16 +13,8 @@ export enum ClientUpdateType {
     REMOVE = 2
 }
 
-export interface ClientTemplate extends MessageTemplate {
+export interface ClientTemplate extends ClientProperties, MessageTemplate {
     type: ClientUpdateType;
-    id: string;
-    ping?: number;
-    flag?: string;
-    country?: string;
-    host?: string;
-    computerName?: string;
-    osType?: string;
-    operatingSystem?: string;
 }
 
 export default class ClientMessage extends Message<ClientTemplate> {

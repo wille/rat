@@ -1,8 +1,11 @@
 import { IncomingMessage } from "http";
 import Message from "shared/messages";
-import WebClient from "./ws/webClient";
-
 import * as WebSocket from "ws";
+
+import { ClientUpdateType } from "../../shared/src/messages/client";
+import ClientMessage from "../../shared/src/messages/client";
+import { clientServer } from "./index";
+import WebClient from "./ws/webClient";
 
 class ControlSocketServer {
 
@@ -27,6 +30,14 @@ class ControlSocketServer {
     private onConnection(ws: WebSocket, req: IncomingMessage) {
         console.log("[ws] connection from", req.connection.remoteAddress);
         const client = new WebClient(ws);
+
+        clientServer.clients.forEach((c) => {
+            client.emit(new ClientMessage({
+                type: ClientUpdateType.ADD,
+                id: c.id,
+                host: c.remoteAddress
+            }), true);
+        });
 
         ws.on("close", (code, reason) => {
             console.log("[ws] lost", req.connection.remoteAddress, code, reason);

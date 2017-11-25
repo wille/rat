@@ -1,12 +1,13 @@
 import { BSON } from "bson";
 import Message from "shared/messages";
 
+import Client from "./client";
 import * as EventHandler from "./messages";
 import { publishSubscriptions } from "./messages";
 
 class ControlSocket {
 
-    public clients: any[] = [];
+    public clients: Client[] = [];
 
     private readonly bson = new BSON();
     private socket: WebSocket;

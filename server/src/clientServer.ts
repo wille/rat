@@ -27,6 +27,12 @@ class ClientServer {
         console.log("[tls] connection from", socket.remoteAddress);
         const client = new Client(socket);
 
+        ControlSocketServer.broadcast(new ClientMessage({
+            type: ClientUpdateType.ADD,
+            id: client.id,
+            host: socket.remoteAddress
+        }), true);
+
         socket.on("close", () => {
             console.log("[tls] lost", socket.remoteAddress);
             this.clients.splice(this.clients.indexOf(client), 1);

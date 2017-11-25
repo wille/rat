@@ -1,12 +1,14 @@
 import * as React from "react";
 
-import ConnectionsComponent from "./components/connections";
+import { Clients } from "./components";
 
-export default class App extends React.Component<any, any> {
+class App extends React.Component<any, any> {
 
     public render() {
         return (
-            <ConnectionsComponent />
+            <Clients />
         );
     }
 }
+
+export default App;

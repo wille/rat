@@ -9,7 +9,7 @@ interface State {
     clients: Client[];
 }
 
-export default class ConnectionsComponent extends ClientComponent<any, State> {
+export default class Clients extends ClientComponent<any, State> {
 
     public state: State = {
         clients: []
@@ -22,7 +22,6 @@ export default class ConnectionsComponent extends ClientComponent<any, State> {
     }
 
     public render() {
-        console.log("state", this.state);
         return (
             <table>
                 {this.state.clients.map((client) => {
