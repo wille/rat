@@ -1,4 +1,4 @@
-import ClientProperties from "../clientProperties";
+import { ClientProperties } from "../system";
 import { MessageType } from "../types";
 import Message, { MessageTemplate } from "./index";
 

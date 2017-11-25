@@ -4,12 +4,13 @@ package header
 type PacketHeader uint16
 
 const (
-	PingHeader         PacketHeader = 0
-	SysHeader          PacketHeader = 2
+	PingHeader     PacketHeader = 0
+	SysHeader      PacketHeader = 2
+	MonitorsHeader PacketHeader = 3
+
 	ComputerInfoHeader PacketHeader = 2
 	ScreenHeader       PacketHeader = 10
 	ProcessHeader      PacketHeader = 11
-	MonitorsHeader     PacketHeader = 12
 	DirectoryHeader    PacketHeader = 13
 	PutFileHeader      PacketHeader = 14 // Upload file to client
 	GetFileHeader      PacketHeader = 15 // Download file from client

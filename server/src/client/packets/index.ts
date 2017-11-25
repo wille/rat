@@ -1,5 +1,3 @@
-import Message from "shared/messages";
-
 import { MessageTemplate } from "../../../../shared/src/messages";
 import Client from "../client";
 import ComputerInfoHandler from "./computerInfo";
@@ -13,7 +11,7 @@ const enum PacketType {
 }
 
 const mapping: PacketMap = {
-    [PacketType.ComputerInfo]: new ComputerInfoHandler()
+    [PacketType.ComputerInfo]: new ComputerInfoHandler(),
 };
 
 export interface PacketHandler<T extends MessageTemplate> {
@@ -26,6 +24,7 @@ export function handle<T extends MessageTemplate>(client: Client, message: T) {
     if (handler) {
         handler.handle(client, message);
     } else {
+        console.log(message);
         throw new Error("failed to find handler for " + message._type);
     }
 }

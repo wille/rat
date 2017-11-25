@@ -1,4 +1,4 @@
-import ClientProperties from "../../shared/src/clientProperties";
+import { ClientProperties, Monitor } from "../../shared/src/system";
 
 class Client implements ClientProperties {
 
@@ -7,6 +7,7 @@ class Client implements ClientProperties {
     public country: string;
     public username: string;
     public hostname: string;
+    public monitors: Monitor[];
 
     constructor(public readonly id: string,
                 public readonly host: string) {
@@ -23,6 +24,7 @@ class Client implements ClientProperties {
         this.country = properties.country || this.country;
         this.username = properties.username || this.username;
         this.hostname = properties.hostname || this.hostname;
+        this.monitors = properties.monitors || this.monitors;
     }
 }
 
