@@ -17,6 +17,10 @@ class Client {
         return this._id.toHexString();
     }
 
+    public get remoteAddress() {
+        return this.socket.remoteAddress;
+    }
+
     /**
      * Read n bytes from the socket and resolve when complete
      * @param n

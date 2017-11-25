@@ -15,15 +15,13 @@ export enum ClientUpdateType {
 export interface ClientTemplate extends MessageTemplate {
     type: ClientUpdateType;
     id: string;
-    data?: {
-        ping: number;
-        flag?: string;
-        country?: string;
-        host?: string;
-        computerName?: string;
-        osType?: string;
-        operatingSystem?: string;
-    };
+    ping?: number;
+    flag?: string;
+    country?: string;
+    host?: string;
+    computerName?: string;
+    osType?: string;
+    operatingSystem?: string;
 }
 
 export default class ClientMessage extends Message<ClientTemplate> {

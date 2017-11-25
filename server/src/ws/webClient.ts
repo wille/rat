@@ -23,7 +23,11 @@ class WebClient {
     }
 
     private send(m: Message) {
-        const buffer = this.bson.serialize(m);
+        const buffer = this.bson.serialize({
+            _type: m._type,
+            ...m.data
+        });
+
         this.ws.send(buffer);
     }
 

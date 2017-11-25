@@ -23,11 +23,14 @@ class ControlSocket {
         this.socket.onopen = () => this.onOpen();
     }
 
-    public send(data: Message) {
+    public send(m: Message) {
         if (this.socket.readyState === WebSocket.OPEN) {
-            this.socket.send(this.bson.serialize(data));
+            this.socket.send(this.bson.serialize({
+                _type: m._type,
+                ...m.data
+            }));
         } else {
-            this.queue.push(data);
+            this.queue.push(m);
         }
     }
 

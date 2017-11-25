@@ -38,11 +38,6 @@ class ClientServer {
         });
 
         this.clients.push(client);
-
-        ControlSocketServer.broadcast(new ClientMessage({
-            type: ClientUpdateType.ADD,
-            id: client.id
-        }), true);
     }
 }
 

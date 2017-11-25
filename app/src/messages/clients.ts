@@ -1,19 +1,22 @@
 import { ClientTemplate, ClientUpdateType } from "../../../shared/src/messages";
-
 import Client from "../client";
+import ConnectionsComponent from "../components/connections";
 import ControlSocket from "../control";
 import MessageHandler from "./index";
 
 class ClientHandler implements MessageHandler<ClientTemplate> {
 
+    constructor(private view: ConnectionsComponent) {
+
+    }
+
     public emit(data: ClientTemplate) {
         console.log(data);
 
-        const params = data.data;
         switch (data.type) {
             case ClientUpdateType.ADD:
-                const client = new Client(data.id, params.flag, params.country, params.host, params.computerName,
-                    params.osType, params.operatingSystem);
+                const client = new Client(data.id, data.flag, data.country, data.host, data.computerName,
+                    data.osType, data.operatingSystem);
 
                 ControlSocket.clients.push(client);
                 break;
@@ -25,6 +28,10 @@ class ClientHandler implements MessageHandler<ClientTemplate> {
                 });
                 break;
         }
+
+        this.view.setState({
+            clients: ControlSocket.clients
+        });
     }
 }
 
