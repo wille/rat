@@ -1,10 +1,10 @@
 import * as React from "react";
+import { Table } from "react-bootstrap";
 
 import { MessageType } from "../../../shared/src/types";
 import Client from "../client";
 import * as EventHandler from "../messages";
 import ClientComponent from "./clientComponent";
-
 import ClientRow from "./ClientRow";
 
 interface State {
@@ -35,7 +35,7 @@ export default class Clients extends ClientComponent<any, State> {
 
     public render() {
         return (
-            <table>
+            <Table bordered>
                 <thead>
                     <tr>
                         {columns.map((column) => <th key={column}>{column}</th>)}
@@ -44,7 +44,7 @@ export default class Clients extends ClientComponent<any, State> {
                 <tbody>
                     {this.state.clients.map((client) => <ClientRow key={client.id} client={client}/>)}
                 </tbody>
-            </table>
+            </Table>
         );
     }
 }
