@@ -1,4 +1,4 @@
-package shared
+package main
 
 type FileTask int
 

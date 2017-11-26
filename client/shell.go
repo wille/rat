@@ -1,4 +1,4 @@
-package shared
+package main
 
 const (
 	StartShell = 0

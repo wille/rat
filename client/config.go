@@ -6,11 +6,10 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"os"
-	"rat/shared"
-	"rat/shared/crypto"
+	"rat/client/crypto"
 )
 
-var Config shared.BinaryConfig
+var Config BinaryConfig
 
 func ParseConfig() error {
 	this := os.Args[0]
@@ -28,7 +27,7 @@ func ParseConfig() error {
 	// Read offset from end of file (32 bits)
 	f.Seek(stat.Size()-4, 0)
 	var offset int32
-	binary.Read(f, shared.ByteOrder, &offset)
+	binary.Read(f, ByteOrder, &offset)
 
 	// Read config from offset
 	f.Seek(int64(offset), 0)

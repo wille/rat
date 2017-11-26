@@ -6,7 +6,7 @@ import (
 	"os"
 	"oslib"
 	"rat/client/drives"
-	"rat/shared/network/header"
+	"rat/client/network/header"
 )
 
 type FileData struct {

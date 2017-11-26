@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"rat/shared/network/header"
+	"rat/client/network/header"
 )
 
 type DownloadPacket struct {

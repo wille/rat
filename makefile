@@ -94,8 +94,8 @@ fakebin:
 
 test:
 	go test \
-	rat/shared/network \
-	rat/shared/crypto \
+	rat/client/network \
+	rat/client/crypto \
 	rat/command \
 	rat/client \
 	rat/client/computer \

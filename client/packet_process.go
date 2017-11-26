@@ -2,8 +2,8 @@ package main
 
 import (
 	"rat/client/process"
-	"rat/shared/network/header"
-	"rat/shared/processes"
+	"rat/client/network/header"
+	"rat/client/processes"
 )
 
 type Process struct {

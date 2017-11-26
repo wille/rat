@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"rat/shared"
 )
 
 var ConfigFiles = [...]string{
@@ -14,7 +13,7 @@ var ConfigFiles = [...]string{
 	"client/config.json",
 }
 
-var Config shared.BinaryConfig
+var Config BinaryConfig
 
 func ParseConfig() error {
 	var file *os.File

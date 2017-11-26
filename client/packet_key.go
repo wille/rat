@@ -2,7 +2,7 @@ package main
 
 import (
 	"rat/client/screen"
-	"rat/shared/network/header"
+	"rat/client/network/header"
 )
 
 type KeyPacket struct {

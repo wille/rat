@@ -3,9 +3,8 @@ package main
 import (
 	"encoding/binary"
 	"net"
-	"rat/shared"
-	"rat/shared/network"
-	"rat/shared/network/header"
+	"rat/client/network"
+	"rat/client/network/header"
 )
 
 type Connection struct {
@@ -28,13 +27,13 @@ func (c *Connection) Close() {
 
 func (c *Connection) ReadHeader() (header.PacketHeader, error) {
 	var h header.PacketHeader
-	err := binary.Read(c, shared.ByteOrder, &h)
+	err := binary.Read(c, network.ByteOrder, &h)
 
 	return h, err
 }
 
 func (c *Connection) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.Conn, shared.ByteOrder, header)
+	return binary.Write(c.Conn, network.ByteOrder, header)
 }
 
 func (c *Connection) WritePacket(packet OutgoingPacket) error {

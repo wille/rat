@@ -10,11 +10,11 @@ import "C"
 
 import (
 	"image"
-	"rat/shared"
+
 	"unsafe"
 )
 
-func Capture(monitor shared.Monitor) image.Image {
+func Capture(monitor Monitor) image.Image {
 	m := cMonitor(monitor)
 
 	cap := C.CaptureMonitor(m)

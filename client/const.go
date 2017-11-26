@@ -1,4 +1,4 @@
-package shared
+package main
 
 const (
 	Windows = "Windows"

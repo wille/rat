@@ -3,7 +3,7 @@ package network
 import (
 	"encoding/binary"
 	"io"
-	"rat/shared"
+
 
 	"github.com/pkg/bson"
 )
@@ -14,31 +14,31 @@ type Reader struct {
 
 func (r Reader) readBool() (bool, error) {
 	var n bool
-	err := binary.Read(r.Reader, shared.ByteOrder, &n)
+	err := binary.Read(r.Reader, ByteOrder, &n)
 	return n, err
 }
 
 func (r Reader) readInt32() (int32, error) {
 	var n int32
-	err := binary.Read(r.Reader, shared.ByteOrder, &n)
+	err := binary.Read(r.Reader, ByteOrder, &n)
 	return n, err
 }
 
 func (r Reader) readInt64() (int64, error) {
 	var n int64
-	err := binary.Read(r.Reader, shared.ByteOrder, &n)
+	err := binary.Read(r.Reader, ByteOrder, &n)
 	return n, err
 }
 
 func (r Reader) readFloat32() (float32, error) {
 	var n float32
-	err := binary.Read(r.Reader, shared.ByteOrder, &n)
+	err := binary.Read(r.Reader, ByteOrder, &n)
 	return n, err
 }
 
 func (r Reader) readFloat64() (float64, error) {
 	var n float64
-	err := binary.Read(r.Reader, shared.ByteOrder, &n)
+	err := binary.Read(r.Reader, ByteOrder, &n)
 	return n, err
 }
 
