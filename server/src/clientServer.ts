@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as geoip from "geoip-lite";
+import { setInterval } from "timers";
 import * as tls from "tls";
 
 import ClientMessage, { ClientUpdateType } from "../../shared/src/messages/client";
@@ -22,6 +23,11 @@ class ClientServer {
 
         this.server = tls.createServer(options, (socket) => this.onConnection(socket));
         this.server.listen(port);
+        setInterval(() => this.ping(), 2500);
+    }
+
+    private ping() {
+        this.clients.forEach((client) => client.sendPing());
     }
 
     private onConnection(socket: tls.TLSSocket) {

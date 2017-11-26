@@ -1,16 +1,19 @@
 import { MessageTemplate } from "../../../../shared/src/messages";
 import Client from "../client";
 import ComputerInfoHandler from "./computerInfo";
+import PongHandler from "./pong";
 
 interface PacketMap {
     [index: string]: PacketHandler<any>;
 }
 
 const enum PacketType {
+    Ping = 0,
     ComputerInfo = 2
 }
 
 const mapping: PacketMap = {
+    [PacketType.Ping]: new PongHandler(),
     [PacketType.ComputerInfo]: new ComputerInfoHandler(),
 };
 

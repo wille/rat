@@ -25,6 +25,6 @@ export function handle<T extends Message>(client: WebClient, message: T) {
     if (handler) {
         handler.handle(client, message);
     } else {
-        console.warn("[ws] failed to find handler", message._type);
+        console.warn("[ws] failed to find handler", message._type, message);
     }
 }

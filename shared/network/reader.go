@@ -5,7 +5,7 @@ import (
 	"io"
 	"rat/shared"
 
-	"gopkg.in/mgo.v2/bson"
+	"github.com/pkg/bson"
 )
 
 type Reader struct {

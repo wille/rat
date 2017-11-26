@@ -12,8 +12,6 @@ type ComputerInfoTemplate = MessageTemplate & ClientProperties;
 class ComputerInfoHandler implements PacketHandler<ComputerInfoTemplate> {
 
     public handle(client: Client, data: ComputerInfoTemplate) {
-        data._type = MessageType.Client;
-
         ControlSocketServer.broadcast(new ClientMessage({
             type: ClientUpdateType.UPDATE,
             id: client.id,

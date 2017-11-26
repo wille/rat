@@ -35,7 +35,7 @@ class ControlSocketServer {
             client.emit(new ClientMessage({
                 type: ClientUpdateType.ADD,
                 id: c.id,
-                host: c.remoteAddress
+                host: c.host
             }), true);
         });
 
