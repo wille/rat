@@ -34,8 +34,8 @@ class ControlSocketServer {
         clientServer.clients.forEach((c) => {
             client.emit(new ClientMessage({
                 type: ClientUpdateType.ADD,
-                id: c.id,
-                host: c.host
+                ...c.getClientProperties(),
+                ...c.getSystemProperties()
             }), true);
         });
 

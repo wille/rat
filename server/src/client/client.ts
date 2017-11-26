@@ -1,11 +1,12 @@
 import { BSON, ObjectId } from "bson";
+import * as geoip from "geoip-lite";
 import { TLSSocket } from "tls";
 
 import { ClientUpdateType } from "../../../shared/src/messages/client";
 import ClientMessage from "../../../shared/src/messages/client";
 import Message from "../../../shared/src/messages/index";
 import PingMessage from "../../../shared/src/messages/ping";
-import { ClientProperties, Monitor } from "../../../shared/src/system";
+import { ClientProperties, Monitor, OperatingSystem } from "../../../shared/src/system";
 import ControlSocketServer from "../controlSocketServer";
 import { handle } from "./packets";
 
@@ -17,9 +18,11 @@ class Client implements ClientProperties {
     public username: string;
     public hostname: string;
     public monitors: Monitor[];
+    public os: OperatingSystem;
 
     private readonly _id = new ObjectId();
     private pingTime: number;
+    private lookup: { country: string };
 
     constructor(private readonly socket: TLSSocket) {
         this.loop();
@@ -58,6 +61,37 @@ class Client implements ClientProperties {
         this.socket.write(len);
 
         this.socket.write(data);
+    }
+
+    /**
+     * Returns all the client properties
+     */
+    public getClientProperties() {
+        if (!this.lookup) {
+            this.lookup = geoip.lookup(this.host) || {
+                country: "unknown"
+            };
+        }
+
+        return {
+            id: this.id,
+            host: this.host,
+            country: this.lookup.country,
+            flag: this.lookup.country.toLowerCase()
+        } as ClientProperties;
+    }
+
+    /**
+     * Returns all system properties sent by the client
+     */
+    public getSystemProperties() {
+        return {
+            id: this.id,
+            hostname: this.hostname,
+            username: this.username,
+            monitors: this.monitors,
+            os: this.os
+        } as ClientProperties;
     }
 
     /**

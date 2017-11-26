@@ -40,10 +40,7 @@ class ClientServer {
 
         ControlSocketServer.broadcast(new ClientMessage({
             type: ClientUpdateType.ADD,
-            id: client.id,
-            host: socket.remoteAddress,
-            country: lookup.country,
-            flag: lookup.country.toLowerCase()
+            ...client.getClientProperties()
         }), true);
 
         socket.on("close", () => {
