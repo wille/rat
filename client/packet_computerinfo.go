@@ -9,11 +9,13 @@ import (
 )
 
 type ComputerInfoPacket struct {
-	Username                   string
-	Hostname                   string
-	OperatingSystemName        string `operatingSystemName"`
-	OperatingSystemDisplayName string `operatingSystemDisplayName`
-	Monitors                   []shared.Monitor
+	Username        string
+	Hostname        string
+	OperatingSystem struct {
+		Type    string
+		Display string
+	} `os`
+	Monitors []shared.Monitor
 }
 
 func (packet ComputerInfoPacket) Header() header.PacketHeader {
@@ -25,8 +27,8 @@ func (packet *ComputerInfoPacket) Init() {
 
 	packet.Username = u.Username
 	packet.Hostname = u.Hostname
-	packet.OperatingSystemName = oslib.Name
-	packet.OperatingSystemDisplayName = oslib.GetDisplay()
+	packet.OperatingSystem.Type = oslib.Name
+	packet.OperatingSystem.Display = oslib.GetDisplay()
 
 	screen.QueryMonitors()
 	packet.Monitors = screen.Monitors

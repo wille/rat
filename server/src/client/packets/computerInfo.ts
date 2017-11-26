@@ -17,7 +17,8 @@ class ComputerInfoHandler implements PacketHandler<ComputerInfoTemplate> {
             id: client.id,
             hostname: data.hostname,
             username: data.username,
-            monitors: data.monitors
+            monitors: data.monitors,
+            os: data.os
         }), true);
     }
 }

@@ -6,6 +6,11 @@ export interface Monitor {
     height: number;
 }
 
+export interface OperatingSystem {
+    type: string;
+    display: string;
+}
+
 /**
  * All system information exposed by a client
  */
@@ -19,4 +24,5 @@ export interface ClientProperties {
     username?: string;
     hostname?: string;
     monitors?: Monitor[];
+    os?: OperatingSystem;
 }

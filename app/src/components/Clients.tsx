@@ -14,7 +14,9 @@ interface State {
 const columns = [
     "Country",
     "Host",
-    "Identifier"
+    "Identifier",
+    "Operating System",
+    "Ping"
 ];
 
 export default class Clients extends ClientComponent<any, State> {
