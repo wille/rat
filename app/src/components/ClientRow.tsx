@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ContextMenu, ContextMenuTrigger, MenuItem, SubMenu } from "react-contextmenu";
 
 import Client from "../client";
 
@@ -12,7 +13,7 @@ export default class ClientRow extends React.Component<Props, any> {
         const { client } = this.props;
 
         return (
-            <tr key={client.id}>
+            <ContextMenuTrigger id={client.id} renderTag="tr">
                 <td>
                     <img src={"assets/flags/" + client.flag + ".png"}/>
                 </td>
@@ -27,7 +28,19 @@ export default class ClientRow extends React.Component<Props, any> {
                 <td>
                     <img src={"assets/ping/" + this.getPingIcon() + ".png"}/>
                 </td>
-            </tr>
+
+
+                <ContextMenu id={client.id}>
+                    <MenuItem>
+                        Menu item 1
+                    </MenuItem>
+                    <SubMenu title="titel">
+                        <MenuItem>
+                            Test
+                        </MenuItem>
+                    </SubMenu>
+                </ContextMenu>
+            </ContextMenuTrigger>
         );
     }
 
