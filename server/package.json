@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon",
     "build": "npm run test && rm -rf dist && tsc",
-    "test": "tslint -p . && ts-node node_modules/tape/bin/tape src/**/*.test.ts"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -15,11 +15,12 @@
   "devDependencies": {
     "@types/bson": "^1.0.4",
     "@types/geoip-lite": "^1.1.29",
+    "@types/jest": "^21.1.8",
     "@types/node": "^8.0.53",
-    "@types/tape": "^4.2.31",
     "@types/ws": "^3.2.0",
+    "jest": "^21.2.1",
     "nodemon": "^1.12.1",
-    "tape": "^4.8.0",
+    "ts-jest": "^21.2.4",
     "ts-node": "^3.3.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
