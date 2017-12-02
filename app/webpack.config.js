@@ -5,7 +5,7 @@ const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const extractSass = new ExtractTextPlugin({
-    filename: "[name].[id].css"
+    filename: "[name].[hash].css"
 });
 
 const config = {
