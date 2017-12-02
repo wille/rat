@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Table } from "react-bootstrap";
 
-import { MessageType } from "../../../shared/src/types";
-import Client from "../client";
-import * as EventHandler from "../messages";
-import ClientComponent from "./clientComponent";
+import { MessageType } from "../../../../shared/src/types";
+import Client from "../../client";
+import * as EventHandler from "../../messages";
+import ClientComponent from "../clientComponent";
 import ClientRow from "./ClientRow";
 
 interface State {

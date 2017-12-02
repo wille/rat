@@ -1,12 +1,12 @@
 import { ClientTemplate, ClientUpdateType } from "../../../shared/src/messages";
 import Client from "../client";
-import { Clients } from "../components";
+import { Connections } from "../components/clientlist";
 import ControlSocket from "../control";
 import MessageHandler from "./index";
 
 class ClientHandler implements MessageHandler<ClientTemplate> {
 
-    constructor(private view: Clients) {
+    constructor(private view: Connections) {
 
     }
 

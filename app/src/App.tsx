@@ -1,12 +1,12 @@
 import * as React from "react";
 
-import { Clients } from "./components";
+import { Connections } from "./components/clientlist";
 
 class App extends React.Component<any, any> {
 
     public render() {
         return (
-            <Clients />
+            <Connections />
         );
     }
 }

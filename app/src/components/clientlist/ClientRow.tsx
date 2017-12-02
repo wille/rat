@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ContextMenu, ContextMenuTrigger, MenuItem, SubMenu } from "react-contextmenu";
 
-import Client from "../client";
+import Client from "../../client";
 
 interface Props {
     client: Client;
