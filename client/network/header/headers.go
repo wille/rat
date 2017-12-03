@@ -4,20 +4,19 @@ package header
 type PacketHeader uint16
 
 const (
-	PingHeader     PacketHeader = 0
-	SysHeader      PacketHeader = 2
-	MonitorsHeader PacketHeader = 3
-
+	PingHeader         PacketHeader = 0
 	ComputerInfoHeader PacketHeader = 2
-	ScreenHeader       PacketHeader = 10
-	ProcessHeader      PacketHeader = 11
-	DirectoryHeader    PacketHeader = 13
-	PutFileHeader      PacketHeader = 14 // Upload file to client
-	GetFileHeader      PacketHeader = 15 // Download file from client
-	MouseMoveHeader    PacketHeader = 16
-	MouseHeader        PacketHeader = 17
-	KeyHeader          PacketHeader = 18
-	FileHeader         PacketHeader = 19
-	ShellHeader        PacketHeader = 20
-	WindowsHeader      PacketHeader = 21
+	ScreenHeader       PacketHeader = 3
+
+	SysHeader       PacketHeader = 2
+	ProcessHeader   PacketHeader = 11
+	DirectoryHeader PacketHeader = 13
+	PutFileHeader   PacketHeader = 14 // Upload file to client
+	GetFileHeader   PacketHeader = 15 // Download file from client
+	MouseMoveHeader PacketHeader = 16
+	MouseHeader     PacketHeader = 17
+	KeyHeader       PacketHeader = 18
+	FileHeader      PacketHeader = 19
+	ShellHeader     PacketHeader = 20
+	WindowsHeader   PacketHeader = 21
 )

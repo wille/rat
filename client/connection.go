@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/binary"
+	"io"
+	"log"
 	"net"
 	"rat/client/network"
 	"rat/client/network/header"
@@ -48,6 +50,7 @@ func (c *Connection) WritePacket(packet OutgoingPacket) error {
 
 type IncomingPacket interface {
 	OnReceive() error
+	Decode(buf []byte) (IncomingPacket, error)
 }
 
 type OutgoingPacket interface {
@@ -56,17 +59,23 @@ type OutgoingPacket interface {
 }
 
 func (c Connection) ReadPacket() (IncomingPacket, error) {
-	header, err := c.ReadHeader()
+	h, err := c.ReadHeader()
 	if err != nil {
 		return nil, err
 	}
 
-	packet := GetIncomingPacket(header)
+	var n int32
+	err = binary.Read(c.Reader.Reader, network.ByteOrder, &n)
+	buf := make([]byte, n)
+	io.ReadFull(c.Reader.Reader, buf)
 
-	e, err := c.Reader.ReadPacket(packet)
+	packet := GetIncomingPacket(h)
+
+	packet, err = packet.Decode(buf)
+
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
-	return e.(IncomingPacket), e.(IncomingPacket).OnReceive()
+	return packet, packet.OnReceive()
 }

@@ -15,3 +15,4 @@ export default class Message<T = any> {
 
 export { default as SubscribeMessage, SubscribeTemplate } from "./subscribe";
 export { default as ClientMessage, ClientTemplate, ClientUpdateType } from "./client";
+export { default as ScreenMessage, ScreenTemplate } from "./screen";

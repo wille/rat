@@ -1,5 +1,6 @@
 export const enum MessageType {
     Ping,
     Subscribe,
-    Client
+    Client,
+    Screen
 }

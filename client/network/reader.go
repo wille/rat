@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"io"
 
-
 	"github.com/pkg/bson"
 )
 

@@ -26,6 +26,10 @@ class ClientServer {
         setInterval(() => this.ping(), 2500);
     }
 
+    public getById(id: string) {
+        return this.clients.filter((x) => x.id === id)[0];
+    }
+
     private ping() {
         this.clients.forEach((client) => client.sendPing());
     }

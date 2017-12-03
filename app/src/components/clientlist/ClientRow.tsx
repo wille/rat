@@ -3,11 +3,15 @@ import { ContextMenu, ContextMenuTrigger, MenuItem, SubMenu } from "react-contex
 
 import Client from "../../client";
 
+import { Screen } from "../screen";
+
 interface Props {
     client: Client;
 }
 
 export default class ClientRow extends React.Component<Props, any> {
+
+    private shit: any;
 
     public render() {
         const { client } = this.props;
@@ -29,10 +33,11 @@ export default class ClientRow extends React.Component<Props, any> {
                     <img src={"assets/ping/" + this.getPingIcon() + ".png"}/>
                 </td>
 
+                <td>{this.shit}</td>
 
                 <ContextMenu id={client.id}>
-                    <MenuItem>
-                        Menu item 1
+                    <MenuItem onClick={() => { this.shit = <Screen client={client}/> }}>
+                        View Screen
                     </MenuItem>
                     <SubMenu title="titel">
                         <MenuItem>

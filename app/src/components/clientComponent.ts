@@ -1,14 +1,23 @@
 import * as React from "react";
 
 import { MessageType } from "../../../shared/src/types";
+import Client from "../client";
 import MessageHandler, * as EventHandler from "../messages";
 
-abstract class ClientComponent<P, S> extends React.Component<P, S> {
+interface Props {
+    client: Client;
+}
+
+abstract class ClientComponent<P = {}, S = {}> extends React.Component<P & Props, S> {
 
     private subscriptions: number[] = [];
 
-    constructor(props: P) {
+    constructor(props: P & Props) {
         super(props);
+    }
+
+    public get client() {
+        return this.props.client as Client;
     }
 
     public abstract render(): React.ReactNode;

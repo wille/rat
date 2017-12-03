@@ -1,18 +1,17 @@
-import { controlSocket } from "~/index";
-
 import Message from "shared/messages";
 import { MessageType } from "shared/types";
 
 import WebClient from "../webClient";
-
-import SubscribeHandler from "./subscribe";
+import ScreenHandler from "./screen.handler";
+import SubscribeHandler from "./subscribe.handler";
 
 interface MessageMap {
     [index: string]: MessageHandler<any>;
 }
 
 const mapping: MessageMap = {
-    [MessageType.Subscribe]: new SubscribeHandler()
+    [MessageType.Subscribe]: new SubscribeHandler(),
+    [MessageType.Screen]: new ScreenHandler()
 };
 
 export interface MessageHandler<T extends any> {

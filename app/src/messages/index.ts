@@ -8,6 +8,7 @@ export default interface MessageHandler<T extends MessageTemplate> {
 }
 
 export { default as ClientHandler } from "./clients";
+export { default as ScreenHandler } from "./screen";
 
 interface Subscriber {
     _id: number;

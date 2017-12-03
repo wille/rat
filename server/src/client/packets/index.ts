@@ -1,7 +1,8 @@
 import { MessageTemplate } from "../../../../shared/src/messages";
 import Client from "../client";
-import ComputerInfoHandler from "./computerInfo";
-import PongHandler from "./pong";
+import ComputerInfoHandler from "./computerInfo.handler";
+import PongHandler from "./pong.handler";
+import ScreenFrameHandler from "./screenFrame.handler";
 
 interface PacketMap {
     [index: string]: PacketHandler<any>;
@@ -9,12 +10,14 @@ interface PacketMap {
 
 const enum PacketType {
     Ping = 0,
-    ComputerInfo = 2
+    ComputerInfo = 2,
+    Screen = 3
 }
 
 const mapping: PacketMap = {
     [PacketType.Ping]: new PongHandler(),
     [PacketType.ComputerInfo]: new ComputerInfoHandler(),
+    [PacketType.Screen]: new ScreenFrameHandler()
 };
 
 export interface PacketHandler<T extends MessageTemplate> {

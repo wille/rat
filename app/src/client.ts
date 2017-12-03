@@ -1,5 +1,6 @@
+import Message from "../../shared/src/messages";
 import { ClientProperties, Monitor, OperatingSystem } from "../../shared/src/system";
-
+import ControlSocket from "./control";
 class Client implements ClientProperties {
 
     public ping: number;
@@ -27,6 +28,10 @@ class Client implements ClientProperties {
         this.hostname = properties.hostname || this.hostname;
         this.monitors = properties.monitors || this.monitors;
         this.os = properties.os || this.os;
+    }
+
+    public send(m: Message) {
+        ControlSocket.send(m);
     }
 }
 
