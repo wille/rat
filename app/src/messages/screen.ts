@@ -1,4 +1,4 @@
-import { ScreenTemplate } from "../../../shared/src/messages/screen";
+import ScreenTemplate from "../../../shared/src/templates/screen";
 import { Screen } from "../components/screen";
 import MessageHandler from "./index";
 

@@ -2,12 +2,12 @@ import { BSON, ObjectId } from "bson";
 import * as geoip from "geoip-lite";
 import { TLSSocket } from "tls";
 
-import { ClientUpdateType } from "../../../shared/src/messages/client";
-import ClientMessage from "../../../shared/src/messages/client";
 import Message from "../../../shared/src/messages/index";
-import PingMessage from "../../../shared/src/messages/ping";
 import { ClientProperties, Monitor, OperatingSystem } from "../../../shared/src/system";
+import { ClientUpdateType } from "../../../shared/src/templates/client";
 import ControlSocketServer from "../controlSocketServer";
+import ClientMessage from "../ws/messages/client.message";
+import PingMessage from "../ws/messages/ping.message";
 import { handle } from "./packets";
 
 class Client implements ClientProperties {

@@ -1,10 +1,8 @@
 import { BSON } from "bson";
 import * as WebSocket from "ws";
 
-import Message, { ClientMessage } from "../../../shared/src/messages";
-import { ClientUpdateType } from "../../../shared/src/messages/client";
+import Message from "../../../shared/src/messages";
 import { MessageType } from "../../../shared/src/types";
-import { clientServer } from "../index";
 import { handle } from "./events";
 
 class WebClient {

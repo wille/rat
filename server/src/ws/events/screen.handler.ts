@@ -1,13 +1,13 @@
 import { clientServer } from "../..";
-import { ScreenTemplate } from "../../../../shared/src/messages/index";
-import ScreenMessage from "../../../../shared/src/messages/screen";
+import StreamMessage from "../../../../shared/src/messages/stream";
+import ScreenTemplate from "../../../../shared/src/templates/screen";
 import WebClient from "../webClient";
 import { MessageHandler } from "./index";
 
 class ScreenHandler implements MessageHandler<ScreenTemplate> {
 
     public handle(client: WebClient, data: ScreenTemplate) {
-        clientServer.getById(data.id).send(new ScreenMessage(data));
+        clientServer.getById(data.id).send(new StreamMessage(data));
     }
 }
 

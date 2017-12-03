@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import ScreenMessage from "../../../../shared/src/messages/screen";
+import StreamMessage from "../../../../shared/src/messages/stream";
 import { MessageType } from "../../../../shared/src/types";
 import { ScreenHandler } from "../../messages";
 import ClientComponent from "../clientComponent";
@@ -14,7 +14,7 @@ export default class Screen extends ClientComponent<any, any> {
     }
 
     public componentDidMount() {
-        this.client.send(new ScreenMessage({
+        this.client.send(new StreamMessage({
             id: this.client.id,
             active: true,
             scale: 0.5,

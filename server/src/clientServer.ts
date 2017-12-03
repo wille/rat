@@ -3,9 +3,10 @@ import * as geoip from "geoip-lite";
 import { setInterval } from "timers";
 import * as tls from "tls";
 
-import ClientMessage, { ClientUpdateType } from "../../shared/src/messages/client";
+import { ClientUpdateType } from "../../shared/src/templates/client";
 import Client from "./client/client";
 import ControlSocketServer from "./controlSocketServer";
+import ClientMessage from "./ws/messages/client.message";
 
 class ClientServer {
 

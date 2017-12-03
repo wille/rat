@@ -1,4 +1,4 @@
-import { MessageTemplate } from "../../../../shared/src/messages";
+import MessageTemplate from "../../../../shared/src/templates/index";
 import Client from "../client";
 import ComputerInfoHandler from "./computerInfo.handler";
 import PongHandler from "./pong.handler";

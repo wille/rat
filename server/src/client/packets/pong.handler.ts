@@ -1,4 +1,3 @@
-import ClientMessage, { ClientUpdateType } from "../../../../shared/src/messages/client";
 import ControlSocketServer from "../../controlSocketServer";
 import Client from "../client";
 import { PacketHandler } from "./index";

@@ -6,7 +6,6 @@
         "target": "es2017",
         "outDir": "dist",
         "baseUrl": ".",
-        "pretty": true,
         "paths": {
             "shared/*": [
                 "../shared/src/*"

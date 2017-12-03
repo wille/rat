@@ -1,4 +1,4 @@
-import { ClientTemplate, ClientUpdateType } from "../../../shared/src/messages";
+import ClientTemplate, { ClientUpdateType } from "../../../shared/src/templates/client";
 import Client from "../client";
 import { Connections } from "../components/clientlist";
 import ControlSocket from "../control";

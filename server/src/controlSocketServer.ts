@@ -2,9 +2,9 @@ import { IncomingMessage } from "http";
 import Message from "shared/messages";
 import * as WebSocket from "ws";
 
-import { ClientUpdateType } from "../../shared/src/messages/client";
-import ClientMessage from "../../shared/src/messages/client";
+import { ClientUpdateType } from "../../shared/src/templates/client";
 import { clientServer } from "./index";
+import ClientMessage from "./ws/messages/client.message";
 import WebClient from "./ws/webClient";
 
 class ControlSocketServer {
