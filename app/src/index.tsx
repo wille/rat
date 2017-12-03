@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap-theme.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/menu.scss";
+import "./styles/split.scss";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";

@@ -9,7 +9,7 @@ interface State {
     data: string;
 }
 
-export default class Screen extends ClientComponent<State> {
+export default class Screen extends ClientComponent<{}, State> {
 
     public state: State = {
         data: null

@@ -4,8 +4,13 @@ import { Table } from "react-bootstrap";
 import { MessageType } from "../../../../shared/src/types";
 import Client from "../../client";
 import * as EventHandler from "../../messages";
+import ViewController from "../../viewController";
 import ClientComponent from "../clientComponent";
 import ClientRow from "./ClientRow";
+
+interface Props {
+    viewController: ViewController;
+}
 
 interface State {
     clients: Client[];
@@ -19,7 +24,7 @@ const columns = [
     "Ping"
 ];
 
-export default class Clients extends ClientComponent<State> {
+export default class Clients extends ClientComponent<Props, State> {
 
     public state: State = {
         clients: []
@@ -42,7 +47,11 @@ export default class Clients extends ClientComponent<State> {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.clients.map((client) => <ClientRow key={client.id} client={client}/>)}
+                    {this.state.clients.map((client) => {
+                        return (
+                            <ClientRow key={client.id} client={client} viewController={this.props.viewController}/>
+                        );
+                    })}
                 </tbody>
             </Table>
         );

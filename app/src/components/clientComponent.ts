@@ -8,11 +8,13 @@ interface Props {
     client: Client;
 }
 
-abstract class ClientComponent<S = {}> extends React.Component<Props, S> {
+abstract class ClientComponent<P = {}, S = {}> extends React.Component<P & Props, S> {
 
+    public title = "title";
+    public id = Math.random();
     private subscriptions: number[] = [];
 
-    constructor(props: Props) {
+    constructor(props: P & Props) {
         super(props);
     }
 
