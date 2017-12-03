@@ -8,11 +8,11 @@ interface Props {
     client: Client;
 }
 
-abstract class ClientComponent<P = {}, S = {}> extends React.Component<P & Props, S> {
+abstract class ClientComponent<S = {}> extends React.Component<Props, S> {
 
     private subscriptions: number[] = [];
 
-    constructor(props: P & Props) {
+    constructor(props: Props) {
         super(props);
     }
 

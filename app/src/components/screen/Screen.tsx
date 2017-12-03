@@ -5,19 +5,23 @@ import { MessageType } from "../../../../shared/src/types";
 import { ScreenHandler } from "../../messages";
 import ClientComponent from "../clientComponent";
 
-export default class Screen extends ClientComponent<any, any> {
+interface State {
+    data: string;
+}
 
-    constructor(props: any) {
-        super(props);
+export default class Screen extends ClientComponent<State> {
 
-        this.subscribe(MessageType.Screen, new ScreenHandler(this));
-    }
+    public state: State = {
+        data: null
+    };
 
     public componentDidMount() {
+        this.subscribe(MessageType.Screen, new ScreenHandler(this));
+
         this.client.send(new StreamMessage({
             id: this.client.id,
             active: true,
-            scale: 0.5,
+            scale: 1,
             monitor: true,
             handle: 0
         }));
@@ -25,7 +29,7 @@ export default class Screen extends ClientComponent<any, any> {
 
     public render() {
         return (
-            <p>Screen</p>
+            <img src={this.state.data}/>
         );
     }
 }

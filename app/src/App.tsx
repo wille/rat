@@ -6,7 +6,7 @@ class App extends React.Component<any, any> {
 
     public render() {
         return (
-            <Connections />
+            <Connections client={null} />
         );
     }
 }

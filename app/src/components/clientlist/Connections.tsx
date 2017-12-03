@@ -19,7 +19,7 @@ const columns = [
     "Ping"
 ];
 
-export default class Clients extends ClientComponent<any, State> {
+export default class Clients extends ClientComponent<State> {
 
     public state: State = {
         clients: []
