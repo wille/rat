@@ -11,7 +11,8 @@
         "max-classes-per-file": false,
         "array-type": false,
         "object-literal-sort-keys": false,
-        "variable-name": false
+        "variable-name": false,
+        "no-empty": false
     },
     "rulesDirectory": []
 }
