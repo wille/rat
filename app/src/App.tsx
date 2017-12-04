@@ -18,15 +18,17 @@ class App extends React.Component<any, any> {
             <div>
                 <SplitPane defaultSize="50%" split="vertical">
                     <Connections client={null} viewController={this.viewController} />
-                    <Nav bsStyle="tabs" activeKey="1">
-                        {this.viewController.views.map((view) => {
-                            console.log(view);
-                            return (
-                                <NavItem key={view.id} eventKey={view.id} onClick={() => this.viewController.selected = view}>{view.title}</NavItem>
-                            );
-                        })}
+                    <div>
+                        <Nav bsStyle="tabs" activeKey="1">
+                            {this.viewController.views.map((view) => {
+                                console.log(view);
+                                return (
+                                    <NavItem key={view.id} eventKey={view.id} onClick={() => this.viewController.selected = view}>{view.title}</NavItem>
+                                );
+                            })}
+                        </Nav>
                         {this.viewController.selected ? this.viewController.selected.render() : false}
-                    </Nav>
+                    </div>
                 </SplitPane>
             </div>
         );
