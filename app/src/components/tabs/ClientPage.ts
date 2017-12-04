@@ -1,7 +1,7 @@
 import Client from "../../client";
-import TabPage from "./TabPage";
+import TabbedView from "./TabPage";
 
-export default abstract class ClientPage extends TabPage {
+export default abstract class ClientPage extends TabbedView {
 
     constructor(title: string, protected readonly client: Client) {
         super(title);

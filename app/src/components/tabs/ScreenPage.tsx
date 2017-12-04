@@ -2,9 +2,9 @@ import * as React from "react";
 
 import Client from "../../client";
 import { Screen } from "../screen";
-import TabPage from "./TabPage";
+import TabbedView from "./TabPage";
 
-export default class ScreenPage extends TabPage {
+export default class ScreenPage extends TabbedView {
 
     constructor(private client: Client) {
         super("Screen");

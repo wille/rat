@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export default abstract class TabPage {
+export default abstract class TabbedView {
 
     public readonly id = Math.random();
 
