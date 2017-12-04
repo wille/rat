@@ -1,6 +1,8 @@
 import * as React from "react";
+import { ButtonGroup, DropdownToggle, MenuItem } from "react-bootstrap";
 
 import StreamMessage from "../../../../shared/src/messages/stream";
+import { Monitor } from "../../../../shared/src/system";
 import { MessageType } from "../../../../shared/src/types";
 import { ScreenHandler } from "../../messages";
 import ClientComponent from "../clientComponent";
@@ -29,7 +31,24 @@ export default class Screen extends ClientComponent<{}, State> {
 
     public render() {
         return (
-            <img src={this.state.data}/>
+            <div>
+                <ButtonGroup>
+                    <DropdownToggle>
+                        {this.client.monitors.map((monitor) => {
+                            return (
+                                <MenuItem key={monitor.id} onClick={() => this.selectMonitor(monitor)}>
+                                    {monitor.id + ": " + monitor.width + "x" + monitor.height}
+                                </MenuItem>
+                            );
+                        })}
+                    </DropdownToggle>
+                </ButtonGroup>
+                <img src={this.state.data}/>
+            </div>
         );
+    }
+
+    private selectMonitor(monitor: Monitor) {
+
     }
 }
