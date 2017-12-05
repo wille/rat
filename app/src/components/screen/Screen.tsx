@@ -17,16 +17,12 @@ export default class Screen extends ClientComponent<{}, State> {
         data: null
     };
 
-    public componentDidMount() {
-        this.subscribe(MessageType.Screen, new ScreenHandler(this));
+    private selectedMonitor: Monitor;
 
-        this.client.send(new StreamMessage({
-            id: this.client.id,
-            active: true,
-            scale: 0.5,
-            monitor: true,
-            handle: 0
-        }));
+    public componentDidMount() {
+        this.selectedMonitor = this.client.monitors[0];
+        this.subscribe(MessageType.Screen, new ScreenHandler(this));
+        this.stream();
     }
 
     public render() {
@@ -54,6 +50,16 @@ export default class Screen extends ClientComponent<{}, State> {
     }
 
     private selectMonitor(monitor: Monitor) {
+        this.selectedMonitor = monitor;
+    }
 
+    private stream() {
+        this.client.send(new StreamMessage({
+            id: this.client.id,
+            active: true,
+            scale: 0.5,
+            monitor: true,
+            handle: this.selectedMonitor.id
+        }));
     }
 }
