@@ -1,23 +1,23 @@
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const TSLintPlugin = require("tslint-webpack-plugin");
+const path = require("path");
 const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TSLintPlugin = require("tslint-webpack-plugin");
 
 const extractSass = new ExtractTextPlugin({
-    filename: "[name].[hash].css"
+    filename: "[name].[chunkhash:8].css"
 });
 
 const config = {
     entry: [
-        "react-hot-loader/patch",
-        "./src/index.tsx"
+        __dirname + "/src/index.tsx",
     ],
     output: {
-        filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: path.resolve(__dirname, "dist"),
+        filename: "[name].[chunkhash:8].js",
     },
-    devtool: "source-map",
     resolve: {
         extensions: [
             ".ts",
@@ -28,14 +28,6 @@ const config = {
     },
     module: {
         loaders: [
-            {
-                test: /\.tsx?$/,
-                loader: [
-                    "react-hot-loader/webpack",
-                    "ts-loader"
-                ]
-            },
-
             // reprocess sourcemaps
             {
                 enforce: "pre",
@@ -74,17 +66,14 @@ const config = {
             }
         ]
     },
-    externals: {
-
-    },
     plugins: [
-        extractSass,
-        new webpack.HotModuleReplacementPlugin(),
 		new webpack.NamedModulesPlugin(),
         new HtmlWebpackPlugin({
-            title: "App",
+            inject: true,
             template: "./src/index.html"
         }),
+        new CaseSensitivePathsPlugin(),
+        extractSass,
         new TSLintPlugin({
             files: [
                 "./src/**/*.ts",
@@ -97,10 +86,7 @@ const config = {
                 to: "assets"
             }
         ])
-    ],
-    devServer: {
-        hot: true
-    }
+    ]
 };
 
 module.exports = config;
