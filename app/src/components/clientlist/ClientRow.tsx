@@ -1,10 +1,12 @@
-import ScreenPage from "../tabs/ScreenPage";
 import * as React from "react";
-import { ContextMenu, ContextMenuTrigger, MenuItem, SubMenu } from "react-contextmenu";
+import { ContextMenu, ContextMenuTrigger, MenuItem } from "react-contextmenu";
 import ViewController from "src/viewController";
 
 import Client from "../../client";
+import FileSystem from "../fs/FileSystem";
 import { Screen } from "../screen";
+import FilePage from "../tabs/FilePage";
+import ScreenPage from "../tabs/ScreenPage";
 
 interface Props {
     viewController: ViewController;
@@ -38,8 +40,11 @@ export default class ClientRow extends React.Component<Props, any> {
                 <td>{this.shit}</td>
 
                 <ContextMenu id={client.id}>
-                    <MenuItem onClick={() => { this.props.viewController.addView(new ScreenPage(client)) }}>
+                    <MenuItem onClick={() => { this.props.viewController.addView(new ScreenPage(client)); }}>
                         View Screen
+                    </MenuItem>
+                    <MenuItem onClick={() => { this.props.viewController.addView(new FilePage(client)); }}>
+                        File System
                     </MenuItem>
                 </ContextMenu>
             </ContextMenuTrigger>

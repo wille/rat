@@ -6,7 +6,6 @@ import ClientComponent from "./components/clientComponent";
 export default class ViewController {
 
     public views: TabbedView[] = [];
-    public selected: TabbedView;
 
     constructor(private parent: App) {
 
@@ -15,8 +14,8 @@ export default class ViewController {
     public addView(view: TabbedView) {
         this.views.push(view);
         this.parent.setState({
-            views: this.views
+            views: this.views,
+            selected: view
         });
-        this.selected = view;
     }
 }
