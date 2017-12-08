@@ -22,6 +22,8 @@ module.exports = merge(common, {
         new webpack.HotModuleReplacementPlugin()
     ],
     devServer: {
-        hot: true
+        hot: true,
+        historyApiFallback: true,
+        contentBase: "src/"
     }
 });
