@@ -8,8 +8,20 @@
         "baseUrl": ".",
         "pretty": true,
         "paths": {
-            "shared/*": [
+            "@shared/*": [
                 "../shared/src/*"
+            ],
+            "@messages/*": [
+                "src/messages/*"
+            ],
+            "@templates/*": [
+                "../shared/src/templates/*"
+            ],
+            "@components/*": [
+                "src/components/*"
+            ],
+            "@app/*": [
+                "src/*"
             ]
         }
     },

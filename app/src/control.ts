@@ -1,9 +1,7 @@
+import Client from "@app/client";
+import * as EventHandler from "@app/messages";
+import Message from "@shared/messages";
 import { BSON } from "bson";
-import Message from "shared/messages";
-
-import Client from "./client";
-import * as EventHandler from "./messages";
-import { publishSubscriptions } from "./messages";
 
 class ControlSocket {
 
@@ -38,7 +36,7 @@ class ControlSocket {
     private onOpen() {
         console.log("[ws] connected");
 
-        publishSubscriptions();
+        EventHandler.publishSubscriptions();
 
         this.queue.forEach((queued) => {
             this.send(queued);

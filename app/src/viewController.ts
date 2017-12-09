@@ -1,7 +1,5 @@
-import TabbedView from "src/components/tabs/TabPage";
-
-import App from "./App";
-import ClientComponent from "./components/clientComponent";
+import App from "@app/App";
+import TabbedView from "@components/tabs/TabPage";
 
 export default class ViewController {
 

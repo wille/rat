@@ -1,10 +1,10 @@
+import ViewController from "@app/viewController";
+import TabbedView from "@components/tabs/TabPage";
 import * as React from "react";
 import { Nav, NavItem } from "react-bootstrap";
 import * as SplitPane from "react-split-pane";
-import TabbedView from "src/components/tabs/TabPage";
 
 import { Connections } from "./components/clientlist";
-import ViewController from "./viewController";
 
 interface State {
     views: TabbedView[];

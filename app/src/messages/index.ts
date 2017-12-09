@@ -1,9 +1,8 @@
-import { MessageType } from "shared/types";
-
-import Message from "../../../shared/src/messages";
-import SubscribeMessage from "../../../shared/src/messages/subscribe";
-import MessageTemplate from "../../../shared/src/templates";
-import ControlSocket from "../control";
+import ControlSocket from "@app/control";
+import Message from "@shared/messages/index";
+import SubscribeMessage from "@shared/messages/subscribe";
+import { MessageType } from "@shared/types";
+import MessageTemplate from "@templates/index";
 
 export default interface MessageHandler<T extends MessageTemplate> {
     emit(data: T): void;

@@ -1,11 +1,10 @@
+import ClientComponent from "@components/clientComponent";
+import ScreenHandler from "@messages/screen";
+import StreamMessage from "@shared/messages/stream";
+import { Monitor } from "@shared/system";
+import { MessageType } from "@shared/types";
 import * as React from "react";
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
-
-import StreamMessage from "../../../../shared/src/messages/stream";
-import { Monitor } from "../../../../shared/src/system";
-import { MessageType } from "../../../../shared/src/types";
-import { ScreenHandler } from "../../messages";
-import ClientComponent from "../clientComponent";
 
 interface State {
     data: string;

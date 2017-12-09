@@ -1,5 +1,5 @@
-import Client from "../../client";
-import TabbedView from "./TabPage";
+import Client from "@app/client";
+import TabbedView from "@components/tabs/TabPage";
 
 export default abstract class ClientPage extends TabbedView {
 

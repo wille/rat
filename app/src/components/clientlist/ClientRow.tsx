@@ -1,12 +1,11 @@
+import Client from "@app/client";
+import ViewController from "@app/viewController";
+import FilePage from "@components/tabs/FilePage";
+import ScreenPage from "@components/tabs/ScreenPage";
 import * as React from "react";
 import { ContextMenu, ContextMenuTrigger, MenuItem } from "react-contextmenu";
-import ViewController from "src/viewController";
 
-import Client from "../../client";
-import FileSystem from "../fs/FileSystem";
 import { Screen } from "../screen";
-import FilePage from "../tabs/FilePage";
-import ScreenPage from "../tabs/ScreenPage";
 
 interface Props {
     viewController: ViewController;

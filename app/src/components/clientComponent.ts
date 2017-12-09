@@ -1,8 +1,7 @@
+import Client from "@app/client";
+import MessageHandler, * as EventHandler from "@messages/index";
+import { MessageType } from "@shared/types";
 import * as React from "react";
-
-import { MessageType } from "../../../shared/src/types";
-import Client from "../client";
-import MessageHandler, * as EventHandler from "../messages";
 
 interface Props {
     client: Client;

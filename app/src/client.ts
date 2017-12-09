@@ -1,6 +1,7 @@
-import Message from "../../shared/src/messages";
-import { ClientProperties, Monitor, OperatingSystem } from "../../shared/src/system";
-import ControlSocket from "./control";
+import ControlSocket from "@app/control";
+import Message from "@shared/messages";
+import { ClientProperties, Monitor, OperatingSystem } from "@shared/system";
+
 class Client implements ClientProperties {
 
     public ping: number;

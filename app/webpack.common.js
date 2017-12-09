@@ -9,6 +9,9 @@ const extractSass = new ExtractTextPlugin({
     filename: "[name].[chunkhash:8].css"
 });
 
+const convertPathsToAliases = require("convert-tsconfig-paths-to-webpack-aliases").default
+const tsconfig = require("./tsconfig.json");
+
 const config = {
     entry: [
         __dirname + "/src/index.tsx",
@@ -19,6 +22,7 @@ const config = {
         publicPath: "/"
     },
     resolve: {
+        alias: convertPathsToAliases(tsconfig),
         extensions: [
             ".ts",
             ".tsx",

@@ -1,11 +1,11 @@
+import Client from "@app/client";
+import * as EventHandler from "@app/messages";
+import ViewController from "@app/viewController";
+import ClientComponent from "@components/clientComponent";
+import { MessageType } from "@shared/types";
 import * as React from "react";
 import { Table } from "react-bootstrap";
 
-import { MessageType } from "../../../../shared/src/types";
-import Client from "../../client";
-import * as EventHandler from "../../messages";
-import ViewController from "../../viewController";
-import ClientComponent from "../clientComponent";
 import ClientRow from "./ClientRow";
 
 interface Props {
