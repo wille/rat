@@ -3,7 +3,6 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TSLintPlugin = require("tslint-webpack-plugin");
 
 const extractSass = new ExtractTextPlugin({
@@ -80,13 +79,7 @@ const config = {
                 "./src/**/*.ts",
                 "./src/**/*.tsx"
             ]
-        }),
-        new CopyWebpackPlugin([
-            {
-                from: "./src/assets",
-                to: "assets"
-            }
-        ])
+        })
     ]
 };
 
