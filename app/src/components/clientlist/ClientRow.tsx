@@ -15,29 +15,28 @@ interface Props {
 
 export default class ClientRow extends React.Component<Props, any> {
 
-    private shit: any;
-
     public render() {
         const { client } = this.props;
+        const flagIcon = require("../../assets/flags/" + (client.flag || "unknown") + ".png");
+        const osIcon = require("../../assets/os/" + (this.getOperatingSystemIcon() || "os_linux") + ".png");
+        const pingIcon = require("../../assets/ping/" + (this.getPingIcon() || "ping5") + ".png");
 
         return (
             <ContextMenuTrigger id={client.id} renderTag="tr">
                 <td>
-                    <img src={"assets/flags/" + client.flag + ".png"}/>
+                    <img src={flagIcon}/>
                 </td>
                 <td>{client.host}</td>
                 <td>{client.identifier}</td>
                 <td>
-                    {<img src={"assets/os/" + this.getOperatingSystemIcon() + ".png"}/>}
+                    {<img src={osIcon}/>}
                 </td>
                 <td>
                     {client.os ? client.os.display : "unknown"}
                 </td>
                 <td>
-                    <img src={"assets/ping/" + this.getPingIcon() + ".png"}/>
+                    <img src={pingIcon}/>
                 </td>
-
-                <td>{this.shit}</td>
 
                 <ContextMenu id={client.id}>
                     <MenuItem onClick={() => { this.props.viewController.addView(new ScreenPage(client)); }}>
