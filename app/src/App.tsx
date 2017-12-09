@@ -32,7 +32,12 @@ class App extends React.Component<any, State> {
                 <SplitPane defaultSize="50%" split="vertical">
                     <Connections client={null} viewController={this.viewController} />
                     <div>
-                        <Nav bsStyle="tabs" activeKey={selected} onSelect={(key) => this.handleSelect(key as any as TabbedView)}>
+                        <Nav
+                            bsStyle="tabs"
+                            activeKey={selected}
+                            onSelect={(key) =>
+                            this.handleSelect(key as any as TabbedView)}
+                        >
                             {views.map((view) => {
                                 return (
                                     <NavItem key={view.id} eventKey={view}>{view.title}</NavItem>
