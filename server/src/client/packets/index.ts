@@ -1,6 +1,7 @@
 import MessageTemplate from "../../../../shared/src/templates/index";
 import Client from "../client";
 import ComputerInfoHandler from "./computerInfo.handler";
+import DirectoryContentHandler from "./directory.handler";
 import PongHandler from "./pong.handler";
 import ScreenFrameHandler from "./screenFrame.handler";
 
@@ -11,13 +12,15 @@ interface PacketMap {
 const enum PacketType {
     Ping = 0,
     ComputerInfo = 2,
-    Screen = 3
+    Screen = 3,
+    Directory = 4
 }
 
 const mapping: PacketMap = {
     [PacketType.Ping]: new PongHandler(),
     [PacketType.ComputerInfo]: new ComputerInfoHandler(),
-    [PacketType.Screen]: new ScreenFrameHandler()
+    [PacketType.Screen]: new ScreenFrameHandler(),
+    [PacketType.Directory]: new DirectoryContentHandler()
 };
 
 export interface PacketHandler<T extends MessageTemplate> {

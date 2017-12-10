@@ -2,6 +2,7 @@ import Message from "shared/messages";
 import { MessageType } from "shared/types";
 
 import WebClient from "../webClient";
+import DirectoryHandler from "./directory.handler";
 import ScreenHandler from "./screen.handler";
 import SubscribeHandler from "./subscribe.handler";
 
@@ -11,7 +12,8 @@ interface MessageMap {
 
 const mapping: MessageMap = {
     [MessageType.Subscribe]: new SubscribeHandler(),
-    [MessageType.Screen]: new ScreenHandler()
+    [MessageType.Screen]: new ScreenHandler(),
+    [MessageType.Directory]: new DirectoryHandler()
 };
 
 export interface MessageHandler<T extends any> {

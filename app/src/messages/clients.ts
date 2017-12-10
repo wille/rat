@@ -12,8 +12,6 @@ class ClientHandler implements MessageHandler<ClientTemplate> {
 
     /* tslint:disable:no-shadowed-variable */
     public emit(data: ClientTemplate) {
-        console.log(data);
-
         switch (data.type) {
             case ClientUpdateType.ADD:
                 const client = new Client(data.id, data.host);

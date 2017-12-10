@@ -7,6 +7,7 @@ import { ClientUpdateType } from "../../shared/src/templates/client";
 import Client from "./client/client";
 import ControlSocketServer from "./controlSocketServer";
 import ClientMessage from "./ws/messages/client.message";
+import MessageTemplate from "../../shared/src/templates/index";
 
 class ClientServer {
 
@@ -27,8 +28,16 @@ class ClientServer {
         setInterval(() => this.ping(), 2500);
     }
 
-    public getById(id: string) {
-        return this.clients.filter((x) => x.id === id)[0];
+    public getById(id: string | { _id?: string }, callback: (client: Client) => void) {
+        if (typeof id === "object") {
+            id = id._id;
+        }
+
+        const clients = this.clients.filter((x) => x.id === id);
+
+        if (clients.length > 0) {
+            callback(clients[0]);
+        }
     }
 
     private ping() {

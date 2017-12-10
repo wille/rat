@@ -7,10 +7,10 @@ const (
 	PingHeader         PacketHeader = 0
 	ComputerInfoHeader PacketHeader = 2
 	ScreenHeader       PacketHeader = 3
+	DirectoryHeader    PacketHeader = 4
 
 	SysHeader       PacketHeader = 2
 	ProcessHeader   PacketHeader = 11
-	DirectoryHeader PacketHeader = 13
 	PutFileHeader   PacketHeader = 14 // Upload file to client
 	GetFileHeader   PacketHeader = 15 // Download file from client
 	MouseMoveHeader PacketHeader = 16

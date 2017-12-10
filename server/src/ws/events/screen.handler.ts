@@ -7,7 +7,9 @@ import { MessageHandler } from "./index";
 class ScreenHandler implements MessageHandler<ScreenTemplate> {
 
     public handle(client: WebClient, data: ScreenTemplate) {
-        clientServer.getById(data.id).send(new StreamMessage(data));
+        clientServer.getById(data, (c) => {
+            c.send(new StreamMessage(data));
+        });
     }
 }
 

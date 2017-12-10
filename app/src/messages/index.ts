@@ -10,6 +10,7 @@ export default interface MessageHandler<T extends MessageTemplate> {
 
 export { default as ClientHandler } from "./clients";
 export { default as ScreenHandler } from "./screen";
+export { default as DirectoryContentHandler } from "./directory";
 
 interface Subscriber {
     _id: number;
@@ -63,7 +64,7 @@ export function unsubscribe<T extends MessageTemplate>(id: number) {
 
 export function emit(message: Message) {
     const clients = events.filter((event) => event.type === message._type);
-
+    console.log(message);
     clients.forEach((event) => event.listener.emit(message));
 }
 

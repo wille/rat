@@ -7,18 +7,20 @@ import (
 	"oslib"
 	"rat/client/drives"
 	"rat/client/network/header"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type FileData struct {
-	Dir    bool
-	Name   string
-	Edited string
+	Dir    bool   "directory"
+	Name   string "path"
+	Edited string "time"
 	Size   int64
 }
 
 type DirectoryPacket struct {
-	Path  string     `network:"send,receive"`
-	Files []FileData `network:"send"`
+	Path  string     "path"
+	Files []FileData "files"
 }
 
 func (packet DirectoryPacket) Header() header.PacketHeader {
@@ -61,4 +63,9 @@ func (packet DirectoryPacket) OnReceive() error {
 		Queue <- &DirectoryPacket{Path: packet.Path}
 	}()
 	return nil
+}
+
+func (packet DirectoryPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

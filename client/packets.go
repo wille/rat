@@ -13,11 +13,11 @@ func init() {
 	packets = make(PacketMap)
 	packets[header.PingHeader] = reflect.TypeOf(PingPacket{})
 	packets[header.ScreenHeader] = reflect.TypeOf(RecvScreenPacket{})
+	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
 
 	/*
 		packets[header.SysHeader] = SysPacket{}
 		packets[header.ProcessHeader] = ProcessPacket{}
-		packets[header.DirectoryHeader] = DirectoryPacket{}
 		packets[header.PutFileHeader] = DownloadPacket{}
 		packets[header.GetFileHeader] = UploadPacket{}
 		packets[header.MouseMoveHeader] = MouseMovePacket{}
