@@ -28,6 +28,8 @@ export default class FileSystem extends ClientComponent<{}, State> {
     public render() {
         const { files, depth } = this.state;
 
+        let current = "/";
+
         return (
             <div style={{padding: 10}}>
                 <Navbar>
@@ -37,11 +39,15 @@ export default class FileSystem extends ClientComponent<{}, State> {
                 </Navbar>
 
                 <Breadcrumb>
-                    {depth.map((part) => {
+                    {depth.filter((part) => part.length > 0).map((part, index) => {
+                        const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
+                        current += part + "/";
+                        const path = current;
+
                         return (
-                            <Breadcrumb.Item key={part}>
-                                {part}
-                            </Breadcrumb.Item>
+                            <li key={part} onClick={() => this.browse(path, true)}>
+                                {elem}
+                            </li>
                         );
                     })}
                 </Breadcrumb>
@@ -103,6 +109,8 @@ export default class FileSystem extends ClientComponent<{}, State> {
         this.setState({
             depth: paths
         });
+
+        console.log("browsing", path, this.currentDirectory);
 
         this.client.send(new BrowseMessage({
             id: this.client.id,
