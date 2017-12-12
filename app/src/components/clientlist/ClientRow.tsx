@@ -16,9 +16,9 @@ export default class ClientRow extends React.Component<Props, any> {
 
     public render() {
         const { client } = this.props;
-        const flagIcon = require("../../assets/flags/" + (client.flag || "unknown") + ".png");
-        const osIcon = require("../../assets/os/" + (this.getOperatingSystemIcon() || "os_linux") + ".png");
-        const pingIcon = require("../../assets/ping/" + (this.getPingIcon() || "ping5") + ".png");
+        const flagIcon = require("@assets/flags/" + (client.flag || "unknown") + ".png");
+        const osIcon = require("@assets/os/" + (this.getOperatingSystemIcon() || "os_linux") + ".png");
+        const pingIcon = require("@assets/ping/" + (this.getPingIcon() || "ping5") + ".png");
 
         return (
             <ContextMenuTrigger id={client.id} renderTag="tr">

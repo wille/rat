@@ -63,10 +63,14 @@ export default class FileSystem extends ClientComponent<{}, State> {
                     <tbody>
                         {files.map((file) => {
                             const size = file.directory ? "" : file.size;
+                            const icon = require("@assets/files/" + this.getFileIcon(file.path, file.directory) + ".png");
 
                             return (
                                 <tr key={file.path} onClick={() => this.browse(file.path)}>
-                                    <td>{file.path}</td>
+                                    <td>
+                                        <img src={icon}/>
+                                        {file.path}
+                                    </td>
                                     <td>{size}</td>
                                     <td>{file.time}</td>
                                 </tr>
@@ -98,7 +102,7 @@ export default class FileSystem extends ClientComponent<{}, State> {
             }
         }
 
-        let paths = path.split(separator);
+        const paths = path.split(separator);
         let depth = "";
 
         if (separator === "/") {
@@ -116,5 +120,48 @@ export default class FileSystem extends ClientComponent<{}, State> {
             id: this.client.id,
             path: this.currentDirectory
         }));
+    }
+
+    private getFileIcon(name: string, isDir?: boolean) {
+        if (isDir) {
+            return "folder";
+        }
+
+        if (name.indexOf(".") !== -1) {
+            const ext = name.substring(name.lastIndexOf("."), name.length).toLowerCase();
+            let type: string;
+
+            switch (ext) {
+                case ".zip":
+                case ".tar":
+                case ".gz":
+                    type = "archive";
+                    break;
+                case ".js":
+                case ".sh":
+                case ".bash":
+                    type = "script";
+                    break;
+                case ".bat":
+                case ".cmd":
+                case ".exe":
+                case ".jar":
+                    type = "application";
+                    break;
+                case ".png":
+                case ".jpg":
+                case ".jpeg":
+                case ".gif":
+                    type = "image";
+                    break;
+                default:
+                    type = "file";
+                    break;
+            }
+
+            return type;
+        }
+
+        return "file";
     }
 }
