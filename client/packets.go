@@ -14,10 +14,10 @@ func init() {
 	packets[header.PingHeader] = reflect.TypeOf(PingPacket{})
 	packets[header.ScreenHeader] = reflect.TypeOf(RecvScreenPacket{})
 	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
+	packets[header.ProcessHeader] = reflect.TypeOf(ProcessPacket{})
 
 	/*
 		packets[header.SysHeader] = SysPacket{}
-		packets[header.ProcessHeader] = ProcessPacket{}
 		packets[header.PutFileHeader] = DownloadPacket{}
 		packets[header.GetFileHeader] = UploadPacket{}
 		packets[header.MouseMoveHeader] = MouseMovePacket{}

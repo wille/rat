@@ -8,9 +8,9 @@ const (
 	ComputerInfoHeader PacketHeader = 2
 	ScreenHeader       PacketHeader = 3
 	DirectoryHeader    PacketHeader = 4
+	ProcessHeader      PacketHeader = 5
 
 	SysHeader       PacketHeader = 2
-	ProcessHeader   PacketHeader = 11
 	PutFileHeader   PacketHeader = 14 // Upload file to client
 	GetFileHeader   PacketHeader = 15 // Download file from client
 	MouseMoveHeader PacketHeader = 16

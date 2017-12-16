@@ -3,5 +3,6 @@ export const enum MessageType {
     Subscribe,
     Client,
     Screen,
-    Directory
+    Directory,
+    Process
 }

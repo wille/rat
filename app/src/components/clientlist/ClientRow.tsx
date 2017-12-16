@@ -1,11 +1,10 @@
 import Client from "@app/client";
 import ViewController from "@app/viewController";
 import FilePage from "@components/tabs/FilePage";
+import ProcessPage from "@components/tabs/ProcessPage";
 import ScreenPage from "@components/tabs/ScreenPage";
 import * as React from "react";
 import { ContextMenu, ContextMenuTrigger, MenuItem } from "react-contextmenu";
-
-import { Screen } from "../screen";
 
 interface Props {
     viewController: ViewController;
@@ -43,6 +42,9 @@ export default class ClientRow extends React.Component<Props, any> {
                     </MenuItem>
                     <MenuItem onClick={() => { this.props.viewController.addView(new FilePage(client)); }}>
                         File System
+                    </MenuItem>
+                    <MenuItem onClick={() => { this.props.viewController.addView(new ProcessPage(client)); }}>
+                        Processes
                     </MenuItem>
                 </ContextMenu>
             </ContextMenuTrigger>
