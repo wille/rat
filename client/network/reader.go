@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"io"
 
-	"github.com/pkg/bson"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Reader struct {
