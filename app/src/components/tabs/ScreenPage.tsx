@@ -1,13 +1,13 @@
+import ClientView from "@components/tabs/ClientView";
 import * as React from "react";
 
-import Client from "../../client";
+import Client from "@app/client";
 import { Screen } from "../screen";
-import TabbedView from "./TabPage";
 
-export default class ScreenPage extends TabbedView {
+export default class ScreenPage extends ClientView {
 
-    constructor(private client: Client) {
-        super("Screen");
+    constructor(client: Client) {
+        super("Screen", client);
     }
 
     public render() {

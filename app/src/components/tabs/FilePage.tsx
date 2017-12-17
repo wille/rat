@@ -2,12 +2,12 @@ import * as React from "react";
 
 import Client from "../../client";
 import FileSystem from "../fs/FileSystem";
-import TabbedView from "./TabPage";
+import ClientView from "./ClientView";
 
-export default class FilePage extends TabbedView {
+export default class FilePage extends ClientView {
 
-    constructor(private client: Client) {
-        super("File System");
+    constructor(client: Client) {
+        super("File System", client);
     }
 
     public render() {

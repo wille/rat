@@ -1,13 +1,13 @@
 import Process from "@components/Process";
+import ClientView from "@components/tabs/ClientView";
 import * as React from "react";
 
 import Client from "../../client";
-import TabbedView from "./TabPage";
 
-export default class ProcessPage extends TabbedView {
+export default class ProcessPage extends ClientView {
 
-    constructor(private client: Client) {
-        super("Processes");
+    constructor(client: Client) {
+        super("Processes", client);
     }
 
     public render() {
