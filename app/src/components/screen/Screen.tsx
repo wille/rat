@@ -54,7 +54,7 @@ export default class Screen extends ClientComponent<{}, State> {
 
     private stream() {
         this.client.send(new StreamMessage({
-            id: this.client.id,
+            _id: this.client.id,
             active: true,
             scale: 0.5,
             monitor: true,
