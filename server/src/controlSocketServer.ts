@@ -9,12 +9,21 @@ import WebClient from "./ws/webClient";
 
 class ControlSocketServer {
 
+    /**
+     * Broadcast websocket message to all connected clients
+     * that has subscribed to the event
+     * @param message
+     * @param force sending even if client is not subscribed
+     */
     public static async broadcast(message: Message, force: boolean = false) {
         ControlSocketServer.clients.forEach((client) => {
             client.emit(message, force);
         });
     }
 
+    /**
+     * All globally connected clients
+     */
     private static clients: WebClient[] = [];
 
     private server: WebSocket.Server;
@@ -31,6 +40,7 @@ class ControlSocketServer {
         console.log("[ws] connection from", req.connection.remoteAddress);
         const client = new WebClient(ws);
 
+        // broadcast all connected clients to new websocket connection
         clientServer.clients.forEach((c) => {
             client.emit(new ClientMessage({
                 type: ClientUpdateType.ADD,
