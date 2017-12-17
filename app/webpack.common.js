@@ -14,6 +14,7 @@ const tsconfig = require("./tsconfig.json");
 
 const config = {
     entry: [
+        "react-hot-loader/patch",
         __dirname + "/src/index.tsx",
     ],
     output: {
