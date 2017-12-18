@@ -1,14 +1,14 @@
 package main
 
 import (
-	"rat/client/screen"
 	"rat/client/network/header"
+	"rat/client/screen"
 )
 
 type MouseMovePacket struct {
-	MonitorID int `network:"receive"`
-	X         int `network:"receive"`
-	Y         int `network:"receive"`
+	MonitorID int "monitor"
+	X         int
+	Y         int
 }
 
 func (packet MouseMovePacket) Header() header.PacketHeader {

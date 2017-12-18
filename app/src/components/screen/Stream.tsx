@@ -1,21 +1,32 @@
+import ClientComponent from "@components/clientComponent";
+import KeyMessage from "@messages/outgoing/key";
+import { MouseMessage, MouseMotionMessage } from "@messages/outgoing/mouse";
+import { InputState } from "@shared/display";
 import * as React from "react";
-import { InputState, MouseButton } from "@shared/display";
+import { KeyboardEvent } from "react";
 
 interface Props {
     mouse: boolean;
     keyboard: boolean;
-}
-
-interface State {
     image: string;
 }
 
 type MouseEvent = React.MouseEvent<HTMLImageElement>;
 
-export default class Stream extends React.Component<Props, State> {
+export default class Stream extends ClientComponent<Props, {}> {
+
+    public componentDidMount() {
+        document.addEventListener("keydown", this.keyDownEvent);
+        document.addEventListener("keydown", this.keyUpEvent);
+    }
+
+    public componentWillUnmount() {
+        document.removeEventListener("keydown", this.keyDownEvent);
+        document.removeEventListener("keyup", this.keyUpEvent);
+    }
 
     public render() {
-        const { image } = this.state;
+        const { image } = this.props;
 
         return (
             <img
@@ -27,6 +38,13 @@ export default class Stream extends React.Component<Props, State> {
         );
     }
 
+    private keyDownEvent = (e: any) => this.keyEvent(e.which || e.keyCode, InputState.PRESS);
+    private keyUpEvent = (e: any) => this.keyEvent(e.which || e.keyCode, InputState.RELEASE);
+
+    private get monitor() {
+        return 0;
+    }
+
     private get mouse() {
         return this.props.mouse;
     }
@@ -35,27 +53,48 @@ export default class Stream extends React.Component<Props, State> {
         return this.props.keyboard;
     }
 
+    private get scale() {
+        return 100;
+    }
+
     private onMouseDown(event: MouseEvent) {
         if (this.mouse) {
-
+            this.client.send(new MouseMessage({
+                monitor: this.monitor,
+                button: event.button,
+                state: InputState.PRESS
+            }));
         }
     }
 
     private onMouseUp(event: MouseEvent) {
         if (this.mouse) {
-
+            this.client.send(new MouseMessage({
+                monitor: this.monitor,
+                button: event.button,
+                state: InputState.RELEASE
+            }));
         }
     }
 
     private onMouseMove(event: MouseEvent) {
         if (this.mouse) {
-
+            console.log("mouse move", this.mouse);
+            this.client.send(new MouseMotionMessage({
+                monitor: this.monitor,
+                x: event.nativeEvent.offsetX / (this.scale / 100),
+                y: event.nativeEvent.offsetY / (this.scale / 100)
+            }));
         }
     }
 
-    private keyEvent(event: any) {
+    private keyEvent(keyCode: number, state: InputState) {
+        console.log("keyoard", this.keyboard);
         if (this.keyboard) {
-
+            this.client.send(new KeyMessage({
+                keyCode,
+                state
+            }));
         }
     }
 }

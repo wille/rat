@@ -4,5 +4,8 @@ export const enum MessageType {
     Client,
     Screen,
     Directory,
-    Process
+    Process,
+    Mouse,
+    MouseMove,
+    Key
 }

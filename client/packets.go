@@ -15,14 +15,14 @@ func init() {
 	packets[header.ScreenHeader] = reflect.TypeOf(RecvScreenPacket{})
 	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
 	packets[header.ProcessHeader] = reflect.TypeOf(ProcessPacket{})
+	packets[header.MouseHeader] = reflect.TypeOf(MousePacket{})
+	packets[header.MouseMoveHeader] = reflect.TypeOf(MouseMovePacket{})
+	packets[header.KeyHeader] = reflect.TypeOf(KeyPacket{})
 
 	/*
 		packets[header.SysHeader] = SysPacket{}
 		packets[header.PutFileHeader] = DownloadPacket{}
 		packets[header.GetFileHeader] = UploadPacket{}
-		packets[header.MouseMoveHeader] = MouseMovePacket{}
-		packets[header.MouseHeader] = MousePacket{}
-		packets[header.KeyHeader] = KeyPacket{}
 		packets[header.FileHeader] = FilePacket{}
 		packets[header.ShellHeader] = ShellPacket{}
 		packets[header.WindowsHeader] = WindowsPacket{}

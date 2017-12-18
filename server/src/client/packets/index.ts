@@ -1,3 +1,4 @@
+import MouseHandler from "../../ws/events/mouse";
 import MessageTemplate from "../../../../shared/src/templates/index";
 import Client from "../client";
 import ComputerInfoHandler from "./computerInfo.handler";

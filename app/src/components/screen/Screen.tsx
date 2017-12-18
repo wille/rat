@@ -5,6 +5,7 @@ import { Monitor } from "@shared/system";
 import { MessageType } from "@shared/types";
 import * as React from "react";
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
+import Stream from "@components/screen/Stream";
 
 interface State {
     data: string;
@@ -42,7 +43,7 @@ export default class Screen extends ClientComponent<{}, State> {
                     </Nav>
                 </Navbar>
                 <div>
-                    <img src={this.state.data}/>
+                    <Stream client={this.client} mouse keyboard image={this.state.data}/>
                 </div>
             </div>
         );

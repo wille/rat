@@ -1,10 +1,17 @@
 import Message from "@shared/messages";
 import { MessageType } from "@shared/types";
-import { MouseTemplate } from "@templates/mouse";
+import { MouseMotionTemplate, MouseTemplate } from "@templates/mouse";
 
-export default class MouseMessage extends Message<MouseTemplate> {
+export class MouseMessage extends Message<MouseTemplate> {
 
     constructor(message: MouseTemplate) {
-        super(MessageType.Process, message);
+        super(MessageType.Mouse, message);
+    }
+}
+
+export class MouseMotionMessage extends Message<MouseMotionTemplate> {
+
+    constructor(message: MouseMotionTemplate) {
+        super(MessageType.MouseMove, message);
     }
 }
