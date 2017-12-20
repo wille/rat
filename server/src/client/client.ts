@@ -36,31 +36,43 @@ class Client implements ClientProperties {
         return this.socket.remoteAddress;
     }
 
+    public disconnect() {
+        this.socket.end();
+    }
+
     public sendPing() {
         this.send(new PingMessage());
         this.pingTime = new Date().getTime();
     }
 
     public pong() {
+        const now = new Date().getTime();
+        const ping = now - this.pingTime;
+
         ControlSocketServer.broadcast(new ClientMessage({
             type: ClientUpdateType.UPDATE,
             id: this.id,
-            ping: new Date().getTime() - this.pingTime
+            ping
         }), true);
     }
 
     public send(m: Message) {
-        const header = new Buffer(2);
-        header.writeInt16LE(m._type, 0);
-        this.socket.write(header);
+        try {
+            const data = new BSON().serialize(m.data);
 
-        const data = new BSON().serialize(m.data);
+            const header = new Buffer(2);
+            header.writeInt16LE(m._type, 0);
 
-        const len = new Buffer(4);
-        len.writeInt32LE(data.length, 0);
-        this.socket.write(len);
+            const len = new Buffer(4);
+            len.writeInt32LE(data.length, 0);
 
-        this.socket.write(data);
+            this.socket.write(header);
+            this.socket.write(len);
+            this.socket.write(data);
+        } catch (ex) {
+            this.disconnect();
+            throw ex;
+        }
     }
 
     /**
