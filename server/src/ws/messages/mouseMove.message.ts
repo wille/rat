@@ -5,6 +5,6 @@ import { MessageType } from "../../../../shared/src/types";
 export default class MouseMotionMessage extends Message<MouseMotionTemplate> {
 
     constructor(message: MouseMotionTemplate) {
-        super(MessageType.Directory, message);
+        super(MessageType.MouseMove, message);
     }
 }
