@@ -10,13 +10,15 @@ import Stream from "@components/screen/Stream";
 interface State {
     data: string;
     scale: number;
+    running: boolean;
 }
 
 export default class Screen extends ClientComponent<{}, State> {
 
     public state: State = {
         data: null,
-        scale: 0.5
+        scale: 0.5,
+        running: true
     };
 
     private selectedMonitor: Monitor;
@@ -27,7 +29,13 @@ export default class Screen extends ClientComponent<{}, State> {
         this.stream();
     }
 
+    public componentWillUnmount() {
+        this.stop();
+    }
+
     public render() {
+        const { scale, running } = this.state;
+
         return (
             <div style={{padding: 10}}>
                 <Navbar>
@@ -46,9 +54,13 @@ export default class Screen extends ClientComponent<{}, State> {
                             <input
                                 type="range"
                                 min={1}
+                                value={scale * 100}
                                 max={100}
                                 onChange={(e) => this.setScale(e.target.valueAsNumber)}
                             />
+                        </NavItem>
+                        <NavItem onClick={() => this.toggle()}>
+                            {running ? "Pause" : "Start"}
                         </NavItem>
                     </Nav>
                 </Navbar>
@@ -63,6 +75,7 @@ export default class Screen extends ClientComponent<{}, State> {
         this.setState({
             scale: scale / 100
         });
+
         this.stream();
     }
 
@@ -70,15 +83,38 @@ export default class Screen extends ClientComponent<{}, State> {
         this.selectedMonitor = monitor;
     }
 
+    private toggle() {
+        const { running } = this.state;
+
+        if (running) {
+            this.stop();
+        } else {
+            this.stream();
+        }
+    }
+
     private stream() {
         const { scale } = this.state;
 
         this.client.send(new StreamMessage({
-            _id: this.client.id,
             active: true,
             scale,
             monitor: true,
             handle: this.selectedMonitor.id
         }));
+
+        this.setState({
+            running: true
+        });
+    }
+
+    private stop() {
+        this.client.send(new StreamMessage({
+            active: false
+        }));
+
+        this.setState({
+            running: false
+        });
     }
 }
