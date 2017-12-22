@@ -9,12 +9,14 @@ import Stream from "@components/screen/Stream";
 
 interface State {
     data: string;
+    scale: number;
 }
 
 export default class Screen extends ClientComponent<{}, State> {
 
     public state: State = {
-        data: null
+        data: null,
+        scale: 0.5
     };
 
     private selectedMonitor: Monitor;
@@ -40,6 +42,14 @@ export default class Screen extends ClientComponent<{}, State> {
                                 );
                             })}
                         </NavDropdown>
+                        <NavItem>
+                            <input
+                                type="range"
+                                min={1}
+                                max={100}
+                                onChange={(e) => this.setScale(e.target.valueAsNumber)}
+                            />
+                        </NavItem>
                     </Nav>
                 </Navbar>
                 <div>
@@ -49,15 +59,24 @@ export default class Screen extends ClientComponent<{}, State> {
         );
     }
 
+    private setScale(scale: number) {
+        this.setState({
+            scale: scale / 100
+        });
+        this.stream();
+    }
+
     private selectMonitor(monitor: Monitor) {
         this.selectedMonitor = monitor;
     }
 
     private stream() {
+        const { scale } = this.state;
+
         this.client.send(new StreamMessage({
             _id: this.client.id,
             active: true,
-            scale: 0.5,
+            scale,
             monitor: true,
             handle: this.selectedMonitor.id
         }));
