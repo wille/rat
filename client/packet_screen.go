@@ -30,6 +30,8 @@ func (packet RecvScreenPacket) Header() header.PacketHeader {
 
 type SendScreenPacket struct {
 	Buffer []byte "buffer"
+	Width  int
+	Height int
 }
 
 func (packet SendScreenPacket) Header() header.PacketHeader {
@@ -84,6 +86,8 @@ func (packet *SendScreenPacket) Init() {
 	})
 
 	packet.Buffer = w.Bytes()
+	packet.Width = img.Bounds().Max.X
+	packet.Height = img.Bounds().Max.Y
 
 	// Send another screen packet if we're still streaming
 	if screenStream {

@@ -9,6 +9,8 @@ class ScreenFrameHandler implements PacketHandler<ScreenFrameTemplate> {
 
     public handle(client: Client, data: ScreenFrameTemplate) {
         ControlSocketServer.broadcast(new ScreenFrameMessage({
+            width: data.width,
+            height: data.height,
             data: data.buffer
         }));
     }

@@ -4,11 +4,12 @@ import ScreenHandler from "@messages/screen";
 import StreamMessage from "@shared/messages/stream";
 import { Monitor } from "@shared/system";
 import { MessageType } from "@shared/types";
+import ScreenFrameTemplate from "@templates/screenFrame";
 import * as React from "react";
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
 
 interface State {
-    data: string;
+    data: ScreenFrameTemplate;
     scale: number;
     running: boolean;
 }
@@ -63,7 +64,7 @@ export default class Screen extends ClientComponent<{}, State> {
                     </Nav>
                 </Navbar>
                 <div>
-                    <Stream client={this.client} mouse keyboard image={data} scale={scale}/>
+                    <Stream client={this.client} mouse keyboard data={data} scale={scale}/>
                 </div>
             </div>
         );

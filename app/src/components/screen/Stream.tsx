@@ -2,17 +2,18 @@ import ClientComponent from "@components/clientComponent";
 import KeyMessage from "@messages/outgoing/key";
 import { MouseMessage, MouseMotionMessage } from "@messages/outgoing/mouse";
 import { InputState } from "@shared/display";
+import ScreenFrameTemplate from "@templates/screenFrame";
 import * as React from "react";
 import { KeyboardEvent } from "react";
 
 interface Props {
+    data: ScreenFrameTemplate;
     mouse: boolean;
     keyboard: boolean;
     scale: number;
-    image: string;
 }
 
-type MouseEvent = React.MouseEvent<HTMLImageElement>;
+type MouseEvent = React.MouseEvent<HTMLDivElement>;
 
 export default class Stream extends ClientComponent<Props, {}> {
 
@@ -27,11 +28,17 @@ export default class Stream extends ClientComponent<Props, {}> {
     }
 
     public render() {
-        const { image } = this.props;
+        const { data } = this.props;
+        const encoded = data ? "data:image/jpeg;base64," + data.data.toString("base64") : null;
 
         return (
-            <img
-                src={image}
+            <div
+                style={{
+                    backgroundImage: "url('" + encoded + "')",
+                    backgroundRepeat: 'no-repeat',
+                    width: data ? data.width : 0,
+                    height: data ? data.height : 0
+                }}
                 onMouseDown={(e) => this.onMouseDown(e)}
                 onMouseUp={(e) => this.onMouseUp(e)}
                 onMouseMove={(e) => this.onMouseMove(e)}
