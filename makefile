@@ -96,7 +96,6 @@ test:
 	go test \
 	rat/client/network \
 	rat/client/crypto \
-	rat/command \
 	rat/client \
 	rat/client/computer \
 	rat/client/drives \
