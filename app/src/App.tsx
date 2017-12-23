@@ -11,7 +11,7 @@ interface State {
     selected: TabbedView;
 }
 
-class App extends React.Component<any, State> {
+export default class App extends React.Component<any, State> {
 
     public state: State = {
         views: [],
@@ -38,11 +38,9 @@ class App extends React.Component<any, State> {
                             onSelect={(key) =>
                             this.handleSelect(key as any as TabbedView)}
                         >
-                            {views.map((view) => {
-                                return (
-                                    <NavItem key={view.id} eventKey={view}>{view.title}</NavItem>
-                                );
-                            })}
+                            {views.map((view) => (
+                                <NavItem key={view.id} eventKey={view}>{view.title}</NavItem>
+                            ))}
                         </Nav>
                         {selected ? selected.render() : false}
                     </div>
@@ -52,11 +50,8 @@ class App extends React.Component<any, State> {
     }
 
     private handleSelect(key: TabbedView) {
-        console.log(key);
         this.setState({
             selected: key
         });
     }
 }
-
-export default App;
