@@ -14,8 +14,8 @@
             "@messages/*": [
                 "src/messages/*"
             ],
-            "@templates/*": [
-                "../shared/src/templates/*"
+            "@templates": [
+                "../shared/src/templates/index"
             ],
             "@components/*": [
                 "src/components/*"

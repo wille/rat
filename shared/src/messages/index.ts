@@ -1,5 +1,5 @@
+import MessageTemplate from "../templates/template";
 import { MessageType } from "../types";
-import MessageTemplate from "../templates/index";
 
 export default class Message<T extends MessageTemplate = any> {
 

@@ -1,5 +1,5 @@
 import { InputState, MouseButton } from "../display";
-import MessageTemplate from "./index";
+import MessageTemplate from "./template";
 
 export interface MouseTemplate extends MessageTemplate {
     monitor: number;

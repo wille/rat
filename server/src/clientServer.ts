@@ -7,7 +7,6 @@ import { ClientUpdateType } from "../../shared/src/templates/client";
 import Client from "./client/client";
 import ControlSocketServer from "./controlSocketServer";
 import ClientMessage from "./ws/messages/client.message";
-import MessageTemplate from "../../shared/src/templates/index";
 
 class ClientServer {
 

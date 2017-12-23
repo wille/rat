@@ -1,5 +1,5 @@
 import { ClientProperties } from "../system";
-import MessageTemplate from "../templates";
+import MessageTemplate from "./template";
 
 export enum ClientUpdateType {
     // Add client, on server connect or web panel open

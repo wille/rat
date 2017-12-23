@@ -2,7 +2,7 @@ import ControlSocket from "@app/control";
 import Message from "@shared/messages/index";
 import SubscribeMessage from "@shared/messages/subscribe";
 import { MessageType } from "@shared/types";
-import MessageTemplate from "@templates/index";
+import { MessageTemplate } from "@templates";
 
 export default interface MessageHandler<T extends MessageTemplate> {
     emit(data: T): void;

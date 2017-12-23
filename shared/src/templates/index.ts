@@ -1,7 +1,11 @@
-import { MessageType } from "../types";
+export * from "./browse";
+export * from "./client";
+export * from "./directory";
+export * from "./key";
+export * from "./mouse";
+export * from "./process";
+export * from "./screen";
+export * from "./screenFrame";
+export * from "./subscribe";
 
-export default interface MessageTemplate {
-    _type?: MessageType;
-    _id?: string;
-    [key: string]: any;
-}
+export { default as MessageTemplate } from "./template";

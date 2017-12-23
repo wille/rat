@@ -1,8 +1,8 @@
 import { PacketHandler } from "~/client/packets";
 
 import { ClientProperties } from "../../../../shared/src/system";
+import { MessageTemplate } from "../../../../shared/src/templates";
 import { ClientUpdateType } from "../../../../shared/src/templates/client";
-import MessageTemplate from "../../../../shared/src/templates/index";
 import ControlSocketServer from "../../controlSocketServer";
 import ClientMessage from "../../ws/messages/client.message";
 import Client from "../client";

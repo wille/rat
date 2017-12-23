@@ -1,5 +1,5 @@
 import { InputState } from "../display";
-import MessageTemplate from "./index";
+import MessageTemplate from "./template";
 
 export interface KeyTemplate extends MessageTemplate {
     keyCode: number;

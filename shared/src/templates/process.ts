@@ -1,4 +1,4 @@
-import MessageTemplate from "../templates";
+import MessageTemplate from "./template";
 
 export const enum ProcessType {
     Query,

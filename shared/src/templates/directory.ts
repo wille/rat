@@ -1,4 +1,4 @@
-import MessageTemplate from ".";
+import MessageTemplate from "./template";
 
 export interface FileEntry {
     path: string;
