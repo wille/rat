@@ -21,6 +21,10 @@ class Client implements ClientProperties {
         return this.username + "@" + this.hostname;
     }
 
+    public get separator() {
+        return this.os.type === "Windows" ? "\\" : "/";
+    }
+
     public update(properties: ClientProperties) {
         this.ping = properties.ping || this.ping;
         this.flag = properties.flag || this.flag;

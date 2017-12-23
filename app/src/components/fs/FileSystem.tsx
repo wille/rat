@@ -28,7 +28,7 @@ export default class FileSystem extends ClientComponent<{}, State> {
     public render() {
         const { files, depth } = this.state;
 
-        let current = "/";
+        let current = this.client.os.type === "Windows" ? "" : "/"
 
         return (
             <div style={{padding: 10}}>
@@ -41,7 +41,7 @@ export default class FileSystem extends ClientComponent<{}, State> {
                 <Breadcrumb>
                     {depth.filter((part) => part.length > 0).map((part, index) => {
                         const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
-                        current += part + "/";
+                        current += part + this.client.separator;
                         const path = current;
 
                         return (
@@ -87,7 +87,7 @@ export default class FileSystem extends ClientComponent<{}, State> {
     }
 
     private browse(path: string, absolute: boolean = false) {
-        const separator = "/";
+        const separator = this.client.separator;
 
         if (!this.currentDirectory) {
             this.currentDirectory = separator === "/" ? "/" : "";
