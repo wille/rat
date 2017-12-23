@@ -1,11 +1,11 @@
 import ClientComponent from "@components/clientComponent";
+import Stream from "@components/screen/Stream";
 import ScreenHandler from "@messages/screen";
 import StreamMessage from "@shared/messages/stream";
 import { Monitor } from "@shared/system";
 import { MessageType } from "@shared/types";
 import * as React from "react";
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
-import Stream from "@components/screen/Stream";
 
 interface State {
     data: string;
@@ -17,7 +17,7 @@ export default class Screen extends ClientComponent<{}, State> {
 
     public state: State = {
         data: null,
-        scale: 0.5,
+        scale: 0.1,
         running: true
     };
 
@@ -34,7 +34,7 @@ export default class Screen extends ClientComponent<{}, State> {
     }
 
     public render() {
-        const { scale, running } = this.state;
+        const { scale, running, data } = this.state;
 
         return (
             <div style={{padding: 10}}>
@@ -42,13 +42,11 @@ export default class Screen extends ClientComponent<{}, State> {
                     <Nav>
                         <NavItem>Close</NavItem>
                         <NavDropdown title={"monitor"} id={"dropdown-size-medium"}>
-                            {this.client.monitors.map((monitor) => {
-                                return (
-                                    <MenuItem key={monitor.id} onClick={() => this.selectMonitor(monitor)}>
-                                        {monitor.id + ": " + monitor.width + "x" + monitor.height}
-                                    </MenuItem>
-                                );
-                            })}
+                            {this.client.monitors.map((monitor) => (
+                                <MenuItem key={monitor.id} onClick={() => this.selectMonitor(monitor)}>
+                                    {monitor.id + ": " + monitor.width + "x" + monitor.height}
+                                </MenuItem>
+                            ))}
                         </NavDropdown>
                         <NavItem>
                             <input
@@ -65,7 +63,7 @@ export default class Screen extends ClientComponent<{}, State> {
                     </Nav>
                 </Navbar>
                 <div>
-                    <Stream client={this.client} mouse keyboard image={this.state.data}/>
+                    <Stream client={this.client} mouse keyboard image={data} scale={scale}/>
                 </div>
             </div>
         );

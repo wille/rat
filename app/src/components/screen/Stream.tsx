@@ -8,6 +8,7 @@ import { KeyboardEvent } from "react";
 interface Props {
     mouse: boolean;
     keyboard: boolean;
+    scale: number;
     image: string;
 }
 
@@ -53,10 +54,6 @@ export default class Stream extends ClientComponent<Props, {}> {
         return this.props.keyboard;
     }
 
-    private get scale() {
-        return 100;
-    }
-
     private onMouseDown(event: MouseEvent) {
         if (this.mouse) {
             this.client.send(new MouseMessage({
@@ -78,18 +75,18 @@ export default class Stream extends ClientComponent<Props, {}> {
     }
 
     private onMouseMove(event: MouseEvent) {
+        const { scale } = this.props;
+
         if (this.mouse) {
-            console.log("mouse move", this.mouse);
             this.client.send(new MouseMotionMessage({
                 monitor: this.monitor,
-                x: event.nativeEvent.offsetX / (this.scale / 100),
-                y: event.nativeEvent.offsetY / (this.scale / 100)
+                x: event.nativeEvent.offsetX / (scale / 100),
+                y: event.nativeEvent.offsetY / (scale / 100)
             }));
         }
     }
 
     private keyEvent(keyCode: number, state: InputState) {
-        console.log("keyoard", this.keyboard);
         if (this.keyboard) {
             this.client.send(new KeyMessage({
                 keyCode,
