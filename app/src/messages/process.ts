@@ -1,5 +1,5 @@
 import Process from "@components/Process";
-import { ProcessListTemplate } from "@templates/process";
+import { ProcessListTemplate } from "@templates";
 
 import MessageHandler from "./index";
 

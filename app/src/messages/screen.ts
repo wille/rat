@@ -1,5 +1,5 @@
 import { Screen } from "@components/screen";
-import ScreenFrameTemplate from "@templates/screenFrame";
+import { ScreenFrameTemplate } from "@templates";
 
 import MessageHandler from "./index";
 

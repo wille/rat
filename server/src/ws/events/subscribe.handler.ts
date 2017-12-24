@@ -1,6 +1,6 @@
 import WebClient from "~/ws/webClient";
 
-import SubscribeTemplate from "../../../../shared/src/templates/subscribe";
+import { SubscribeTemplate } from "../../../../shared/src/templates";
 import { MessageHandler } from "./index";
 
 class EventHandler implements MessageHandler<SubscribeTemplate> {

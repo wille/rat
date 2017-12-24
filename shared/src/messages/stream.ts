@@ -1,10 +1,10 @@
 import Message from "../../../shared/src/messages/index";
 import { MessageType } from "../../../shared/src/types";
-import StreamTemplate from "../templates/screen";
+import { ScreenTemplate } from "../templates";
 
-export default class StreamMessage extends Message<StreamTemplate> {
+export default class StreamMessage extends Message<ScreenTemplate> {
 
-    constructor(message: StreamTemplate) {
+    constructor(message: ScreenTemplate) {
         super(MessageType.Screen, message);
     }
 }

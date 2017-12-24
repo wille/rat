@@ -1,6 +1,6 @@
 import { PacketHandler } from "~/client/packets";
 
-import ScreenFrameTemplate from "../../../../shared/src/templates/screenFrame";
+import { ScreenFrameTemplate } from "../../../../shared/src/templates";
 import ControlSocketServer from "../../controlSocketServer";
 import ScreenFrameMessage from "../../ws/messages/screenFrame.message";
 import Client from "../client";

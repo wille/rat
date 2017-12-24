@@ -1,6 +1,6 @@
 import Message from "../../../shared/src/messages/index";
 import { MessageType } from "../../../shared/src/types";
-import BrowseTemplate from "../templates/browse";
+import { BrowseTemplate } from "../templates";
 
 export default class BrowseMessage extends Message<BrowseTemplate> {
 

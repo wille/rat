@@ -1,5 +1,5 @@
 import Message from "../../../../shared/src/messages/index";
-import ScreenFrameTemplate from "../../../../shared/src/templates/screenFrame";
+import { ScreenFrameTemplate } from "../../../../shared/src/templates";
 import { MessageType } from "../../../../shared/src/types";
 
 export default class ScreenFrameMessage extends Message<ScreenFrameTemplate> {

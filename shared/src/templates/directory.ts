@@ -7,6 +7,6 @@ export interface FileEntry {
     time: string;
 }
 
-export default interface DirectoryContentTemplate extends MessageTemplate {
+export interface DirectoryContentTemplate extends MessageTemplate {
     files: FileEntry[];
 }

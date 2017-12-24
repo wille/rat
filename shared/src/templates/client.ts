@@ -12,6 +12,6 @@ export enum ClientUpdateType {
     REMOVE = 2
 }
 
-export default interface ClientTemplate extends ClientProperties, MessageTemplate {
+export interface ClientTemplate extends ClientProperties, MessageTemplate {
     type: ClientUpdateType;
 }

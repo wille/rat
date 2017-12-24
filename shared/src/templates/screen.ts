@@ -1,6 +1,6 @@
 import MessageTemplate from "./template";
 
-export default interface ScreenTemplate extends MessageTemplate {
+export interface ScreenTemplate extends MessageTemplate {
     active: boolean;
     scale?: number;
     monitor?: true;

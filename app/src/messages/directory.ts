@@ -1,5 +1,5 @@
 import FileSystem from "@components/fs/FileSystem";
-import DirectoryContentTemplate from "@templates/directory";
+import { DirectoryContentTemplate } from "@templates";
 
 import MessageHandler from "./index";
 

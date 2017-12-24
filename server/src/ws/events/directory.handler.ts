@@ -1,6 +1,6 @@
 import { clientServer } from "../..";
 import BrowseMessage from "../../../../shared/src/messages/browse";
-import BrowseTemplate from "../../../../shared/src/templates/browse";
+import { BrowseTemplate } from "../../../../shared/src/templates";
 import WebClient from "../webClient";
 import { MessageHandler } from "./index";
 

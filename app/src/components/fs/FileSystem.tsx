@@ -2,7 +2,7 @@ import ClientComponent from "@components/clientComponent";
 import DirectoryContentHandler from "@messages/directory";
 import BrowseMessage from "@shared/messages/browse";
 import { MessageType } from "@shared/types";
-import { FileEntry } from "@templates/directory";
+import { FileEntry } from "@templates";
 import * as React from "react";
 import { Breadcrumb, Nav, Navbar, NavItem, Table } from "react-bootstrap";
 

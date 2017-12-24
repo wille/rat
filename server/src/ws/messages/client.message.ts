@@ -1,5 +1,5 @@
 import Message from "../../../../shared/src/messages";
-import ClientTemplate from "../../../../shared/src/templates/client";
+import { ClientTemplate } from "../../../../shared/src/templates";
 import { MessageType } from "../../../../shared/src/types";
 
 export default class ClientMessage extends Message<ClientTemplate> {

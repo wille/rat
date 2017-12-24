@@ -4,7 +4,7 @@ import ScreenHandler from "@messages/screen";
 import StreamMessage from "@shared/messages/stream";
 import { Monitor } from "@shared/system";
 import { MessageType } from "@shared/types";
-import ScreenFrameTemplate from "@templates/screenFrame";
+import { ScreenFrameTemplate } from "@templates";
 import * as React from "react";
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
 

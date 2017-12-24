@@ -2,7 +2,7 @@ import ClientComponent from "@components/clientComponent";
 import KeyMessage from "@messages/outgoing/key";
 import { MouseMessage, MouseMotionMessage } from "@messages/outgoing/mouse";
 import { InputState } from "@shared/display";
-import ScreenFrameTemplate from "@templates/screenFrame";
+import { ScreenFrameTemplate } from "@templates";
 import * as React from "react";
 import { KeyboardEvent } from "react";
 

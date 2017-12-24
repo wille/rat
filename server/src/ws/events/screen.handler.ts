@@ -1,6 +1,6 @@
 import { clientServer } from "../..";
 import StreamMessage from "../../../../shared/src/messages/stream";
-import ScreenTemplate from "../../../../shared/src/templates/screen";
+import { ScreenTemplate } from "../../../../shared/src/templates";
 import WebClient from "../webClient";
 import { MessageHandler } from "./index";
 
