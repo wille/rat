@@ -32,8 +32,13 @@ if (process.env.NODE_ENV === 'development') {
 } else {
   webServer = https.createServer(keys, app);
   app.use(morgan(':remote-addr [:date[clf]] ":method :url" :status :res[content-length] :response-time ms'));
-  app.use(express.static(path.resolve(__dirname, 'app')));
+  app.use('*', (req, res, next) => {
+    res.header('Content-Security-Policy',
+      "default-src 'self'; style-src 'unsafe-inline' 'self'; connect-src 'self' wss://*:*; img-src 'self' data:");
+    next();
+  });
 
+  app.use(express.static(path.resolve(__dirname, 'app')));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'app', 'index.html'));
   });
