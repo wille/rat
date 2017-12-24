@@ -1,19 +1,19 @@
-import Process from "@components/Process";
-import { ProcessListTemplate } from "@templates";
+import Process from '@components/Process';
+import { ProcessListTemplate } from '@templates';
 
-import MessageHandler from "./index";
+import MessageHandler from './index';
 
 export default class ProcessListHandler implements MessageHandler<ProcessListTemplate> {
 
-    constructor(private view: Process) {
+  constructor(private view: Process) {
 
-    }
+  }
 
-    public emit(data: ProcessListTemplate) {
-        const processes = data.processes.sort((a, b) => a.path === "" ? 1 : -1);
+  public emit(data: ProcessListTemplate) {
+    const processes = data.processes.sort((a, b) => a.path === '' ? 1 : -1);
 
-        this.view.setState({
-            processes
-        });
-    }
+    this.view.setState({
+      processes
+    });
+  }
 }

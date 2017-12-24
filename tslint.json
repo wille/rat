@@ -12,7 +12,8 @@
         "array-type": false,
         "object-literal-sort-keys": false,
         "variable-name": false,
-        "no-empty": false
+        "no-empty": false,
+        "quotemark": false
     },
     "rulesDirectory": []
 }

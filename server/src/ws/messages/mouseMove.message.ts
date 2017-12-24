@@ -1,10 +1,10 @@
-import Message from "../../../../shared/src/messages";
-import { MouseMotionTemplate } from "../../../../shared/src/templates/mouse";
-import { MessageType } from "../../../../shared/src/types";
+import Message from '../../../../shared/src/messages';
+import { MouseMotionTemplate } from '../../../../shared/src/templates/mouse';
+import { MessageType } from '../../../../shared/src/types';
 
 export default class MouseMotionMessage extends Message<MouseMotionTemplate> {
 
-    constructor(message: MouseMotionTemplate) {
-        super(MessageType.MouseMove, message);
-    }
+  constructor(message: MouseMotionTemplate) {
+    super(MessageType.MouseMove, message);
+  }
 }
