@@ -1,5 +1,7 @@
 import * as express from 'express';
+import * as fs from 'fs';
 import * as http from 'http';
+import * as https from 'https';
 import * as morgan from 'morgan';
 import * as path from 'path';
 
@@ -11,13 +13,24 @@ const ports = {
   server: 9999
 };
 
-const app = express();
+const keys = {
+  cert: fs.readFileSync('cert.pem'),
+  key: fs.readFileSync('private.pem'),
+};
 
+const app = express();
+let webServer;
+
+/**
+ * If in development, serve control socket over HTTP
+ */
 if (process.env.NODE_ENV === 'development') {
+  webServer = http.createServer(app);
   app.use('*', (req, res) => {
     res.send('in development mode, run app with webpack');
   });
 } else {
+  webServer = https.createServer(keys, app);
   app.use(morgan(':remote-addr [:date[clf]] ":method :url" :status :res[content-length] :response-time ms'));
   app.use(express.static(path.resolve(__dirname, 'app')));
 
@@ -26,7 +39,6 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-const webServer = http.createServer(app);
 webServer.listen(ports.web, () => {
   console.log('web server running on', ports.web);
 });
