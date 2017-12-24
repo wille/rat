@@ -12,12 +12,19 @@ const ports = {
 };
 
 const app = express();
-app.use(morgan(':remote-addr [:date[clf]] ":method :url" :status :res[content-length] :response-time ms'));
-app.use(express.static(path.resolve(__dirname, 'app')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'app', 'index.html'));
-});
+if (process.env.NODE_ENV === 'development') {
+  app.use('*', (req, res) => {
+    res.send('in development mode, run app with webpack');
+  });
+} else {
+  app.use(morgan(':remote-addr [:date[clf]] ":method :url" :status :res[content-length] :response-time ms'));
+  app.use(express.static(path.resolve(__dirname, 'app')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'app', 'index.html'));
+  });
+}
 
 const webServer = http.createServer(app);
 webServer.listen(ports.web, () => {
