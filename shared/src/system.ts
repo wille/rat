@@ -7,7 +7,9 @@ export interface Monitor {
 }
 
 export interface OperatingSystem {
-    type: string;
+    type: "Windows" | "Linux" | "macOS" | "FreeBSD"
+          | "OpenBSD" | "DragonFlyBSD" | "NetBSD"
+          | "Solaris" | string;
     display: string;
 }
 

@@ -45,6 +45,8 @@ class ClientServer {
 
     private onConnection(socket: tls.TLSSocket) {
         console.log("[tls] connection from", socket.remoteAddress);
+        socket.setTimeout(5000);
+
         const client = new Client(socket);
 
         const lookup = geoip.lookup(socket.remoteAddress) || {

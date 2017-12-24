@@ -12,16 +12,44 @@ import { handle } from "./packets";
 
 class Client implements ClientProperties {
 
-    public flag: string;
-    public country: string;
+    /**
+     * Current ping in milliseconds
+     */
     public ping: number;
+
+    /**
+     * Username of client machine
+     */
     public username: string;
+
+    /**
+     * Hostname of client machine
+     */
     public hostname: string;
+
+    /**
+     * Client monitors
+     */
     public monitors: Monitor[];
+
+    /**
+     * Client operating system
+     */
     public os: OperatingSystem;
 
+    /**
+     * Unique client ID
+     */
     private readonly _id = new ObjectId();
+
+    /**
+     * Timestamp for last sent ping
+     */
     private pingTime: number;
+
+    /**
+     * Country resolved from
+     */
     private lookup: { country: string };
 
     constructor(private readonly socket: TLSSocket) {
@@ -56,6 +84,10 @@ class Client implements ClientProperties {
         }), true);
     }
 
+    /**
+     * Sends the message to the client
+     * @param m
+     */
     public send(m: Message) {
         try {
             const data = new BSON().serialize(m.data);
@@ -123,7 +155,7 @@ class Client implements ClientProperties {
     }
 
     private async loop() {
-        while (true) {
+        while (this.socket.readable) {
             let buffer = await this.read(2);
             const header = buffer.readInt16LE(0);
 
