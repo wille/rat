@@ -1,4 +1,5 @@
 import { IncomingMessage } from 'http';
+import * as http from 'http';
 import Message from 'shared/messages';
 import * as WebSocket from 'ws';
 
@@ -28,11 +29,8 @@ class ControlSocketServer {
 
   private server: WebSocket.Server;
 
-  constructor(options: WebSocket.ServerOptions) {
-    this.server = new WebSocket.Server(options, () => {
-      console.log('[ws] listening on', options.port);
-    });
-
+  constructor(server: http.Server) {
+    this.server = new WebSocket.Server({ server });
     this.server.on('connection', (ws, req) => this.onConnection(ws, req));
   }
 
