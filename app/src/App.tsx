@@ -2,7 +2,7 @@ import ViewController from '@app/viewController';
 import TabbedView from '@components/tabs/TabPage';
 import * as React from 'react';
 import { Nav, NavItem } from 'react-bootstrap';
-import SplitPane from 'react-split-pane';
+import * as SplitPane_ from 'react-split-pane';
 
 import { Connections } from './components/clientlist';
 
@@ -10,6 +10,9 @@ interface State {
   views: TabbedView[];
   selected: TabbedView;
 }
+
+// quick fix for broken typings
+const SplitPane = SplitPane_ as any;
 
 export default class App extends React.Component<any, State> {
 
@@ -44,7 +47,7 @@ export default class App extends React.Component<any, State> {
             </Nav>
             {selected ? selected.render() : false}
           </div>
-        </SplitPane>
+          </SplitPane>
       </div>
     );
   }
