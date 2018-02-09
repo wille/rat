@@ -11,6 +11,8 @@ interface State {
   depth: string[];
 }
 
+const BreadcrumbItem = Breadcrumb.Item as any;
+
 export default class FileSystem extends ClientComponent<{}, State> {
 
   public state: State = {
@@ -28,7 +30,9 @@ export default class FileSystem extends ClientComponent<{}, State> {
   public render() {
     const { files, depth } = this.state;
 
-    let current = this.client.os.type === 'Windows' ? '' : '/'
+    let current = this.client.os.type === 'Windows' ? '' : '/';
+
+    const tree = depth.filter(part => part.length > 0);
 
     return (
       <div style={{padding: 10}}>
@@ -39,15 +43,19 @@ export default class FileSystem extends ClientComponent<{}, State> {
         </Navbar>
 
         <Breadcrumb>
-          {depth.filter((part) => part.length > 0).map((part, index) => {
+          {tree.map((part, index) => {
             const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
             current += part + this.client.separator;
             const path = current;
 
             return (
-              <li key={part} onClick={() => this.browse(path, true)}>
+              <BreadcrumbItem
+                key={part}
+                active={index === tree.length - 1}
+                onClick={() => this.browse(path, true)}
+              >
                 {elem}
-              </li>
+              </BreadcrumbItem>
             );
           })}
         </Breadcrumb>

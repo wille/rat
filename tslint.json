@@ -13,7 +13,8 @@
         "object-literal-sort-keys": false,
         "variable-name": false,
         "no-empty": false,
-        "quotemark": false
+        "quotemark": false,
+        "arrow-parens": false
     },
     "rulesDirectory": []
 }
