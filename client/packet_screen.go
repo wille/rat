@@ -39,9 +39,8 @@ func (packet SendScreenPacket) Header() header.PacketHeader {
 }
 
 func (packet RecvScreenPacket) OnReceive() error {
-	if packet.Run {
+	if packet.Run && !screenStream {
 		// Dispatch one screen packet
-		screenStream = false
 		Queue <- &SendScreenPacket{}
 	}
 
