@@ -10,5 +10,7 @@ export const enum Action {
   CLIENT_UPDATE,
   SET_CURRENT_CLIENT,
 
-  SET_FILE_LIST
+  SET_FILE_LIST,
+
+  PROCESS_SET_LIST,
 }

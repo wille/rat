@@ -44,7 +44,7 @@ class ClientRow extends React.Component<Props> {
           <MenuItem onClick={() => this.redirect('/u/fs', client)}>
             File System
           </MenuItem>
-          <MenuItem onClick={() => this.redirect('/u/processes', client)}>
+          <MenuItem onClick={() => this.redirect('/u/process', client)}>
             Processes
           </MenuItem>
         </ContextMenu>

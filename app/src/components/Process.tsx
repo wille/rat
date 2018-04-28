@@ -5,54 +5,47 @@ import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
 import Client from '@app/client';
-import { selectClient } from '@app/reducers';
+import { selectClient, selectProcessList } from '@app/reducers';
 import { connect } from 'react-redux';
 import ProcessMessage from '../../../shared/src/messages/process';
+import { ProcessSubscription } from '@app/messages';
 
 interface Props {
   client: Client;
-}
-
-interface State {
   processes: Process[];
 }
 
 class ProcessView extends React.Component<Props> {
-  public state: State = {
-    processes: [],
-  };
-
-  public componentDidMount() {
-    // this.subscribe(MessageType.Process, new ProcessListHandler(this));
+  componentDidMount() {
     this.reload();
   }
 
-  public render() {
-    const { processes } = this.state;
+  render() {
+    const { processes } = this.props;;
 
     return (
-      <Table bordered>
-        <thead>
-          <tr>
-            <th>PID</th>
-            <th>Path</th>
-          </tr>
-        </thead>
-        <tbody>
-          {processes.map(process => {
-            return (
+      <ProcessSubscription>
+        <Table bordered>
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>Path</th>
+            </tr>
+          </thead>
+          <tbody>
+            {processes.map(process => (
               <tr key={process.pid}>
                 <td>{process.pid}</td>
                 <td>{process.path}</td>
               </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+            ))}
+          </tbody>
+        </Table>
+      </ProcessSubscription>
     );
   }
 
-  private reload() {
+  reload() {
     this.props.client.send(
       new ProcessMessage({
         _id: this.props.client.id,
@@ -64,4 +57,5 @@ class ProcessView extends React.Component<Props> {
 
 export default connect(state => ({
   client: selectClient(state),
+  processes: selectProcessList(state),
 }))(ProcessView);

@@ -26,4 +26,4 @@ export const setActiveClient = (client: Client) => ({
 export const setFilesList = (list: FileEntry[]) => ({
   type: Action.SET_FILE_LIST,
   payload: list,
-})
+});
