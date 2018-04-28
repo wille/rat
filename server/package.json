@@ -5,8 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf dist/",
     "start": "nodemon",
-    "build": "npm run test && rm -rf dist && tsc",
+    "build": "yarn run clean && yarn run test && webpack --mode=production",
     "test": "jest"
   },
   "keywords": [],
