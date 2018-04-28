@@ -1,6 +1,6 @@
-import { setClient } from '@app/actions';
+import { setActiveClient } from '@app/actions';
 import Client from '@app/client';
-import { selectClient } from '@app/reducers/clients';
+import { selectClient } from '@app/reducers';
 import KeyMessage from '@messages/outgoing/key';
 import { MouseMessage, MouseMotionMessage } from '@messages/outgoing/mouse';
 import { InputState } from '@shared/display';
@@ -14,7 +14,7 @@ interface Props {
   keyboard: boolean;
   scale: number;
   client: Client;
-  setClient: typeof setClient;
+  setActiveClient: typeof setActiveClient;
 }
 
 type MouseEvent = React.MouseEvent<HTMLDivElement>;
@@ -123,6 +123,6 @@ export default connect(
     client: selectClient(state),
   }),
   {
-    setClient,
+    setActiveClient,
   }
 )(Stream);

@@ -1,15 +1,14 @@
-import { setClient } from '@app/actions';
+import { setActiveClient } from '@app/actions';
 import Client from '@app/client';
 import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { History, RouteComponentProps, withRouter } from 'react-router-dom';
 
 interface Props extends RouteComponentProps<any> {
   client: Client;
-  history: any;
-  setClient: any;
-  [x: string]: any;
+  history: History;
+  setActiveClient: typeof setActiveClient;
 }
 
 class ClientRow extends React.Component<Props> {
@@ -54,7 +53,7 @@ class ClientRow extends React.Component<Props> {
   }
 
   redirect(path: string, user: Client) {
-    this.props.setClient(user);
+    this.props.setActiveClient(user);
     this.props.history.push(path);
   }
 
@@ -129,6 +128,6 @@ class ClientRow extends React.Component<Props> {
 
 export default withRouter(
   connect(state => ({}), {
-    setClient,
+    setActiveClient,
   })(ClientRow)
 );

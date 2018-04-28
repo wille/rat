@@ -5,7 +5,7 @@ import { MessageType } from '@shared/types';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
-import { selectClients } from '@app/reducers/clients';
+import { selectClients } from '@app/reducers';
 import { connect } from 'react-redux';
 import ClientRow from './ClientRow';
 

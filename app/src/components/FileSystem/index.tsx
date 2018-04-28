@@ -1,5 +1,5 @@
 import Client from '@app/client';
-import { selectClient } from '@app/reducers/clients';
+import { selectClient } from '@app/reducers';
 import { DirectorySubscription } from '@messages/index';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';

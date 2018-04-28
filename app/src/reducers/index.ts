@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux';
-import clients from './clients';
+import client from './client';
 import subscriptions from './subscription';
 
+export * from './client';
+export * from './subscription';
+
 const rootReducer = combineReducers({
-  clients,
+  client,
   subscriptions,
 });
 

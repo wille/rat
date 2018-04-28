@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
 import Client from '@app/client';
-import { selectClient } from '@app/reducers/clients';
+import { selectClient } from '@app/reducers';
 import { connect } from 'react-redux';
 import ProcessMessage from '../../../shared/src/messages/process';
 

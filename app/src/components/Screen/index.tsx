@@ -1,6 +1,6 @@
 import Client from '@app/client';
 import { ScreenSubscription } from '@app/messages';
-import { selectClient } from '@app/reducers/clients';
+import { selectClient } from '@app/reducers';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
 import { Monitor } from '@shared/system';
