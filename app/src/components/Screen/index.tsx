@@ -1,6 +1,6 @@
 import Client from '@app/client';
 import { ScreenSubscription } from '@app/messages';
-import { selectClient } from '@app/reducers';
+import { selectClient, selectScreenBuffer} from '@app/reducers';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
 import { Monitor } from '@shared/system';
@@ -13,17 +13,16 @@ import Stream from './Stream';
 
 interface Props {
   client: Client;
+  frame: ScreenFrameTemplate;
 }
 
 interface State {
-  data: ScreenFrameTemplate;
   scale: number;
   running: boolean;
 }
 
 class Screen extends React.Component<Props> {
-  public state: State = {
-    data: null,
+  state = {
     scale: 0.1,
     running: true,
   };
@@ -32,7 +31,6 @@ class Screen extends React.Component<Props> {
 
   public componentDidMount() {
     this.selectedMonitor = this.props.client.monitors[0];
-    // this.subscribe(MessageType.Screen, new ScreenHandler(this));
     this.stream();
   }
 
@@ -41,7 +39,8 @@ class Screen extends React.Component<Props> {
   }
 
   public render() {
-    const { scale, running, data } = this.state;
+    const { frame } = this.props;
+    const { scale, running } = this.state;
 
     return (
       <ScreenSubscription>
@@ -74,7 +73,7 @@ class Screen extends React.Component<Props> {
             </Nav>
           </Navbar>
           <div>
-            <Stream mouse keyboard data={data} scale={scale} />
+            <Stream mouse keyboard data={frame} scale={scale} />
           </div>
         </div>
       </ScreenSubscription>
@@ -135,4 +134,5 @@ class Screen extends React.Component<Props> {
 
 export default connect(state => ({
   client: selectClient(state),
+  frame: selectScreenBuffer(state),
 }))(Screen);

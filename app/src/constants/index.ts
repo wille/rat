@@ -13,4 +13,6 @@ export const enum Action {
   SET_FILE_LIST,
 
   PROCESS_SET_LIST,
+
+  SCREEN_SET_FRAME,
 }
