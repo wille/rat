@@ -15,7 +15,7 @@ class WebClient {
   }
 
   public emit(m: Message, force: boolean = false) {
-    if (force || this.subscribed.includes(m._type)) {
+    if (force || this.subscribed.indexOf(m._type) > -1) {
       this.send(m);
     }
   }

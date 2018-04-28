@@ -3,8 +3,7 @@
         "noImplicitAny": true,
         "removeComments": true,
         "module": "commonjs",
-        "target": "es2017",
-        "outDir": "dist",
+        "target": "es2015",
         "baseUrl": ".",
         "paths": {
             "shared/*": [
