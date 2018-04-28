@@ -1,16 +1,17 @@
 {
-    "defaultSeverity": "warning",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "no-console": false,
-        "interface-name": false,
-        "max-classes-per-file": false,
-        "array-type": false,
-        "object-literal-sort-keys": false,
-        "quotemark": false,
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "warning",
+  "extends": ["tslint:recommended", "tslint-plugin-prettier"],
+  "jsRules": {},
+  "rules": {
+    "prettier": [{
+      "singleQuote": true,
+    }],
+    "no-console": false,
+    "interface-name": false,
+    "max-classes-per-file": false,
+    "array-type": false,
+    "object-literal-sort-keys": false,
+    "quotemark": [true, "single", "jsx-double"]
+  },
+  "rulesDirectory": []
 }
