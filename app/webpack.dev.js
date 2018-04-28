@@ -1,29 +1,35 @@
-const merge = require("webpack-merge");
-const common = require("./webpack.common.js");
-const webpack = require("webpack");
-
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+const merge = require('webpack-merge');
+const common = require('./webpack.common.js');
+const webpack = require('webpack');
 
 module.exports = merge(common, {
-  devtool: "source-map",
+  mode: 'development',
+  devtool: 'source-map',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.tsx?$/,
-        loader: [
-          "react-hot-loader/webpack",
-          "ts-loader"
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: true,
+              plugins: [
+                //'react-hot-loader/babel'
+              ]
+            }
+          },
+          'ts-loader'
         ]
       }
     ]
   },
   plugins: [
-    new WatchMissingNodeModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
     hot: true,
     historyApiFallback: true,
-    contentBase: "src/"
+    contentBase: 'src/'
   }
 });
