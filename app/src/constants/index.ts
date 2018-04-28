@@ -9,4 +9,6 @@ export const enum Action {
   CLIENT_DISCONNECT,
   CLIENT_UPDATE,
   SET_CURRENT_CLIENT,
+
+  SET_FILE_LIST
 }

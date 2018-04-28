@@ -3,6 +3,7 @@ import { Action } from '../constants';
 const initialState = {
   current: null,
   list: [],
+  filesList: [],
 };
 
 export default (state = initialState, action) => {
@@ -28,6 +29,11 @@ export default (state = initialState, action) => {
         ...state,
         clients: state.list.filter(c => c.id !== action.payload.id),
       };
+    case Action.SET_FILE_LIST:
+      return {
+        ...state,
+        filesList: action.payload,
+      };
     default:
       return state;
   }
@@ -36,3 +42,5 @@ export default (state = initialState, action) => {
 export const selectClients = state => state.client.list;
 
 export const selectClient = state => state.client.current;
+
+export const selectFilesList = state => state.client.filesList;

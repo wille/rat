@@ -1,5 +1,5 @@
 import Client from '@app/client';
-import { selectClient } from '@app/reducers';
+import { selectClient, selectFilesList } from '@app/reducers';
 import { DirectorySubscription } from '@messages/index';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';
@@ -10,18 +10,17 @@ import { connect } from 'react-redux';
 
 interface Props {
   client: Client;
+  filesList: FileEntry[];
 }
 
 interface State {
-  files: FileEntry[];
   depth: string[];
 }
 
 const BreadcrumbItem = Breadcrumb.Item as any;
 
-class FileSystem extends React.Component<Props> {
-  public state: State = {
-    files: [],
+class FileSystem extends React.Component<Props, State> {
+  state: State = {
     depth: [],
   };
 
@@ -32,7 +31,8 @@ class FileSystem extends React.Component<Props> {
   }
 
   public render() {
-    const { files, depth } = this.state;
+    const { filesList } = this.props;
+    const { depth } = this.state;
 
     let current = this.props.client.os.type === 'Windows' ? '' : '/';
 
@@ -74,7 +74,7 @@ class FileSystem extends React.Component<Props> {
               </tr>
             </thead>
             <tbody>
-              {files.map(file => {
+              {filesList.map(file => {
                 const size = file.directory ? '' : file.size;
                 const icon = require('@assets/files/' +
                   this.getFileIcon(file.path, file.directory) +
@@ -188,4 +188,5 @@ class FileSystem extends React.Component<Props> {
 
 export default connect(state => ({
   client: selectClient(state),
+  filesList: selectFilesList(state)
 }))(FileSystem);

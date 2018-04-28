@@ -1,6 +1,7 @@
 import Client from '@app/client';
 import { ClientTemplate } from '@shared/templates';
 import { Action } from '../constants';
+import { FileEntry } from '@shared/templates';
 
 export const addClient = (data: ClientTemplate) => ({
   type: Action.CLIENT_CONNECT,
@@ -21,3 +22,8 @@ export const setActiveClient = (client: Client) => ({
   type: Action.SET_CURRENT_CLIENT,
   payload: client,
 });
+
+export const setFilesList = (list: FileEntry[]) => ({
+  type: Action.SET_FILE_LIST,
+  payload: list,
+})
