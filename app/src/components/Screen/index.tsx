@@ -1,5 +1,4 @@
 import ClientComponent from '@components/clientComponent';
-import Stream from '@components/screen/Stream';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
 import { Monitor } from '@shared/system';
@@ -7,6 +6,7 @@ import { MessageType } from '@shared/types';
 import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
+import Stream from './Stream';
 
 interface State {
   data: ScreenFrameTemplate;
@@ -38,7 +38,7 @@ export default class Screen extends ClientComponent<{}, State> {
     const { scale, running, data } = this.state;
 
     return (
-      <div style={{padding: 10}}>
+      <div style={{ padding: 10 }}>
         <Navbar>
           <Nav>
             <NavItem>Close</NavItem>
@@ -64,7 +64,7 @@ export default class Screen extends ClientComponent<{}, State> {
           </Nav>
         </Navbar>
         <div>
-          <Stream client={this.client} mouse keyboard data={data} scale={scale}/>
+          <Stream client={this.client} mouse keyboard data={data} scale={scale} />
         </div>
       </div>
     );

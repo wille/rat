@@ -1,6 +1,6 @@
 import { ClientTemplate, ClientUpdateType } from '../../../shared/src/templates';
 import Client from '../client';
-import { Connections } from '../components/clientlist';
+import Connections from '../components/Clients';
 import ControlSocket from '../control';
 import MessageHandler from './index';
 

@@ -1,9 +1,9 @@
-import ClientComponent from '@components/clientComponent';
 import ProcessListHandler from '@messages/process';
 import { MessageType } from '@shared/types';
 import { Process, ProcessType } from '@templates';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
+import ClientComponent from './clientComponent';
 
 import ProcessMessage from '../../../shared/src/messages/process';
 

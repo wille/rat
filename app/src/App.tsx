@@ -1,31 +1,18 @@
-import ViewController from '@app/viewController';
-import TabbedView from '@components/tabs/TabPage';
 import * as React from 'react';
 import { Nav, NavItem } from 'react-bootstrap';
 import * as SplitPane_ from 'react-split-pane';
 
-import { Connections } from './components/clientlist';
-
-interface State {
-  views: TabbedView[];
-  selected: TabbedView;
-}
+import Connections from './components/Clients';
 
 // quick fix for broken typings
 const SplitPane = SplitPane_ as any;
 
-export default class App extends React.Component<any, State> {
+export default class App extends React.Component<any, any> {
 
-  public state: State = {
+  public state: any = {
     views: [],
     selected: null
   };
-
-  private viewController: ViewController;
-
-  public componentWillMount() {
-    this.viewController = new ViewController(this);
-  }
 
   public render() {
     const { views, selected } = this.state;
@@ -33,28 +20,13 @@ export default class App extends React.Component<any, State> {
     return (
       <div>
         <SplitPane defaultSize='50%' split='vertical'>
-          <Connections client={null} viewController={this.viewController} />
+          <Connections client={null} />
           <div>
-            <Nav
-              bsStyle='tabs'
-              activeKey={selected}
-              onSelect={(key) =>
-                this.handleSelect(key as any as TabbedView)}
-            >
-              {views.map((view) => (
-                <NavItem key={view.id} eventKey={view}>{view.title}</NavItem>
-              ))}
-            </Nav>
-            {selected ? selected.render() : false}
+
           </div>
         </SplitPane>
       </div>
     );
   }
 
-  private handleSelect(key: TabbedView) {
-    this.setState({
-      selected: key
-    });
-  }
 }

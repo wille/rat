@@ -1,13 +1,8 @@
 import Client from '@app/client';
-import ViewController from '@app/viewController';
-import FilePage from '@components/tabs/FilePage';
-import ProcessPage from '@components/tabs/ProcessPage';
-import ScreenPage from '@components/tabs/ScreenPage';
 import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 
 interface Props {
-  viewController: ViewController;
   client: Client;
 }
 
@@ -22,28 +17,28 @@ export default class ClientRow extends React.Component<Props, any> {
     return (
       <ContextMenuTrigger id={client.id} renderTag='tr'>
         <td>
-          <img src={flagIcon}/>
+          <img src={flagIcon} />
         </td>
         <td>{client.host}</td>
         <td>{client.identifier}</td>
         <td>
-          {<img src={osIcon}/>}
+          {<img src={osIcon} />}
         </td>
         <td>
           {client.os ? client.os.display : 'unknown'}
         </td>
         <td>
-          <img src={pingIcon}/>
+          <img src={pingIcon} />
         </td>
 
         <ContextMenu id={client.id}>
-          <MenuItem onClick={() => { this.props.viewController.addView(new ScreenPage(client)); }}>
+          <MenuItem>
             View Screen
           </MenuItem>
-          <MenuItem onClick={() => { this.props.viewController.addView(new FilePage(client)); }}>
+          <MenuItem>
             File System
           </MenuItem>
-          <MenuItem onClick={() => { this.props.viewController.addView(new ProcessPage(client)); }}>
+          <MenuItem>
             Processes
           </MenuItem>
         </ContextMenu>
@@ -70,28 +65,28 @@ export default class ClientRow extends React.Component<Props, any> {
     let icon: string;
 
     switch (type) {
-    case 'windows':
-    case 'linux':
-      icon = 'os_' + type;
-      break;
-    case 'mac': // Mac OS X
-    case 'macos':
-      icon = 'os_mac';
-      break;
-    case 'debian':
-    case 'ubuntu':
-    case 'opensuse':
-    case 'mint':
-    case 'gentoo':
-    case 'fedora':
-    case 'centos':
-    case 'arch':
-    case 'kali':
-      icon = 'dist_' + type;
-      break;
-    default:
-      icon = 'unknown';
-      break;
+      case 'windows':
+      case 'linux':
+        icon = 'os_' + type;
+        break;
+      case 'mac': // Mac OS X
+      case 'macos':
+        icon = 'os_mac';
+        break;
+      case 'debian':
+      case 'ubuntu':
+      case 'opensuse':
+      case 'mint':
+      case 'gentoo':
+      case 'fedora':
+      case 'centos':
+      case 'arch':
+      case 'kali':
+        icon = 'dist_' + type;
+        break;
+      default:
+        icon = 'unknown';
+        break;
     }
 
     return icon;

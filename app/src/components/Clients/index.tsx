@@ -1,16 +1,11 @@
 import Client from '@app/client';
 import * as EventHandler from '@app/messages';
-import ViewController from '@app/viewController';
 import ClientComponent from '@components/clientComponent';
 import { MessageType } from '@shared/types';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
 import ClientRow from './ClientRow';
-
-interface Props {
-  viewController: ViewController;
-}
 
 interface State {
   clients: Client[];
@@ -24,7 +19,7 @@ const columns = [
   'Ping'
 ];
 
-export default class Clients extends ClientComponent<Props, State> {
+export default class Clients extends ClientComponent<{}, State> {
 
   public state: State = {
     clients: []
@@ -49,7 +44,7 @@ export default class Clients extends ClientComponent<Props, State> {
         <tbody>
           {this.state.clients.map((client) => {
             return (
-              <ClientRow key={client.id} client={client} viewController={this.props.viewController}/>
+              <ClientRow key={client.id} client={client} />
             );
           })}
         </tbody>

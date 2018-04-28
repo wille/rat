@@ -1,4 +1,4 @@
-import FileSystem from '@components/fs/FileSystem';
+import FileSystem from '@components/FileSystem';
 import { DirectoryContentTemplate } from '@templates';
 
 import MessageHandler from './index';
