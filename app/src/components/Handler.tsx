@@ -6,7 +6,7 @@ import { subscribe, unsubscribe } from '@app/actions/subscription';
 
 interface Props {
   type: MessageType;
-  handler: () => any;
+  handler: (data?: any) => void;
   subscribe: any;
   unsubscribe: any;
 }

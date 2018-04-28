@@ -1,4 +1,5 @@
 import Client from '@app/client';
+import { ScreenSubscription } from '@app/messages';
 import { selectClient } from '@app/reducers/clients';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
@@ -43,38 +44,40 @@ class Screen extends React.Component<Props> {
     const { scale, running, data } = this.state;
 
     return (
-      <div style={{ padding: 10 }}>
-        <Navbar>
-          <Nav>
-            <NavItem>Close</NavItem>
-            <NavDropdown title={'monitor'} id={'dropdown-size-medium'}>
-              {this.props.client.monitors.map(monitor => (
-                <MenuItem
-                  key={monitor.id}
-                  onClick={() => this.selectMonitor(monitor)}
-                >
-                  {monitor.id + ': ' + monitor.width + 'x' + monitor.height}
-                </MenuItem>
-              ))}
-            </NavDropdown>
-            <NavItem>
-              <input
-                type="range"
-                min={1}
-                value={scale * 100}
-                max={100}
-                onChange={e => this.setScale(e.target.valueAsNumber)}
-              />
-            </NavItem>
-            <NavItem onClick={() => this.toggle()}>
-              {running ? 'Pause' : 'Start'}
-            </NavItem>
-          </Nav>
-        </Navbar>
-        <div>
-          <Stream mouse keyboard data={data} scale={scale} />
+      <ScreenSubscription>
+        <div style={{ padding: 10 }}>
+          <Navbar>
+            <Nav>
+              <NavItem>Close</NavItem>
+              <NavDropdown title={'monitor'} id={'dropdown-size-medium'}>
+                {this.props.client.monitors.map(monitor => (
+                  <MenuItem
+                    key={monitor.id}
+                    onClick={() => this.selectMonitor(monitor)}
+                  >
+                    {monitor.id + ': ' + monitor.width + 'x' + monitor.height}
+                  </MenuItem>
+                ))}
+              </NavDropdown>
+              <NavItem>
+                <input
+                  type="range"
+                  min={1}
+                  value={scale * 100}
+                  max={100}
+                  onChange={e => this.setScale(e.target.valueAsNumber)}
+                />
+              </NavItem>
+              <NavItem onClick={() => this.toggle()}>
+                {running ? 'Pause' : 'Start'}
+              </NavItem>
+            </Nav>
+          </Navbar>
+          <div>
+            <Stream mouse keyboard data={data} scale={scale} />
+          </div>
         </div>
-      </div>
+      </ScreenSubscription>
     );
   }
 

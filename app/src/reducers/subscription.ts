@@ -1,11 +1,12 @@
 import ControlSocket from '@app/control';
 import SubscribeMessage from '@shared/messages/subscribe';
+import { Action } from '../constants';
 
 const initialState = [];
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'SUB':
+    case Action.SUBSCRIBE:
       ControlSocket.send(
         new SubscribeMessage({
           type: action.payload.type,
@@ -14,7 +15,7 @@ export default (state = initialState, action) => {
       );
 
       return [...state, action.payload];
-    case 'UNSUB':
+    case Action.UNSUBSCRIBE:
       ControlSocket.send(
         new SubscribeMessage({
           type: action.payload.type,

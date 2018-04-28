@@ -28,7 +28,6 @@ class FileSystem extends React.Component<Props> {
   private currentDirectory: string;
 
   public componentDidMount() {
-    // this.subscribe(MessageType.Directory, new DirectoryContentHandler(this));
     this.browse('');
   }
 
@@ -41,12 +40,12 @@ class FileSystem extends React.Component<Props> {
 
     return (
       <DirectorySubscription>
-      <div style={{ padding: 10 }}>
-        <Navbar>
-          <Nav>
-            <NavItem>Close</NavItem>
-          </Nav>
-        </Navbar>
+        <div style={{ padding: 10 }}>
+          <Navbar>
+            <Nav>
+              <NavItem>Close</NavItem>
+            </Nav>
+          </Navbar>
 
           <Breadcrumb>
             {tree.map((part, index) => {

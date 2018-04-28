@@ -1,17 +1,18 @@
-import SubscribeMessage from '@shared/messages/subscribe';
+import { MessageType } from '@shared/types';
+import { Action } from '../constants';
 
-interface SubscribeAction {}
+type HandlerFunc = (data?: any) => void;
 
-export const subscribe = (type, handler) => ({
-  type: 'SUB',
+export const subscribe = (type: MessageType, handler: HandlerFunc) => ({
+  type: Action.SUBSCRIBE,
   payload: {
     type,
     handler,
   },
 });
 
-export const unsubscribe = handler => ({
-  type: 'UNSUB',
+export const unsubscribe = (handler: HandlerFunc) => ({
+  type: Action.UNSUBSCRIBE,
   payload: {
     handler,
   },
