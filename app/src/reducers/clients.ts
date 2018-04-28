@@ -19,6 +19,11 @@ export default (state = initialState, action) => {
     case 'SET_CLIENT':
       return {
         ...state,
+        client: action.payload,
+      };
+    case 'REMOVE_CLIENT':
+      return {
+        ...state,
         clients: state.clients.filter(c => c.id !== action.payload.id),
       };
     default:

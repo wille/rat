@@ -52,4 +52,9 @@ const ProcessSubscription = withProps({
   handler: processHandler,
 })(Handler);
 
-export { ClientSubscription };
+export {
+  ClientSubscription,
+  DirectorySubscription,
+  ScreenSubscription,
+  ProcessSubscription,
+};

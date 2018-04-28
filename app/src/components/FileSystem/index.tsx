@@ -1,6 +1,6 @@
 import Client from '@app/client';
 import { selectClient } from '@app/reducers/clients';
-import DirectoryContentHandler from '@messages/directory';
+import { DirectorySubscription } from '@messages/index';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';
 import { FileEntry } from '@templates';
@@ -40,6 +40,7 @@ class FileSystem extends React.Component<Props> {
     const tree = depth.filter(part => part.length > 0);
 
     return (
+      <DirectorySubscription>
       <div style={{ padding: 10 }}>
         <Navbar>
           <Nav>
@@ -47,53 +48,54 @@ class FileSystem extends React.Component<Props> {
           </Nav>
         </Navbar>
 
-        <Breadcrumb>
-          {tree.map((part, index) => {
-            const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
-            current += part + this.props.client.separator;
-            const path = current;
-
-            return (
-              <BreadcrumbItem
-                key={part}
-                active={index === tree.length - 1}
-                onClick={() => this.browse(path, true)}
-              >
-                {elem}
-              </BreadcrumbItem>
-            );
-          })}
-        </Breadcrumb>
-
-        <Table bordered>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Size</th>
-              <th>Last modified</th>
-            </tr>
-          </thead>
-          <tbody>
-            {files.map(file => {
-              const size = file.directory ? '' : file.size;
-              const icon = require('@assets/files/' +
-                this.getFileIcon(file.path, file.directory) +
-                '.png');
+          <Breadcrumb>
+            {tree.map((part, index) => {
+              const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
+              current += part + this.props.client.separator;
+              const path = current;
 
               return (
-                <tr key={file.path} onClick={() => this.browse(file.path)}>
-                  <td>
-                    <img src={icon} />
-                    {file.path}
-                  </td>
-                  <td>{size}</td>
-                  <td>{file.time}</td>
-                </tr>
+                <BreadcrumbItem
+                  key={part}
+                  active={index === tree.length - 1}
+                  onClick={() => this.browse(path, true)}
+                >
+                  {elem}
+                </BreadcrumbItem>
               );
             })}
-          </tbody>
-        </Table>
-      </div>
+          </Breadcrumb>
+
+          <Table bordered>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Last modified</th>
+              </tr>
+            </thead>
+            <tbody>
+              {files.map(file => {
+                const size = file.directory ? '' : file.size;
+                const icon = require('@assets/files/' +
+                  this.getFileIcon(file.path, file.directory) +
+                  '.png');
+
+                return (
+                  <tr key={file.path} onClick={() => this.browse(file.path)}>
+                    <td>
+                      <img src={icon} />
+                      {file.path}
+                    </td>
+                    <td>{size}</td>
+                    <td>{file.time}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
+      </DirectorySubscription>
     );
   }
 

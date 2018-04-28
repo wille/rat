@@ -1,49 +1,61 @@
+import { setClient } from '@app/actions';
 import Client from '@app/client';
 import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-interface Props {
+interface Props extends RouteComponentProps<any> {
   client: Client;
+  history: any;
+  setClient: any;
+  [x: string]: any;
 }
 
-export default class ClientRow extends React.Component<Props, any> {
-
+class ClientRow extends React.Component<Props> {
   public render() {
     const { client } = this.props;
-    const flagIcon = require('@assets/flags/' + (client.flag || 'unknown') + '.png');
-    const osIcon = require('@assets/os/' + (this.getOperatingSystemIcon() || 'os_linux') + '.png');
-    const pingIcon = require('@assets/ping/' + (this.getPingIcon() || 'ping5') + '.png');
+    const flagIcon = require('@assets/flags/' +
+      (client.flag || 'unknown') +
+      '.png');
+    const osIcon = require('@assets/os/' +
+      (this.getOperatingSystemIcon() || 'os_linux') +
+      '.png');
+    const pingIcon = require('@assets/ping/' +
+      (this.getPingIcon() || 'ping5') +
+      '.png');
 
     return (
-      <ContextMenuTrigger id={client.id} renderTag='tr'>
+      <ContextMenuTrigger id={client.id} renderTag="tr">
         <td>
           <img src={flagIcon} />
         </td>
         <td>{client.host}</td>
         <td>{client.identifier}</td>
-        <td>
-          {<img src={osIcon} />}
-        </td>
-        <td>
-          {client.os ? client.os.display : 'unknown'}
-        </td>
+        <td>{<img src={osIcon} />}</td>
+        <td>{client.os ? client.os.display : 'unknown'}</td>
         <td>
           <img src={pingIcon} />
         </td>
 
         <ContextMenu id={client.id}>
-          <MenuItem>
+          <MenuItem onClick={() => this.redirect('/u/screen', client)}>
             View Screen
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={() => this.redirect('/u/fs', client)}>
             File System
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={() => this.redirect('/u/processes', client)}>
             Processes
           </MenuItem>
         </ContextMenu>
       </ContextMenuTrigger>
     );
+  }
+
+  redirect(path: string, user: Client) {
+    this.props.setClient(user);
+    this.props.history.push(path);
   }
 
   private getOperatingSystemIcon(): string {
@@ -113,5 +125,10 @@ export default class ClientRow extends React.Component<Props, any> {
 
     return 'ping' + n;
   }
-
 }
+
+export default withRouter(
+  connect(state => ({}), {
+    setClient,
+  })(ClientRow)
+);

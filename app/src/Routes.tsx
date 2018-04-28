@@ -20,3 +20,5 @@ const Routes = () => (
     <Route path="/u/" component={ClientRoutes} />
   </Switch>
 );
+
+export default Routes;
