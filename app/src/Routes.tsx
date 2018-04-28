@@ -8,9 +8,9 @@ import Screen from './components/Screen';
 
 const ClientRoutes = () => (
   <Switch>
-    <Route path="/u/screen/:id" component={Screen} />
-    <Route path="/u/process/:id" component={Process} />
-    <Route path="/u/fs/:id" component={FileSystem} />
+    <Route path="/u/screen" component={Screen} />
+    <Route path="/u/process" component={Process} />
+    <Route path="/u/fs" component={FileSystem} />
   </Switch>
 );
 

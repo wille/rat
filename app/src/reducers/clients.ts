@@ -11,12 +11,11 @@ export default (state = initialState, action) => {
         clients: [...state.clients, action.payload],
       };
     case 'UPDATE_CLIENT':
-      return {
-        ...state,
-        clients: state.clients
-          .filter(c => c.id === action.payload.data.id)
-          .forEach(c => c.update(action.payload.data)),
-      };
+      state.clients
+        .filter(c => c.id === action.payload.data.id)
+        .forEach(c => c.update(action.payload.data));
+
+      return state;
     case 'SET_CLIENT':
       return {
         ...state,

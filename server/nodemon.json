@@ -1,6 +1,6 @@
 {
     "restartable": "rs",
-    "exec": "webpack --mode=development",
+    "exec": "webpack --mode=development && node dist/index.js",
     "watch": [
         "src",
         "../shared/src"

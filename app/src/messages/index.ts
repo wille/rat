@@ -3,29 +3,22 @@ import Message from '@shared/messages/index';
 import SubscribeMessage from '@shared/messages/subscribe';
 import { MessageType } from '@shared/types';
 import { MessageTemplate } from '@templates';
-
+import withProps from 'recompose/withProps';
 import store from '../index';
 
-export default interface MessageHandler<T extends MessageTemplate> {
-  emit(data: T): void;
-}
-
-export { default as ClientHandler } from './clients';
-export { default as ScreenHandler } from './screen';
-export { default as DirectoryContentHandler } from './directory';
-
-interface Subscriber {
-  _id: number;
-  type: MessageType;
-  listener: MessageHandler<any>;
-}
+import Handler from '../components/Handler';
+import clientHandler from './clients';
+import directoryHandler from './directory';
+import processHandler from './process';
+import screenHandler from './screen';
 
 export function emit(message: Message) {
   const clients = store
     .getState()
     .subscriptions.filter(event => event.type === message._type);
-  console.log(message);
-  clients.forEach(event => event.listener.emit(message));
+  clients.forEach(event => {
+    event.handler(message);
+  });
 }
 
 export function publishSubscriptions() {
@@ -38,3 +31,25 @@ export function publishSubscriptions() {
     );
   });
 }
+
+const ClientSubscription = withProps({
+  type: MessageType.Client,
+  handler: clientHandler,
+})(Handler);
+
+const DirectorySubscription = withProps({
+  type: MessageType.Directory,
+  handler: directoryHandler,
+})(Handler);
+
+const ScreenSubscription = withProps({
+  type: MessageType.Screen,
+  handler: screenHandler,
+})(Handler);
+
+const ProcessSubscription = withProps({
+  type: MessageType.Process,
+  handler: processHandler,
+})(Handler);
+
+export { ClientSubscription };

@@ -1,5 +1,6 @@
 import Client from '@app/client';
 import * as EventHandler from '@app/messages';
+import { ClientSubscription } from '@app/messages';
 import { MessageType } from '@shared/types';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
@@ -14,7 +15,7 @@ interface State {
 
 const columns = ['Country', 'Host', 'Identifier', 'Operating System', 'Ping'];
 
-class Clients extends React.Component {
+class Clients extends React.Component<any> {
   public state: State = {
     clients: [],
   };
@@ -23,22 +24,20 @@ class Clients extends React.Component {
     super(props);
   }
 
-  public componentDidMount() {
-    // this.subscribe(MessageType.Client, new EventHandler.ClientHandler(this));
-  }
-
   public render() {
     return (
-      <Table bordered>
-        <thead>
-          <tr>{columns.map(column => <th key={column}>{column}</th>)}</tr>
-        </thead>
-        <tbody>
-          {this.state.clients.map(client => {
-            return <ClientRow key={client.id} client={client} />;
-          })}
-        </tbody>
-      </Table>
+      <ClientSubscription>
+        <Table bordered>
+          <thead>
+            <tr>{columns.map(column => <th key={column}>{column}</th>)}</tr>
+          </thead>
+          <tbody>
+            {this.props.clients.map(client => {
+              return <ClientRow key={client.id} client={client} />;
+            })}
+          </tbody>
+        </Table>
+      </ClientSubscription>
     );
   }
 }
