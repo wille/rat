@@ -1,4 +1,5 @@
-import ClientComponent from '@components/clientComponent';
+import Client from '@app/client';
+import { selectClient } from '@app/reducers/clients';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
 import { Monitor } from '@shared/system';
@@ -6,7 +7,12 @@ import { MessageType } from '@shared/types';
 import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import Stream from './Stream';
+
+interface Props {
+  client: Client;
+}
 
 interface State {
   data: ScreenFrameTemplate;
@@ -14,19 +20,18 @@ interface State {
   running: boolean;
 }
 
-export default class Screen extends ClientComponent<{}, State> {
-
+class Screen extends React.Component<Props> {
   public state: State = {
     data: null,
     scale: 0.1,
-    running: true
+    running: true,
   };
 
   private selectedMonitor: Monitor;
 
   public componentDidMount() {
-    this.selectedMonitor = this.client.monitors[0];
-    this.subscribe(MessageType.Screen, new ScreenHandler(this));
+    this.selectedMonitor = this.props.client.monitors[0];
+    // this.subscribe(MessageType.Screen, new ScreenHandler(this));
     this.stream();
   }
 
@@ -43,19 +48,22 @@ export default class Screen extends ClientComponent<{}, State> {
           <Nav>
             <NavItem>Close</NavItem>
             <NavDropdown title={'monitor'} id={'dropdown-size-medium'}>
-              {this.client.monitors.map((monitor) => (
-                <MenuItem key={monitor.id} onClick={() => this.selectMonitor(monitor)}>
+              {this.props.client.monitors.map(monitor => (
+                <MenuItem
+                  key={monitor.id}
+                  onClick={() => this.selectMonitor(monitor)}
+                >
                   {monitor.id + ': ' + monitor.width + 'x' + monitor.height}
                 </MenuItem>
               ))}
             </NavDropdown>
             <NavItem>
               <input
-                type='range'
+                type="range"
                 min={1}
                 value={scale * 100}
                 max={100}
-                onChange={(e) => this.setScale(e.target.valueAsNumber)}
+                onChange={e => this.setScale(e.target.valueAsNumber)}
               />
             </NavItem>
             <NavItem onClick={() => this.toggle()}>
@@ -64,7 +72,7 @@ export default class Screen extends ClientComponent<{}, State> {
           </Nav>
         </Navbar>
         <div>
-          <Stream client={this.client} mouse keyboard data={data} scale={scale} />
+          <Stream mouse keyboard data={data} scale={scale} />
         </div>
       </div>
     );
@@ -72,7 +80,7 @@ export default class Screen extends ClientComponent<{}, State> {
 
   private setScale(scale: number) {
     this.setState({
-      scale: scale / 100
+      scale: scale / 100,
     });
 
     this.stream();
@@ -95,25 +103,33 @@ export default class Screen extends ClientComponent<{}, State> {
   private stream() {
     const { scale } = this.state;
 
-    this.client.send(new StreamMessage({
-      active: true,
-      scale,
-      monitor: true,
-      handle: this.selectedMonitor.id
-    }));
+    this.props.client.send(
+      new StreamMessage({
+        active: true,
+        scale,
+        monitor: true,
+        handle: this.selectedMonitor.id,
+      })
+    );
 
     this.setState({
-      running: true
+      running: true,
     });
   }
 
   private stop() {
-    this.client.send(new StreamMessage({
-      active: false
-    }));
+    this.props.client.send(
+      new StreamMessage({
+        active: false,
+      })
+    );
 
     this.setState({
-      running: false
+      running: false,
     });
   }
 }
+
+export default connect(state => ({
+  client: selectClient(state),
+}))(Screen);

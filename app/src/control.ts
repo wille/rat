@@ -4,16 +4,11 @@ import Message from '@shared/messages';
 import { BSON } from 'bson';
 
 class ControlSocket {
-
-  public clients: Client[] = [];
-
   private readonly bson = new BSON();
   private socket: WebSocket;
   private queue: Message[] = [];
 
-  constructor(private readonly url: string) {
-
-  }
+  constructor(private readonly url: string) {}
 
   public connect() {
     this.socket = new WebSocket(this.url);
@@ -24,10 +19,12 @@ class ControlSocket {
 
   public send(m: Message) {
     if (this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(this.bson.serialize({
-        _type: m._type,
-        ...m.data
-      }));
+      this.socket.send(
+        this.bson.serialize({
+          _type: m._type,
+          ...m.data,
+        })
+      );
     } else {
       this.queue.push(m);
     }
@@ -38,7 +35,7 @@ class ControlSocket {
 
     EventHandler.publishSubscriptions();
 
-    this.queue.forEach((queued) => {
+    this.queue.forEach(queued => {
       this.send(queued);
     });
     this.queue = [];

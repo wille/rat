@@ -11,10 +11,12 @@
     "prettier": [
       true,
       {
-        "singleQuote": true
+        "singleQuote": true,
+        "trailingComma": "es5"
       }
     ],
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "member-access": false
   },
   "rulesDirectory": []
 }

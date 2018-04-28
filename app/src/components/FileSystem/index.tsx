@@ -1,10 +1,16 @@
-import ClientComponent from '@components/clientComponent';
+import Client from '@app/client';
+import { selectClient } from '@app/reducers/clients';
 import DirectoryContentHandler from '@messages/directory';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';
 import { FileEntry } from '@templates';
 import * as React from 'react';
 import { Breadcrumb, Nav, Navbar, NavItem, Table } from 'react-bootstrap';
+import { connect } from 'react-redux';
+
+interface Props {
+  client: Client;
+}
 
 interface State {
   files: FileEntry[];
@@ -13,29 +19,28 @@ interface State {
 
 const BreadcrumbItem = Breadcrumb.Item as any;
 
-export default class FileSystem extends ClientComponent<{}, State> {
-
+class FileSystem extends React.Component<Props> {
   public state: State = {
     files: [],
-    depth: []
+    depth: [],
   };
 
   private currentDirectory: string;
 
   public componentDidMount() {
-    this.subscribe(MessageType.Directory, new DirectoryContentHandler(this));
+    // this.subscribe(MessageType.Directory, new DirectoryContentHandler(this));
     this.browse('');
   }
 
   public render() {
     const { files, depth } = this.state;
 
-    let current = this.client.os.type === 'Windows' ? '' : '/';
+    let current = this.props.client.os.type === 'Windows' ? '' : '/';
 
     const tree = depth.filter(part => part.length > 0);
 
     return (
-      <div style={{padding: 10}}>
+      <div style={{ padding: 10 }}>
         <Navbar>
           <Nav>
             <NavItem>Close</NavItem>
@@ -45,7 +50,7 @@ export default class FileSystem extends ClientComponent<{}, State> {
         <Breadcrumb>
           {tree.map((part, index) => {
             const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
-            current += part + this.client.separator;
+            current += part + this.props.client.separator;
             const path = current;
 
             return (
@@ -69,14 +74,16 @@ export default class FileSystem extends ClientComponent<{}, State> {
             </tr>
           </thead>
           <tbody>
-            {files.map((file) => {
+            {files.map(file => {
               const size = file.directory ? '' : file.size;
-              const icon = require('@assets/files/' + this.getFileIcon(file.path, file.directory) + '.png');
+              const icon = require('@assets/files/' +
+                this.getFileIcon(file.path, file.directory) +
+                '.png');
 
               return (
                 <tr key={file.path} onClick={() => this.browse(file.path)}>
                   <td>
-                    <img src={icon}/>
+                    <img src={icon} />
                     {file.path}
                   </td>
                   <td>{size}</td>
@@ -95,7 +102,7 @@ export default class FileSystem extends ClientComponent<{}, State> {
   }
 
   private browse(path: string, absolute: boolean = false) {
-    const separator = this.client.separator;
+    const separator = this.props.client.separator;
 
     if (!this.currentDirectory) {
       this.currentDirectory = separator === '/' ? '/' : '';
@@ -119,15 +126,17 @@ export default class FileSystem extends ClientComponent<{}, State> {
     }
 
     this.setState({
-      depth: paths
+      depth: paths,
     });
 
     console.log('browsing', path, this.currentDirectory);
 
-    this.client.send(new BrowseMessage({
-      id: this.client.id,
-      path: this.currentDirectory
-    }));
+    this.props.client.send(
+      new BrowseMessage({
+        id: this.props.client.id,
+        path: this.currentDirectory,
+      })
+    );
   }
 
   private getFileIcon(name: string, isDir?: boolean) {
@@ -136,7 +145,9 @@ export default class FileSystem extends ClientComponent<{}, State> {
     }
 
     if (name.indexOf('.') !== -1) {
-      const ext = name.substring(name.lastIndexOf('.'), name.length).toLowerCase();
+      const ext = name
+        .substring(name.lastIndexOf('.'), name.length)
+        .toLowerCase();
       let type: string;
 
       switch (ext) {
@@ -173,3 +184,7 @@ export default class FileSystem extends ClientComponent<{}, State> {
     return 'file';
   }
 }
+
+export default connect(state => ({
+  client: selectClient(state),
+}))(FileSystem);

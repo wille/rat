@@ -1,9 +1,9 @@
 import ControlSocket from '@app/control';
 import Message from '@shared/messages';
 import { ClientProperties, Monitor, OperatingSystem } from '@shared/system';
+import { ClientTemplate } from '@shared/templates';
 
 class Client implements ClientProperties {
-
   public ping: number;
   public flag: string;
   public country: string;
@@ -12,9 +12,14 @@ class Client implements ClientProperties {
   public monitors: Monitor[];
   public os: OperatingSystem;
 
-  constructor(public readonly id: string,
-        public readonly host: string) {
-
+  constructor(
+    public readonly id: string,
+    public readonly host: string,
+    data?: ClientTemplate
+  ) {
+    if (data) {
+      this.update(data);
+    }
   }
 
   public get identifier() {

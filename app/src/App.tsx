@@ -13,7 +13,7 @@ export default class App extends React.Component<any, any> {
   public render() {
     const { views, selected } = this.state;
 
-    return <Connections client={null} />;
+    return <Connections />;
   }
 
 }

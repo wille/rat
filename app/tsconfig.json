@@ -5,7 +5,6 @@
     "target": "es2017",
     "jsx": "react",
     "baseUrl": ".",
-    "pretty": true,
     "paths": {
       "@shared/*": ["../shared/src/*"],
       "@messages/*": ["src/messages/*"],

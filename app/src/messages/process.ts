@@ -3,17 +3,13 @@ import { ProcessListTemplate } from '@templates';
 
 import MessageHandler from './index';
 
-export default class ProcessListHandler implements MessageHandler<ProcessListTemplate> {
-
-  constructor(private view: Process) {
-
-  }
-
+export default class ProcessListHandler
+  implements MessageHandler<ProcessListTemplate> {
   public emit(data: ProcessListTemplate) {
-    const processes = data.processes.sort((a, b) => a.path === '' ? 1 : -1);
+    /* const processes = data.processes.sort((a, b) => a.path === '' ? 1 : -1);
 
     this.view.setState({
       processes
-    });
+    }); */
   }
 }

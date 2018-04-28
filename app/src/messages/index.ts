@@ -4,6 +4,8 @@ import SubscribeMessage from '@shared/messages/subscribe';
 import { MessageType } from '@shared/types';
 import { MessageTemplate } from '@templates';
 
+import store from '../index';
+
 export default interface MessageHandler<T extends MessageTemplate> {
   emit(data: T): void;
 }
@@ -18,61 +20,21 @@ interface Subscriber {
   listener: MessageHandler<any>;
 }
 
-const events: Subscriber[] = [];
-
-export function subscribe<T extends MessageTemplate>(type: MessageType, listener: MessageHandler<T>) {
-  console.log('subscribing', type);
-
-  if (typeof listener === 'function') {
-    listener = {
-      emit: listener
-    } as MessageHandler<T>;
-  }
-
-  const id = Math.random();
-
-  events.push({
-    _id: id,
-    type,
-    listener
-  });
-
-  ControlSocket.send(new SubscribeMessage({
-    type,
-    subscribe: true
-  }));
-
-  return id;
-}
-
-export function unsubscribe<T extends MessageTemplate>(id: number) {
-  console.log('unsubscribing');
-
-  events.some((event, index) => {
-    if (event._id === id) {
-      events.splice(index, 1);
-
-      ControlSocket.send(new SubscribeMessage({
-        type: event.type,
-        subscribe: false
-      }));
-
-      return true;
-    }
-  });
-}
-
 export function emit(message: Message) {
-  const clients = events.filter((event) => event.type === message._type);
+  const clients = store
+    .getState()
+    .subscriptions.filter(event => event.type === message._type);
   console.log(message);
-  clients.forEach((event) => event.listener.emit(message));
+  clients.forEach(event => event.listener.emit(message));
 }
 
 export function publishSubscriptions() {
-  events.forEach((event) => {
-    ControlSocket.send(new SubscribeMessage({
-      type: event.type,
-      subscribe: true
-    }));
+  store.getState().subscriptions.forEach(event => {
+    ControlSocket.send(
+      new SubscribeMessage({
+        type: event.type,
+        subscribe: true,
+      })
+    );
   });
 }

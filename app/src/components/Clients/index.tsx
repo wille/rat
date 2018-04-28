@@ -1,28 +1,22 @@
 import Client from '@app/client';
 import * as EventHandler from '@app/messages';
-import ClientComponent from '@components/clientComponent';
 import { MessageType } from '@shared/types';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
+import { selectClients } from '@app/reducers/clients';
+import { connect } from 'react-redux';
 import ClientRow from './ClientRow';
 
 interface State {
   clients: Client[];
 }
 
-const columns = [
-  'Country',
-  'Host',
-  'Identifier',
-  'Operating System',
-  'Ping'
-];
+const columns = ['Country', 'Host', 'Identifier', 'Operating System', 'Ping'];
 
-export default class Clients extends ClientComponent<{}, State> {
-
+class Clients extends React.Component {
   public state: State = {
-    clients: []
+    clients: [],
   };
 
   constructor(props: any) {
@@ -30,25 +24,25 @@ export default class Clients extends ClientComponent<{}, State> {
   }
 
   public componentDidMount() {
-    this.subscribe(MessageType.Client, new EventHandler.ClientHandler(this));
+    // this.subscribe(MessageType.Client, new EventHandler.ClientHandler(this));
   }
 
   public render() {
     return (
       <Table bordered>
         <thead>
-          <tr>
-            {columns.map((column) => <th key={column}>{column}</th>)}
-          </tr>
+          <tr>{columns.map(column => <th key={column}>{column}</th>)}</tr>
         </thead>
         <tbody>
-          {this.state.clients.map((client) => {
-            return (
-              <ClientRow key={client.id} client={client} />
-            );
+          {this.state.clients.map(client => {
+            return <ClientRow key={client.id} client={client} />;
           })}
         </tbody>
       </Table>
     );
   }
 }
+
+export default connect(state => ({
+  clients: selectClients(state),
+}))(Clients);
