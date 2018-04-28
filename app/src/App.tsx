@@ -39,7 +39,7 @@ export default class App extends React.Component<any, State> {
               bsStyle='tabs'
               activeKey={selected}
               onSelect={(key) =>
-              this.handleSelect(key as any as TabbedView)}
+                this.handleSelect(key as any as TabbedView)}
             >
               {views.map((view) => (
                 <NavItem key={view.id} eventKey={view}>{view.title}</NavItem>
@@ -47,7 +47,7 @@ export default class App extends React.Component<any, State> {
             </Nav>
             {selected ? selected.render() : false}
           </div>
-          </SplitPane>
+        </SplitPane>
       </div>
     );
   }
