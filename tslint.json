@@ -1,17 +1,20 @@
 {
   "defaultSeverity": "warning",
-  "extends": ["tslint:recommended", "tslint-plugin-prettier"],
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-plugin-prettier",
+    "tslint-config-prettier"
+  ],
   "jsRules": {},
   "rules": {
-    "prettier": [{
-      "singleQuote": true,
-    }],
-    "no-console": false,
-    "interface-name": false,
-    "max-classes-per-file": false,
-    "array-type": false,
-    "object-literal-sort-keys": false,
-    "quotemark": [true, "single", "jsx-double"]
+    "prettier": [
+      true,
+      {
+        "singleQuote": true
+      }
+    ],
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": []
 }
