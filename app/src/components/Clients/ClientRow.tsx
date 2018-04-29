@@ -1,17 +1,37 @@
 import { setActiveClient } from '@app/actions';
 import Client from '@app/client';
+import { selectClient } from '@app/reducers';
 import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { connect } from 'react-redux';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
+import store from '../../';
 
 interface Props extends RouteComponentProps<any> {
   client: Client;
   history: History;
+  currentClient: Client;
   setActiveClient: typeof setActiveClient;
 }
 
-class ClientRow extends React.Component<Props> {
+interface State {
+  unsubscribe: () => void;
+}
+
+class ClientRow extends React.Component<Props, State> {
+  componentWillMount() {
+    this.setState({
+      unsubscribe: store.subscribe(this.subscribe),
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.unsubscribe();
+  }
+
+  subscribe = () => {
+    this.forceUpdate();
+  };
   public render() {
     const { client } = this.props;
     const flagIcon = require('@assets/flags/' +
@@ -31,10 +51,13 @@ class ClientRow extends React.Component<Props> {
         </td>
         <td>{client.host}</td>
         <td>{client.identifier}</td>
-        <td>{<img src={osIcon} />}</td>
-        <td>{client.os ? client.os.display : 'unknown'}</td>
+        <td>
+          <img src={osIcon} />
+          {client.os.display}
+        </td>
         <td>
           <img src={pingIcon} />
+          {client.ping}
         </td>
 
         <ContextMenu id={client.id}>
@@ -127,7 +150,12 @@ class ClientRow extends React.Component<Props> {
 }
 
 export default withRouter(
-  connect(state => ({}), {
-    setActiveClient,
-  })(ClientRow)
+  connect(
+    state => ({
+      currentClient: selectClient(state),
+    }),
+    {
+      setActiveClient,
+    }
+  )(ClientRow)
 );

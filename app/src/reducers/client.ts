@@ -3,7 +3,6 @@ import { Action } from '../constants';
 const initialState = {
   current: null,
   list: [],
-  filesList: [],
 };
 
 export default (state = initialState, action) => {
@@ -18,7 +17,7 @@ export default (state = initialState, action) => {
         .filter(c => c.id === action.payload.id)
         .forEach(c => c.update(action.payload));
 
-      return state;
+      return { ...state };
     case Action.SET_CURRENT_CLIENT:
       return {
         ...state,

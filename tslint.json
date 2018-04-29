@@ -17,7 +17,7 @@
     ],
     "object-literal-sort-keys": false,
     "member-access": false,
-    "interface-name": false,
+    "interface-name": false
   },
   "rulesDirectory": []
 }
