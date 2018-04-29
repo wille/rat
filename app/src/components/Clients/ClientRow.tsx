@@ -6,6 +6,7 @@ import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { connect } from 'react-redux';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
 import store from '../../';
 import FlagIcon from './Flag';
 import OsIcon from './OsIcon';
@@ -64,55 +65,9 @@ class ClientRow extends React.Component<Props, State> {
     this.props.setActiveClient(user);
     this.props.history.push(path);
   }
-
-  private getOperatingSystemIcon(): string {
-    const { client } = this.props;
-    const os = client.os ? client.os.display : null;
-
-    if (os === null) {
-      return;
-    }
-
-    const args = os.split(' ');
-
-    // windows, macos, linux...
-    const type = args[0].toLowerCase();
-
-    // (Windows) 10, (macOS) 10.12
-    const version = args.length >= 2 ? args[args.length - 1] : null;
-
-    let icon: string;
-
-    switch (type) {
-      case 'windows':
-      case 'linux':
-        icon = 'os_' + type;
-        break;
-      case 'mac': // Mac OS X
-      case 'macos':
-        icon = 'os_mac';
-        break;
-      case 'debian':
-      case 'ubuntu':
-      case 'opensuse':
-      case 'mint':
-      case 'gentoo':
-      case 'fedora':
-      case 'centos':
-      case 'arch':
-      case 'kali':
-        icon = 'dist_' + type;
-        break;
-      default:
-        icon = 'unknown';
-        break;
-    }
-
-    return icon;
-  }
 }
 
-export default withRouter(
+export default compose<any, any>(
   connect(
     state => ({
       currentClient: selectClient(state),
@@ -120,5 +75,6 @@ export default withRouter(
     {
       setActiveClient,
     }
-  )(ClientRow)
-);
+  ),
+  withRouter
+)(ClientRow);
