@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
 import store from '../../';
 import FlagIcon from './Flag';
+import OsIcon from './OsIcon';
 import PingIcon from './PingIcon';
 
 interface Props extends RouteComponentProps<any> {
@@ -25,11 +26,6 @@ class ClientRow extends React.Component<Props, State> {
   public render() {
     const { client } = this.props;
 
-    const osIcon = require('@assets/os/' +
-      (this.getOperatingSystemIcon() || 'os_linux') +
-      '.png');
-
-
     return (
       <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
         <ContextMenuTrigger id={client.id} renderTag="tr">
@@ -40,7 +36,7 @@ class ClientRow extends React.Component<Props, State> {
           <td>{client.host}</td>
           <td>{client.identifier}</td>
           <td>
-            <img src={osIcon} />
+            <OsIcon os={client.os} />
             {client.os.display}
           </td>
           <td>
