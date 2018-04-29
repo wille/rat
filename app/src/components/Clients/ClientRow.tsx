@@ -49,6 +49,7 @@ class ClientRow extends React.Component<Props, State> {
       <ContextMenuTrigger id={client.id} renderTag="tr">
         <td>
           <img src={flagIcon} />
+          {client.country || 'Unknown'}
         </td>
         <td>{client.host}</td>
         <td>{client.identifier}</td>
@@ -58,7 +59,7 @@ class ClientRow extends React.Component<Props, State> {
         </td>
         <td>
           <img src={pingIcon} />
-          {client.ping}
+          {client.ping + ' ms'}
         </td>
 
         <ContextMenu id={client.id}>
