@@ -9,6 +9,7 @@ import { selectClient, selectProcessList } from '@app/reducers';
 import { connect } from 'react-redux';
 import ProcessMessage from '../../../shared/src/messages/process';
 import { ProcessSubscription } from './Subscription';
+import withClient from '@app/withClient';
 
 interface Props {
   client: Client;
@@ -56,6 +57,5 @@ class ProcessView extends React.Component<Props> {
 }
 
 export default connect(state => ({
-  client: selectClient(state),
   processes: selectProcessList(state),
-}))(ProcessView);
+}))(withClient(ProcessView));

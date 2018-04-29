@@ -1,12 +1,13 @@
 import Client from '@app/client';
 import { selectClient, selectFilesList } from '@app/reducers';
-import { DirectorySubscription } from '../Subscription';
+import withClient from '@app/withClient';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';
 import { FileEntry } from '@templates';
 import * as React from 'react';
 import { Breadcrumb, Nav, Navbar, NavItem, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { DirectorySubscription } from '../Subscription';
 
 interface Props {
   client: Client;
@@ -187,6 +188,5 @@ class FileSystem extends React.Component<Props, State> {
 }
 
 export default connect(state => ({
-  client: selectClient(state),
-  filesList: selectFilesList(state)
-}))(FileSystem);
+  filesList: selectFilesList(state),
+}))(withClient(FileSystem));

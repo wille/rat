@@ -64,6 +64,10 @@ class Client implements ClientProperties {
     m.data._id = this.id;
     ControlSocket.send(m);
   }
+
+  public open(path: string) {
+    document.location.href = '/view/' + this.id + '/' + path;
+  }
 }
 
 export default Client;

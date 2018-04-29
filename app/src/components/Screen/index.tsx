@@ -1,6 +1,6 @@
 import Client from '@app/client';
-import { ScreenSubscription } from '../Subscription';
 import { selectClient, selectScreenBuffer} from '@app/reducers';
+import withClient from '@app/withClient';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
 import { Monitor } from '@shared/system';
@@ -9,6 +9,7 @@ import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { ScreenSubscription } from '../Subscription';
 import Stream from './Stream';
 
 interface Props {
@@ -133,6 +134,5 @@ class Screen extends React.Component<Props> {
 }
 
 export default connect(state => ({
-  client: selectClient(state),
   frame: selectScreenBuffer(state),
-}))(Screen);
+}))(withClient(Screen));
