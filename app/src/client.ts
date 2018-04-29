@@ -37,7 +37,7 @@ class Client implements ClientProperties {
     this.username = properties.username || this.username;
     this.hostname = properties.hostname || this.hostname;
     this.monitors = properties.monitors || this.monitors;
-    this.os = properties.os || this.os;
+    this.os = properties.os || this.os || { display: null, type: 'Unknown' };
   }
 
   public send(m: Message) {
