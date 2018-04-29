@@ -34,8 +34,9 @@ class ClientRow extends React.Component<Props, State> {
   };
   public render() {
     const { client } = this.props;
-    const flagIcon = require('@assets/flags/' +
-      (client.flag || 'unknown') +
+
+    const flagIcon = require('flag-icons/flags/flags-iso/flat/24/' +
+      (client.flag || '_unknown') +
       '.png');
     const osIcon = require('@assets/os/' +
       (this.getOperatingSystemIcon() || 'os_linux') +

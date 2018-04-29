@@ -112,8 +112,10 @@ class Client implements ClientProperties {
    */
   public getClientProperties() {
     if (!this.lookup) {
-      this.lookup = geoip.lookup(this.host) || {
-        country: 'unknown'
+      const lookup = geoip.lookup(this.host);
+
+      this.lookup = lookup || {
+        country: null,
       };
     }
 
@@ -121,7 +123,7 @@ class Client implements ClientProperties {
       id: this.id,
       host: this.host,
       country: this.lookup.country,
-      flag: this.lookup.country.toLowerCase()
+      flag: this.lookup.country && this.lookup.country.toLowerCase()
     } as ClientProperties;
   }
 
