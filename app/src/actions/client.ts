@@ -2,9 +2,13 @@ import Client from '@app/client';
 import { ClientTemplate } from '@shared/templates';
 import { Action } from '../constants';
 
-export const addClient = (data: ClientTemplate) => ({
+export const initClients = () => ({
+  type: Action.CLIENTS_LIST_INIT,
+});
+
+export const addClients = (...data: ClientTemplate[]) => ({
   type: Action.CLIENT_CONNECT,
-  payload: new Client(data.id, data.host, data),
+  payload: data.map(data => new Client(data.id, data.host, data)),
 });
 
 export const removeClient = (client: { _id?: string }) => ({

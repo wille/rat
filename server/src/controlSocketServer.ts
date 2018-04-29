@@ -42,6 +42,7 @@ class ControlSocketServer {
     // broadcast all connected clients to new websocket connection
     clientServer.clients.forEach((c) => {
       client.emit(new ClientMessage({
+        initial: true,
         type: ClientUpdateType.ADD,
         ...c.getClientProperties(),
         ...c.getSystemProperties()

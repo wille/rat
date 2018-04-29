@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
 
-import { selectClient } from '@app/reducers';
+import { selectClient, selectIsLoadingClients } from '@app/reducers';
 import { connect } from 'react-redux';
 
+import { ClientSubscription } from '@components/Subscription';
 import Clients from './components/Clients';
 import Card from './components/Clients/Card';
 import FileSystem from './components/FileSystem';
 import Process from './components/Process';
 import Screen from './components/Screen';
 
-const Views = ({ client }) => (
+const Views = ({ client, isLoading }) => (
   <div>
-    {client ? (
+    {!isLoading ? (
       <div>
         <Card />
         <Switch>
@@ -29,13 +30,16 @@ const Views = ({ client }) => (
 
 const Views2 = connect(state => ({
   client: selectClient(state),
+  isLoading: selectIsLoadingClients(state),
 }))(Views);
 
 const App = () => (
-  <Switch>
-    <Route path="/" exact component={Clients} />
-    <Route path="/view/" component={Views2} />
-  </Switch>
+  <ClientSubscription>
+    <Switch>
+      <Route path="/" exact component={Clients} />
+      <Route path="/view/" component={Views2} />
+    </Switch>
+  </ClientSubscription>
 );
 
 export default App;

@@ -1,4 +1,9 @@
-import { addClient, removeClient, updateClient } from '@app/actions';
+import {
+  addClients,
+  initClients,
+  removeClient,
+  updateClient,
+} from '@app/actions';
 import store from '../';
 import {
   ClientTemplate,
@@ -12,7 +17,10 @@ import ControlSocket from '../control';
 export default (data: ClientTemplate) => {
   switch (data.type) {
     case ClientUpdateType.ADD:
-      store.dispatch(addClient(data));
+      store.dispatch(addClients(data));
+      if (data.initial) {
+        store.dispatch(initClients());
+      }
       break;
     case ClientUpdateType.UPDATE:
       store.dispatch(updateClient(data));
