@@ -49,10 +49,12 @@
   "dependencies": {
     "bootstrap": "^4.1.0",
     "bson": "^2.0.6",
+    "emotion": "^9.1.2",
     "flag-icons": "^1.0.2",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.3.2",
+    "react-emotion": "^9.1.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",

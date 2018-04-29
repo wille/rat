@@ -7,6 +7,7 @@ import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { connect } from 'react-redux';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
 import store from '../../';
+import FlagIcon from './Flag';
 
 interface Props extends RouteComponentProps<any> {
   client: Client;
@@ -20,13 +21,9 @@ interface State {
 }
 
 class ClientRow extends React.Component<Props, State> {
-
   public render() {
     const { client } = this.props;
 
-    const flagIcon = require('flag-icons/flags/flags-iso/flat/24/' +
-      (client.flag || '_unknown') +
-      '.png');
     const osIcon = require('@assets/os/' +
       (this.getOperatingSystemIcon() || 'os_linux') +
       '.png');
@@ -38,7 +35,7 @@ class ClientRow extends React.Component<Props, State> {
       <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
         <ContextMenuTrigger id={client.id} renderTag="tr">
           <td>
-            <img src={flagIcon} />
+            <FlagIcon client={client} />
             {client.country || 'Unknown'}
           </td>
           <td>{client.host}</td>
