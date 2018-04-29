@@ -25,6 +25,4 @@ const Card = ({ client }: Props) => (
   </Container>
 );
 
-export default connect(state => ({
-  client: selectClient(state),
-}))(Card);
+export default Card;
