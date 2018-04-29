@@ -1,6 +1,6 @@
 import Client from '@app/client';
 import * as EventHandler from '@app/messages';
-import { ClientSubscription } from '@app/messages';
+import { ClientSubscription } from '../Subscription';
 import { MessageType } from '@shared/types';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';

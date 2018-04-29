@@ -8,7 +8,7 @@ import Client from '@app/client';
 import { selectClient, selectProcessList } from '@app/reducers';
 import { connect } from 'react-redux';
 import ProcessMessage from '../../../shared/src/messages/process';
-import { ProcessSubscription } from '@app/messages';
+import { ProcessSubscription } from './Subscription';
 
 interface Props {
   client: Client;

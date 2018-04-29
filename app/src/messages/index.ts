@@ -6,12 +6,6 @@ import { MessageTemplate } from '@templates';
 import withProps from 'recompose/withProps';
 import store from '../index';
 
-import Handler from '../components/Handler';
-import clientHandler from './clients';
-import directoryHandler from './directory';
-import processHandler from './process';
-import screenHandler from './screen';
-
 export function emit(message: Message) {
   const clients = store
     .getState()
@@ -31,30 +25,3 @@ export function publishSubscriptions() {
     );
   });
 }
-
-const ClientSubscription = withProps({
-  type: MessageType.Client,
-  handler: clientHandler,
-})(Handler);
-
-const DirectorySubscription = withProps({
-  type: MessageType.Directory,
-  handler: directoryHandler,
-})(Handler);
-
-const ScreenSubscription = withProps({
-  type: MessageType.Screen,
-  handler: screenHandler,
-})(Handler);
-
-const ProcessSubscription = withProps({
-  type: MessageType.Process,
-  handler: processHandler,
-})(Handler);
-
-export {
-  ClientSubscription,
-  DirectorySubscription,
-  ScreenSubscription,
-  ProcessSubscription,
-};

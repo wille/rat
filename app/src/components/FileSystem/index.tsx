@@ -1,6 +1,6 @@
 import Client from '@app/client';
 import { selectClient, selectFilesList } from '@app/reducers';
-import { DirectorySubscription } from '@messages/index';
+import { DirectorySubscription } from '../Subscription';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';
 import { FileEntry } from '@templates';

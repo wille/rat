@@ -1,5 +1,5 @@
 import Client from '@app/client';
-import { ScreenSubscription } from '@app/messages';
+import { ScreenSubscription } from '../Subscription';
 import { selectClient, selectScreenBuffer} from '@app/reducers';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
