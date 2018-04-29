@@ -62,13 +62,13 @@ class ClientRow extends React.Component<Props, State> {
         </td>
 
         <ContextMenu id={client.id}>
-          <MenuItem onClick={() => this.redirect('/u/screen', client)}>
+          <MenuItem onClick={() => this.redirect('/view/screen', client)}>
             View Screen
           </MenuItem>
-          <MenuItem onClick={() => this.redirect('/u/fs', client)}>
+          <MenuItem onClick={() => this.redirect('/view/fs', client)}>
             File System
           </MenuItem>
-          <MenuItem onClick={() => this.redirect('/u/process', client)}>
+          <MenuItem onClick={() => this.redirect('/view/process', client)}>
             Processes
           </MenuItem>
         </ContextMenu>
