@@ -1,6 +1,7 @@
 import { setActiveClient } from '@app/actions';
 import Client from '@app/client';
 import { selectClient } from '@app/reducers';
+import ClientUpdate from '@components/ClientUpdate';
 import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
 import { connect } from 'react-redux';
@@ -19,19 +20,7 @@ interface State {
 }
 
 class ClientRow extends React.Component<Props, State> {
-  componentWillMount() {
-    this.setState({
-      unsubscribe: store.subscribe(this.subscribe),
-    });
-  }
 
-  componentWillUnmount() {
-    this.state.unsubscribe();
-  }
-
-  subscribe = () => {
-    this.forceUpdate();
-  };
   public render() {
     const { client } = this.props;
 
@@ -46,34 +35,36 @@ class ClientRow extends React.Component<Props, State> {
       '.png');
 
     return (
-      <ContextMenuTrigger id={client.id} renderTag="tr">
-        <td>
-          <img src={flagIcon} />
-          {client.country || 'Unknown'}
-        </td>
-        <td>{client.host}</td>
-        <td>{client.identifier}</td>
-        <td>
-          <img src={osIcon} />
-          {client.os.display}
-        </td>
-        <td>
-          <img src={pingIcon} />
-          {client.ping + ' ms'}
-        </td>
+      <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
+        <ContextMenuTrigger id={client.id} renderTag="tr">
+          <td>
+            <img src={flagIcon} />
+            {client.country || 'Unknown'}
+          </td>
+          <td>{client.host}</td>
+          <td>{client.identifier}</td>
+          <td>
+            <img src={osIcon} />
+            {client.os.display}
+          </td>
+          <td>
+            <img src={pingIcon} />
+            {client.ping + ' ms'}
+          </td>
 
-        <ContextMenu id={client.id}>
-          <MenuItem onClick={() => this.redirect('/view/screen', client)}>
-            View Screen
-          </MenuItem>
-          <MenuItem onClick={() => this.redirect('/view/fs', client)}>
-            File System
-          </MenuItem>
-          <MenuItem onClick={() => this.redirect('/view/process', client)}>
-            Processes
-          </MenuItem>
-        </ContextMenu>
-      </ContextMenuTrigger>
+          <ContextMenu id={client.id}>
+            <MenuItem onClick={() => this.redirect('/view/screen', client)}>
+              View Screen
+            </MenuItem>
+            <MenuItem onClick={() => this.redirect('/view/fs', client)}>
+              File System
+            </MenuItem>
+            <MenuItem onClick={() => this.redirect('/view/process', client)}>
+              Processes
+            </MenuItem>
+          </ContextMenu>
+        </ContextMenuTrigger>
+      </ClientUpdate>
     );
   }
 
