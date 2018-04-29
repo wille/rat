@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
 
-import { selectClient, selectLoadingClient } from '@app/reducers';
+import { selectClient } from '@app/reducers';
 import { connect } from 'react-redux';
 
 import withClient from '@app/withClient';

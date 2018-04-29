@@ -1,10 +1,8 @@
 import { Action } from '../constants';
 
-const currentClient = localStorage.getItem('currentClient');
-
 const initialState = {
+  isLoading: true,
   current: null,
-  loading: currentClient ? JSON.parse(currentClient) : false,
   list: [],
 };
 
@@ -22,13 +20,6 @@ export default (state = initialState, action) => {
 
       return { ...state };
     case Action.SET_CURRENT_CLIENT:
-      localStorage.setItem(
-        'currentClient',
-        JSON.stringify({
-          id: action.payload.id,
-          host: action.payload.host,
-        })
-      );
       return {
         ...state,
         current: action.payload,
@@ -41,8 +32,7 @@ export default (state = initialState, action) => {
     case Action.CLIENTS_LIST_INIT:
       return {
         ...state,
-        loading: false,
-        current: state.list.find(client => client.id === state.loading.id),
+        isLoading: false,
       };
     default:
       return state;
@@ -51,4 +41,4 @@ export default (state = initialState, action) => {
 
 export const selectClients = state => state.client.list;
 export const selectClient = state => state.client.current;
-export const selectLoadingClient = state => state.client.loading;
+export const selectIsLoadingClients = state => state.client.isLoading;
