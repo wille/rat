@@ -26,7 +26,7 @@ export default (state = initialState, action) => {
     case Action.CLIENT_DISCONNECT:
       return {
         ...state,
-        clients: state.list.filter(c => c.id !== action.payload.id),
+        list: state.list.filter(c => c.id !== action.payload.id),
       };
     default:
       return state;
