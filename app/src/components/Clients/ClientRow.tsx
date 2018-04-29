@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
 import store from '../../';
 import FlagIcon from './Flag';
+import PingIcon from './PingIcon';
 
 interface Props extends RouteComponentProps<any> {
   client: Client;
@@ -27,9 +28,7 @@ class ClientRow extends React.Component<Props, State> {
     const osIcon = require('@assets/os/' +
       (this.getOperatingSystemIcon() || 'os_linux') +
       '.png');
-    const pingIcon = require('@assets/ping/' +
-      (this.getPingIcon() || 'ping5') +
-      '.png');
+
 
     return (
       <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
@@ -45,7 +44,7 @@ class ClientRow extends React.Component<Props, State> {
             {client.os.display}
           </td>
           <td>
-            <img src={pingIcon} />
+            <PingIcon ping={client.ping} />
             {client.ping + ' ms'}
           </td>
 
@@ -114,28 +113,6 @@ class ClientRow extends React.Component<Props, State> {
     }
 
     return icon;
-  }
-
-  private getPingIcon() {
-    const { client } = this.props;
-    const ms = client.ping;
-    let n;
-
-    if (ms < 100) {
-      n = 0;
-    } else if (ms < 150) {
-      n = 1;
-    } else if (ms < 250) {
-      n = 2;
-    } else if (ms < 350) {
-      n = 3;
-    } else if (ms < 500) {
-      n = 4;
-    } else {
-      n = 5;
-    }
-
-    return 'ping' + n;
   }
 }
 
