@@ -4,11 +4,13 @@ import withClient from '@app/withClient';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';
 import { FileEntry } from '@templates';
+import * as path from 'path';
 import * as React from 'react';
 import { Breadcrumb, Nav, Navbar, NavItem, Table } from 'react-bootstrap';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { Z_DEFAULT_COMPRESSION } from 'zlib';
 import { DirectorySubscription } from '../Subscription';
 import Row from './Row';
 
@@ -18,8 +20,8 @@ interface Props {
 }
 
 interface State {
-  depth: string[];
-  currentDirectory: FileEntry;
+  currentDirectory: string;
+  utils: any;
 }
 
 const BreadcrumbItem = Breadcrumb.Item as any;
@@ -29,39 +31,53 @@ const BreadcrumbContainer = styled('div')`
 `;
 
 class FileSystem extends React.Component<Props, State> {
-  state: State = {
-    depth: [],
-    currentDirectory: null,
-  };
+  constructor(props) {
+    super(props);
 
-  public componentDidMount() {
+    this.state = {
+      currentDirectory: '',
+      utils: props.client.os.type === 'Windows' ? path.win32 : path.posix,
+    };
+  }
+
+  componentDidMount() {
     this.browse();
   }
 
-  public render() {
-    const { filesList } = this.props;
-    const { depth } = this.state;
+  splitPath = (path: string) => {
+    const { client } = this.props;
 
-    let current = this.props.client.os.type === 'Windows' ? '' : '/';
+    return path.split(client.separator).filter(x => x.length > 0);
+  };
 
-    const tree = depth.filter(part => part.length > 0);
+  render() {
+    const { filesList, client } = this.props;
+    const { currentDirectory } = this.state;
+
+    const paths = this.splitPath(currentDirectory);
 
     return (
       <DirectorySubscription>
         <BreadcrumbContainer>
           <Breadcrumb>
-            {tree.map((part, index) => {
-              const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
-              current += part + this.props.client.separator;
-              const path = current;
+            {client.os.type !== 'Windows' && (
+              <BreadcrumbItem active={false} onClick={() => this.browse()}>
+                root
+              </BreadcrumbItem>
+            )}
 
+            {paths.map((part, index) => {
               return (
                 <BreadcrumbItem
                   key={part}
-                  active={index === tree.length - 1}
-                  // onClick={() => this.browse(path, true)}
+                  active={false}
+                  onClick={() =>
+                    this.browse(
+                      paths.slice(0, index + 1).join(client.separator)
+                    )
+                  }
                 >
-                  {elem}
+                  {part}
                 </BreadcrumbItem>
               );
             })}
@@ -90,28 +106,33 @@ class FileSystem extends React.Component<Props, State> {
     );
   }
 
-  private navigate(item: any) {
-    console.log(item.target);
-  }
-
-  private browse(file?: FileEntry) {
+  browse = (file?: FileEntry | string) => {
     const { client } = this.props;
+    const { utils } = this.state;
 
-    if (!file || file.directory) {
-      const path = file ? file.path + client.separator + file.name : '';
+    let path = '';
 
-      this.setState({
-        currentDirectory: file,
-      });
-
-      this.props.client.send(
-        new BrowseMessage({
-          id: this.props.client.id,
-          path,
-        })
-      );
+    if (typeof file === 'string') {
+      path = file;
+    } else if (file && file.directory) {
+      path = file ? file.path + client.separator + file.name : '';
     }
-  }
+
+    if (client.os.type !== 'Windows' && path[0] !== '/') {
+      path = '/' + path;
+    }
+
+    this.setState({
+      currentDirectory: path,
+    });
+
+    this.props.client.send(
+      new BrowseMessage({
+        id: this.props.client.id,
+        path,
+      })
+    );
+  };
 }
 
 export default compose(
