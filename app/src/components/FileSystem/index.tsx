@@ -10,6 +10,7 @@ import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { DirectorySubscription } from '../Subscription';
+import Row from './Row';
 
 interface Props {
   client: Client;
@@ -76,23 +77,13 @@ class FileSystem extends React.Component<Props, State> {
             </tr>
           </thead>
           <tbody>
-            {filesList.map(file => {
-              const size = file.directory ? '' : file.size;
-              const icon = require('@assets/files/' +
-                this.getFileIcon(file.path, file.directory) +
-                '.png');
-
-              return (
-                <tr key={file.path} onClick={() => this.browse(file.path)}>
-                  <td>
-                    <img src={icon} />
-                    {file.path}
-                  </td>
-                  <td>{size}</td>
-                  <td>{file.time}</td>
-                </tr>
-              );
-            })}
+            {filesList.map(file => (
+              <Row
+                key={file.path}
+                file={file}
+                onClick={() => this.browse(file.path)}
+              />
+            ))}
           </tbody>
         </Table>
       </DirectorySubscription>
@@ -139,51 +130,6 @@ class FileSystem extends React.Component<Props, State> {
         path: this.currentDirectory,
       })
     );
-  }
-
-  private getFileIcon(name: string, isDir?: boolean) {
-    if (isDir) {
-      return 'folder';
-    }
-
-    if (name.indexOf('.') !== -1) {
-      const ext = name
-        .substring(name.lastIndexOf('.'), name.length)
-        .toLowerCase();
-      let type: string;
-
-      switch (ext) {
-        case '.zip':
-        case '.tar':
-        case '.gz':
-          type = 'archive';
-          break;
-        case '.js':
-        case '.sh':
-        case '.bash':
-          type = 'script';
-          break;
-        case '.bat':
-        case '.cmd':
-        case '.exe':
-        case '.jar':
-          type = 'application';
-          break;
-        case '.png':
-        case '.jpg':
-        case '.jpeg':
-        case '.gif':
-          type = 'image';
-          break;
-        default:
-          type = 'file';
-          break;
-      }
-
-      return type;
-    }
-
-    return 'file';
   }
 }
 
