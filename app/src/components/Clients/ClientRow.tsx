@@ -4,6 +4,8 @@ import { selectClient } from '@app/reducers';
 import ClientUpdate from '@components/ClientUpdate';
 import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
+import { css } from 'react-emotion';
+import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
@@ -15,42 +17,59 @@ import PingIcon from './PingIcon';
 interface Props extends RouteComponentProps<any> {
   client: Client;
   history: History;
-  currentClient: Client;
-  setActiveClient: typeof setActiveClient;
 }
 
-interface State {
-  unsubscribe: () => void;
-}
+const styles = {
+  row: css`
+    &:hover {
+      background-color: #f7f7f7;
+    }
+  `,
+};
 
-class ClientRow extends React.Component<Props, State> {
+const Cell = styled('td')`
+  * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  & > div {
+    margin-right: 6px;
+  }
+`;
+
+class ClientRow extends React.Component<Props> {
   public render() {
     const { client } = this.props;
 
     return (
       <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
-        <ContextMenuTrigger id={client.id} renderTag="tr">
-          <td>
+        <ContextMenuTrigger
+          id={client.id}
+          renderTag="tr"
+          attributes={{ className: styles.row }}
+        >
+          <Cell>
             <FlagIcon client={client} />
             {client.country || 'Unknown'}
-          </td>
-          <td>{client.host}</td>
-          <td>{client.identifier}</td>
-          <td>
+          </Cell>
+          <Cell>{client.host}</Cell>
+          <Cell>{client.identifier}</Cell>
+          <Cell>
             <OsIcon os={client.os} />
             {client.os.display}
-          </td>
-          <td>
+          </Cell>
+          <Cell>
             <PingIcon ping={client.ping} />
             {client.ping + ' ms'}
-          </td>
+          </Cell>
 
           <ContextMenu id={client.id}>
-            <MenuItem onClick={() => client.open('screen')}>
+            <MenuItem onClick={() => this.redirect('screen')}>
               View Screen
             </MenuItem>
-            <MenuItem onClick={() => client.open('fs')}>File System</MenuItem>
-            <MenuItem onClick={() => client.open('process')}>
+            <MenuItem onClick={() => this.redirect('fs')}>File System</MenuItem>
+            <MenuItem onClick={() => this.redirect('process')}>
               Processes
             </MenuItem>
           </ContextMenu>
@@ -59,20 +78,9 @@ class ClientRow extends React.Component<Props, State> {
     );
   }
 
-  redirect(path: string, user: Client) {
-    this.props.setActiveClient(user);
-    this.props.history.push(path);
-  }
+  redirect = (path: string) => {
+    this.props.history.push(`/view/${this.props.client.id}/${path}`);
+  };
 }
 
-export default compose<any, any>(
-  connect(
-    state => ({
-      currentClient: selectClient(state),
-    }),
-    {
-      setActiveClient,
-    }
-  ),
-  withRouter
-)(ClientRow);
+export default withRouter(ClientRow);
