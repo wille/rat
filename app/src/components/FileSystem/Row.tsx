@@ -15,15 +15,18 @@ const StyledRow = styled('tr')`
 
 interface Props {
   file: FileEntry;
-  onClick: (file?: FileEntry) => void;
+  onClick: (
+    file?: FileEntry,
+    e?: React.MouseEvent<HTMLTableRowElement>
+  ) => void;
 }
 
-const Row = ({ file }: Props) => {
+const Row = ({ file, onClick }: Props) => {
   const fileSize = file.directory ? '' : file.size;
   const icon = requireFileIcon(file.path, file.directory);
 
   return (
-    <StyledRow>
+    <StyledRow onClick={e => onClick(file, e)}>
       <td>
         <AlignChildren>
           <StaticImage size="16px" src={icon} />
