@@ -19,6 +19,7 @@ interface Props {
 
 interface State {
   depth: string[];
+  currentDirectory: FileEntry;
 }
 
 const BreadcrumbItem = Breadcrumb.Item as any;
@@ -30,12 +31,11 @@ const BreadcrumbContainer = styled('div')`
 class FileSystem extends React.Component<Props, State> {
   state: State = {
     depth: [],
+    currentDirectory: null,
   };
 
-  private currentDirectory: string;
-
   public componentDidMount() {
-    this.browse('');
+    this.browse();
   }
 
   public render() {
@@ -59,7 +59,7 @@ class FileSystem extends React.Component<Props, State> {
                 <BreadcrumbItem
                   key={part}
                   active={index === tree.length - 1}
-                  onClick={() => this.browse(path, true)}
+                  // onClick={() => this.browse(path, true)}
                 >
                   {elem}
                 </BreadcrumbItem>
@@ -79,9 +79,9 @@ class FileSystem extends React.Component<Props, State> {
           <tbody>
             {filesList.map(file => (
               <Row
-                key={file.path}
+                key={file.path + file.name}
                 file={file}
-                onClick={() => this.browse(file.path)}
+                onClick={() => this.browse(file)}
               />
             ))}
           </tbody>
@@ -94,42 +94,23 @@ class FileSystem extends React.Component<Props, State> {
     console.log(item.target);
   }
 
-  private browse(path: string, absolute: boolean = false) {
-    const separator = this.props.client.separator;
+  private browse(file?: FileEntry) {
+    const { client } = this.props;
 
-    if (!this.currentDirectory) {
-      this.currentDirectory = separator === '/' ? '/' : '';
+    if (!file || file.directory) {
+      const path = file ? file.path + client.separator + file.name : '';
+
+      this.setState({
+        currentDirectory: file,
+      });
+
+      this.props.client.send(
+        new BrowseMessage({
+          id: this.props.client.id,
+          path,
+        })
+      );
     }
-
-    if (path !== '') {
-      if (absolute) {
-        this.currentDirectory = path;
-      } else {
-        path = this.currentDirectory + path + separator;
-        this.currentDirectory = path;
-      }
-    }
-
-    const paths = path.split(separator);
-    let depth = '';
-
-    if (separator === '/') {
-      paths.splice(0, 1);
-      depth = '/';
-    }
-
-    this.setState({
-      depth: paths,
-    });
-
-    console.log('browsing', path, this.currentDirectory);
-
-    this.props.client.send(
-      new BrowseMessage({
-        id: this.props.client.id,
-        path: this.currentDirectory,
-      })
-    );
   }
 }
 

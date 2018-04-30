@@ -1,12 +1,13 @@
 import MessageTemplate from "./template";
 
 export interface FileEntry {
-    path: string;
-    directory: boolean;
-    size: string;
-    time: string;
+  directory: boolean;
+  name: string;
+  path: string;
+  size: string;
+  time: string;
 }
 
 export interface DirectoryContentTemplate extends MessageTemplate {
-    files: FileEntry[];
+  files: FileEntry[];
 }

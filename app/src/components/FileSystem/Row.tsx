@@ -21,6 +21,8 @@ interface Props {
   ) => void;
 }
 
+const fileDisplayName = (file: FileEntry) => file.name;
+
 const Row = ({ file, onClick }: Props) => {
   const fileSize = file.directory ? '' : file.size;
   const icon = requireFileIcon(file.path, file.directory);
@@ -30,7 +32,7 @@ const Row = ({ file, onClick }: Props) => {
       <td>
         <AlignChildren>
           <StaticImage size="16px" src={icon} />
-          {file.path}
+          {fileDisplayName(file)}
         </AlignChildren>
       </td>
       <td>{fileSize}</td>
