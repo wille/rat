@@ -74,7 +74,7 @@ class FileSystem extends React.Component<Props, State> {
               return (
                 <BreadcrumbItem
                   key={part}
-                  active={false}
+                  active={index === paths.length - 1}
                   onClick={() =>
                     this.browse(
                       paths.slice(0, index + 1).join(client.separator)
