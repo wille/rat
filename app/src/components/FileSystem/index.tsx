@@ -1,5 +1,10 @@
+import { setCurrentDirectory } from '@app/actions';
 import Client from '@app/client';
-import { selectClient, selectFilesList } from '@app/reducers';
+import {
+  selectClient,
+  selectCurrentDirectory,
+  selectFilesList,
+} from '@app/reducers';
 import withClient from '@app/withClient';
 import BrowseMessage from '@shared/messages/browse';
 import { MessageType } from '@shared/types';
@@ -17,10 +22,11 @@ import Row from './Row';
 interface Props {
   client: Client;
   filesList: FileEntry[];
+  currentDirectory: string;
+  setCurrentDirectory: typeof setCurrentDirectory;
 }
 
 interface State {
-  currentDirectory: string;
   utils: any;
 }
 
@@ -35,7 +41,6 @@ class FileSystem extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      currentDirectory: '',
       utils: props.client.os.type === 'Windows' ? path.win32 : path.posix,
     };
   }
@@ -51,8 +56,7 @@ class FileSystem extends React.Component<Props, State> {
   };
 
   render() {
-    const { filesList, client } = this.props;
-    const { currentDirectory } = this.state;
+    const { filesList, client, currentDirectory } = this.props;
 
     const paths = this.splitPath(currentDirectory);
 
@@ -107,7 +111,7 @@ class FileSystem extends React.Component<Props, State> {
   }
 
   browse = (file?: FileEntry | string) => {
-    const { client } = this.props;
+    const { client, setCurrentDirectory } = this.props;
     const { utils } = this.state;
 
     let path = '';
@@ -122,9 +126,7 @@ class FileSystem extends React.Component<Props, State> {
       path = '/' + path;
     }
 
-    this.setState({
-      currentDirectory: path,
-    });
+    setCurrentDirectory(path);
 
     this.props.client.send(
       new BrowseMessage({
@@ -136,8 +138,14 @@ class FileSystem extends React.Component<Props, State> {
 }
 
 export default compose(
-  connect(state => ({
-    filesList: selectFilesList(state),
-  })),
+  connect(
+    state => ({
+      filesList: selectFilesList(state),
+      currentDirectory: selectCurrentDirectory(state),
+    }),
+    {
+      setCurrentDirectory,
+    }
+  ),
   withClient
 )(FileSystem);

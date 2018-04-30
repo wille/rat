@@ -13,7 +13,6 @@ import (
 
 type FileData struct {
 	Dir    bool   "directory"
-	Path   string "path"
 	Name   string "name"
 	Edited string "time"
 	Size   int64
@@ -51,7 +50,6 @@ func (packet *DirectoryPacket) Init() {
 
 		packet.Files = append(packet.Files, FileData{
 			file.IsDir(),
-			packet.Path,
 			file.Name(),
 			file.ModTime().Format("2006-01-02 15:04:05"),
 			file.Size(),

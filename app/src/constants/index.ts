@@ -12,6 +12,7 @@ export const enum Action {
   SET_CURRENT_CLIENT,
 
   SET_FILE_LIST,
+  SET_CURRENT_DIRECTORY,
 
   PROCESS_SET_LIST,
 

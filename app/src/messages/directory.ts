@@ -1,10 +1,15 @@
+import { setFilesList } from '@app/actions';
+import { selectCurrentDirectory } from '@app/reducers';
 import { DirectoryContentTemplate } from '@templates';
 import store from '../';
-import { setFilesList } from '@app/actions';
 
 export default (data: DirectoryContentTemplate) => {
-  const folders = data.files.filter(file => file.directory);
-  const files = data.files.filter(file => !file.directory);
-
-  store.dispatch(setFilesList([...folders, ...files]));
+  store.dispatch(
+    setFilesList(
+      data.files.sort((a, b) => +b.directory - +a.directory).map(file => ({
+        ...file,
+        path: selectCurrentDirectory(store.getState()),
+      }))
+    )
+  );
 };
