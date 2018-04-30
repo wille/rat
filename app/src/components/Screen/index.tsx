@@ -1,5 +1,5 @@
 import Client from '@app/client';
-import { selectClient, selectScreenBuffer} from '@app/reducers';
+import { selectClient, selectScreenBuffer } from '@app/reducers';
 import withClient from '@app/withClient';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from '@shared/messages/stream';
@@ -9,6 +9,7 @@ import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { ScreenSubscription } from '../Subscription';
 import Stream from './Stream';
 
@@ -133,6 +134,9 @@ class Screen extends React.Component<Props> {
   }
 }
 
-export default connect(state => ({
-  frame: selectScreenBuffer(state),
-}))(withClient(Screen));
+export default compose(
+  connect(state => ({
+    frame: selectScreenBuffer(state),
+  })),
+  withClient
+)(Screen);

@@ -7,6 +7,7 @@ import { FileEntry } from '@templates';
 import * as React from 'react';
 import { Breadcrumb, Nav, Navbar, NavItem, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { DirectorySubscription } from '../Subscription';
 
 interface Props {
@@ -187,6 +188,9 @@ class FileSystem extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => ({
-  filesList: selectFilesList(state),
-}))(withClient(FileSystem));
+export default compose(
+  connect(state => ({
+    filesList: selectFilesList(state),
+  })),
+  withClient
+)(FileSystem);

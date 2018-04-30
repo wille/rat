@@ -6,10 +6,11 @@ import { Table } from 'react-bootstrap';
 
 import Client from '@app/client';
 import { selectClient, selectProcessList } from '@app/reducers';
+import withClient from '@app/withClient';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import ProcessMessage from '../../../shared/src/messages/process';
 import { ProcessSubscription } from './Subscription';
-import withClient from '@app/withClient';
 
 interface Props {
   client: Client;
@@ -22,7 +23,7 @@ class ProcessView extends React.Component<Props> {
   }
 
   render() {
-    const { processes } = this.props;;
+    const { processes } = this.props;
 
     return (
       <ProcessSubscription>
@@ -56,6 +57,9 @@ class ProcessView extends React.Component<Props> {
   }
 }
 
-export default connect(state => ({
-  processes: selectProcessList(state),
-}))(withClient(ProcessView));
+export default compose(
+  connect(state => ({
+    processes: selectProcessList(state),
+  })),
+  withClient
+)(ProcessView);
