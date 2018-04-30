@@ -1,14 +1,12 @@
+import * as path from 'path';
+
 export const requireFileIcon = (name: string, isDir?: boolean) => {
   let type = 'file';
 
   if (isDir) {
     type = 'folder';
-  }
-
-  if (name.indexOf('.') !== -1) {
-    const ext = name
-      .substring(name.lastIndexOf('.'), name.length)
-      .toLowerCase();
+  } else {
+    const ext = path.extname(name);
 
     switch (ext) {
       case '.zip':
