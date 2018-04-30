@@ -6,6 +6,7 @@ import { MessageType } from '@shared/types';
 import { FileEntry } from '@templates';
 import * as React from 'react';
 import { Breadcrumb, Nav, Navbar, NavItem, Table } from 'react-bootstrap';
+import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { DirectorySubscription } from '../Subscription';
@@ -20,6 +21,10 @@ interface State {
 }
 
 const BreadcrumbItem = Breadcrumb.Item as any;
+
+const BreadcrumbContainer = styled('div')`
+  padding: 12px;
+`;
 
 class FileSystem extends React.Component<Props, State> {
   state: State = {
@@ -42,13 +47,7 @@ class FileSystem extends React.Component<Props, State> {
 
     return (
       <DirectorySubscription>
-        <div style={{ padding: 10 }}>
-          <Navbar>
-            <Nav>
-              <NavItem>Close</NavItem>
-            </Nav>
-          </Navbar>
-
+        <BreadcrumbContainer>
           <Breadcrumb>
             {tree.map((part, index) => {
               const elem = index !== depth.length - 2 ? <a>{part}</a> : part;
@@ -66,36 +65,36 @@ class FileSystem extends React.Component<Props, State> {
               );
             })}
           </Breadcrumb>
+        </BreadcrumbContainer>
 
-          <Table bordered>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Last modified</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filesList.map(file => {
-                const size = file.directory ? '' : file.size;
-                const icon = require('@assets/files/' +
-                  this.getFileIcon(file.path, file.directory) +
-                  '.png');
+        <Table bordered>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Size</th>
+              <th>Last modified</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filesList.map(file => {
+              const size = file.directory ? '' : file.size;
+              const icon = require('@assets/files/' +
+                this.getFileIcon(file.path, file.directory) +
+                '.png');
 
-                return (
-                  <tr key={file.path} onClick={() => this.browse(file.path)}>
-                    <td>
-                      <img src={icon} />
-                      {file.path}
-                    </td>
-                    <td>{size}</td>
-                    <td>{file.time}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        </div>
+              return (
+                <tr key={file.path} onClick={() => this.browse(file.path)}>
+                  <td>
+                    <img src={icon} />
+                    {file.path}
+                  </td>
+                  <td>{size}</td>
+                  <td>{file.time}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
       </DirectorySubscription>
     );
   }
