@@ -14,18 +14,28 @@ interface Props extends RouteComponentProps<Params> {
   list: Client[];
 }
 
-export default function withClient(Component): any {
-  return withRouter(
-    connect(state => ({ list: selectClients(state) }))(
+function withClient<
+  T extends React.ComponentClass | React.StatelessComponent<any> = any
+>(Component: T) {
+  return compose(
+    withRouter,
+    connect(state => ({ list: selectClients(state) })),
+    Component =>
       class extends React.Component<Props> {
         render() {
-          const client = this.props.list.find(
-            client => client.id === this.props.match.params.id
-          );
+          const {
+            list,
+            match: {
+              params: { id },
+            },
+          } = this.props;
+
+          const client = list.find(client => client.id === id);
 
           return <Component client={client} {...this.props} />;
         }
       }
-    )
-  );
+  )(Component) as T;
 }
+
+export default withClient;
