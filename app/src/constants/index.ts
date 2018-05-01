@@ -17,4 +17,5 @@ export const enum Action {
   PROCESS_SET_LIST,
 
   SCREEN_SET_FRAME,
+  SCREEN_RESET_FPS,
 }

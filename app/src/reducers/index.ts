@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 
 import client from './client';
-import subscriptions from './subscription';
-import processes from './processes';
 import fs from './fs';
+import processes from './processes';
 import screen from './screen';
+import subscriptions from './subscription';
 
 export * from './client';
 export * from './subscription';

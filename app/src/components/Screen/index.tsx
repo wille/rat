@@ -1,5 +1,5 @@
 import Client from '@app/client';
-import { selectClient, selectScreenBuffer } from '@app/reducers';
+import { selectClient, selectScreenBuffer, selectFps } from '@app/reducers';
 import withClient from '@app/withClient';
 import ScreenHandler from '@messages/screen';
 import StreamMessage from 'shared/messages/stream';
@@ -16,6 +16,7 @@ import Stream from './Stream';
 interface Props {
   client: Client;
   frame: ScreenFrameTemplate;
+  fps: number;
 }
 
 interface State {
@@ -41,8 +42,10 @@ class Screen extends React.Component<Props> {
   }
 
   public render() {
-    const { frame } = this.props;
+    const { frame, fps } = this.props;
     const { scale, running } = this.state;
+
+    console.log(fps);
 
     return (
       <ScreenSubscription>
@@ -71,6 +74,9 @@ class Screen extends React.Component<Props> {
               </NavItem>
               <NavItem onClick={() => this.toggle()}>
                 {running ? 'Pause' : 'Start'}
+              </NavItem>
+              <NavItem>
+                {fps} FPS
               </NavItem>
             </Nav>
           </Navbar>
@@ -137,6 +143,7 @@ class Screen extends React.Component<Props> {
 export default compose(
   connect(state => ({
     frame: selectScreenBuffer(state),
+    fps: selectFps(state),
   })),
   withClient
 )(Screen);

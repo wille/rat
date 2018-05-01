@@ -9,10 +9,14 @@ import App from './App';
 import ControlSocket from './control';
 import reducers from './reducers';
 
+import fpsCounter from './fps-counter';
+
 ControlSocket.connect();
 
 const store = createStore(reducers);
 export default store;
+
+fpsCounter(store);
 
 ReactDOM.render(
   <BrowserRouter>
