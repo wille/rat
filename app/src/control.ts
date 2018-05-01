@@ -60,4 +60,4 @@ class ControlSocket {
   }
 }
 
-export default new ControlSocket('ws://localhost:3000');
+export default new ControlSocket('wss://localhost:3000');

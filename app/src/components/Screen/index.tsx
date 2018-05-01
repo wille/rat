@@ -1,15 +1,16 @@
-import Client from '@app/client';
-import { selectClient, selectScreenBuffer, selectFps } from '@app/reducers';
-import withClient from '@app/withClient';
-import ScreenHandler from '@messages/screen';
-import StreamMessage from 'shared/messages/stream';
-import { Monitor } from 'shared/system';
-import { MessageType } from 'shared/types';
-import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+
+import Client from '@app/client';
+import { selectClient, selectFps, selectScreenBuffer } from '@app/reducers';
+import withClient from '@app/withClient';
+import ScreenHandler from '@messages/screen';
+import { ScreenFrameTemplate } from '@templates';
+import StreamMessage from 'shared/messages/stream';
+import { Monitor } from 'shared/system';
+import { MessageType } from 'shared/types';
 import { ScreenSubscription } from '../Subscription';
 import Stream from './Stream';
 
@@ -45,8 +46,6 @@ class Screen extends React.Component<Props> {
     const { frame, fps } = this.props;
     const { scale, running } = this.state;
 
-    console.log(fps);
-
     return (
       <ScreenSubscription>
         <div style={{ padding: 10 }}>
@@ -75,13 +74,17 @@ class Screen extends React.Component<Props> {
               <NavItem onClick={() => this.toggle()}>
                 {running ? 'Pause' : 'Start'}
               </NavItem>
-              <NavItem>
-                {fps} FPS
-              </NavItem>
+              <NavItem>{fps} FPS</NavItem>
             </Nav>
           </Navbar>
           <div>
-            <Stream mouse keyboard data={frame} scale={scale} client={this.props.client} />
+            <Stream
+              mouse
+              keyboard
+              data={frame}
+              scale={scale}
+              client={this.props.client}
+            />
           </div>
         </div>
       </ScreenSubscription>

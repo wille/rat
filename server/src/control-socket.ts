@@ -1,5 +1,4 @@
 import { IncomingMessage } from 'http';
-import * as http from 'http';
 import * as https from 'https';
 import Message from 'shared/messages';
 import * as WebSocket from 'ws';
@@ -30,7 +29,7 @@ class ControlSocketServer {
 
   private server: WebSocket.Server;
 
-  constructor(server: https.Server | http.Server) {
+  constructor(server: https.Server) {
     this.server = new WebSocket.Server({ server });
     this.server.on('connection', (ws, req) => this.onConnection(ws, req));
   }

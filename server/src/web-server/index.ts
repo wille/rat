@@ -6,6 +6,9 @@ import * as fs from 'fs';
 import * as https from 'https';
 import * as path from 'path';
 
+import csp from './middlewares/content-security-policy';
+import spa from './middlewares/spa';
+
 const keys = {
   cert: fs.readFileSync('cert.pem'),
   key: fs.readFileSync('private.pem'),
@@ -14,23 +17,14 @@ const keys = {
 const app = express();
 const server = https.createServer(keys, app);
 
-app.use('*', (req, res, next) => {
-  res.header(
-    'Content-Security-Policy',
-    "default-src 'self'; style-src 'unsafe-inline' 'self'; connect-src 'self' wss://*:*; img-src 'self' data:"
-  );
-  next();
-});
-
+app.use('*', csp);
 app.use(express.static(path.resolve(__dirname, 'app')));
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'app', 'index.html'));
-});
+app.get('*', spa);
 
 const port = 3000;
 
-server.listen(port, () => {
-  debug('web server running on', chalk.bold(port + ''));
-});
+server.listen(port, () =>
+  debug('web server running on', chalk.bold(port + ''))
+);
 
 export default server;
