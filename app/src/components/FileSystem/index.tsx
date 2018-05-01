@@ -52,16 +52,16 @@ class FileSystem extends React.Component<Props, State> {
     this.browse();
   }
 
-  splitPath = (path: string) => {
-    const { client } = this.props;
+  splitPath = () => {
+    const { client, currentDirectory } = this.props;
 
-    return path.split(client.separator).filter(x => x.length > 0);
+    return currentDirectory.split(client.separator).filter(x => x.length > 0);
   };
 
   render() {
-    const { filesList, client, currentDirectory } = this.props;
+    const { filesList, client } = this.props;
 
-    const paths = this.splitPath(currentDirectory);
+    const paths = this.splitPath();
 
     return (
       <DirectorySubscription>
