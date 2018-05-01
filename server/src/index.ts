@@ -1,11 +1,14 @@
-import * as debug from 'debug';
+import { enable } from 'debug';
 import * as express from 'express';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
 
-debug.enable('server:*');
+import chalk from 'chalk';
+
+enable('server:*');
+const debug = require('debug')('server:http');
 
 import ClientServer from './clientServer';
 import ControlSocketServer from './control-socket';
@@ -48,7 +51,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 webServer.listen(ports.web, () => {
-  console.log('web server running on', ports.web);
+  debug('web server running on', chalk.bold(ports.web + ''));
 });
 
 export const controlSocket = new ControlSocketServer(webServer);
