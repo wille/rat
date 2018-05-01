@@ -2,26 +2,19 @@ import Client from '@app/client';
 import { ClientTemplate } from 'shared/templates';
 import { Action } from '../constants';
 
-export const initClients = () => ({
-  type: Action.CLIENTS_LIST_INIT,
+import { createAction } from 'redux-actions';
+
+export const initClients = createAction(Action.CLIENTS_LIST_INIT);
+
+export const addClients = createAction(Action.CLIENT_CONNECT, data => {
+  if (!Array.isArray(data)) {
+    data = [data];
+  }
+  return data.map(data => new Client(data.id, data.host, data));
 });
 
-export const addClients = (...data: ClientTemplate[]) => ({
-  type: Action.CLIENT_CONNECT,
-  payload: data.map(data => new Client(data.id, data.host, data)),
-});
+export const removeClient = createAction<ClientTemplate>(
+  Action.CLIENT_DISCONNECT
+);
 
-export const removeClient = (client: { _id?: string }) => ({
-  type: Action.CLIENT_DISCONNECT,
-  payload: client,
-});
-
-export const updateClient = (data: ClientTemplate) => ({
-  type: Action.CLIENT_UPDATE,
-  payload: data,
-});
-
-export const setActiveClient = (client: Client) => ({
-  type: Action.SET_CURRENT_CLIENT,
-  payload: client,
-});
+export const updateClient = createAction<ClientTemplate>(Action.CLIENT_UPDATE);

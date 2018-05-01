@@ -81,7 +81,7 @@ class Screen extends React.Component<Props> {
             </Nav>
           </Navbar>
           <div>
-            <Stream mouse keyboard data={frame} scale={scale} />
+            <Stream mouse keyboard data={frame} scale={scale} client={this.props.client} />
           </div>
         </div>
       </ScreenSubscription>

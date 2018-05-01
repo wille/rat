@@ -1,4 +1,4 @@
-import { setActiveClient } from '@app/actions';
+import {  } from '@app/actions';
 import Client from '@app/client';
 import { selectClient } from '@app/reducers';
 import KeyMessage from '@messages/outgoing/key';
@@ -7,6 +7,7 @@ import { InputState } from 'shared/display';
 import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import withClient from '@app/withClient';
 
 interface Props {
   data: ScreenFrameTemplate;
@@ -14,7 +15,6 @@ interface Props {
   keyboard: boolean;
   scale: number;
   client: Client;
-  setActiveClient: typeof setActiveClient;
 }
 
 type MouseEvent = React.MouseEvent<HTMLDivElement>;
@@ -118,11 +118,4 @@ class Stream extends React.Component<Props> {
   }
 }
 
-export default connect(
-  state => ({
-    client: selectClient(state),
-  }),
-  {
-    setActiveClient,
-  }
-)(Stream);
+export default withClient(Stream);

@@ -1,4 +1,3 @@
-import { setActiveClient } from '@app/actions';
 import Client from '@app/client';
 import { selectClient } from '@app/reducers';
 import ClientUpdate from '@components/ClientUpdate';

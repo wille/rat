@@ -1,11 +1,9 @@
 import { Action } from '@app/constants';
+import { createAction } from 'redux-actions';
 import { ScreenFrameTemplate } from 'shared/templates';
 
-export const setScreenFrame = (frame: ScreenFrameTemplate) => ({
-  type: Action.SCREEN_SET_FRAME,
-  payload: frame,
-});
+export const setScreenFrame = createAction<ScreenFrameTemplate>(
+  Action.SCREEN_SET_FRAME
+);
 
-export const resetFps = () => ({
-  type: Action.SCREEN_RESET_FPS,
-});
+export const resetFps = createAction(Action.SCREEN_RESET_FPS);
