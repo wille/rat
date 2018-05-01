@@ -3,7 +3,7 @@ import * as geoip from 'geoip-lite';
 import { TLSSocket } from 'tls';
 
 import Message from '../../../shared/src/messages/index';
-import { ClientProperties, Monitor, OperatingSystem } from '../../../shared/src/system';
+import { ClientProperties, Monitor, UserOperatingSystem } from '../../../shared/src/system';
 import { ClientUpdateType } from '../../../shared/src/templates/client';
 import ControlSocketServer from '../controlSocketServer';
 import ClientMessage from '../ws/messages/client.message';
@@ -35,7 +35,7 @@ class Client implements ClientProperties {
   /**
    * Client operating system
    */
-  public os: OperatingSystem;
+  public os: UserOperatingSystem;
 
   /**
    * Unique client ID

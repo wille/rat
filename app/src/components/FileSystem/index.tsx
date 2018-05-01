@@ -6,8 +6,6 @@ import {
   selectFilesList,
 } from '@app/reducers';
 import withClient from '@app/withClient';
-import BrowseMessage from 'shared/messages/browse';
-import { MessageType } from 'shared/types';
 import { FileEntry } from '@templates';
 import * as path from 'path';
 import * as React from 'react';
@@ -15,7 +13,9 @@ import { Breadcrumb, Nav, Navbar, NavItem, Table } from 'react-bootstrap';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Z_DEFAULT_COMPRESSION } from 'zlib';
+import BrowseMessage from 'shared/messages/browse';
+import { OperatingSystem } from 'shared/system';
+import { MessageType } from 'shared/types';
 import { DirectorySubscription } from '../Subscription';
 import Row from './Row';
 
@@ -41,7 +41,10 @@ class FileSystem extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      utils: props.client.os.type === 'Windows' ? path.win32 : path.posix,
+      utils:
+        props.client.os.type === OperatingSystem.WINDOWS
+          ? path.win32
+          : path.posix,
     };
   }
 
@@ -64,7 +67,7 @@ class FileSystem extends React.Component<Props, State> {
       <DirectorySubscription>
         <BreadcrumbContainer>
           <Breadcrumb>
-            {client.os.type !== 'Windows' && (
+            {client.os.type !== OperatingSystem.WINDOWS && (
               <BreadcrumbItem active={false} onClick={() => this.browse()}>
                 root
               </BreadcrumbItem>
@@ -122,7 +125,7 @@ class FileSystem extends React.Component<Props, State> {
       path = file ? file.path + client.separator + file.name : '';
     }
 
-    if (client.os.type !== 'Windows' && path[0] !== '/') {
+    if (client.os.type !== OperatingSystem.WINDOWS && path[0] !== '/') {
       path = '/' + path;
     }
 

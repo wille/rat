@@ -1,6 +1,6 @@
 import ControlSocket from '@app/control';
 import Message from 'shared/messages';
-import { ClientProperties, Monitor, OperatingSystem } from 'shared/system';
+import { ClientProperties, Monitor, OperatingSystem, UserOperatingSystem } from 'shared/system';
 import { ClientTemplate } from 'shared/templates';
 
 class Client implements ClientProperties {
@@ -10,7 +10,7 @@ class Client implements ClientProperties {
   public username: string;
   public hostname: string;
   public monitors: Monitor[];
-  public os: OperatingSystem;
+  public os: UserOperatingSystem;
 
   private updateListeners: Array<() => void> = [];
 
@@ -29,7 +29,7 @@ class Client implements ClientProperties {
   }
 
   public get separator() {
-    return this.os.type === 'Windows' ? '\\' : '/';
+    return this.os.type === OperatingSystem.WINDOWS ? '\\' : '/';
   }
 
   /**
@@ -55,7 +55,8 @@ class Client implements ClientProperties {
     this.username = properties.username || this.username;
     this.hostname = properties.hostname || this.hostname;
     this.monitors = properties.monitors || this.monitors || [];
-    this.os = properties.os || this.os || { display: null, type: 'Unknown' };
+    this.os = properties.os ||
+      this.os || { display: null, type: OperatingSystem.UNKNOWN };
 
     this.updateListeners.forEach(c => c());
   }

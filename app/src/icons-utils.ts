@@ -1,5 +1,5 @@
-import { OperatingSystem } from 'shared/system';
 import * as path from 'path';
+import { UserOperatingSystem } from 'shared/system';
 
 export const requireFileIcon = (name: string, isDir?: boolean) => {
   let type = 'file';
@@ -41,7 +41,7 @@ export const requireFileIcon = (name: string, isDir?: boolean) => {
   return require('@assets/files/' + type + '.png');
 };
 
-export const getOperatingSystemIcon = (os: OperatingSystem) => {
+export const getOperatingSystemIcon = (os: UserOperatingSystem) => {
   let name = 'unknown';
 
   if (os.display) {

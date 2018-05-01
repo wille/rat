@@ -1,8 +1,0 @@
-{
-  "name": "shared",
-  "version": "0.0.0",
-  "description": "shared code",
-  "main": "src/",
-  "license": "MIT",
-  "private": true
-}
