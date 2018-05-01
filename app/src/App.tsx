@@ -19,6 +19,7 @@ const Views = ({ client }) => (
       <ClientLoadingScreen />
     ) : (
       <div>
+        <a href="/">Back</a>
         <Card client={client} />
         <Switch>
           <Route path="/view/:id/screen" component={Screen} />
