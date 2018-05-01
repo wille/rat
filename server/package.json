@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "start": "nodemon",
-    "build": "yarn run clean && yarn run test && webpack --mode=production",
+    "build": "yarn run clean && webpack --mode=production",
     "test": "jest"
   },
   "keywords": [],
