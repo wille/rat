@@ -1,4 +1,4 @@
-import ControlSocketServer from '../../controlSocketServer';
+import ControlSocketServer from '../../control-socket';
 import Client from '../client';
 import { PacketHandler } from './index';
 

@@ -4,9 +4,12 @@ import * as http from 'http';
 import * as https from 'https';
 import * as morgan from 'morgan';
 import * as path from 'path';
+import * as debug from 'debug';
+
+debug.enable('control:*');
 
 import ClientServer from './clientServer';
-import ControlSocketServer from './controlSocketServer';
+import ControlSocketServer from './control-socket';
 
 const ports = {
   web: 3000,

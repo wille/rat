@@ -1,5 +1,8 @@
 {
     "extends": [
         "../tslint.json"
-    ]
+    ],
+    "rules": {
+        "no-var-requires": false
+    }
 }

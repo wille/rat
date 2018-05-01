@@ -5,7 +5,7 @@ import { TLSSocket } from 'tls';
 import Message from '../../../shared/src/messages/index';
 import { ClientProperties, Monitor, UserOperatingSystem } from '../../../shared/src/system';
 import { ClientUpdateType } from '../../../shared/src/templates/client';
-import ControlSocketServer from '../controlSocketServer';
+import ControlSocketServer from '../control-socket';
 import ClientMessage from '../ws/messages/client.message';
 import PingMessage from '../ws/messages/ping.message';
 import { handle } from './packets';

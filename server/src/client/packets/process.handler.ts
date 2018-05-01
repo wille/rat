@@ -1,7 +1,7 @@
 import { PacketHandler } from '~/client/packets';
 
 import { ProcessListTemplate } from '../../../../shared/src/templates/process';
-import ControlSocketServer from '../../controlSocketServer';
+import ControlSocketServer from '../../control-socket';
 import ProcessListMessage from '../../ws/messages/process.message';
 import Client from '../client';
 
