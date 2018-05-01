@@ -1,19 +1,18 @@
+import * as debug from 'debug';
 import * as express from 'express';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-import * as morgan from 'morgan';
 import * as path from 'path';
-import * as debug from 'debug';
 
-debug.enable('control:*');
+debug.enable('server:*');
 
 import ClientServer from './clientServer';
 import ControlSocketServer from './control-socket';
 
 const ports = {
   web: 3000,
-  server: 9999
+  server: 9999,
 };
 
 const keys = {
@@ -34,10 +33,11 @@ if (process.env.NODE_ENV === 'development') {
   });
 } else {
   webServer = https.createServer(keys, app);
-  app.use(morgan(':remote-addr [:date[clf]] ":method :url" :status :res[content-length] :response-time ms'));
   app.use('*', (req, res, next) => {
-    res.header('Content-Security-Policy',
-      "default-src 'self'; style-src 'unsafe-inline' 'self'; connect-src 'self' wss://*:*; img-src 'self' data:");
+    res.header(
+      'Content-Security-Policy',
+      "default-src 'self'; style-src 'unsafe-inline' 'self'; connect-src 'self' wss://*:*; img-src 'self' data:"
+    );
     next();
   });
 
