@@ -1,4 +1,4 @@
-import { OperatingSystem } from '@shared/system';
+import { OperatingSystem } from 'shared/system';
 import * as path from 'path';
 
 export const requireFileIcon = (name: string, isDir?: boolean) => {

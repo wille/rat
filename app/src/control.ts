@@ -1,6 +1,6 @@
 import Client from '@app/client';
 import * as EventHandler from '@app/messages';
-import Message from '@shared/messages';
+import Message from 'shared/messages';
 import { BSON } from 'bson';
 
 class ControlSocket {

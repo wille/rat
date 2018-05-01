@@ -1,7 +1,7 @@
 import ControlSocket from '@app/control';
-import Message from '@shared/messages';
-import { ClientProperties, Monitor, OperatingSystem } from '@shared/system';
-import { ClientTemplate } from '@shared/templates';
+import Message from 'shared/messages';
+import { ClientProperties, Monitor, OperatingSystem } from 'shared/system';
+import { ClientTemplate } from 'shared/templates';
 
 class Client implements ClientProperties {
   public ping: number;

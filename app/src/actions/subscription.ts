@@ -1,4 +1,4 @@
-import { MessageType } from '@shared/types';
+import { MessageType } from 'shared/types';
 import { Action } from '../constants';
 
 type HandlerFunc = (data?: any) => void;

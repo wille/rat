@@ -1,5 +1,5 @@
 import Client from '@app/client';
-import { ClientTemplate } from '@shared/templates';
+import { ClientTemplate } from 'shared/templates';
 import { Action } from '../constants';
 
 export const initClients = () => ({

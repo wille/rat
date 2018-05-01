@@ -3,7 +3,7 @@ import Client from '@app/client';
 import { selectClient } from '@app/reducers';
 import KeyMessage from '@messages/outgoing/key';
 import { MouseMessage, MouseMotionMessage } from '@messages/outgoing/mouse';
-import { InputState } from '@shared/display';
+import { InputState } from 'shared/display';
 import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { connect } from 'react-redux';

@@ -1,4 +1,4 @@
-import { FileEntry } from '@shared/templates';
+import { FileEntry } from 'shared/templates';
 import { Action } from '../constants';
 
 interface State {

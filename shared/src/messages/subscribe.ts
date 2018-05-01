@@ -1,4 +1,4 @@
-import { MessageType } from "@shared/types";
+import { MessageType } from "shared/types";
 import { SubscribeTemplate } from "@templates";
 
 import Message from "./index";

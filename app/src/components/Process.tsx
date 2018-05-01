@@ -1,5 +1,5 @@
 import ProcessListHandler from '@messages/process';
-import { MessageType } from '@shared/types';
+import { MessageType } from 'shared/types';
 import { Process, ProcessType } from '@templates';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';

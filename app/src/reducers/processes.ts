@@ -1,5 +1,5 @@
 import ControlSocket from '@app/control';
-import SubscribeMessage from '@shared/messages/subscribe';
+import SubscribeMessage from 'shared/messages/subscribe';
 import { Action } from '../constants';
 
 const initialState = {

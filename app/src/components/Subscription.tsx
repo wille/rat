@@ -1,4 +1,4 @@
-import { MessageType } from '@shared/types';
+import { MessageType } from 'shared/types';
 import * as React from 'react';
 import { connect } from 'react-redux';
 

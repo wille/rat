@@ -6,7 +6,7 @@
     "jsx": "react",
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["../shared/src/*"],
+      "shared/*": ["../shared/src/*"],
       "@messages/*": ["src/messages/*"],
       "@templates": ["../shared/src/templates/index"],
       "@components/*": ["src/components/*"],

@@ -6,8 +6,8 @@ import {
   selectFilesList,
 } from '@app/reducers';
 import withClient from '@app/withClient';
-import BrowseMessage from '@shared/messages/browse';
-import { MessageType } from '@shared/types';
+import BrowseMessage from 'shared/messages/browse';
+import { MessageType } from 'shared/types';
 import { FileEntry } from '@templates';
 import * as path from 'path';
 import * as React from 'react';

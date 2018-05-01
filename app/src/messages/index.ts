@@ -1,7 +1,7 @@
 import ControlSocket from '@app/control';
-import Message from '@shared/messages/index';
-import SubscribeMessage from '@shared/messages/subscribe';
-import { MessageType } from '@shared/types';
+import Message from 'shared/messages/index';
+import SubscribeMessage from 'shared/messages/subscribe';
+import { MessageType } from 'shared/types';
 import { MessageTemplate } from '@templates';
 import withProps from 'recompose/withProps';
 import store from '../index';

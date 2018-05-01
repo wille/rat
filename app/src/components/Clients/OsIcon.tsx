@@ -1,6 +1,6 @@
 import { getOperatingSystemIcon } from '@app/icons-utils';
 import StaticImage from '@components/Clients/StaticImage';
-import { OperatingSystem } from '@shared/system';
+import { OperatingSystem } from 'shared/system';
 import * as React from 'react';
 
 interface Props {
