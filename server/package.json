@@ -22,6 +22,7 @@
     "@types/geoip-lite": "^1.1.29",
     "@types/jest": "^22.2.3",
     "@types/node": "^10.0.0",
+    "@types/node-forge": "^0.7.2",
     "@types/ws": "^4.0.2",
     "jest": "^22.4.3",
     "nodemon": "^1.17.3",
@@ -43,6 +44,7 @@
     "debug": "^3.1.0",
     "express": "^4.16.3",
     "geoip-lite": "^1.2.1",
+    "node-forge": "^0.7.5",
     "shared": "file:../shared",
     "supports-color": "^5.4.0",
     "ws": "^5.1.1"
