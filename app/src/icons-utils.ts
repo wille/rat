@@ -61,6 +61,10 @@ export const getOperatingSystemIcon = (os: UserOperatingSystem) => {
       case 'centos':
       case 'arch':
       case 'kali':
+      case 'freebsd':
+      case 'openbsd':
+      case 'netbsd':
+      case 'dragonfly':
         name = type;
         break;
       case 'mac': // Mac OS X
@@ -73,6 +77,5 @@ export const getOperatingSystemIcon = (os: UserOperatingSystem) => {
     }
   }
 
-  name = 'mint';
   return require('@assets/os/' + name + '.svg');
 };
