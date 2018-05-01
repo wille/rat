@@ -52,12 +52,6 @@ export const getOperatingSystemIcon = (os: UserOperatingSystem) => {
     switch (type) {
       case 'windows':
       case 'linux':
-        name = 'os_' + type;
-        break;
-      case 'mac': // Mac OS X
-      case 'macos':
-        name = 'os_mac';
-        break;
       case 'debian':
       case 'ubuntu':
       case 'opensuse':
@@ -67,7 +61,11 @@ export const getOperatingSystemIcon = (os: UserOperatingSystem) => {
       case 'centos':
       case 'arch':
       case 'kali':
-        name = 'dist_' + type;
+        name = type;
+        break;
+      case 'mac': // Mac OS X
+      case 'macos':
+        name = 'macos';
         break;
       default:
         name = 'unknown';
@@ -75,5 +73,6 @@ export const getOperatingSystemIcon = (os: UserOperatingSystem) => {
     }
   }
 
-  return require('@assets/os/' + name + '.png');
+  name = 'mint';
+  return require('@assets/os/' + name + '.svg');
 };
