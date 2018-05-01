@@ -10,7 +10,7 @@ import ClientMessage from './ws/messages/client.message';
 import WebClient from './ws/webClient';
 
 import chalk from 'chalk';
-const debug = require('debug')('control:ws');
+const debug = require('debug')('server:ws');
 
 class ControlSocketServer {
   /**
@@ -20,9 +20,7 @@ class ControlSocketServer {
    * @param force sending even if client is not subscribed
    */
   public static async broadcast(message: Message, force: boolean = false) {
-    ControlSocketServer.clients.forEach(client => {
-      client.emit(message, force);
-    });
+    ControlSocketServer.clients.forEach(client => client.emit(message, force));
   }
 
   /**

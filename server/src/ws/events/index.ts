@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 import Message from 'shared/messages';
 import { MessageType } from 'shared/types';
 import MouseMotionHandler from './mouseMove';
@@ -10,6 +12,8 @@ import ProcessHandler from './process.handler';
 import ScreenHandler from './screen.handler';
 import SubscribeHandler from './subscribe.handler';
 
+const debug = require('debug')('control:ws');
+
 interface MessageMap {
   [index: string]: MessageHandler<any>;
 }
@@ -21,7 +25,7 @@ const mapping: MessageMap = {
   [MessageType.Process]: new ProcessHandler(),
   [MessageType.Mouse]: new MouseHandler(),
   [MessageType.MouseMove]: new MouseMotionHandler(),
-  [MessageType.Key]: new KeyHandler()
+  [MessageType.Key]: new KeyHandler(),
 };
 
 export interface MessageHandler<T extends any> {
@@ -34,6 +38,6 @@ export function handle<T extends Message>(client: WebClient, message: T) {
   if (handler) {
     handler.handle(client, message);
   } else {
-    console.warn('[ws] failed to find handler', message._type, message);
+    debug('failed to find handler', chalk.bold(message._type + ''), message);
   }
 }
