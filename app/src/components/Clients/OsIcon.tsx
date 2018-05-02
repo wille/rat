@@ -8,7 +8,7 @@ interface Props {
 }
 
 const OsIcon = ({ os }: Props) => (
-  <Spinner size="16px" src={os && getOperatingSystemIcon(os)} />
+  <Spinner size="16px" src={os.display && getOperatingSystemIcon(os)} />
 );
 
 export default OsIcon;

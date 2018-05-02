@@ -41,11 +41,21 @@ export const requireFileIcon = (name: string, isDir?: boolean) => {
   return require('@assets/files/' + type + '.png');
 };
 
-export const getOperatingSystemIcon = (os: UserOperatingSystem) => {
+/**
+ * return appropiate operating system icon
+ * @param display os display string
+ */
+export const getOperatingSystemIcon = (
+  display: UserOperatingSystem | string
+) => {
+  if (typeof display !== 'string') {
+    display = display.display;
+  }
+
   let name = 'unknown';
 
-  if (os.display) {
-    const args = os.display.split(' ');
+  if (display) {
+    const args = display.split(' ');
     const type = args[0].toLowerCase();
     const version = args.length >= 2 ? args[args.length - 1] : null;
 
