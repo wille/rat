@@ -1,10 +1,8 @@
-import ControlSocketServer from '../../control-socket';
+import { PacketHandler } from '.';
 import Client from '../client';
-import { PacketHandler } from './index';
 
-class PongHandler implements PacketHandler<{}> {
-
-  public handle(client: Client, data: {}) {
+class PongHandler implements PacketHandler<never> {
+  public handle(data: never, client: Client) {
     client.pong();
   }
 }

@@ -10,17 +10,19 @@ import Client from '../client';
 type ComputerInfoTemplate = MessageTemplate & ClientProperties;
 
 class ComputerInfoHandler implements PacketHandler<ComputerInfoTemplate> {
-
-  public handle(client: Client, data: ComputerInfoTemplate) {
+  public handle(data: ComputerInfoTemplate, client: Client) {
     client.hostname = data.hostname;
     client.username = data.username;
     client.monitors = data.monitors;
     client.os = data.os;
 
-    ControlSocketServer.broadcast(new ClientMessage({
-      type: ClientUpdateType.UPDATE,
-      ...client.getSystemProperties()
-    }), true);
+    ControlSocketServer.broadcast(
+      new ClientMessage({
+        type: ClientUpdateType.UPDATE,
+        ...client.getSystemProperties(),
+      }),
+      true
+    );
   }
 }
 

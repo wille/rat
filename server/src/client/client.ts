@@ -2,8 +2,12 @@ import { BSON, ObjectId } from 'bson';
 import * as geoip from 'geoip-lite';
 import { TLSSocket } from 'tls';
 
-import Message from '../../../shared/src/messages/index';
-import { ClientProperties, Monitor, UserOperatingSystem } from '../../../shared/src/system';
+import Message from '../../../shared/src/messages';
+import {
+  ClientProperties,
+  Monitor,
+  UserOperatingSystem,
+} from '../../../shared/src/system';
 import { ClientUpdateType } from '../../../shared/src/templates/client';
 import ControlSocketServer from '../control-socket';
 import ClientMessage from '../ws/messages/client.message';
@@ -11,7 +15,6 @@ import PingMessage from '../ws/messages/ping.message';
 import { handle } from './packets';
 
 class Client implements ClientProperties {
-
   /**
    * Current ping in milliseconds
    */
@@ -77,11 +80,14 @@ class Client implements ClientProperties {
     const now = new Date().getTime();
     const ping = now - this.pingTime;
 
-    ControlSocketServer.broadcast(new ClientMessage({
-      type: ClientUpdateType.UPDATE,
-      id: this.id,
-      ping
-    }), true);
+    ControlSocketServer.broadcast(
+      new ClientMessage({
+        type: ClientUpdateType.UPDATE,
+        id: this.id,
+        ping,
+      }),
+      true
+    );
   }
 
   /**
@@ -110,7 +116,7 @@ class Client implements ClientProperties {
   /**
    * Returns all the client properties
    */
-  public getClientProperties() {
+  public getClientProperties(): ClientProperties {
     if (!this.lookup) {
       const lookup = geoip.lookup(this.host);
 
@@ -123,21 +129,21 @@ class Client implements ClientProperties {
       id: this.id,
       host: this.host,
       country: this.lookup.country,
-      flag: this.lookup.country && this.lookup.country.toLowerCase()
-    } as ClientProperties;
+      flag: this.lookup.country && this.lookup.country.toLowerCase(),
+    };
   }
 
   /**
    * Returns all system properties sent by the client
    */
-  public getSystemProperties() {
+  public getSystemProperties(): ClientProperties {
     return {
       id: this.id,
       hostname: this.hostname,
       username: this.username,
       monitors: this.monitors,
-      os: this.os
-    } as ClientProperties;
+      os: this.os,
+    };
   }
 
   /**
@@ -148,7 +154,11 @@ class Client implements ClientProperties {
     return new Promise<Buffer>((resolve, reject) => {
       const buffer = this.socket.read(n);
       if (buffer === null) {
-        this.socket.once('readable', () => this.read(n).then(resolve).catch(reject));
+        this.socket.once('readable', () =>
+          this.read(n)
+            .then(resolve)
+            .catch(reject)
+        );
         return;
       }
 
@@ -169,7 +179,7 @@ class Client implements ClientProperties {
 
       handle(this, {
         _type: header,
-        ...data
+        ...data,
       });
     }
   }

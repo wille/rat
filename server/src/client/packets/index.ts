@@ -27,14 +27,14 @@ const mapping: PacketMap = {
 };
 
 export interface PacketHandler<T extends MessageTemplate> {
-  handle(client: Client, data: T): void;
+  handle(data: T, client: Client): void;
 }
 
 export function handle<T extends MessageTemplate>(client: Client, message: T) {
   const handler = mapping[message._type] as PacketHandler<T>;
 
   if (handler) {
-    handler.handle(client, message);
+    handler.handle(message, client);
   } else {
     throw new Error('failed to find handler for ' + message._type);
   }

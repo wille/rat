@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import * as fs from 'fs';
-import * as geoip from 'geoip-lite';
 import { setInterval } from 'timers';
 import * as tls from 'tls';
 
@@ -55,10 +54,6 @@ class ClientServer {
     socket.setTimeout(5000);
 
     const client = new Client(socket);
-
-    const lookup = geoip.lookup(socket.remoteAddress) || {
-      country: 'unknown',
-    };
 
     ControlSocketServer.broadcast(
       new ClientMessage({

@@ -29,14 +29,14 @@ const mapping: MessageMap = {
 };
 
 export interface MessageHandler<T extends any> {
-  handle(client: WebClient, data: T): void;
+  handle(data: T, client?: WebClient): void;
 }
 
 export function handle<T extends Message>(client: WebClient, message: T) {
   const handler = mapping[message._type] as MessageHandler<T>;
 
   if (handler) {
-    handler.handle(client, message);
+    handler.handle(message, client);
   } else {
     debug('failed to find handler', chalk.bold(message._type + ''), message);
   }

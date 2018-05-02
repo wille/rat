@@ -1,7 +1,6 @@
-const debug = require('debug')('server:http');
-
 import * as forge from 'node-forge';
-import * as os from 'os';
+
+const debug = require('debug')('server:http');
 
 const generateCert = () => {
   const bits = 2048;
@@ -14,8 +13,6 @@ const generateCert = () => {
   cert.publicKey = keys.publicKey;
   cert.serialNumber = '01';
   cert.validity.notBefore = new Date();
-
-  const options = { attrs: {} };
 
   const attrs = [
     { name: 'commonName', value: 'hostname' },
