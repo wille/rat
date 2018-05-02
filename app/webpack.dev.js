@@ -29,6 +29,7 @@ module.exports = merge(common, {
   ],
   devServer: {
     hot: true,
+    https: true,
     historyApiFallback: true,
     contentBase: 'src/'
   }
