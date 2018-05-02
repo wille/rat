@@ -57,7 +57,7 @@ export const getOperatingSystemIcon = (
   if (display) {
     const args = display.split(' ');
     const type = args[0].toLowerCase();
-    const version = args.length >= 2 ? args[args.length - 1] : null;
+    // const version = args.length >= 2 ? args[args.length - 1] : null;
 
     switch (type) {
       case 'windows':

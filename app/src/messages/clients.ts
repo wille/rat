@@ -4,15 +4,12 @@ import {
   removeClient,
   updateClient,
 } from '@app/actions';
+
 import store from '../';
 import {
   ClientTemplate,
   ClientUpdateType,
-  MessageTemplate,
 } from '../../../shared/src/templates';
-import Client from '../client';
-import Connections from '../components/Clients';
-import ControlSocket from '../control';
 
 export default (data: ClientTemplate) => {
   switch (data.type) {

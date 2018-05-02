@@ -1,9 +1,9 @@
 import { resetClients } from '@app/actions';
-import Client from '@app/client';
 import * as EventHandler from '@app/messages';
 import { BSON } from 'bson';
 import Message from 'shared/messages';
-import store from './index';
+
+import store from '.';
 
 class ControlSocket {
   private readonly bson = new BSON();

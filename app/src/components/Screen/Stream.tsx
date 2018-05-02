@@ -1,13 +1,10 @@
-import {  } from '@app/actions';
 import Client from '@app/client';
-import { selectClient } from '@app/reducers';
+import withClient from '@app/withClient';
 import KeyMessage from '@messages/outgoing/key';
 import { MouseMessage, MouseMotionMessage } from '@messages/outgoing/mouse';
-import { InputState } from 'shared/display';
 import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
-import { connect } from 'react-redux';
-import withClient from '@app/withClient';
+import { InputState } from 'shared/display';
 
 interface Props {
   data: ScreenFrameTemplate;

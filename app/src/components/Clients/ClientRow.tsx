@@ -1,14 +1,10 @@
 import Client from '@app/client';
-import { selectClient } from '@app/reducers';
 import ClientUpdate from '@components/ClientUpdate';
 import * as React from 'react';
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import { css } from 'react-emotion';
-import styled from 'react-emotion';
-import { connect } from 'react-redux';
+import styled, { css } from 'react-emotion';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import store from '../../';
+
 import FlagIcon from './Flag';
 import OsIcon from './OsIcon';
 import PingIcon from './PingIcon';

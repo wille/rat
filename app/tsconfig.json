@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "sourceMap": true,
+    "removeComments": true,
+    "noUnusedLocals": true,
     "module": "commonjs",
     "target": "es2017",
     "jsx": "react",

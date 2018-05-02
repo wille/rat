@@ -1,21 +1,17 @@
 import { setCurrentDirectory } from '@app/actions';
 import Client from '@app/client';
-import {
-  selectClient,
-  selectCurrentDirectory,
-  selectFilesList,
-} from '@app/reducers';
+import { selectCurrentDirectory, selectFilesList } from '@app/reducers';
 import withClient from '@app/withClient';
 import { FileEntry } from '@templates';
 import * as path from 'path';
 import * as React from 'react';
-import { Breadcrumb, Nav, Navbar, NavItem, Table } from 'react-bootstrap';
+import { Breadcrumb, Table } from 'react-bootstrap';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import BrowseMessage from 'shared/messages/browse';
 import { OperatingSystem } from 'shared/system';
-import { MessageType } from 'shared/types';
+
 import { DirectorySubscription } from '../Subscription';
 import Row from './Row';
 
@@ -115,7 +111,6 @@ class FileSystem extends React.Component<Props, State> {
 
   browse = (file?: FileEntry | string) => {
     const { client, setCurrentDirectory } = this.props;
-    const { utils } = this.state;
 
     let path = '';
 

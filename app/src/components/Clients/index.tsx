@@ -1,12 +1,9 @@
 import Client from '@app/client';
-import * as EventHandler from '@app/messages';
-import { MessageType } from 'shared/types';
+import { selectClients } from '@app/reducers';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
-import { ClientSubscription } from '../Subscription';
-
-import { selectClients } from '@app/reducers';
 import { connect } from 'react-redux';
+
 import ClientRow from './ClientRow';
 
 interface Props {

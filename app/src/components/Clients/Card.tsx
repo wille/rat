@@ -1,8 +1,6 @@
 import Client from '@app/client';
-import { selectClient } from '@app/reducers';
 import * as React from 'react';
 import styled from 'react-emotion';
-import { connect } from 'react-redux';
 
 import OsIcon from './OsIcon';
 

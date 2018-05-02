@@ -1,9 +1,7 @@
-import ControlSocket from '@app/control';
-import SubscribeMessage from 'shared/messages/subscribe';
 import { Action } from '../constants';
 
 const initialState = {
-  list: []
+  list: [],
 };
 
 export default (state = initialState, action) => {
@@ -12,7 +10,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         list: action.payload,
-      }
+      };
     default:
       return state;
   }

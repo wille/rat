@@ -1,11 +1,8 @@
+import withClient from '@app/withClient';
+import { ClientSubscription } from '@components/Subscription';
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
 
-import { selectClient } from '@app/reducers';
-import { connect } from 'react-redux';
-
-import withClient from '@app/withClient';
-import { ClientSubscription } from '@components/Subscription';
 import ClientLoadingScreen from './components/ClientLoadingScreen';
 import Clients from './components/Clients';
 import Card from './components/Clients/Card';

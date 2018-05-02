@@ -1,16 +1,14 @@
+import Client from '@app/client';
+import { selectFps, selectScreenBuffer } from '@app/reducers';
+import withClient from '@app/withClient';
+import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-
-import Client from '@app/client';
-import { selectClient, selectFps, selectScreenBuffer } from '@app/reducers';
-import withClient from '@app/withClient';
-import ScreenHandler from '@messages/screen';
-import { ScreenFrameTemplate } from '@templates';
 import StreamMessage from 'shared/messages/stream';
 import { Monitor } from 'shared/system';
-import { MessageType } from 'shared/types';
+
 import { ScreenSubscription } from '../Subscription';
 import Stream from './Stream';
 
@@ -25,7 +23,7 @@ interface State {
   running: boolean;
 }
 
-class Screen extends React.Component<Props> {
+class Screen extends React.Component<Props, State> {
   state = {
     scale: 0.1,
     running: true,

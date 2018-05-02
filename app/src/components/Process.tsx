@@ -1,14 +1,12 @@
-import ProcessListHandler from '@messages/process';
-import { MessageType } from 'shared/types';
+import Client from '@app/client';
+import { selectProcessList } from '@app/reducers';
+import withClient from '@app/withClient';
 import { Process, ProcessType } from '@templates';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
-
-import Client from '@app/client';
-import { selectClient, selectProcessList } from '@app/reducers';
-import withClient from '@app/withClient';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+
 import ProcessMessage from '../../../shared/src/messages/process';
 import { ProcessSubscription } from './Subscription';
 
