@@ -1,7 +1,9 @@
+import { resetClients } from '@app/actions';
 import Client from '@app/client';
 import * as EventHandler from '@app/messages';
 import { BSON } from 'bson';
 import Message from 'shared/messages';
+import store from './index';
 
 class ControlSocket {
   private readonly bson = new BSON();
@@ -38,6 +40,8 @@ class ControlSocket {
 
   private onOpen() {
     console.log('[ws] connected');
+
+    store.dispatch(resetClients());
 
     this.attempt = 0;
 

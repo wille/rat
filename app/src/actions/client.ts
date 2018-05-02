@@ -18,3 +18,5 @@ export const removeClient = createAction<ClientTemplate>(
 );
 
 export const updateClient = createAction<ClientTemplate>(Action.CLIENT_UPDATE);
+
+export const resetClients = createAction(Action.CLIENTS_RESET);

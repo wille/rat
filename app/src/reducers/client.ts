@@ -37,6 +37,11 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
       };
+    case Action.CLIENTS_RESET: {
+      return {
+        ...initialState,
+      };
+    }
     default:
       return state;
   }
