@@ -1,12 +1,14 @@
 import Client from '@app/client';
 import * as EventHandler from '@app/messages';
-import Message from 'shared/messages';
 import { BSON } from 'bson';
+import Message from 'shared/messages';
 
 class ControlSocket {
   private readonly bson = new BSON();
   private socket: WebSocket;
   private queue: Message[] = [];
+
+  private attempt = 0;
 
   constructor(private readonly url: string) {}
 
@@ -26,6 +28,10 @@ class ControlSocket {
         })
       );
     } else {
+      console.warn(
+        '[ws] sending data in invalid state:',
+        this.socket.readyState
+      );
       this.queue.push(m);
     }
   }
@@ -33,16 +39,14 @@ class ControlSocket {
   private onOpen() {
     console.log('[ws] connected');
 
+    this.attempt = 0;
+
     EventHandler.publishSubscriptions();
 
     this.queue.forEach(queued => {
       this.send(queued);
     });
     this.queue = [];
-  }
-
-  private onBounce(data: any) {
-    console.log('bounce', data);
   }
 
   private handleMessage(e: MessageEvent) {
@@ -56,7 +60,28 @@ class ControlSocket {
   }
 
   private onClose(e: CloseEvent) {
-    setTimeout(() => this.connect(), 1000);
+    let delay = 10000;
+
+    if (this.attempt < 5) {
+      delay = 1000;
+    } else if (this.attempt < 15) {
+      delay = 5000;
+    }
+
+    this.attempt++;
+
+    this.reconnect(delay);
+  }
+
+  /**
+   * start delayed connection attempt
+   * @param delay
+   */
+  private reconnect(delay: number) {
+    console.log(
+      `[ws] trying to reconnect in ${delay / 1000}s, attempt ${this.attempt}`
+    );
+    setTimeout(() => this.connect(), delay);
   }
 }
 
