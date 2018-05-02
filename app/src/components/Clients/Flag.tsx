@@ -1,6 +1,5 @@
 import Client from '@app/client';
 import * as React from 'react';
-import styled from 'react-emotion';
 import StaticImage from './StaticImage';
 
 interface Props {

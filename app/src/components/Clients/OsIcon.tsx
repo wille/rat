@@ -1,5 +1,5 @@
 import { getOperatingSystemIcon } from '@app/icons-utils';
-import StaticImage from '@components/Clients/StaticImage';
+import Spinner from '@components/Spinner';
 import * as React from 'react';
 import { UserOperatingSystem } from 'shared/system';
 
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const OsIcon = ({ os }: Props) => (
-  <StaticImage size="16px" src={getOperatingSystemIcon(os)} />
+  <Spinner size="16px" src={os && getOperatingSystemIcon(os)} />
 );
 
 export default OsIcon;

@@ -15,4 +15,5 @@ const StaticImage = styled<Props, 'div'>('div')`
   height: ${props => props.height || props.size};
 `;
 
+export { Props as StaticImageProps };
 export default StaticImage;

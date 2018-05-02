@@ -18,7 +18,8 @@
     "member-access": false,
     "interface-name": false,
     "no-submodule-imports": false,
-    "no-implicit-dependencies": false
+    "no-implicit-dependencies": false,
+    "no-var-requires": false
   },
   "rulesDirectory": []
 }

@@ -1,5 +1,5 @@
+import Spinner from '@components/Spinner';
 import * as React from 'react';
-import StaticImage from './StaticImage';
 
 interface Props {
   ping: number;
@@ -19,7 +19,13 @@ const PingIcon = ({ ping }: Props) => {
 
   icon = require('@assets/ping/' + icon + '.png');
 
-  return <StaticImage width="16px" height="12px" src={icon} />;
+  return (
+    <Spinner
+      width="16px"
+      height="12px"
+      src={typeof ping === 'number' && icon}
+    />
+  );
 };
 
 export default PingIcon;
