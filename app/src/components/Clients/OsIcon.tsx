@@ -9,11 +9,7 @@ interface Props {
 }
 
 const OsIcon = ({ os, ...props }: Props) => (
-  <Spinner
-    {...props}
-    size="36px"
-    src={os.display && getOperatingSystemIcon(os)}
-  />
+  <Spinner {...props} src={os.display && getOperatingSystemIcon(os)} />
 );
 
 export default OsIcon;

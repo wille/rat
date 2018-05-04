@@ -21,6 +21,7 @@ const Container = styled('div')`
   background-color: ${props => props.color || '#fff'};
 
   padding: 12px;
+  max-height: 275px;
 
   * {
     display: inline-block;
@@ -64,14 +65,13 @@ class ClientRow extends React.Component<Props> {
     return (
       <Container color={color} onClick={onClick}>
         <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
-          <OsIcon os={client.os} title={client.os.display} />
+          <OsIcon size="36px" os={client.os} title={client.os.display} />
           <TextContainer>
             <Title selected={selected}>{client.identifier}</Title>
             <Info>
               <Country selected={selected}>
                 {client.country || 'Unknown'}
               </Country>
-              {'  '}
               <Host selected={selected}>{client.host}</Host>
             </Info>
             <NetworkContainer>
