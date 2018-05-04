@@ -10,17 +10,16 @@ import PingIcon from './PingIcon';
 interface Props extends RouteComponentProps<any> {
   client: Client;
   history: History;
-  tabIndex?: number;
+  selected: boolean;
+  onClick: () => void;
 }
 
 const Container = styled('div')`
   &:hover {
-    background-color: #f7f7f7;
+    background-color: ${props => props.color || '#f7f7f7'};
   }
 
-  &:focus {
-    background-color: #3f99df;
-  }
+  background-color: ${props => props.color || '#fff'};
 
   padding: 24px 12px;
 
@@ -59,10 +58,12 @@ const Info = styled('div')``;
 
 class ClientRow extends React.Component<Props> {
   public render() {
-    const { client, tabIndex } = this.props;
+    const { client, selected, onClick } = this.props;
+
+    const color = selected && '#3f99df';
 
     return (
-      <Container tabIndex={tabIndex}>
+      <Container color={color} onClick={onClick}>
         <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
           <OsIcon os={client.os} title={client.os.display} />
           <TextContainer>
