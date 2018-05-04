@@ -27,15 +27,17 @@ class Clients extends React.Component<Props> {
       <ListContainer>
         {clients.map((client, i) => {
           const match = matchPath(location.pathname, {
-            path: '/:id',
+            path: '/client/:id',
           });
+
+          const selected = client.id === (match && match.params.id);
 
           return (
             <ClientRow
               key={client.id}
               client={client}
-              selected={client.id === match.params.id}
-              onClick={() => history.push('/' + client.id)}
+              selected={selected}
+              onClick={() => history.push('/client/' + client.id)}
             />
           );
         })}

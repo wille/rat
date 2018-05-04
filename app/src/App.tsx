@@ -27,9 +27,9 @@ const Views = ({ client }) => (
       <div>
         <a href="/">Back</a>
         <Switch>
-          <Route path="/view/:id/screen" component={Screen} />
-          <Route path="/view/:id/process" component={Process} />
-          <Route path="/view/:id/fs" component={FileSystem} />
+          <Route path="/client/:id/screen" component={Screen} />
+          <Route path="/client/:id/process" component={Process} />
+          <Route path="/client/:id/fs" component={FileSystem} />
         </Switch>
       </div>
     )}
@@ -43,7 +43,7 @@ const App = () => (
     <Container>
       <Clients />
       <Switch>
-        <Route path="/view/:id" component={Views2} />
+        <Route path="/client/:id" component={Views2} />
       </Switch>
     </Container>
   </ClientSubscription>
