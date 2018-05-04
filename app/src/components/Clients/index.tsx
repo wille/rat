@@ -12,7 +12,7 @@ import { History, matchPath, withRouter } from 'react-router-dom';
 const ListContainer = styled('div')`
   width: auto;
   overflow-y: scroll;
-  height: 100%;
+  height: 100vh;
 `;
 
 interface Props {

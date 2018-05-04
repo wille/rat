@@ -21,7 +21,7 @@ const Container = styled('div')`
 
   background-color: ${props => props.color || '#fff'};
 
-  padding: 24px 12px;
+  padding: 12px;
 
   * {
     display: inline-block;
@@ -29,7 +29,7 @@ const Container = styled('div')`
 `;
 
 const TextContainer = styled('div')`
-  padding: 12px;
+  padding: 0 12px;
 `;
 
 const Title = styled<any, any>('span')`
