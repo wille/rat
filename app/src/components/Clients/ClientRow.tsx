@@ -10,6 +10,7 @@ import PingIcon from './PingIcon';
 interface Props extends RouteComponentProps<any> {
   client: Client;
   history: History;
+  tabIndex?: number;
 }
 
 const Container = styled('div')`
@@ -58,10 +59,10 @@ const Info = styled('div')``;
 
 class ClientRow extends React.Component<Props> {
   public render() {
-    const { client } = this.props;
+    const { client, tabIndex } = this.props;
 
     return (
-      <Container>
+      <Container tabIndex={tabIndex}>
         <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
           <OsIcon os={client.os} title={client.os.display} />
           <TextContainer>

@@ -16,15 +16,15 @@ interface Props {
   clients: Client[];
 }
 
-// const columns = ['Country', 'Host', 'Identifier', 'Operating System', 'Ping'];
-
 class Clients extends React.Component<Props> {
   render() {
     const { clients } = this.props;
 
     return (
       <ListContainer>
-        {clients.map(client => <ClientRow key={client.id} client={client} />)}
+        {clients.map((client, i) => (
+          <ClientRow key={client.id} client={client} tabIndex={i} />
+        ))}
       </ListContainer>
     );
   }
