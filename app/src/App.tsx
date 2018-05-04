@@ -3,6 +3,7 @@ import { ClientSubscription } from '@components/Subscription';
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
 
+import ClientHome from './components/ClientHome';
 import ClientLoadingScreen from './components/ClientLoadingScreen';
 import Clients from './components/Clients';
 import FileSystem from './components/FileSystem';
@@ -25,6 +26,7 @@ const Views = ({ client }) => (
       <ClientLoadingScreen />
     ) : (
       <Switch>
+        <Route path="/client/:id" exact component={ClientHome} />
         <Route path="/client/:id/screen" component={Screen} />
         <Route path="/client/:id/process" component={Process} />
         <Route path="/client/:id/fs" component={FileSystem} />

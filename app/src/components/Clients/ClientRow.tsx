@@ -2,14 +2,13 @@ import Client from '@app/client';
 import ClientUpdate from '@components/ClientUpdate';
 import * as React from 'react';
 import styled from 'react-emotion';
-import { History, RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
 import OsIcon from './OsIcon';
 import PingIcon from './PingIcon';
 
 interface Props extends RouteComponentProps<any> {
   client: Client;
-  history: History;
   selected: boolean;
   onClick: () => void;
 }
@@ -83,10 +82,6 @@ class ClientRow extends React.Component<Props> {
       </Container>
     );
   }
-
-  redirect = (path: string) => {
-    this.props.history.push(`/view/${this.props.client.id}/${path}`);
-  };
 }
 
-export default withRouter(ClientRow);
+export default ClientRow;
