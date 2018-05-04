@@ -24,14 +24,11 @@ const Views = ({ client }) => (
     {!client ? (
       <ClientLoadingScreen />
     ) : (
-      <div>
-        <a href="/">Back</a>
-        <Switch>
-          <Route path="/client/:id/screen" component={Screen} />
-          <Route path="/client/:id/process" component={Process} />
-          <Route path="/client/:id/fs" component={FileSystem} />
-        </Switch>
-      </div>
+      <Switch>
+        <Route path="/client/:id/screen" component={Screen} />
+        <Route path="/client/:id/process" component={Process} />
+        <Route path="/client/:id/fs" component={FileSystem} />
+      </Switch>
     )}
   </Content>
 );
