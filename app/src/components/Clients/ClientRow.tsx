@@ -32,21 +32,21 @@ const TextContainer = styled('div')`
   padding: 12px;
 `;
 
-const Title = styled('span')`
+const Title = styled<any, any>('span')`
   display: block;
   font-size: 16px;
   font-weight: bold;
-  color: #000;
+  color: ${props => (props.selected ? '#fff' : '#000')};
 `;
 
-const Host = styled('span')`
+const Host = styled<any, any>('span')`
   font-size: 16px;
-  color: gray;
+  color: ${props => (props.selected ? '#fff' : 'gray')};
 `;
 
-const Country = styled('span')`
+const Country = styled<any, any>('span')`
   font-size: 16px;
-  color: #3f99df;
+  color: ${props => (props.selected ? '#fff' : '#3f99df')};
 `;
 
 const NetworkContainer = styled('div')`
@@ -60,18 +60,20 @@ class ClientRow extends React.Component<Props> {
   public render() {
     const { client, selected, onClick } = this.props;
 
-    const color = selected && '#3f99df';
+    const color = selected ? '#3f99df' : undefined;
 
     return (
       <Container color={color} onClick={onClick}>
         <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
           <OsIcon os={client.os} title={client.os.display} />
           <TextContainer>
-            <Title>{client.identifier}</Title>
+            <Title selected={selected}>{client.identifier}</Title>
             <Info>
-              <Country>{client.country || 'Unknown'}</Country>
+              <Country selected={selected}>
+                {client.country || 'Unknown'}
+              </Country>
               {'  '}
-              <Host>{client.host}</Host>
+              <Host selected={selected}>{client.host}</Host>
             </Info>
             <NetworkContainer>
               <PingIcon ping={client.ping} />
