@@ -1,30 +1,31 @@
 import Client from '@app/client';
 import { selectClients } from '@app/reducers';
 import * as React from 'react';
-import { Table } from 'react-bootstrap';
+import styled from 'react-emotion';
 import { connect } from 'react-redux';
 
 import ClientRow from './ClientRow';
+
+const ListContainer = styled('div')`
+  width: auto;
+  overflow-y: scroll;
+  height: 100%;
+`;
 
 interface Props {
   clients: Client[];
 }
 
-const columns = ['Country', 'Host', 'Identifier', 'Operating System', 'Ping'];
+// const columns = ['Country', 'Host', 'Identifier', 'Operating System', 'Ping'];
 
 class Clients extends React.Component<Props> {
   render() {
+    const { clients } = this.props;
+
     return (
-      <Table bordered>
-        <thead>
-          <tr>{columns.map(column => <th key={column}>{column}</th>)}</tr>
-        </thead>
-        <tbody>
-          {this.props.clients.map(client => {
-            return <ClientRow key={client.id} client={client} />;
-          })}
-        </tbody>
-      </Table>
+      <ListContainer>
+        {clients.map(client => <ClientRow key={client.id} client={client} />)}
+      </ListContainer>
     );
   }
 }

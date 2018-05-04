@@ -5,19 +5,27 @@ import { Route, Switch } from 'react-router';
 
 import ClientLoadingScreen from './components/ClientLoadingScreen';
 import Clients from './components/Clients';
-import Card from './components/Clients/Card';
 import FileSystem from './components/FileSystem';
 import Process from './components/Process';
 import Screen from './components/Screen';
 
+import styled from 'react-emotion';
+
+const Container = styled('div')`
+  display: flex;
+`;
+
+const Content = styled('div')`
+  flex: 1;
+`;
+
 const Views = ({ client }) => (
-  <div>
+  <Content>
     {!client ? (
       <ClientLoadingScreen />
     ) : (
       <div>
         <a href="/">Back</a>
-        <Card client={client} />
         <Switch>
           <Route path="/view/:id/screen" component={Screen} />
           <Route path="/view/:id/process" component={Process} />
@@ -25,17 +33,19 @@ const Views = ({ client }) => (
         </Switch>
       </div>
     )}
-  </div>
+  </Content>
 );
 
 const Views2 = withClient(Views);
 
 const App = () => (
   <ClientSubscription>
-    <Switch>
-      <Route path="/(|view)" exact component={Clients} />
-      <Route path="/view/:id" component={Views2} />
-    </Switch>
+    <Container>
+      <Clients />
+      <Switch>
+        <Route path="/view/:id" component={Views2} />
+      </Switch>
+    </Container>
   </ClientSubscription>
 );
 
