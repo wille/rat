@@ -3,9 +3,10 @@ import * as React from 'react';
 
 interface Props {
   ping: number;
+  [x: string]: any;
 }
 
-const PingIcon = ({ ping }: Props) => {
+const PingIcon = ({ ping, ...props }: Props) => {
   const steps = [100, 150, 250, 350, 500];
 
   let icon = 'ping5';
@@ -24,6 +25,7 @@ const PingIcon = ({ ping }: Props) => {
       width="16px"
       height="12px"
       src={typeof ping === 'number' && icon}
+      {...props}
     />
   );
 };

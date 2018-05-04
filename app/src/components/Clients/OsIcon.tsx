@@ -5,10 +5,15 @@ import { UserOperatingSystem } from 'shared/system';
 
 interface Props {
   os: UserOperatingSystem;
+  [x: string]: any;
 }
 
-const OsIcon = ({ os }: Props) => (
-  <Spinner size="16px" src={os.display && getOperatingSystemIcon(os)} />
+const OsIcon = ({ os, ...props }: Props) => (
+  <Spinner
+    {...props}
+    size="36px"
+    src={os.display && getOperatingSystemIcon(os)}
+  />
 );
 
 export default OsIcon;

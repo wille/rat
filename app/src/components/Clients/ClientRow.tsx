@@ -1,11 +1,9 @@
 import Client from '@app/client';
 import ClientUpdate from '@components/ClientUpdate';
 import * as React from 'react';
-import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
-import styled, { css } from 'react-emotion';
+import styled from 'react-emotion';
 import { History, RouteComponentProps, withRouter } from 'react-router-dom';
 
-import FlagIcon from './Flag';
 import OsIcon from './OsIcon';
 import PingIcon from './PingIcon';
 
@@ -14,62 +12,71 @@ interface Props extends RouteComponentProps<any> {
   history: History;
 }
 
-const styles = {
-  row: css`
-    &:hover {
-      background-color: #f7f7f7;
-    }
-  `,
-};
+const Container = styled('div')`
+  &:hover {
+    background-color: #f7f7f7;
+  }
 
-const Cell = styled('td')`
+  &:focus {
+    background-color: #3f99df;
+  }
+
+  padding: 24px 12px;
+
   * {
     display: inline-block;
-    vertical-align: middle;
-  }
-
-  & > div {
-    margin-right: 6px;
   }
 `;
+
+const TextContainer = styled('div')`
+  padding: 12px;
+`;
+
+const Title = styled('span')`
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+`;
+
+const Host = styled('span')`
+  font-size: 16px;
+  color: gray;
+`;
+
+const Country = styled('span')`
+  font-size: 16px;
+  color: #3f99df;
+`;
+
+const NetworkContainer = styled('div')`
+  margin-left: 12px;
+  vertical-align: middle;
+`;
+
+const Info = styled('div')``;
 
 class ClientRow extends React.Component<Props> {
   public render() {
     const { client } = this.props;
 
     return (
-      <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
-        <ContextMenuTrigger
-          id={client.id}
-          renderTag="tr"
-          attributes={{ className: styles.row }}
-        >
-          <Cell>
-            <FlagIcon client={client} />
-            {client.country || 'Unknown'}
-          </Cell>
-          <Cell>{client.host}</Cell>
-          <Cell>{client.identifier}</Cell>
-          <Cell>
-            <OsIcon os={client.os} />
-            {client.os.display}
-          </Cell>
-          <Cell>
-            <PingIcon ping={client.ping} />
-            {client.ping + ' ms'}
-          </Cell>
-
-          <ContextMenu id={client.id}>
-            <MenuItem onClick={() => this.redirect('screen')}>
-              View Screen
-            </MenuItem>
-            <MenuItem onClick={() => this.redirect('fs')}>File System</MenuItem>
-            <MenuItem onClick={() => this.redirect('process')}>
-              Processes
-            </MenuItem>
-          </ContextMenu>
-        </ContextMenuTrigger>
-      </ClientUpdate>
+      <Container>
+        <ClientUpdate client={client} onUpdate={() => this.forceUpdate()}>
+          <OsIcon os={client.os} title={client.os.display} />
+          <TextContainer>
+            <Title>{client.identifier}</Title>
+            <Info>
+              <Country>{client.country || 'Unknown'}</Country>
+              {'  '}
+              <Host>{client.host}</Host>
+            </Info>
+            <NetworkContainer>
+              <PingIcon ping={client.ping} />
+            </NetworkContainer>
+          </TextContainer>
+        </ClientUpdate>
+      </Container>
     );
   }
 
