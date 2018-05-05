@@ -1,5 +1,7 @@
 import Client from '@app/client';
 import withClient from '@app/withClient';
+import AlignChildren from '@components/AlignChildren';
+import FlagIcon from '@components/Clients/Flag';
 import * as React from 'react';
 import styled, { css } from 'react-emotion';
 import { Link } from 'react-router-dom';
@@ -8,7 +10,7 @@ interface Props {
   client: Client;
 }
 
-const Content = styled('div')`
+const Container = styled('div')`
   display: flex;
   align-items: center;
   width: 100%;
@@ -17,6 +19,10 @@ const Content = styled('div')`
   * {
     display: block;
   }
+`;
+
+const Content = styled('div')`
+  margin: 0 auto;
 `;
 
 const link = css`
@@ -38,29 +44,41 @@ const Item = ({ to, children }) => (
 );
 
 const Navigation = styled('ul')`
-  margin: 0 auto;
+  padding: 0;
 `;
 
 const NestedList = styled('ul')`
   padding-top: 4px;
 `;
 
+const Info = styled('div')`
+  margin: 0 auto;
+`;
+
 const ClientHome = ({ client }: Props) => {
   const link = page => `/client/${client.id}/${page}`;
 
   return (
-    <Content>
-      <Navigation>
-        <Item to={link('screen')}>
-          View screen
-          <NestedList>
-            <Item to={link('')}>View windows</Item>
-          </NestedList>
-        </Item>
-        <Item to={link('fs')}>Browse files</Item>
-        <Item to={link('process')}>Manage processes</Item>
-      </Navigation>
-    </Content>
+    <Container>
+      <Content>
+        <Info>
+          <AlignChildren>
+            <FlagIcon client={client} />
+            {client.country || 'Unknown'}
+          </AlignChildren>
+        </Info>
+        <Navigation>
+          <Item to={link('screen')}>
+            View screen
+            <NestedList>
+              <Item to={link('')}>View windows</Item>
+            </NestedList>
+          </Item>
+          <Item to={link('fs')}>Browse files</Item>
+          <Item to={link('process')}>Manage processes</Item>
+        </Navigation>
+      </Content>
+    </Container>
   );
 };
 
