@@ -6,12 +6,13 @@ import { FileEntry } from '@templates';
 import * as path from 'path';
 import * as React from 'react';
 import { Breadcrumb, Table } from 'react-bootstrap';
-import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import BrowseMessage from 'shared/messages/browse';
 import { OperatingSystem } from 'shared/system';
 
+import Toolbar from '@components/Toolbar';
+import { css } from 'react-emotion';
 import { DirectorySubscription } from '../Subscription';
 import Row from './Row';
 
@@ -26,11 +27,13 @@ interface State {
   utils: any;
 }
 
-const BreadcrumbItem = Breadcrumb.Item as any;
+const styles = {
+  breadcrumb: css`
+    font-size: 18px;
+  `,
+};
 
-const BreadcrumbContainer = styled('div')`
-  padding: 12px;
-`;
+const BreadcrumbItem = Breadcrumb.Item as any;
 
 class FileSystem extends React.Component<Props, State> {
   constructor(props) {
@@ -61,8 +64,8 @@ class FileSystem extends React.Component<Props, State> {
 
     return (
       <DirectorySubscription>
-        <BreadcrumbContainer>
-          <Breadcrumb>
+        <Toolbar>
+          <Breadcrumb className={styles.breadcrumb}>
             {client.os.type !== OperatingSystem.WINDOWS && (
               <BreadcrumbItem active={false} onClick={() => this.browse()}>
                 root
@@ -85,7 +88,7 @@ class FileSystem extends React.Component<Props, State> {
               );
             })}
           </Breadcrumb>
-        </BreadcrumbContainer>
+        </Toolbar>
 
         <Table bordered>
           <thead>
