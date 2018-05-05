@@ -58,7 +58,7 @@ const ClientHome = ({ client }: Props) => {
           </NestedList>
         </Item>
         <Item to={link('fs')}>Browse files</Item>
-        <Item to={link('processes')}>Manage processes</Item>
+        <Item to={link('process')}>Manage processes</Item>
       </Navigation>
     </Content>
   );
