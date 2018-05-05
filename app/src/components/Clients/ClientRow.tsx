@@ -4,21 +4,23 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import { RouteComponentProps } from 'react-router-dom';
 
+import { withTheme } from 'emotion-theming';
 import OsIcon from './OsIcon';
 import PingIcon from './PingIcon';
 
 interface Props extends RouteComponentProps<any> {
   client: Client;
   selected: boolean;
+  theme: any;
   onClick: () => void;
 }
 
 const Container = styled('div')`
   &:hover {
-    background-color: ${props => props.color || '#f7f7f7'};
+    background-color: ${props => props.color || props.theme.hover};
   }
 
-  background-color: ${props => props.color || '#fff'};
+  background-color: ${props => props.color || props.theme.background};
 
   padding: 12px;
   max-height: 275px;
@@ -36,17 +38,20 @@ const Title = styled<any, any>('span')`
   display: block;
   font-size: 16px;
   font-weight: bold;
-  color: ${props => (props.selected ? '#fff' : '#000')};
+  color: ${props =>
+    props.selected ? props.theme.background : props.theme.primary};
 `;
 
 const Host = styled<any, any>('span')`
   font-size: 16px;
-  color: ${props => (props.selected ? '#fff' : 'gray')};
+  color: ${props =>
+    props.selected ? props.theme.background : props.theme.secondary};
 `;
 
 const Country = styled<any, any>('span')`
   font-size: 16px;
-  color: ${props => (props.selected ? '#fff' : '#3f99df')};
+  color: ${props =>
+    props.selected ? props.theme.background : props.theme.focus};
 `;
 
 const NetworkContainer = styled('div')`
@@ -58,9 +63,9 @@ const Info = styled('div')``;
 
 class ClientRow extends React.Component<Props> {
   public render() {
-    const { client, selected, onClick } = this.props;
+    const { client, selected, onClick, theme } = this.props;
 
-    const color = selected ? '#3f99df' : undefined;
+    const color = selected ? theme.focus : undefined;
 
     return (
       <Container color={color} onClick={onClick}>
@@ -84,4 +89,4 @@ class ClientRow extends React.Component<Props> {
   }
 }
 
-export default ClientRow;
+export default withTheme(ClientRow);
