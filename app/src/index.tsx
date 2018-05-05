@@ -11,6 +11,9 @@ import reducers from './reducers';
 
 import fpsCounter from './fps-counter';
 
+import { ThemeProvider } from 'emotion-theming';
+import theme from './theme';
+
 ControlSocket.connect();
 
 const store = createStore(reducers);
@@ -21,9 +24,11 @@ fpsCounter(store);
 ReactDOM.render(
   <BrowserRouter>
     <AppContainer>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ThemeProvider>
     </AppContainer>
   </BrowserRouter>,
   document.getElementById('root')

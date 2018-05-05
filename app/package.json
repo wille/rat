@@ -50,6 +50,7 @@
     "bootstrap": "^4.1.0",
     "bson": "^2.0.6",
     "emotion": "^9.1.2",
+    "emotion-theming": "^9.1.2",
     "flag-icons": "^1.0.2",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
