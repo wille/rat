@@ -90,11 +90,15 @@ class Screen extends React.Component<Props, State> {
   }
 
   private setScale(scale: number) {
-    this.setState({
-      scale: scale / 100,
-    });
-
-    this.stream();
+    this.setState(
+      {
+        scale: scale / 100,
+      },
+      () => {
+        this.stop();
+        this.stream();
+      }
+    );
   }
 
   private selectMonitor(monitor: Monitor) {
