@@ -23,7 +23,7 @@ const Container = styled('div')`
   background-color: ${props => props.color || props.theme.background};
 
   padding: 12px;
-  max-height: 275px;
+  height: 72px;
 
   * {
     display: inline-block;
@@ -79,10 +79,10 @@ class ClientRow extends React.Component<Props> {
               </Country>
               <Host selected={selected}>{client.host}</Host>
             </Info>
-            <NetworkContainer>
-              <PingIcon ping={client.ping} />
-            </NetworkContainer>
           </TextContainer>
+          <NetworkContainer>
+            <PingIcon ping={client.ping} />
+          </NetworkContainer>
         </ClientUpdate>
       </Container>
     );

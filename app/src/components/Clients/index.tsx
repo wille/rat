@@ -7,6 +7,7 @@ import { compose } from 'recompose';
 
 import ClientRow from './ClientRow';
 
+import NoClientsRow from '@components/Clients/NoClientsRow';
 import { History, matchPath, withRouter } from 'react-router-dom';
 
 const ListContainer = styled('div')`
@@ -25,6 +26,7 @@ class Clients extends React.Component<Props> {
     const { clients, history } = this.props;
     return (
       <ListContainer>
+        {clients.length === 0 && <NoClientsRow />}
         {clients.map((client, i) => {
           const match = matchPath(location.pathname, {
             path: '/client/:id',
