@@ -4,7 +4,15 @@ import KeyMessage from '@messages/outgoing/key';
 import { MouseMessage, MouseMotionMessage } from '@messages/outgoing/mouse';
 import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
+import styled from 'react-emotion';
 import { InputState } from 'shared/display';
+
+const Container = styled<any, 'div'>('div')`
+  background-image: url('${props => props.src}');
+  background-repeat: no-repeat;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+`;
 
 interface Props {
   data: ScreenFrameTemplate;
@@ -34,13 +42,10 @@ class Stream extends React.Component<Props> {
       : null;
 
     return (
-      <div
-        style={{
-          backgroundImage: "url('" + encoded + "')",
-          backgroundRepeat: 'no-repeat',
-          width: data ? data.width : 0,
-          height: data ? data.height : 0,
-        }}
+      <Container
+        src={encoded}
+        width={data ? data.width : 0}
+        height={data ? data.height : 0}
         onMouseDown={e => this.onMouseDown(e)}
         onMouseUp={e => this.onMouseUp(e)}
         onMouseMove={e => this.onMouseMove(e)}
