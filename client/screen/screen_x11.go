@@ -3,7 +3,7 @@
 package screen
 
 /*
-#cgo LDFLAGS: -lX11
+#cgo LDFLAGS: -lX11 -lXrandr
 #include <stdlib.h>
 #include "screen.h"
 #include "screen_x11.h"

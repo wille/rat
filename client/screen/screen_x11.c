@@ -2,6 +2,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/Xrandr.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,28 +14,21 @@
 
 void QueryMonitors(void) {
 	Display *display;
-    Screen *screen;
-    Window root;
     display = XOpenDisplay(NULL);
-	
-	int screen_count = ScreenCount(display);
+
+    XRRScreenResources *screen = XRRGetScreenResources(display, DefaultRootWindow(display));
+
 	int i;
-	for (i = 0; i < screen_count; i++) {
-		screen = ScreenOfDisplay(display, i);
-		int screen_number = *(int*)screen;
-
-		root = RootWindow(display, screen_number);
-		XWindowAttributes gwa;
-
-		XGetWindowAttributes(display, root, &gwa);
+	for (i = 0; i < screen->ncrtc; i++) {
+        XRRCrtcInfo *crtc_info = XRRGetCrtcInfo(display, screen, screen->crtcs[i]);
 
 		Monitor m;
 
-		m.id = screen_number;
-		m.coordinates.x = gwa.x;
-		m.coordinates.y = gwa.y;
-		m.coordinates.width = gwa.width;
-		m.coordinates.height = gwa.height;
+		m.id = i;
+		m.coordinates.x = crtc_info->x;
+		m.coordinates.y = crtc_info->y;
+		m.coordinates.width = crtc_info->width;
+		m.coordinates.height = crtc_info->height;
 
 		MonitorCallback(m);
 	}
@@ -61,9 +55,9 @@ Capture CaptureWindow(int handle) {
     int height = attr.height;
 
     XImage *img = XGetImage(display, window, x, y, width, height, AllPlanes, ZPixmap);
-    
+
     PixelSwap(img->data, width * height * 4);
-    
+
     XCloseDisplay(display);
 
     cap.width = width;
@@ -77,7 +71,7 @@ end:
 Capture CaptureMonitor(Monitor monitor) {
     Capture cap;
     cap.error = 0;
-    
+
     Display *display = XOpenDisplay(NULL);
     Window root = DefaultRootWindow(display);
 
@@ -90,7 +84,7 @@ Capture CaptureMonitor(Monitor monitor) {
     cap.width = monitor.coordinates.width;
     cap.height = monitor.coordinates.height;
     cap.image = img;
-    
+
     return cap;
 }
 

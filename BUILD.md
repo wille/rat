@@ -11,7 +11,7 @@
 	- Xcode
 - Linux
 	- gcc
-	- X11 development headers and libraries
+	- X11 development headers and libraries, Xrandr extension
 - `go get github.com/oschwald/geoip2-golang`
 - `go get github.com/disintegration/imaging`
 - `go get golang.org/x/net/websocket`
