@@ -11,7 +11,7 @@ import PingIcon from './PingIcon';
 interface Props extends RouteComponentProps<any> {
   client: Client;
   selected: boolean;
-  theme: any;
+  theme?: any;
   onClick: () => void;
 }
 
