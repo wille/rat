@@ -21,35 +21,41 @@ interface Props {
 interface State {
   scale: number;
   running: boolean;
+  selectedMonitor: Monitor;
 }
 
 class Screen extends React.Component<Props, State> {
-  state = {
-    scale: 0.1,
-    running: true,
-  };
+  constructor(props) {
+    super(props);
 
-  private selectedMonitor: Monitor;
+    this.state = {
+      scale: 0.1,
+      running: true,
+      selectedMonitor: props.client.monitors[0],
+    };
+  }
 
-  public componentDidMount() {
-    this.selectedMonitor = this.props.client.monitors[0];
+  componentDidMount() {
     this.stream();
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     this.stop();
   }
 
-  public render() {
+  render() {
     const { frame, fps } = this.props;
-    const { scale, running } = this.state;
+    const { scale, running, selectedMonitor } = this.state;
 
     return (
       <ScreenSubscription>
         <Navbar>
           <Nav>
             <NavItem>Close</NavItem>
-            <NavDropdown title={'monitor'} id={'dropdown-size-medium'}>
+            <NavDropdown
+              title={'Monitor ' + selectedMonitor.id}
+              id={'dropdown-size-medium'}
+            >
               {this.props.client.monitors.map(monitor => (
                 <MenuItem
                   key={monitor.id}
@@ -97,9 +103,13 @@ class Screen extends React.Component<Props, State> {
     );
   }
 
-  private selectMonitor(monitor: Monitor) {
-    this.selectedMonitor = monitor;
-  }
+  selectMonitor = (monitor: Monitor) =>
+    this.setState(
+      {
+        selectedMonitor: monitor,
+      },
+      () => this.stream()
+    );
 
   private toggle() {
     const { running } = this.state;
@@ -112,14 +122,14 @@ class Screen extends React.Component<Props, State> {
   }
 
   private stream() {
-    const { scale } = this.state;
+    const { scale, selectedMonitor } = this.state;
 
     this.props.client.send(
       new StreamMessage({
         active: true,
         scale,
         monitor: true,
-        handle: this.selectedMonitor.id,
+        handle: selectedMonitor.id,
       })
     );
 
