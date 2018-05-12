@@ -10,6 +10,7 @@ import Client404 from './components/Clients/404';
 import FileSystem from './components/FileSystem';
 import Process from './components/Process';
 import Screen from './components/Screen';
+import Transfers from './components/Transfers';
 
 import styled from 'react-emotion';
 
@@ -45,6 +46,7 @@ const App = () => (
       <Clients />
       <Switch>
         <Route path="/client/:id" component={Views2} />
+        <Route path="/transfers" component={Transfers} />
       </Switch>
     </Container>
   </ClientSubscription>

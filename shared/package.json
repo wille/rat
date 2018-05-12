@@ -1,0 +1,10 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "main": "src",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bson": "^2.0.6"
+  }
+}
