@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import StaticImage, { StaticImageProps } from '@components/Clients/StaticImage';
+import StaticImage, { StaticImageProps } from './/Clients/StaticImage';
 
-const Icon = require('@assets/loading.svg');
+const Icon = require('assets/loading.svg');
 
 interface Props extends StaticImageProps {
   src: string;

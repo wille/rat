@@ -1,5 +1,5 @@
-import { setProcessList } from '@app/actions/processes';
-import { ProcessListTemplate } from '@templates';
+import { setProcessList } from '..//actions/processes';
+import { ProcessListTemplate } from 'shared/templates';
 import store from '../';
 
 export default (data: ProcessListTemplate) => {

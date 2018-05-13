@@ -1,7 +1,7 @@
-import { resetClients } from '@app/actions';
-import * as EventHandler from '@app/messages';
 import { BSON } from 'bson';
 import Message from 'shared/messages';
+import { resetClients } from './actions';
+import * as EventHandler from './messages';
 
 import store from '.';
 

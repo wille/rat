@@ -1,10 +1,11 @@
-import Client from '@app/client';
-import withClient from '@app/withClient';
-import AlignChildren from '@components/AlignChildren';
-import FlagIcon from '@components/Clients/Flag';
 import * as React from 'react';
 import styled, { css } from 'react-emotion';
+
 import { Link } from 'react-router-dom';
+import Client from '../../client';
+import withClient from '../../withClient';
+import AlignChildren from '../AlignChildren';
+import FlagIcon from '../Clients/Flag';
 
 interface Props {
   client: Client;

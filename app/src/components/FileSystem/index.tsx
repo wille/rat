@@ -1,19 +1,20 @@
-import { setCurrentDirectory } from '@app/actions';
-import Client from '@app/client';
-import { selectCurrentDirectory, selectFilesList } from '@app/reducers';
-import withClient from '@app/withClient';
-import { FileEntry } from '@templates';
 import * as path from 'path';
 import * as React from 'react';
 import { Breadcrumb, Table } from 'react-bootstrap';
+import { css } from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+
 import BrowseMessage from 'shared/messages/browse';
 import { OperatingSystem } from 'shared/system';
+import { FileEntry } from 'shared/templates';
+import { setCurrentDirectory } from '../../actions';
+import Client from '../../client';
+import { selectCurrentDirectory, selectFilesList } from '../../reducers';
+import withClient from '../../withClient';
 
-import Toolbar from '@components/Toolbar';
-import { css } from 'react-emotion';
 import { DirectorySubscription } from '../Subscription';
+import Toolbar from '../Toolbar';
 import Row from './Row';
 
 interface Props {

@@ -1,7 +1,7 @@
-import withClient from '@app/withClient';
-import { ClientSubscription } from '@components/Subscription';
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
+import { ClientSubscription } from './components/Subscription';
+import withClient from './withClient';
 
 import ClientHome from './components/ClientHome';
 import ClientLoadingScreen from './components/ClientLoadingScreen';

@@ -1,4 +1,4 @@
-import Client from '@app/client';
+import Client from '..//client';
 import * as React from 'react';
 
 interface Props {

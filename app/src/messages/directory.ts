@@ -1,6 +1,6 @@
-import { setFilesList } from '@app/actions';
-import { selectCurrentDirectory } from '@app/reducers';
-import { DirectoryContentTemplate } from '@templates';
+import { setFilesList } from '..//actions';
+import { selectCurrentDirectory } from '..//reducers';
+import { DirectoryContentTemplate } from 'shared/templates';
 import store from '../';
 
 export default (data: DirectoryContentTemplate) => {

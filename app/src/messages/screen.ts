@@ -1,6 +1,6 @@
-import { ScreenFrameTemplate } from '@templates';
+import { ScreenFrameTemplate } from 'shared/templates';
 import store from '..';
-import { setScreenFrame } from '@app/actions/screen';
+import { setScreenFrame } from '..//actions/screen';
 
 export default (data: ScreenFrameTemplate) => {
   store.dispatch(setScreenFrame(data));

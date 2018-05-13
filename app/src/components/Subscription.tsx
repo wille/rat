@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { MessageType } from 'shared/types';
 
-import { subscribe, unsubscribe } from '@app/actions/subscription';
+import { subscribe, unsubscribe } from '..//actions/subscription';
 
 import withProps from 'recompose/withProps';
 

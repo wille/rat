@@ -9,11 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "shared/*": ["../shared/src/*"],
-      "@messages/*": ["src/messages/*"],
-      "@templates": ["../shared/src/templates/index"],
-      "@components/*": ["src/components/*"],
-      "@app/*": ["src/*"],
-      "@assets/*": ["src/assets/*"]
+      "assets/*": ["src/assets/*"]
     }
   },
   "include": ["./src/**/*"]

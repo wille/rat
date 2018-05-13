@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
-import StaticImage from '@components/Clients/StaticImage';
 import { FileEntry } from 'shared/templates';
+import StaticImage from '../Clients/StaticImage';
 
-import AlignChildren from '@components/AlignChildren';
 import { requireFileIcon } from '../../icons-utils';
+import AlignChildren from '../AlignChildren';
 
 const StyledRow = styled('tr')`
   &:hover {

@@ -1,13 +1,13 @@
-import Client from '@app/client';
-import { selectFps, selectScreenBuffer } from '@app/reducers';
-import withClient from '@app/withClient';
-import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import StreamMessage from 'shared/messages/stream';
 import { Monitor } from 'shared/system';
+import { ScreenFrameTemplate } from 'shared/templates';
+import Client from '../../client';
+import { selectFps, selectScreenBuffer } from '../../reducers';
+import withClient from '../../withClient';
 
 import { ScreenSubscription } from '../Subscription';
 import Stream from './Stream';

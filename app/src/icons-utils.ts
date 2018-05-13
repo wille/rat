@@ -38,7 +38,7 @@ export const requireFileIcon = (name: string, isDir?: boolean) => {
     }
   }
 
-  return require('@assets/files/' + type + '.png');
+  return require('assets/files/' + type + '.png');
 };
 
 /**
@@ -87,5 +87,5 @@ export const getOperatingSystemIcon = (
     }
   }
 
-  return require('@assets/os/' + name + '.svg');
+  return require('assets/os/' + name + '.svg');
 };

@@ -1,4 +1,4 @@
-import { Action } from '@app/constants';
+import { Action } from '..//constants';
 import { createAction } from 'redux-actions';
 import { ScreenFrameTemplate } from 'shared/templates';
 

@@ -1,14 +1,15 @@
-import Client from '@app/client';
-import { selectClients } from '@app/reducers';
 import * as React from 'react';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
+import { History, matchPath, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+
+import Client from '../../client';
+import { selectClients } from '../../reducers';
 
 import ClientRow from './ClientRow';
 
-import NoClientsRow from '@components/Clients/NoClientsRow';
-import { History, matchPath, withRouter } from 'react-router-dom';
+import NoClientsRow from './NoClientsRow';
 
 const ListContainer = styled('div')`
   width: auto;

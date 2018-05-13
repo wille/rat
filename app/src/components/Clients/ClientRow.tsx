@@ -1,10 +1,10 @@
-import Client from '@app/client';
-import ClientUpdate from '@components/ClientUpdate';
+import { withTheme } from 'emotion-theming';
 import * as React from 'react';
 import styled from 'react-emotion';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { withTheme } from 'emotion-theming';
+import Client from '../../client';
+import ClientUpdate from '../ClientUpdate';
 import OsIcon from './OsIcon';
 import PingIcon from './PingIcon';
 

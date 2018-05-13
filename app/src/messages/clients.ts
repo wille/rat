@@ -3,7 +3,7 @@ import {
   initClients,
   removeClient,
   updateClient,
-} from '@app/actions';
+} from '..//actions';
 
 import store from '../';
 import {

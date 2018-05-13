@@ -1,4 +1,4 @@
-import ControlSocket from '@app/control';
+import ControlSocket from '..//control';
 import Message from 'shared/messages';
 import SubscribeMessage from 'shared/messages/subscribe';
 

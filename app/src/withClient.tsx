@@ -1,9 +1,10 @@
-import Client from '@app/client';
-import { selectClients } from '@app/reducers';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
 import { compose } from 'recompose';
+
+import { RouteComponentProps, withRouter } from 'react-router';
+import Client from './client';
+import { selectClients } from './reducers';
 
 interface Params {
   id: string;

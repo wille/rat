@@ -1,7 +1,7 @@
-import Client from '@app/client';
-import { selectProcessList } from '@app/reducers';
-import withClient from '@app/withClient';
-import { Process, ProcessType } from '@templates';
+import Client from '..//client';
+import { selectProcessList } from '..//reducers';
+import withClient from '..//withClient';
+import { Process, ProcessType } from 'shared/templates';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';

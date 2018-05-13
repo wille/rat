@@ -1,11 +1,15 @@
-import Client from '@app/client';
-import withClient from '@app/withClient';
-import KeyMessage from '@messages/outgoing/key';
-import { MouseMessage, MouseMotionMessage } from '@messages/outgoing/mouse';
-import { ScreenFrameTemplate } from '@templates';
 import * as React from 'react';
 import styled from 'react-emotion';
+
 import { InputState } from 'shared/display';
+import { ScreenFrameTemplate } from 'shared/templates';
+import Client from '../../client';
+import KeyMessage from '../../messages/outgoing/key';
+import {
+  MouseMessage,
+  MouseMotionMessage,
+} from '../../messages/outgoing/mouse';
+import withClient from '../../withClient';
 
 const Container = styled<any, 'div'>('div')`
   background-image: url('${props => props.src}');

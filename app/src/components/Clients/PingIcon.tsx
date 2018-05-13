@@ -1,5 +1,5 @@
-import Spinner from '@components/Spinner';
 import * as React from 'react';
+import Spinner from '../Spinner';
 
 interface Props {
   ping: number;
@@ -18,7 +18,7 @@ const PingIcon = ({ ping, ...props }: Props) => {
     }
   });
 
-  icon = require('@assets/ping/' + icon + '.png');
+  icon = require('assets/ping/' + icon + '.png');
 
   return (
     <Spinner

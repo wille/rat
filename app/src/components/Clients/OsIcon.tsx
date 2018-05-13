@@ -1,7 +1,8 @@
-import { getOperatingSystemIcon } from '@app/icons-utils';
-import Spinner from '@components/Spinner';
 import * as React from 'react';
+
 import { UserOperatingSystem } from 'shared/system';
+import { getOperatingSystemIcon } from '../../icons-utils';
+import Spinner from '../Spinner';
 
 interface Props {
   os: UserOperatingSystem;

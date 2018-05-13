@@ -1,6 +1,6 @@
 import Message from 'shared/messages';
 import { MessageType } from 'shared/types';
-import { MouseMotionTemplate, MouseTemplate } from '@templates';
+import { MouseMotionTemplate, MouseTemplate } from 'shared/templates';
 
 export class MouseMessage extends Message<MouseTemplate> {
 

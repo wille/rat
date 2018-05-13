@@ -1,5 +1,5 @@
-import Client from '@app/client';
 import * as React from 'react';
+import Client from '../../client';
 import StaticImage from './StaticImage';
 
 interface Props {
