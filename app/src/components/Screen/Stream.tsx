@@ -2,13 +2,9 @@ import * as React from 'react';
 import styled from 'react-emotion';
 
 import { InputState } from 'shared/display';
+import { KeyMessage, MouseMessage, MouseMoveMessage } from 'shared/messages';
 import { ScreenFrameTemplate } from 'shared/templates';
 import Client from '../../client';
-import KeyMessage from '../../messages/outgoing/key';
-import {
-  MouseMessage,
-  MouseMotionMessage,
-} from '../../messages/outgoing/mouse';
 import withClient from '../../withClient';
 
 const Container = styled<any, 'div'>('div')`
@@ -103,7 +99,7 @@ class Stream extends React.Component<Props> {
 
     if (this.mouse) {
       this.props.client.send(
-        new MouseMotionMessage({
+        new MouseMoveMessage({
           monitor: this.monitor,
           x: event.nativeEvent.offsetX / (scale / 100),
           y: event.nativeEvent.offsetY / (scale / 100),

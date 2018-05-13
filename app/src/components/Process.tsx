@@ -1,13 +1,13 @@
-import Client from '..//client';
-import { selectProcessList } from '..//reducers';
-import withClient from '..//withClient';
-import { Process, ProcessType } from 'shared/templates';
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { Process, ProcessType } from 'shared/templates';
+import Client from '..//client';
+import { selectProcessList } from '..//reducers';
+import withClient from '..//withClient';
 
-import ProcessMessage from '../../../shared/src/messages/process';
+import { ProcessMessage } from 'shared/messages';
 import { ProcessSubscription } from './Subscription';
 
 interface Props {

@@ -1,4 +1,4 @@
-import SubscribeMessage from 'shared/messages/subscribe';
+import { SubscribeMessage } from 'shared/messages';
 import { Action } from '../constants';
 import ControlSocket from '../control';
 
@@ -27,3 +27,5 @@ export default (state = initialState, action) => {
       return state;
   }
 };
+
+export const selectSubscriptions = state => state.subscriptions;

@@ -1,4 +1,4 @@
-import Message from 'shared/messages';
+import { Message } from 'shared/messages';
 import {
   ClientProperties,
   Monitor,

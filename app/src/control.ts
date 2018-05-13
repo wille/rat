@@ -1,5 +1,5 @@
 import { BSON } from 'bson';
-import Message from 'shared/messages';
+import { Message } from 'shared/messages';
 import { resetClients } from './actions';
 import * as EventHandler from './messages';
 
