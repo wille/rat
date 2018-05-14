@@ -2,16 +2,15 @@ import { BSON, ObjectId } from 'bson';
 import * as geoip from 'geoip-lite';
 import { TLSSocket } from 'tls';
 
-import Message from '../../../shared/src/messages';
+import { Message } from '../../../shared/src/messages';
 import {
   ClientProperties,
   Monitor,
   UserOperatingSystem,
 } from '../../../shared/src/system';
-import { ClientUpdateType } from '../../../shared/src/templates/client';
+import { ClientUpdateType } from '../../../shared/src/templates';
 import ControlSocketServer from '../control-socket';
-import ClientMessage from '../ws/messages/client.message';
-import PingMessage from '../ws/messages/ping.message';
+import { ClientMessage, PingMessage } from '../ws/messages';
 import { handle } from './packets';
 
 class Client implements ClientProperties {
@@ -72,7 +71,7 @@ class Client implements ClientProperties {
   }
 
   public sendPing() {
-    this.send(new PingMessage());
+    this.send(new PingMessage({}));
     this.pingTime = new Date().getTime();
   }
 

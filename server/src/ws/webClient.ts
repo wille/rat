@@ -1,17 +1,16 @@
 import { BSON } from 'bson';
 import * as WebSocket from 'ws';
 
-import Message from '../../../shared/src/messages';
+import { Message } from '../../../shared/src/messages';
 import { MessageType } from '../../../shared/src/types';
 import { handle } from './events';
 
 class WebClient {
-
   public subscribed: MessageType[] = [];
   private readonly bson = new BSON();
 
   constructor(private ws: WebSocket) {
-    ws.on('message', (data) => this.onMessage(data));
+    ws.on('message', data => this.onMessage(data));
   }
 
   public emit(m: Message, force: boolean = false) {
@@ -23,7 +22,7 @@ class WebClient {
   private send(m: Message) {
     const buffer = this.bson.serialize({
       _type: m._type,
-      ...m.data
+      ...m.data,
     });
 
     this.ws.send(buffer);

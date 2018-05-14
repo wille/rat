@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 
-import Message from 'shared/messages';
-import { MessageType } from 'shared/types';
+import { Message } from '../../../../shared/src/messages';
+import { MessageType } from '../../../../shared/src/types';
 import MouseMotionHandler from './mouseMove';
 
 import WebClient from '../webClient';

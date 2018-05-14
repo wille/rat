@@ -1672,6 +1672,10 @@ convert-source-map@^1.4.0, convert-source-map@^1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.1.tgz#b8278097b9bc229365de5c62cf5fcaed8b5599e5"
 
+convert-tsconfig-paths-to-webpack-aliases@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/convert-tsconfig-paths-to-webpack-aliases/-/convert-tsconfig-paths-to-webpack-aliases-0.9.2.tgz#55d67f86c7a506ab5d89d14580ae6e7c07f1aad0"
+
 cookie-signature@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
@@ -5854,7 +5858,9 @@ sha.js@^2.4.0, sha.js@^2.4.8:
     safe-buffer "^5.0.1"
 
 "shared@file:../shared":
-  version "0.0.0"
+  version "1.0.0"
+  dependencies:
+    bson "^2.0.6"
 
 shebang-command@^1.2.0:
   version "1.2.0"

@@ -6,7 +6,7 @@ import * as tls from 'tls';
 import { ClientUpdateType } from '../../shared/src/templates/client';
 import Client from './client/client';
 import ControlSocketServer from './control-socket';
-import ClientMessage from './ws/messages/client.message';
+import { ClientMessage } from './ws/messages';
 
 const debug = require('debug')('server:tls');
 

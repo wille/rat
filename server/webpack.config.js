@@ -1,9 +1,12 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const convertPathsToAliases = require('convert-tsconfig-paths-to-webpack-aliases').default
+const tsconfig = require('./tsconfig.json');
 
 module.exports = (env, options) => ({
   entry: './src/index.ts',
   target: 'node',
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -17,7 +20,8 @@ module.exports = (env, options) => ({
   resolve: {
     extensions: [
       '.tsx', '.ts', '.js'
-    ]
+    ],
+    alias: convertPathsToAliases(tsconfig),
   },
   output: {
     filename: 'index.js',

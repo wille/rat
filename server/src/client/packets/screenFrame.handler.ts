@@ -1,8 +1,8 @@
-import { PacketHandler } from '~/client/packets';
+import { PacketHandler } from '.';
 
 import { ScreenFrameTemplate } from '../../../../shared/src/templates';
 import ControlSocketServer from '../../control-socket';
-import ScreenFrameMessage from '../../ws/messages/screenFrame.message';
+import { ScreenFrameMessage } from '../../ws/messages';
 
 class ScreenFrameHandler implements PacketHandler<ScreenFrameTemplate> {
   public handle(data: ScreenFrameTemplate) {

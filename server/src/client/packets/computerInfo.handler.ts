@@ -1,10 +1,10 @@
-import { PacketHandler } from '~/client/packets';
+import { PacketHandler } from '.';
 
 import { ClientProperties } from '../../../../shared/src/system';
 import { MessageTemplate } from '../../../../shared/src/templates';
 import { ClientUpdateType } from '../../../../shared/src/templates/client';
 import ControlSocketServer from '../../control-socket';
-import ClientMessage from '../../ws/messages/client.message';
+import { ClientMessage } from '../../ws/messages';
 import Client from '../client';
 
 type ComputerInfoTemplate = MessageTemplate & ClientProperties;

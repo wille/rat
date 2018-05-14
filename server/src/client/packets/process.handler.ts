@@ -1,8 +1,8 @@
-import { PacketHandler } from '~/client/packets';
+import { PacketHandler } from '.';
 
 import { ProcessListTemplate } from '../../../../shared/src/templates/process';
 import ControlSocketServer from '../../control-socket';
-import ProcessListMessage from '../../ws/messages/process.message';
+import { ProcessListMessage } from '../../ws/messages';
 
 export default class ProcessListHandler
   implements PacketHandler<ProcessListTemplate> {

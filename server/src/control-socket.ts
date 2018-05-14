@@ -1,11 +1,11 @@
 import { IncomingMessage } from 'http';
 import * as https from 'https';
-import Message from 'shared/messages';
 import * as WebSocket from 'ws';
 
+import { Message } from '../../shared/src/messages';
 import { ClientUpdateType } from '../../shared/src/templates/client';
 import { clientServer } from './index';
-import ClientMessage from './ws/messages/client.message';
+import { ClientMessage } from './ws/messages';
 import WebClient from './ws/webClient';
 
 import chalk from 'chalk';
