@@ -1,8 +1,9 @@
 import { Action } from '../constants';
 import ControlSocket from '../control';
+import { MessageHandler } from '../messages';
 import { SubscribeMessage } from '../messages/outgoing-messages';
 
-const initialState = [];
+const initialState: MessageHandler[] = [];
 
 export default (state = initialState, action) => {
   switch (action.type) {

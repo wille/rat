@@ -1,9 +1,10 @@
 import { BSON } from 'bson';
 import { Message } from 'shared/messages';
-import { resetClients } from './actions';
-import * as EventHandler from './messages';
 
 import store from '.';
+import { resetClients } from './actions';
+import { SubscribeMessage } from './messages/outgoing-messages';
+import { selectSubscriptions } from './reducers';
 
 class ControlSocket {
   private readonly bson = new BSON();
@@ -45,7 +46,7 @@ class ControlSocket {
 
     this.attempt = 0;
 
-    EventHandler.publishSubscriptions();
+    this.sendSubscriptions();
 
     this.queue.forEach(queued => {
       this.send(queued);
@@ -53,11 +54,28 @@ class ControlSocket {
     this.queue = [];
   }
 
+  private sendSubscriptions() {
+    selectSubscriptions(store.getState()).forEach(event =>
+      this.send(
+        new SubscribeMessage({
+          type: event.type,
+          subscribe: true,
+        })
+      )
+    );
+  }
+
+  private emit(message: Message) {
+    selectSubscriptions(store.getState())
+      .filter(event => event.type === message._type)
+      .forEach(event => event.handler(message));
+  }
+
   private handleMessage(e: MessageEvent) {
     const reader = new FileReader();
     reader.onloadend = () => {
       const bson = this.bson.deserialize(Buffer.from(reader.result));
-      EventHandler.emit(bson);
+      this.emit(bson);
     };
 
     reader.readAsArrayBuffer(e.data);

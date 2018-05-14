@@ -1,22 +1,13 @@
-import { Message } from 'shared/messages';
-import ControlSocket from '../control';
-import { SubscribeMessage } from '../messages/outgoing-messages';
+import { MessageTemplate } from 'shared/templates';
 
-import store from '..';
-import { selectSubscriptions } from '../reducers';
+export { default as clientHandler } from './client-handler';
+export { default as directoryHandler } from './directory-handler';
+export { default as processHandler } from './process-handler';
+export { default as screenHandler } from './screen-handler';
 
-export const emit = (message: Message) =>
-  store
-    .getState()
-    .subscriptions.filter(event => event.type === message._type)
-    .forEach(event => event.handler(message));
+export * from './outgoing-messages';
 
-export const publishSubscriptions = () =>
-  selectSubscriptions(store.getState()).forEach(event =>
-    ControlSocket.send(
-      new SubscribeMessage({
-        type: event.type,
-        subscribe: true,
-      })
-    )
-  );
+/**
+ * Incoming websocket message handler
+ */
+export type MessageHandler = <T extends MessageTemplate>(data: T) => void;

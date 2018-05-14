@@ -1,10 +1,9 @@
 import { createAction } from 'redux-actions';
 import { MessageType } from 'shared/types';
 import { Action } from '../constants';
+import { MessageHandler } from '../messages';
 
-type HandlerFunc = (data?: any) => void;
-
-export const subscribe = createAction<any, MessageType, HandlerFunc>(
+export const subscribe = createAction<any, MessageType, MessageHandler>(
   Action.SUBSCRIBE,
   (type, handler) => ({
     type,
@@ -12,4 +11,4 @@ export const subscribe = createAction<any, MessageType, HandlerFunc>(
   })
 );
 
-export const unsubscribe = createAction<HandlerFunc>(Action.UNSUBSCRIBE);
+export const unsubscribe = createAction<MessageHandler>(Action.UNSUBSCRIBE);

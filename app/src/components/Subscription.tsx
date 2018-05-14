@@ -1,21 +1,22 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import withProps from 'recompose/withProps';
 import { MessageType } from 'shared/types';
 
-import { subscribe, unsubscribe } from '..//actions/subscription';
-
-import withProps from 'recompose/withProps';
-
-import clientHandler from '../messages/clients';
-import directoryHandler from '../messages/directory';
-import processHandler from '../messages/process';
-import screenHandler from '../messages/screen';
+import { subscribe, unsubscribe } from '../actions/subscription';
+import {
+  clientHandler,
+  directoryHandler,
+  MessageHandler,
+  processHandler,
+  screenHandler,
+} from '../messages';
 
 interface Props {
   type: MessageType;
-  handler: (data?: any) => void;
-  subscribe: any;
-  unsubscribe: any;
+  handler: MessageHandler;
+  subscribe: typeof subscribe;
+  unsubscribe: typeof unsubscribe;
 }
 
 class Handler extends React.Component<Props> {
