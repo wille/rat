@@ -1,5 +1,6 @@
-import { Message, SubscribeMessage } from 'shared/messages';
+import { Message } from 'shared/messages';
 import ControlSocket from '../control';
+import { SubscribeMessage } from '../messages/outgoing-messages';
 
 import store from '..';
 import { selectSubscriptions } from '../reducers';

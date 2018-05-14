@@ -2,9 +2,13 @@ import * as React from 'react';
 import styled from 'react-emotion';
 
 import { InputState } from 'shared/display';
-import { KeyMessage, MouseMessage, MouseMoveMessage } from 'shared/messages';
 import { ScreenFrameTemplate } from 'shared/templates';
 import Client from '../../client';
+import {
+  KeyMessage,
+  MouseMessage,
+  MouseMoveMessage,
+} from '../../messages/outgoing-messages';
 import withClient from '../../withClient';
 
 const Container = styled<any, 'div'>('div')`

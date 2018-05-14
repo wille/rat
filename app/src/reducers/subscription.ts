@@ -1,6 +1,6 @@
-import { SubscribeMessage } from 'shared/messages';
 import { Action } from '../constants';
 import ControlSocket from '../control';
+import { SubscribeMessage } from '../messages/outgoing-messages';
 
 const initialState = [];
 

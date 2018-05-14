@@ -2,9 +2,9 @@ import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { StreamMessage } from 'shared/messages';
 import { Monitor } from 'shared/system';
 import { ScreenFrameTemplate } from 'shared/templates';
+import { StreamMessage } from '../../messages/outgoing-messages';
 
 import Client from '../../client';
 import { selectFps, selectScreenBuffer } from '../../reducers';

@@ -5,11 +5,11 @@ import { css } from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { BrowseMessage } from 'shared/messages';
 import { OperatingSystem } from 'shared/system';
 import { FileEntry } from 'shared/templates';
 import { setCurrentDirectory } from '../../actions';
 import Client from '../../client';
+import { BrowseMessage } from '../../messages/outgoing-messages';
 import { selectCurrentDirectory, selectFilesList } from '../../reducers';
 import withClient from '../../withClient';
 

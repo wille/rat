@@ -7,7 +7,7 @@ import Client from '..//client';
 import { selectProcessList } from '..//reducers';
 import withClient from '..//withClient';
 
-import { ProcessMessage } from 'shared/messages';
+import { ProcessMessage } from '../messages/outgoing-messages';
 import { ProcessSubscription } from './Subscription';
 
 interface Props {
