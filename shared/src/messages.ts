@@ -1,7 +1,7 @@
 import { MessageTemplate} from './templates';
 import { MessageType } from './types';
 
-export interface Message<T extends MessageTemplate = any> {
+export interface Message<T extends MessageTemplate = MessageTemplate> {
   readonly _type: MessageType,
   readonly data: T
 }

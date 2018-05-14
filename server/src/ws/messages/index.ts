@@ -1,3 +1,6 @@
+import { MessageTemplate } from 'shared/templates';
+import Client from '~/client/client';
+
 import { createMessage } from '../../../../shared/src/messages';
 import {
   BrowseTemplate,
@@ -12,14 +15,14 @@ import {
   ScreenTemplate,
 } from '../../../../shared/src/templates';
 import { MessageType } from '../../../../shared/src/types';
-
-export { default as directoryHandler } from './directory-handler';
-export { default as keyHandler } from './key-handler';
-export { default as mouseHandler } from './mouse-handler';
-export { default as mouseMoveHandler } from './mouse-move-handler';
-export { default as processHandler } from './process-handler';
-export { default as screenHandler } from './screen-handler';
-export { default as subscribeHandler } from './subscribe-handler';
+import WebClient from '../webClient';
+import directoryHandler from './directory-handler';
+import keyHandler from './key-handler';
+import mouseHandler from './mouse-handler';
+import mouseMoveHandler from './mouse-move-handler';
+import processHandler from './process-handler';
+import screenHandler from './screen-handler';
+import subscribeHandler from './subscribe-handler';
 
 export const BrowseMessage = createMessage<BrowseTemplate>(
   MessageType.Directory
@@ -47,3 +50,22 @@ export const ScreenFrameMessage = createMessage<ScreenFrameTemplate>(
 export const DirectoryContentMessage = createMessage<DirectoryContentTemplate>(
   MessageType.Directory
 );
+
+export type MessageHandler = <T extends MessageTemplate>(
+  data: T,
+  webClient: WebClient,
+  client?: Client
+) => void;
+
+const mapping = {
+  [MessageType.Subscribe]: subscribeHandler,
+  [MessageType.Screen]: screenHandler,
+  [MessageType.Directory]: directoryHandler,
+  [MessageType.Process]: processHandler,
+  [MessageType.Mouse]: mouseHandler,
+  [MessageType.MouseMove]: mouseMoveHandler,
+  [MessageType.Key]: keyHandler,
+};
+
+export const getMessageHandler = (type: MessageType): MessageHandler =>
+  mapping[type];

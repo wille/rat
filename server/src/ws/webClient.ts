@@ -1,9 +1,12 @@
 import { BSON } from 'bson';
+import chalk from 'chalk';
 import * as WebSocket from 'ws';
+import { getMessageHandler } from '~/ws/messages';
 
 import { Message } from '../../../shared/src/messages';
 import { MessageType } from '../../../shared/src/types';
-import { handle } from './events';
+
+const debug = require('debug')('control:ws');
 
 class WebClient {
   public subscribed: MessageType[] = [];
@@ -30,7 +33,17 @@ class WebClient {
 
   private onMessage(data: WebSocket.Data) {
     const m = this.bson.deserialize(data as Buffer) as Message;
-    handle(this, m);
+    this.handle(this, m);
+  }
+
+  private handle<T extends Message>(webClient: WebClient, message: T) {
+    const handler = getMessageHandler(message._type);
+
+    if (handler) {
+      handler(message, webClient);
+    } else {
+      debug('failed to find handler', chalk.bold(message._type + ''), message);
+    }
   }
 }
 
