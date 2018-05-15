@@ -12,7 +12,7 @@ import {
 import { ClientUpdateType } from '../../../shared/src/templates';
 import ControlSocketServer from '../control-socket';
 import { ClientMessage } from '../ws/messages';
-import { PingPacket, selectHandler } from './packets';
+import { PacketType, PingPacket, selectHandler } from './packets';
 
 class Client implements ClientProperties {
   /**
@@ -181,7 +181,7 @@ class Client implements ClientProperties {
     }
   }
 
-  private handle(header: MessageType, data: any) {
+  private handle(header: PacketType, data: any) {
     const handler = selectHandler(header);
 
     if (handler) {

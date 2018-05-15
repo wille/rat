@@ -9,7 +9,7 @@ import screenFrameHandler from './screen-frame-handler';
 
 export * from './outgoing-packets';
 
-const enum PacketType {
+export const enum PacketType {
   Ping = 0,
   ComputerInfo = 2,
   Screen = 3,
@@ -30,5 +30,4 @@ export type PacketHandler = <T extends MessageTemplate>(
   client: Client
 ) => void;
 
-export const selectHandler = (type: MessageType): PacketHandler =>
-  mapping[type];
+export const selectHandler = (type: PacketType): PacketHandler => mapping[type];
