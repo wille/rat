@@ -30,19 +30,18 @@ class ClientServer {
     setInterval(() => this.ping(), 2500);
   }
 
-  public getById(
-    id: string | { _id?: string },
-    callback: (client: Client) => void
-  ) {
+  public getById(id: string | { _id?: string }) {
     if (typeof id === 'object') {
       id = id._id;
     }
 
     const clients = this.clients.filter(x => x.id === id);
 
-    if (clients.length > 0) {
-      callback(clients[0]);
+    if (clients.length > 1) {
+      throw new Error('multiple clients with same id (' + id + ')');
     }
+
+    return clients[0];
   }
 
   private ping() {

@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import * as WebSocket from 'ws';
 import { getMessageHandler } from '~/ws/messages';
 
+import { clientServer } from '..';
 import { Message } from '../../../shared/src/messages';
 import { MessageType } from '../../../shared/src/types';
 
@@ -40,7 +41,17 @@ class WebClient {
     const handler = getMessageHandler(message._type);
 
     if (handler) {
-      handler(message, webClient);
+      let client;
+
+      if (message.data._id) {
+        client = clientServer.getById(message.data._id);
+
+        if (!client) {
+          throw new Error("couldn't find client with id " + message.data._id);
+        }
+      }
+
+      handler(message, webClient, client);
     } else {
       debug('failed to find handler', chalk.bold(message._type + ''), message);
     }

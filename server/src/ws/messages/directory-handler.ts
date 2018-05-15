@@ -1,6 +1,7 @@
+import Client from '~/client/client';
 import { BrowsePacket } from '~/client/packets';
-import { clientServer } from '../..';
+
 import { BrowseTemplate } from '../../../../shared/src/templates';
 
-export default (data: BrowseTemplate) =>
-  clientServer.getById(data.id, c => c.send(new BrowsePacket(data)));
+export default (data: BrowseTemplate, _, client: Client) =>
+  client.send(new BrowsePacket(data));
