@@ -7,5 +7,6 @@ export const enum MessageType {
     Process,
     Mouse,
     MouseMove,
-    Key
+    Key,
+    DownloadToServer = 9,
 }

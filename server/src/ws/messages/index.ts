@@ -15,6 +15,7 @@ import keyHandler from './key-handler';
 import mouseHandler from './mouse-handler';
 import mouseMoveHandler from './mouse-move-handler';
 import processHandler from './process-handler';
+import requestDownloadHandler from './request-download-handler';
 import screenHandler from './screen-handler';
 import subscribeHandler from './subscribe-handler';
 
@@ -46,6 +47,7 @@ const mapping = {
   [MessageType.Mouse]: mouseHandler,
   [MessageType.MouseMove]: mouseMoveHandler,
   [MessageType.Key]: keyHandler,
+  [MessageType.DownloadToServer]: requestDownloadHandler,
 };
 
 export const getMessageHandler = (type: MessageType): MessageHandler =>

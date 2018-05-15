@@ -6,6 +6,7 @@ import {
   MouseMotionTemplate,
   MouseTemplate,
   ProcessTemplate,
+  RequestDownloadTemplate,
   ScreenTemplate,
   SubscribeTemplate,
 } from 'shared/templates';
@@ -26,4 +27,7 @@ export const KeyMessage = createMessage<KeyTemplate>(MessageType.Key);
 export const MouseMessage = createMessage<MouseTemplate>(MessageType.Mouse);
 export const MouseMoveMessage = createMessage<MouseMotionTemplate>(
   MessageType.MouseMove
+);
+export const DownloadToServerMessage = createMessage<RequestDownloadTemplate>(
+  MessageType.DownloadToServer
 );

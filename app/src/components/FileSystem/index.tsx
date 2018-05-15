@@ -9,7 +9,10 @@ import { OperatingSystem } from 'shared/system';
 import { FileEntry } from 'shared/templates';
 import { setCurrentDirectory } from '../../actions';
 import Client from '../../client';
-import { BrowseMessage } from '../../messages/outgoing-messages';
+import {
+  BrowseMessage,
+  DownloadToServerMessage,
+} from '../../messages/outgoing-messages';
 import { selectCurrentDirectory, selectFilesList } from '../../reducers';
 import withClient from '../../withClient';
 
@@ -113,6 +116,16 @@ class FileSystem extends React.Component<Props, State> {
     );
   }
 
+  download = (file: FileEntry) => {
+    const { client } = this.props;
+
+    this.props.client.send(
+      new DownloadToServerMessage({
+        file: file.path + client.separator + file.name,
+      })
+    );
+  };
+
   browse = (file?: FileEntry | string) => {
     const { client, setCurrentDirectory } = this.props;
 
@@ -122,6 +135,9 @@ class FileSystem extends React.Component<Props, State> {
       path = file;
     } else if (file && file.directory) {
       path = file ? file.path + client.separator + file.name : '';
+    } else if (file) {
+      this.download(file as FileEntry);
+      return;
     }
 
     if (client.os.type !== OperatingSystem.WINDOWS && path[0] !== '/') {

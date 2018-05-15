@@ -28,6 +28,10 @@ export interface DataTemplate extends MessageTemplate {
   data: any;
 }
 
+export interface RequestDownloadTemplate extends MessageTemplate {
+  file: string;
+}
+
 export interface TransferData {
   _id: ObjectId;
   local?: string;
