@@ -9,4 +9,8 @@ export * from "./screenFrame";
 export * from "./subscribe";
 export * from './transfers';
 
-export { default as MessageTemplate } from "./template";
+import MessageTemplate from './template';
+
+export { MessageTemplate };
+
+export * from './template'

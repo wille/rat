@@ -1,7 +1,10 @@
 import { MessageType } from "../types";
 
-export default interface MessageTemplate {
-    _type?: MessageType;
-    _id?: string;
-    [key: string]: any;
+export interface BaseTemplate<T> {
+  _type?: T;
+}
+
+export default interface MessageTemplate extends BaseTemplate<MessageType> {
+  _id?: string;
+  [key: string]: any;
 }

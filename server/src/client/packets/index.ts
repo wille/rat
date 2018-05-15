@@ -1,5 +1,5 @@
-import { MessageType } from 'shared/types';
-import { MessageTemplate } from '../../../../shared/src/templates/index';
+import { BaseTemplate } from 'shared/templates/template';
+
 import Client from '../client';
 import computerInfoHandler from './computer-info-handler';
 import directoryContentHandler from './directory-content-handler';
@@ -9,6 +9,8 @@ import processHandler from './process-handler';
 import screenFrameHandler from './screen-frame-handler';
 
 export * from './outgoing-packets';
+
+export type PacketTemplate = BaseTemplate<PacketType>;
 
 export const enum PacketType {
   Ping = 0,
@@ -28,9 +30,10 @@ const mapping = {
   [PacketType.DownloadToServer]: downloadToServerHandler,
 };
 
-export type PacketHandler = <T extends MessageTemplate>(
+export type PacketHandler = <T extends PacketTemplate>(
   data: T,
   client: Client
 ) => void;
 
-export const selectHandler = (type: PacketType): PacketHandler => mapping[type];
+export const selectHandler = (type: PacketType): PacketHandler =>
+  mapping[type] as PacketHandler;

@@ -2,7 +2,6 @@ import { BSON, ObjectId } from 'bson';
 import * as geoip from 'geoip-lite';
 import { TLSSocket } from 'tls';
 
-import { MessageType } from 'shared/types';
 import { Message } from '../../../shared/src/messages';
 import {
   ClientProperties,
