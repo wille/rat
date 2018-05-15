@@ -6,6 +6,8 @@ import pongHandler from './pong-handler';
 import processHandler from './process-handler';
 import screenFrameHandler from './screen-frame-handler';
 
+export * from './outgoing-packets';
+
 const enum PacketType {
   Ping = 0,
   ComputerInfo = 2,

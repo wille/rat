@@ -10,7 +10,8 @@ import {
 } from '../../../shared/src/system';
 import { ClientUpdateType } from '../../../shared/src/templates';
 import ControlSocketServer from '../control-socket';
-import { ClientMessage, PingMessage } from '../ws/messages';
+import { ClientMessage } from '../ws/messages';
+import { PingPacket } from './packets';
 import { handle } from './packets';
 
 class Client implements ClientProperties {
@@ -71,7 +72,7 @@ class Client implements ClientProperties {
   }
 
   public sendPing() {
-    this.send(new PingMessage({}));
+    this.send(new PingPacket({}));
     this.pingTime = new Date().getTime();
   }
 
