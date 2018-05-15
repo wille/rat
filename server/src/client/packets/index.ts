@@ -1,14 +1,10 @@
 import { MessageTemplate } from '../../../../shared/src/templates/index';
 import Client from '../client';
-import ComputerInfoHandler from './computerInfo.handler';
-import DirectoryContentHandler from './directory.handler';
-import PongHandler from './pong.handler';
-import ProcessHandler from './process.handler';
-import ScreenFrameHandler from './screenFrame.handler';
-
-interface PacketMap {
-  [index: string]: PacketHandler<any>;
-}
+import computerInfoHandler from './computer-info-handler';
+import directoryContentHandler from './directory-content-handler';
+import pongHandler from './pong-handler';
+import processHandler from './process-handler';
+import screenFrameHandler from './screen-frame-handler';
 
 const enum PacketType {
   Ping = 0,
@@ -18,23 +14,24 @@ const enum PacketType {
   Process = 5,
 }
 
-const mapping: PacketMap = {
-  [PacketType.Ping]: new PongHandler(),
-  [PacketType.ComputerInfo]: new ComputerInfoHandler(),
-  [PacketType.Screen]: new ScreenFrameHandler(),
-  [PacketType.Directory]: new DirectoryContentHandler(),
-  [PacketType.Process]: new ProcessHandler(),
+const mapping = {
+  [PacketType.Ping]: pongHandler,
+  [PacketType.ComputerInfo]: computerInfoHandler,
+  [PacketType.Screen]: screenFrameHandler,
+  [PacketType.Directory]: directoryContentHandler,
+  [PacketType.Process]: processHandler,
 };
 
-export interface PacketHandler<T extends MessageTemplate> {
-  handle(data: T, client: Client): void;
-}
+export type PacketHandler = <T extends MessageTemplate>(
+  data: T,
+  client: Client
+) => void;
 
 export function handle<T extends MessageTemplate>(client: Client, message: T) {
-  const handler = mapping[message._type] as PacketHandler<T>;
+  const handler = mapping[message._type];
 
   if (handler) {
-    handler.handle(message, client);
+    handler(message, client);
   } else {
     throw new Error('failed to find handler for ' + message._type);
   }
