@@ -21,6 +21,13 @@ export enum TransferState {
   Waiting,
 }
 
+export interface DataTemplate extends MessageTemplate {
+  file: string;
+  total: number;
+  final: boolean;
+  data: any;
+}
+
 export interface TransferData {
   _id: ObjectId;
   local?: string;

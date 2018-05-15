@@ -16,7 +16,7 @@ type UploadPacket struct {
 }
 
 func (packet UploadPacket) Header() header.PacketHeader {
-	return header.GetFileHeader
+	return header.DownloadToServerHeader
 }
 
 func (packet *UploadPacket) Init() {
