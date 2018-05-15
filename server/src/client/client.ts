@@ -2,6 +2,7 @@ import { BSON, ObjectId } from 'bson';
 import * as geoip from 'geoip-lite';
 import { TLSSocket } from 'tls';
 
+import { MessageType } from 'shared/types';
 import { Message } from '../../../shared/src/messages';
 import {
   ClientProperties,
@@ -11,8 +12,7 @@ import {
 import { ClientUpdateType } from '../../../shared/src/templates';
 import ControlSocketServer from '../control-socket';
 import { ClientMessage } from '../ws/messages';
-import { PingPacket } from './packets';
-import { handle } from './packets';
+import { PingPacket, selectHandler } from './packets';
 
 class Client implements ClientProperties {
   /**
@@ -177,10 +177,17 @@ class Client implements ClientProperties {
       buffer = await this.read(size);
       const data = new BSON().deserialize(buffer);
 
-      handle(this, {
-        _type: header,
-        ...data,
-      });
+      this.handle(header, data);
+    }
+  }
+
+  private handle(header: MessageType, data: any) {
+    const handler = selectHandler(header);
+
+    if (handler) {
+      handler(data, this);
+    } else {
+      throw new Error('failed to find handler for ' + header);
     }
   }
 }

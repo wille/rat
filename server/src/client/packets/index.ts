@@ -1,3 +1,4 @@
+import { MessageType } from 'shared/types';
 import { MessageTemplate } from '../../../../shared/src/templates/index';
 import Client from '../client';
 import computerInfoHandler from './computer-info-handler';
@@ -29,12 +30,5 @@ export type PacketHandler = <T extends MessageTemplate>(
   client: Client
 ) => void;
 
-export function handle<T extends MessageTemplate>(client: Client, message: T) {
-  const handler = mapping[message._type];
-
-  if (handler) {
-    handler(message, client);
-  } else {
-    throw new Error('failed to find handler for ' + message._type);
-  }
-}
+export const selectHandler = (type: MessageType): PacketHandler =>
+  mapping[type];
