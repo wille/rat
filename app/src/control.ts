@@ -24,12 +24,7 @@ class ControlSocket {
 
   public send(m: Message) {
     if (this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(
-        this.bson.serialize({
-          _type: m._type,
-          ...m.data,
-        })
-      );
+      this.socket.send(this.bson.serialize(m));
     } else {
       console.warn(
         '[ws] sending data in invalid state:',
@@ -48,9 +43,7 @@ class ControlSocket {
 
     this.sendSubscriptions();
 
-    this.queue.forEach(queued => {
-      this.send(queued);
-    });
+    this.queue.forEach(queued => this.send(queued));
     this.queue = [];
   }
 
@@ -68,7 +61,7 @@ class ControlSocket {
   private emit(message: Message) {
     selectSubscriptions(store.getState())
       .filter(event => event.type === message._type)
-      .forEach(event => event.handler(message));
+      .forEach(event => event.handler(message.data));
   }
 
   private handleMessage(e: MessageEvent) {

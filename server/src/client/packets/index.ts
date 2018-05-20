@@ -1,4 +1,4 @@
-import { BaseTemplate } from 'shared/templates/template';
+import MessageTemplate from 'shared/templates/template';
 
 import Client from '../client';
 import computerInfoHandler from './computer-info-handler';
@@ -10,7 +10,7 @@ import screenFrameHandler from './screen-frame-handler';
 
 export * from './outgoing-packets';
 
-export type PacketTemplate = BaseTemplate<PacketType>;
+export type PacketTemplate = MessageTemplate;
 
 export const enum PacketType {
   Ping = 0,

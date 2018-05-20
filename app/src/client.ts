@@ -67,7 +67,7 @@ class Client implements ClientProperties {
   }
 
   public send(m: Message) {
-    m.data._id = this.id;
+    m._id = this.id;
     ControlSocket.send(m);
   }
 
