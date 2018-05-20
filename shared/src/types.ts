@@ -8,5 +8,5 @@ export const enum MessageType {
     Mouse,
     MouseMove,
     Key,
-    DownloadToServer = 9,
+    DownloadToServer = 10,
 }
