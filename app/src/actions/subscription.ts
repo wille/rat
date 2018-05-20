@@ -11,4 +11,4 @@ export const subscribe = createAction<any, MessageType, MessageHandler>(
   })
 );
 
-export const unsubscribe = createAction<MessageHandler>(Action.UNSUBSCRIBE);
+export const unsubscribe = createAction<MessageType>(Action.UNSUBSCRIBE);

@@ -1,13 +1,15 @@
+import { ObjectId } from 'bson';
 import * as path from 'path';
 import * as React from 'react';
 import { Breadcrumb, Table } from 'react-bootstrap';
 import { css } from 'react-emotion';
 import { connect } from 'react-redux';
+import { withRouter, BrowserHistory } from 'react-router-dom';
 import { compose } from 'recompose';
-
 import { OperatingSystem } from 'shared/system';
-import { FileEntry } from 'shared/templates';
-import { setCurrentDirectory } from '../../actions';
+import { FileEntry, TransferState } from 'shared/templates';
+
+import { createPlaceholderTransfer, setCurrentDirectory } from '../../actions';
 import Client from '../../client';
 import {
   BrowseMessage,
@@ -15,7 +17,6 @@ import {
 } from '../../messages/outgoing-messages';
 import { selectCurrentDirectory, selectFilesList } from '../../reducers';
 import withClient from '../../withClient';
-
 import { DirectorySubscription } from '../Subscription';
 import Toolbar from '../Toolbar';
 import Row from './Row';
@@ -24,7 +25,9 @@ interface Props {
   client: Client;
   filesList: FileEntry[];
   currentDirectory: string;
+  history: BrowserHistory;
   setCurrentDirectory: typeof setCurrentDirectory;
+  createPlaceholderTransfer: typeof createPlaceholderTransfer;
 }
 
 interface State {
@@ -117,13 +120,27 @@ class FileSystem extends React.Component<Props, State> {
   }
 
   download = (file: FileEntry) => {
-    const { client } = this.props;
+    const { client, history, createPlaceholderTransfer } = this.props;
 
-    this.props.client.send(
+    const id = new ObjectId();
+
+    createPlaceholderTransfer({
+      id,
+      local: '',
+      remote: file.path + client.separator + file.name,
+      total: 0,
+      recv: 0,
+      state: TransferState.Waiting,
+    });
+
+    client.send(
       new DownloadToServerMessage({
+        id,
         file: file.path + client.separator + file.name,
       })
     );
+
+    history.push('/transfers');
   };
 
   browse = (file?: FileEntry | string) => {
@@ -163,7 +180,9 @@ export default compose(
     }),
     {
       setCurrentDirectory,
+      createPlaceholderTransfer,
     }
   ),
+  withRouter,
   withClient
 )(FileSystem);

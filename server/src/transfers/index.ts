@@ -1,28 +1,50 @@
+import { ObjectId, ObjectID } from 'bson';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
+import { TransferData, TransferState } from '../../../shared/src/templates';
 
 const debug = require('debug')('server:transfer');
 
-const transfers = {};
+export const transfersList: TransferData[] = [];
 
-class Transfer {
+class Transfer implements TransferData {
+  public local: string;
+  public remote: string;
+  public total: number = 0;
+  public recv: number = 0;
+  public state: TransferState = TransferState.Waiting;
+
   private fd: number;
 
-  constructor(readonly file: string) {
+  constructor(readonly id: ObjectId) {}
+
+  public open() {
     const tempFile = tmp.fileSync();
-    debug('writing', file, 'to', tempFile.name);
+    debug('writing', this.remote, 'to', tempFile.name);
     this.fd = tempFile.fd;
   }
 
   public write(data: Buffer) {
+    this.recv += data.length;
     fs.writeFileSync(this.fd, data);
   }
 
   public close() {
+    this.state = TransferState.Complete;
     fs.closeSync(this.fd);
   }
 }
 
-export function createTransfer(file: string): Transfer {
-  return transfers[file] || (transfers[file] = new Transfer(file));
+export function createTransfer(id: ObjectID): Transfer {
+  const existing = transfersList.find(x => x.id === id);
+  if (existing) {
+    return existing as Transfer;
+  }
+
+  const transfer = new Transfer(id);
+  transfersList.push(transfer);
+
+  transfer.open();
+
+  return transfer;
 }

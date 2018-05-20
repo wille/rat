@@ -1,4 +1,4 @@
-import { MessageTemplate } from 'shared/templates';
+import { MessageTemplate, TransferTemplate } from 'shared/templates';
 import Client from '~/client/client';
 
 import { createMessage } from '../../../../shared/src/messages';
@@ -31,6 +31,10 @@ export const ScreenFrameMessage = createMessage<ScreenFrameTemplate>(
 
 export const DirectoryContentMessage = createMessage<DirectoryContentTemplate>(
   MessageType.Directory
+);
+
+export const TransferMessage = createMessage<TransferTemplate>(
+  MessageType.Transfers
 );
 
 export type MessageHandler = <T extends MessageTemplate>(

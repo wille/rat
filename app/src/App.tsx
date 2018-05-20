@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
-import { ClientSubscription } from './components/Subscription';
+import {
+  ClientSubscription,
+  TransferSubscription,
+} from './components/Subscription';
 import withClient from './withClient';
 
 import ClientHome from './components/ClientHome';
@@ -42,13 +45,15 @@ const Views2 = withClient(Views);
 
 const App = () => (
   <ClientSubscription>
-    <Container>
-      <Clients />
-      <Switch>
-        <Route path="/client/:id" component={Views2} />
-        <Route path="/transfers" component={Transfers} />
-      </Switch>
-    </Container>
+    <TransferSubscription>
+      <Container>
+        <Clients />
+        <Switch>
+          <Route path="/client/:id" component={Views2} />
+          <Route path="/transfers" component={Transfers} />
+        </Switch>
+      </Container>
+    </TransferSubscription>
   </ClientSubscription>
 );
 

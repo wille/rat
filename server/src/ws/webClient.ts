@@ -44,7 +44,7 @@ class WebClient {
         client = clientServer.getById(message._id);
 
         if (!client) {
-          throw new Error("couldn't find client with id " + message.data._id);
+          console.warn("couldn't find client with id " + message.data._id);
         }
       }
 

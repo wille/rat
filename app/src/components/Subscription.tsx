@@ -10,6 +10,7 @@ import {
   MessageHandler,
   processHandler,
   screenHandler,
+  transfersHandler,
 } from '../messages';
 
 interface Props {
@@ -30,8 +31,8 @@ class Handler extends React.Component<Props> {
   }
 
   componentWillUnmount() {
-    const { unsubscribe } = this.props;
-    unsubscribe(this.state.subscription);
+    const { unsubscribe, type } = this.props;
+    unsubscribe(type);
   }
 
   render() {
@@ -64,9 +65,15 @@ const ProcessSubscription = withProps({
   handler: processHandler,
 })(ConnectedHandler);
 
+const TransferSubscription = withProps({
+  type: MessageType.Transfers,
+  handler: transfersHandler,
+})(ConnectedHandler);
+
 export {
   ClientSubscription,
   DirectorySubscription,
   ScreenSubscription,
   ProcessSubscription,
+  TransferSubscription,
 };

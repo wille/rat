@@ -11,10 +11,11 @@ import (
 )
 
 type UploadPacket struct {
-	File  string `network:"send,receive"`
-	Total int64  `network:"send"`
-	Final bool   `network:"send"`
-	Data  []byte `network:"send"`
+	ID    bson.ObjectId `network:"send,receive"`
+	File  string        `network:"send,receive"`
+	Total int64         `network:"send"`
+	Final bool          `network:"send"`
+	Data  []byte        `network:"send"`
 }
 
 func (packet UploadPacket) Header() header.PacketHeader {
@@ -51,7 +52,7 @@ func (packet UploadPacket) OnReceive() error {
 				fmt.Println(err.Error())
 				return
 			}
-			Queue <- &UploadPacket{packet.File, stat.Size(), final, data[:read]}
+			Queue <- &UploadPacket{packet.ID, packet.File, stat.Size(), final, data[:read]}
 		}
 	}()
 

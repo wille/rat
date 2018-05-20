@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { IncomingMessage } from 'http';
 import * as https from 'https';
 import * as WebSocket from 'ws';
@@ -5,10 +6,11 @@ import * as WebSocket from 'ws';
 import { Message } from '../../shared/src/messages';
 import { ClientUpdateType } from '../../shared/src/templates/client';
 import { clientServer } from './index';
-import { ClientMessage } from './ws/messages';
+import { ClientMessage, TransferMessage } from './ws/messages';
 import WebClient from './ws/webClient';
 
-import chalk from 'chalk';
+import * as Transfers from './transfers';
+
 const debug = require('debug')('server:ws');
 
 class ControlSocketServer {
@@ -50,6 +52,10 @@ class ControlSocketServer {
         }),
         true
       )
+    );
+
+    Transfers.transfersList.forEach(transfer =>
+      client.emit(new TransferMessage(transfer))
     );
 
     ws.on('close', (code, reason) => {

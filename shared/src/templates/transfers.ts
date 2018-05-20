@@ -19,6 +19,8 @@ export enum TransferState {
 
   // first data not received
   Waiting,
+
+  Complete,
 }
 
 export interface DataTemplate extends MessageTemplate {
@@ -29,11 +31,12 @@ export interface DataTemplate extends MessageTemplate {
 }
 
 export interface RequestDownloadTemplate extends MessageTemplate {
+  id: ObjectId;
   file: string;
 }
 
 export interface TransferData {
-  _id: ObjectId;
+  id: ObjectId;
   local?: string;
   remote?: string;
   total: number;
@@ -41,6 +44,4 @@ export interface TransferData {
   state: TransferState;
 }
 
-export interface TransferListTemplate extends MessageTemplate {
-  transfer: TransferData;
-}
+export type TransferTemplate = TransferData;

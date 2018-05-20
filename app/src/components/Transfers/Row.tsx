@@ -12,7 +12,7 @@ const Container = styled('div')`
 `;
 
 const Row = ({ transfer }: Props) => (
-  <Container>{transfer.remote + transfer.local}</Container>
+  <Container>{JSON.stringify(transfer)}</Container>
 );
 
 export default Row;

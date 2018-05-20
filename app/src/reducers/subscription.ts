@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
     case Action.UNSUBSCRIBE:
       ControlSocket.send(
         new SubscribeMessage({
-          type: action.payload.type,
+          type: action.payload,
           subscribe: false,
         })
       );
