@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { UserOperatingSystem } from 'shared/system';
+import { TransferData, TransferState } from 'shared/templates';
 
 export const requireFileIcon = (name: string, isDir?: boolean) => {
   let type = 'file';
