@@ -14,6 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/bson": "^1.0.8",
+    "@types/bytes": "^3.0.0",
     "@types/jest": "^22.2.3",
     "@types/react": "^16.3.13",
     "@types/react-bootstrap": "^0.32.9",
@@ -49,6 +50,7 @@
   "dependencies": {
     "bootstrap": "^4.1.0",
     "bson": "^2.0.6",
+    "bytes": "^3.0.0",
     "emotion": "^9.1.2",
     "emotion-theming": "^9.1.2",
     "flag-icons": "^1.0.2",

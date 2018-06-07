@@ -1,5 +1,8 @@
 import * as React from 'react';
 import styled from 'react-emotion';
+
+import * as bytes from 'bytes';
+
 import { Recipient, TransferData } from 'shared/templates';
 
 const DownloadIcon = require('assets/download.svg');
@@ -21,6 +24,11 @@ const Container = styled('div')`
   &:hover {
     background: ${props => props.theme.hover};
   }
+`;
+
+const Content = styled('div')`
+  display: flex;
+  flex-direction: column;
 `;
 
 const Icon = styled<any, any>('div')`
@@ -46,10 +54,17 @@ const Row = ({ transfer }: Props) => {
     statusText = `Downloading ${transfer.remote}`;
   }
 
+  const percentage = Math.floor(transfer.recv / transfer.total * 100);
+
   return (
     <Container>
       <Icon src={typeIcon} />
-      <p>{statusText}</p>
+      <Content>
+        <p>{statusText}</p>
+        <p>{`${bytes(transfer.recv)} / ${bytes(
+          transfer.total
+        )} (${percentage}%)`}</p>
+      </Content>
     </Container>
   );
 };
