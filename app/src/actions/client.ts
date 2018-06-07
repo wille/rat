@@ -1,5 +1,5 @@
-import Client from '..//client';
 import { ClientTemplate } from 'shared/templates';
+import Client from '..//client';
 import { Action } from '../constants';
 
 import { createAction } from 'redux-actions';

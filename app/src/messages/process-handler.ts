@@ -1,6 +1,6 @@
-import { setProcessList } from '..//actions/processes';
 import { ProcessListTemplate } from 'shared/templates';
 import store from '../';
+import { setProcessList } from '..//actions/processes';
 
 export default (data: ProcessListTemplate) => {
   store.dispatch(

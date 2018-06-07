@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
         ...state,
         fps: state.currentFps,
         currentFps: 0,
-      }
+      };
     default:
       return state;
   }

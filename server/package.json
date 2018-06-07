@@ -10,7 +10,8 @@
     "build": "yarn run clean && webpack --mode=production",
     "build:native": "yarn run build && pkg dist/index.js --out-path dist/",
     "build:natives": "yarn run build && pkg dist/index.js -t latest-win-x64,latest-linux-x64,latest-linux-armv7,latest-macos-x64 --out-path dist/",
-    "test": "jest"
+    "test": "jest",
+    "lint": "tslint --fix ./src/**/*.ts"
   },
   "keywords": [],
   "author": "",
