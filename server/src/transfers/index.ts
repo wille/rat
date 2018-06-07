@@ -1,7 +1,11 @@
 import { ObjectId, ObjectID } from 'bson';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
-import { TransferData, TransferState } from '../../../shared/src/templates';
+import {
+  Recipient,
+  TransferData,
+  TransferState,
+} from '../../../shared/src/templates';
 
 const debug = require('debug')('server:transfer');
 
@@ -13,6 +17,7 @@ class Transfer implements TransferData {
   public total: number = 0;
   public recv: number = 0;
   public state: TransferState = TransferState.Waiting;
+  public recipient: Recipient;
 
   private fd: number;
 
@@ -21,6 +26,7 @@ class Transfer implements TransferData {
   public open() {
     const tempFile = tmp.fileSync();
     debug('writing', this.remote, 'to', tempFile.name);
+    this.local = tempFile.name;
     this.fd = tempFile.fd;
   }
 
@@ -32,13 +38,13 @@ class Transfer implements TransferData {
   public close() {
     this.state = TransferState.Complete;
     fs.closeSync(this.fd);
+    this.fd = null;
   }
 }
 
 export function createTransfer(id: ObjectID): Transfer {
   const existing = transfersList.find(x => x.id.equals(id));
   if (existing) {
-    console.log('returning existing');
     return existing as Transfer;
   }
 

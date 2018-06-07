@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import { TransferData } from 'shared/templates';
+import { Recipient, TransferData } from 'shared/templates';
 
 interface Props {
   transfer: TransferData;
@@ -11,8 +11,22 @@ const Container = styled('div')`
   height: 48px;
 `;
 
-const Row = ({ transfer }: Props) => (
-  <Container>{JSON.stringify(transfer)}</Container>
-);
+const Row = ({ transfer }: Props) => {
+  let remote;
+  let local;
+
+  switch (transfer.recipient) {
+    case Recipient.Client:
+    case Recipient.Server:
+  }
+
+  return (
+    <Container>
+      <p>{remote}</p>
+      <p>{local}</p>
+      {JSON.stringify(transfer)}
+    </Container>
+  );
+};
 
 export default Row;

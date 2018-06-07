@@ -2,11 +2,7 @@ import MessageTemplate from "./template";
 import { ObjectId } from 'bson';
 
 export enum TransferState {
-  // is uploading
-  Uploading,
-
-  // is downloading
-  Downloading,
+  InProgress,
 
   // paused
   Paused,
@@ -21,6 +17,11 @@ export enum TransferState {
   Waiting,
 
   Complete,
+}
+
+export enum Recipient {
+  Client,
+  Server
 }
 
 export interface DataTemplate extends MessageTemplate {
@@ -41,6 +42,7 @@ export interface TransferData {
   remote?: string;
   total: number;
   recv: number;
+  recipient: Recipient;
   state: TransferState;
 }
 

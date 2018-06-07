@@ -4,10 +4,10 @@ import * as React from 'react';
 import { Breadcrumb, Table } from 'react-bootstrap';
 import { css } from 'react-emotion';
 import { connect } from 'react-redux';
-import { withRouter, BrowserHistory } from 'react-router-dom';
+import { BrowserHistory, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { OperatingSystem } from 'shared/system';
-import { FileEntry, TransferState } from 'shared/templates';
+import { FileEntry, Recipient, TransferState } from 'shared/templates';
 
 import { createPlaceholderTransfer, setCurrentDirectory } from '../../actions';
 import Client from '../../client';
@@ -131,6 +131,7 @@ class FileSystem extends React.Component<Props, State> {
       total: 0,
       recv: 0,
       state: TransferState.Waiting,
+      recipient: Recipient.Server,
     });
 
     client.send(
