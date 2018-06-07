@@ -55,7 +55,7 @@ class ControlSocketServer {
     );
 
     Transfers.transfersList.forEach(transfer =>
-      client.emit(new TransferMessage(transfer))
+      client.emit(new TransferMessage(transfer), true)
     );
 
     ws.on('close', (code, reason) => {
