@@ -6,7 +6,13 @@ const initialState: TransferData[] = [];
 export default (state = initialState, action) => {
   switch (action.type) {
     case Action.TRANSFER_UPDATE:
-      return [...state, action.payload];
+      const index = state.findIndex(data => data.id.equals(action.payload.id));
+      if (index > -1) {
+        state[index] = action.payload;
+      } else {
+        state.push(action.payload);
+      }
+      return [...state];
     case Action.TRANSFER_CREATE_PLACEHOLDER: {
       return [...state, action.payload];
     }

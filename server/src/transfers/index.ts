@@ -36,8 +36,9 @@ class Transfer implements TransferData {
 }
 
 export function createTransfer(id: ObjectID): Transfer {
-  const existing = transfersList.find(x => x.id === id);
+  const existing = transfersList.find(x => x.id.equals(id));
   if (existing) {
+    console.log('returning existing');
     return existing as Transfer;
   }
 
