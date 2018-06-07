@@ -31,3 +31,5 @@ command/web/static/css/
 
 dist/
 node_modules/
+
+client/bin/
