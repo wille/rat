@@ -2,6 +2,9 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import { Recipient, TransferData } from 'shared/templates';
 
+import DownloadIcon from '../../assets/download.svg';
+import UploadIcon from '../../assets/upload.svg';
+
 interface Props {
   transfer: TransferData;
 }
@@ -12,18 +15,14 @@ const Container = styled('div')`
 `;
 
 const Row = ({ transfer }: Props) => {
-  let remote;
-  let local;
-
-  switch (transfer.recipient) {
-    case Recipient.Client:
-    case Recipient.Server:
-  }
+  const typeIcon =
+    transfer.recipient === Recipient.Client ? UploadIcon : DownloadIcon;
 
   return (
     <Container>
-      <p>{remote}</p>
-      <p>{local}</p>
+      <img src={typeIcon} />
+      <p>{transfer.remote}</p>
+      <p>{transfer.local}</p>
       {JSON.stringify(transfer)}
     </Container>
   );

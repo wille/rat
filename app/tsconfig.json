@@ -12,5 +12,5 @@
       "assets/*": ["src/assets/*"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "./src/svg.d.ts"]
 }
