@@ -38,11 +38,18 @@ const Row = ({ transfer }: Props) => {
   const typeIcon =
     transfer.recipient === Recipient.Client ? UploadIcon : DownloadIcon;
 
+  let statusText;
+
+  if (transfer.recipient === Recipient.Client) {
+    statusText = `Uploading ${transfer.local} to ${transfer.remote}`;
+  } else {
+    statusText = `Downloading ${transfer.remote}`;
+  }
+
   return (
     <Container>
       <Icon src={typeIcon} />
-      <p>{transfer.remote}</p>
-      <p>{transfer.local}</p>
+      <p>{statusText}</p>
     </Container>
   );
 };
