@@ -42,7 +42,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "bson": "^1.0.9",
+    "bson": "^2.0.6",
     "chalk": "^2.4.1",
     "debug": "^3.1.0",
     "express": "^4.16.3",
