@@ -33,6 +33,7 @@ class Transfer implements TransferData {
   public write(data: Buffer) {
     this.recv += data.length;
     fs.writeFileSync(this.fd, data);
+    this.state = TransferState.InProgress;
   }
 
   public close() {
