@@ -2,21 +2,21 @@ import MessageTemplate from "./template";
 import { ObjectId } from 'bson';
 
 export enum TransferState {
-  InProgress,
+  InProgress = "In progress",
 
   // paused
-  Paused,
+  Paused = "Paused",
 
   // cancelled while in transfer
-  Cancelled,
+  Cancelled = "Cancelled",
 
   // completed but later deleted from disk
-  Deleted,
+  Deleted = "Deleted",
 
   // first data not received
-  Waiting,
+  Waiting = "Waiting",
 
-  Complete,
+  Complete = "Complete",
 }
 
 export enum Recipient {
