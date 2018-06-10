@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "removeComments": true,
-        "noUnusedLocals": true,
         "module": "commonjs",
         "target": "es2015",
         "baseUrl": ".",
