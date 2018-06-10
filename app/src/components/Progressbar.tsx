@@ -18,11 +18,12 @@ const Container = styled('div')`
 interface Props {
   value: number;
   max: number;
+  color: string;
 }
 
-const Progressbar = ({ value, max }: Props) => (
+const Progressbar = ({ value, max, color }: Props) => (
   <Container>
-    <Progress progress={(value / max) * 100} color="green" />
+    <Progress progress={(value / max) * 100} color={color} />
   </Container>
 );
 

@@ -5,6 +5,7 @@ import * as bytes from 'bytes';
 
 import { Recipient, TransferData } from 'shared/templates';
 import Progressbar from '../Progressbar';
+import { getProgressColor } from './colors';
 
 const DownloadIcon = require('assets/download.svg');
 const UploadIcon = require('assets/upload.svg');
@@ -79,7 +80,11 @@ const Row = ({ transfer }: Props) => {
         </Content>
       </ContentContainer>
       <ProgressContainer>
-        <Progressbar value={50} max={100} />
+        <Progressbar
+          value={50}
+          max={100}
+          color={getProgressColor(transfer.state)}
+        />
       </ProgressContainer>
     </Container>
   );
