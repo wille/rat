@@ -4,6 +4,7 @@ import styled from 'react-emotion';
 import * as bytes from 'bytes';
 
 import { Recipient, TransferData } from 'shared/templates';
+import Progressbar from '../Progressbar';
 
 const DownloadIcon = require('assets/download.svg');
 const UploadIcon = require('assets/upload.svg');
@@ -13,6 +14,16 @@ interface Props {
 }
 
 const Container = styled('div')`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ProgressContainer = styled('div')`
+  width: 100%;
+  height: 6px;
+`;
+
+const ContentContainer = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -54,17 +65,22 @@ const Row = ({ transfer }: Props) => {
     statusText = `Downloading ${transfer.remote}`;
   }
 
-  const percentage = Math.floor(transfer.recv / transfer.total * 100);
+  const percentage = Math.floor((transfer.recv / transfer.total) * 100);
 
   return (
     <Container>
-      <Icon src={typeIcon} />
-      <Content>
-        <p>{statusText}</p>
-        <p>{`${bytes(transfer.recv)} / ${bytes(
-          transfer.total
-        )} (${percentage}%)`}</p>
-      </Content>
+      <ContentContainer>
+        <Icon src={typeIcon} />
+        <Content>
+          <p>{statusText}</p>
+          <p>{`${bytes(transfer.recv)} / ${bytes(
+            transfer.total
+          )} (${percentage}%)`}</p>
+        </Content>
+      </ContentContainer>
+      <ProgressContainer>
+        <Progressbar value={50} max={100} />
+      </ProgressContainer>
     </Container>
   );
 };
