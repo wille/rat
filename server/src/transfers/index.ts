@@ -1,6 +1,8 @@
 import { ObjectId, ObjectID } from 'bson';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
+import ControlSocketServer from '~/control-socket';
+import { TransferMessage } from '~/ws/messages';
 import {
   Recipient,
   TransferData,
@@ -21,25 +23,43 @@ class Transfer implements TransferData {
 
   private fd: number;
 
-  constructor(readonly id: ObjectId) {}
+  /**
+   * timestamp of last transfer update message
+   */
+  private lastUpdate = 0;
+
+  constructor(readonly id: ObjectId = new ObjectId()) {}
 
   public open() {
     const tempFile = tmp.fileSync();
     debug('writing', this.remote, 'to', tempFile.name);
     this.local = tempFile.name;
     this.fd = tempFile.fd;
+
+    this.update();
   }
 
   public write(data: Buffer) {
     this.recv += data.length;
-    fs.writeFileSync(this.fd, data);
     this.state = TransferState.InProgress;
+    this.update();
+
+    fs.writeFileSync(this.fd, data);
   }
 
   public close() {
     this.state = TransferState.Complete;
-    fs.closeSync(this.fd);
     this.fd = null;
+    this.update();
+
+    fs.closeSync(this.fd);
+  }
+
+  private update() {
+    if (this.lastUpdate + 1000 < Date.now()) {
+      ControlSocketServer.broadcast(new TransferMessage(this));
+      this.lastUpdate = Date.now();
+    }
   }
 }
 
