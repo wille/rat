@@ -1,6 +1,8 @@
 import { ObjectId, ObjectID } from 'bson';
 import * as fs from 'fs';
+import throttle from 'lodash.throttle';
 import * as tmp from 'tmp';
+
 import ControlSocketServer from '~/control-socket';
 import { TransferMessage } from '~/ws/messages';
 import {
@@ -21,12 +23,12 @@ class Transfer implements TransferData {
   public state: TransferState = TransferState.Waiting;
   public recipient: Recipient;
 
-  private fd: number;
+  public readonly update = throttle(
+    () => ControlSocketServer.broadcast(new TransferMessage(this)),
+    1000
+  );
 
-  /**
-   * timestamp of last transfer update message
-   */
-  private lastUpdate = 0;
+  private fd: number;
 
   constructor(readonly id: ObjectId = new ObjectId()) {}
 
@@ -53,13 +55,6 @@ class Transfer implements TransferData {
     this.update();
 
     fs.closeSync(this.fd);
-  }
-
-  private update() {
-    if (this.lastUpdate + 1000 < Date.now()) {
-      ControlSocketServer.broadcast(new TransferMessage(this));
-      this.lastUpdate = Date.now();
-    }
   }
 }
 
