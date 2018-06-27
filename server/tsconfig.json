@@ -1,22 +1,23 @@
 {
-    "compilerOptions": {
-        "removeComments": true,
-        "module": "commonjs",
-        "target": "es2015",
-        "baseUrl": ".",
-        "paths": {
-            "shared/*": [
-                "../shared/src/*"
-            ],
-            "~/*": [
-                "src/*"
-            ]
-        }
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "src/**/*.test.ts"
-    ]
+  "compilerOptions": {
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "baseUrl": ".",
+    "paths": {
+      "shared/*": [
+          "../shared/src/*"
+      ],
+      "~/*": [
+          "src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/**/*.test.ts"
+  ]
 }
