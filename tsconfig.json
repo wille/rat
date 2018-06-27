@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+  },
+  "include": [
+    "packages/shared/**/*.ts"
+  ]
+}
