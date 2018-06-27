@@ -1,5 +1,5 @@
-import Client from '~/client/client';
-import { ScreenPacket } from '~/client/packets';
+import Client from '../../client/client';
+import { ScreenPacket } from '../../client/packets';
 
 import { ScreenTemplate } from 'shared/templates';
 

@@ -1,5 +1,5 @@
-import Client from '~/client/client';
-import { createTransfer } from '~/transfers';
+import Client from '../../client/client';
+import { createTransfer } from '../../transfers';
 
 import { DataTemplate } from 'shared/templates';
 

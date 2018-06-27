@@ -1,7 +1,7 @@
 import { BSON } from 'bson';
 import chalk from 'chalk';
 import * as WebSocket from 'ws';
-import { getMessageHandler } from '~/ws/messages';
+import { getMessageHandler } from '../ws/messages';
 
 import { clientServer } from '..';
 import { Message } from 'shared/messages';

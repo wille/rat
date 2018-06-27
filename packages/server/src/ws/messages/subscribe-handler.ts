@@ -1,4 +1,4 @@
-import WebClient from '~/ws/webClient';
+import WebClient from '../../ws/webClient';
 
 import { SubscribeTemplate } from 'shared/templates';
 

@@ -1,5 +1,5 @@
-import Client from '~/client/client';
-import { BrowsePacket } from '~/client/packets';
+import Client from '../../client/client';
+import { BrowsePacket } from '../../client/packets';
 
 import { BrowseTemplate } from 'shared/templates';
 

@@ -1,5 +1,5 @@
 import { BSON, ObjectId } from 'bson';
-import * as geoip from 'geoip-lite';
+import geoip from 'geoip-lite';
 import { TLSSocket } from 'tls';
 
 import { Message } from 'shared/messages';
@@ -117,11 +117,13 @@ class Client implements ClientProperties {
    */
   public getClientProperties(): ClientProperties {
     if (!this.lookup) {
-      const lookup = geoip.lookup(this.host);
-
-      this.lookup = lookup || {
-        country: null,
-      };
+      try {
+        this.lookup = geoip.lookup(this.host);
+      } catch (e) {
+        this.lookup = {
+          country: null
+        }
+      }
     }
 
     return {

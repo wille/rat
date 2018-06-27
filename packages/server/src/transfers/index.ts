@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import throttle from 'lodash.throttle';
 import * as tmp from 'tmp';
 
-import ControlSocketServer from '~/control-socket';
-import { TransferMessage } from '~/ws/messages';
+import ControlSocketServer from '../control-socket';
+import { TransferMessage } from '../ws/messages';
 import {
   Recipient,
   TransferData,

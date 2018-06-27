@@ -1,5 +1,5 @@
-import Client from '~/client/client';
-import { MousePacket } from '~/client/packets';
+import Client from '../../client/client';
+import { MousePacket } from '../../client/packets';
 
 import { MouseTemplate } from 'shared/templates/mouse';
 

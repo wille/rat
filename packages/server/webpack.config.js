@@ -1,6 +1,5 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const convertPathsToAliases = require('convert-tsconfig-paths-to-webpack-aliases').default
 const tsconfig = require('./tsconfig.json');
 
 module.exports = (env, options) => ({

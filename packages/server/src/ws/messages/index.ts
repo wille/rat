@@ -1,5 +1,5 @@
 import { MessageTemplate, TransferTemplate } from 'shared/templates';
-import Client from '~/client/client';
+import Client from '../../client/client';
 
 import { createMessage } from 'shared/messages';
 import {

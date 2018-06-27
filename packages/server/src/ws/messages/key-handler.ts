@@ -1,5 +1,5 @@
-import Client from '~/client/client';
-import { KeyPacket } from '~/client/packets';
+import Client from '../../client/client';
+import { KeyPacket } from '../../client/packets';
 
 import { KeyTemplate } from 'shared/templates/key';
 

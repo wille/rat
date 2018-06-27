@@ -1,5 +1,5 @@
-import Client from '~/client/client';
-import { ProcessPacket } from '~/client/packets';
+import Client from '../../client/client';
+import { ProcessPacket } from '../../client/packets';
 
 import { ProcessTemplate } from 'shared/templates/process';
 
