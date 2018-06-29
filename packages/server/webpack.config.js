@@ -20,7 +20,6 @@ module.exports = (env, options) => ({
     extensions: [
       '.tsx', '.ts', '.js'
     ],
-    alias: convertPathsToAliases(tsconfig),
   },
   output: {
     filename: 'index.js',
