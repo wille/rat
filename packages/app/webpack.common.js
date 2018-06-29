@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const convertPathsToAliases = require('convert-tsconfig-paths-to-webpack-aliases').default;
 const tsconfig = require('./tsconfig.json');
 
 const config = {
@@ -20,7 +20,8 @@ const config = {
       '.tsx',
       '.js',
       '.json'
-    ]
+    ],
+    alias: convertPathsToAliases(require('./tsconfig.json'))
   },
   module: {
     rules: [
