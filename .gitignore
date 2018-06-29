@@ -33,3 +33,4 @@ dist/
 node_modules/
 
 client/bin/
+vendor/
