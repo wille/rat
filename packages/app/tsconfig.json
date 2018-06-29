@@ -6,6 +6,12 @@
       "es2017",
       "dom"
     ],
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "assets/*": [
+        "src/assets/*"
+      ]
+    }
   }
 }
