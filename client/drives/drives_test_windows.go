@@ -2,7 +2,7 @@ package drives
 
 import (
 	"fmt"
-	"oslib"
+	"rat/client/os"
 	"testing"
 )
 

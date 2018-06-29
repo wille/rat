@@ -3,10 +3,10 @@ package install
 import (
 	"io"
 	"os"
-	"oslib"
 	"path/filepath"
 	"rat/client/computer"
 	"rat/client/installpath"
+	"rat/client/os"
 	"strings"
 )
 

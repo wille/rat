@@ -1,8 +1,8 @@
 package main
 
 import (
-	"oslib"
 	"rat/client/computer"
+	"rat/client/os"
 	"rat/client/screen"
 
 	"rat/client/network/header"
