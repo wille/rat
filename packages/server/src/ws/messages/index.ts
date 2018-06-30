@@ -18,6 +18,7 @@ import processHandler from './process-handler';
 import requestDownloadHandler from './request-download-handler';
 import screenHandler from './screen-handler';
 import subscribeHandler from './subscribe-handler';
+import transferActionHandler from './transfer-action-handler';
 
 export const ClientMessage = createMessage<ClientTemplate>(MessageType.Client);
 
@@ -52,6 +53,7 @@ const mapping = {
   [MessageType.MouseMove]: mouseMoveHandler,
   [MessageType.Key]: keyHandler,
   [MessageType.DownloadToServer]: requestDownloadHandler,
+  [MessageType.TransferAction]: transferActionHandler,
 };
 
 export const getMessageHandler = (type: MessageType): MessageHandler =>
