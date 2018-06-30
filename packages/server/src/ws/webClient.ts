@@ -3,9 +3,9 @@ import chalk from 'chalk';
 import * as WebSocket from 'ws';
 import { getMessageHandler } from '../ws/messages';
 
-import { clientServer } from '..';
 import { Message } from 'shared/messages';
 import { MessageType } from 'shared/types';
+import { clientServer } from '..';
 
 const debug = require('debug')('control:ws');
 

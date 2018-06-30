@@ -48,3 +48,14 @@ export interface TransferData {
 }
 
 export type TransferTemplate = TransferData;
+
+export enum TransferAction {
+  PAUSE = 'pause',
+  RESUME = 'start',
+  CANCEL = 'cancel',
+}
+
+export interface TransferActionTemplate extends MessageTemplate {
+  id: ObjectId;
+  action: TransferAction;
+}

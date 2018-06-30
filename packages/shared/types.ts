@@ -10,4 +10,5 @@ export const enum MessageType {
   Key,
   Transfers = 9,
   DownloadToServer = 10,
+  TransferAction = 11,
 }

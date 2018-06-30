@@ -3,7 +3,16 @@ import styled from 'react-emotion';
 
 import * as bytes from 'bytes';
 
-import { Recipient, TransferData, TransferState } from 'shared/templates';
+import { compose, withProps } from 'recompose';
+import {
+  Recipient,
+  TransferAction,
+  TransferData,
+  TransferState,
+} from 'shared/templates';
+import Client from '../../client';
+import { TransferActionMessage } from '../../messages';
+import withClient from '../../withClient';
 import Progressbar from '../Progressbar';
 import { getProgressColor } from './colors';
 
@@ -12,6 +21,7 @@ const UploadIcon = require('assets/upload.svg');
 
 interface Props {
   transfer: TransferData;
+  client?: Client;
 }
 
 const Container = styled('div')`
@@ -54,41 +64,84 @@ const Icon = styled<any, any>('div')`
   margin-right: 8px;
 `;
 
-const Row = ({ transfer }: Props) => {
-  const typeIcon =
-    transfer.recipient === Recipient.Client ? UploadIcon : DownloadIcon;
+const Actions = styled('div')`
+  justify-self: flex-end;
+`;
 
-  const statusText =
-    transfer.recipient === Recipient.Client
-      ? `Uploading ${transfer.local} to ${transfer.remote}`
-      : `Downloading ${transfer.remote}`;
+const Action = styled('p')`
+  text-decoration: underline;
+  cursor: pointer;
+`;
 
-  const percentage = Math.floor((transfer.recv / transfer.total) * 100);
-  const bps = `${
-    transfer.state !== TransferState.InProgress ? 'avg ' : ''
-  }${bytes(transfer.bps)} /s`;
+class Row extends React.Component<Props> {
+  update = (action: TransferAction) =>
+    this.props.client.send(
+      new TransferActionMessage({ action, id: this.props.transfer.id })
+    );
 
-  return (
-    <Container>
-      <ContentContainer>
-        <Icon src={typeIcon} />
-        <Content>
-          <p>{statusText}</p>
-          <p>{`${bytes(transfer.recv)} / ${bytes(
-            transfer.total
-          )} (${percentage}%)`}</p>
-          <p>{bps}</p>
-        </Content>
-      </ContentContainer>
-      <ProgressContainer>
-        <Progressbar
-          value={50}
-          max={100}
-          color={getProgressColor(transfer.state)}
-        />
-      </ProgressContainer>
-    </Container>
-  );
-};
+  download = () => {
+    const { transfer } = this.props;
+    window.open('/download/' + transfer.id.toHexString());
+  };
 
-export default Row;
+  render() {
+    const { transfer } = this.props;
+
+    const typeIcon =
+      transfer.recipient === Recipient.Client ? UploadIcon : DownloadIcon;
+
+    const statusText =
+      transfer.recipient === Recipient.Client
+        ? `Uploading ${transfer.local} to ${transfer.remote}`
+        : `Downloading ${transfer.remote}`;
+
+    const percentage = Math.floor((transfer.recv / transfer.total) * 100);
+    const bps = `${
+      transfer.state !== TransferState.InProgress ? 'avg ' : ''
+    }${bytes(transfer.bps)} /s`;
+
+    return (
+      <Container>
+        <ContentContainer>
+          <Icon src={typeIcon} />
+          <Content>
+            <p>{statusText}</p>
+            <p>{`${bytes(transfer.recv)} / ${bytes(
+              transfer.total
+            )} (${percentage}%)`}</p>
+            <p>{bps}</p>
+          </Content>
+          <Actions>
+            {transfer.state === TransferState.InProgress && (
+              <Action onClick={() => this.update(TransferAction.CANCEL)}>
+                Cancel
+              </Action>
+            )}
+            {transfer.state === TransferState.InProgress && (
+              <Action onClick={() => this.update(TransferAction.PAUSE)}>
+                Pause
+              </Action>
+            )}
+            {transfer.state === TransferState.Paused && (
+              <Action onClick={() => this.update(TransferAction.RESUME)}>
+                Resume
+              </Action>
+            )}
+            {transfer.state === TransferState.Complete && (
+              <Action onClick={() => this.download()}>Download</Action>
+            )}
+          </Actions>
+        </ContentContainer>
+        <ProgressContainer>
+          <Progressbar
+            value={50}
+            max={100}
+            color={getProgressColor(transfer.state)}
+          />
+        </ProgressContainer>
+      </Container>
+    );
+  }
+}
+
+export default withClient(Row);

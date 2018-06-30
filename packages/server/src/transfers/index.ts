@@ -11,7 +11,7 @@ import { TransferMessage } from '../ws/messages';
 
 const debug = require('debug')('server:transfer');
 
-export const transfersList: TransferData[] = [];
+export const transfersList: Transfer[] = [];
 
 class Transfer implements TransferController {
   public local: string;

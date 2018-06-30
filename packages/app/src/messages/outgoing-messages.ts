@@ -9,6 +9,7 @@ import {
   RequestDownloadTemplate,
   ScreenTemplate,
   SubscribeTemplate,
+  TransferActionTemplate,
 } from 'shared/templates';
 
 import { MessageType } from 'shared/types';
@@ -30,4 +31,7 @@ export const MouseMoveMessage = createMessage<MouseMotionTemplate>(
 );
 export const DownloadToServerMessage = createMessage<RequestDownloadTemplate>(
   MessageType.DownloadToServer
+);
+export const TransferActionMessage = createMessage<TransferActionTemplate>(
+  MessageType.TransferAction
 );
