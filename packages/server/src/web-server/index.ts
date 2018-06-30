@@ -8,6 +8,7 @@ import * as path from 'path';
 
 import generateCert from './cert-generator';
 
+import downloadRoute from './download';
 import csp from './middlewares/content-security-policy';
 import spa from './middlewares/spa';
 
@@ -43,6 +44,7 @@ const server = https.createServer(
 );
 
 app.use('*', csp);
+app.get('/download/:id', downloadRoute);
 app.use(express.static(path.resolve(__dirname, 'app')));
 app.get('*', spa);
 

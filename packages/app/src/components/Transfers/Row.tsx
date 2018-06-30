@@ -81,7 +81,14 @@ class Row extends React.Component<Props> {
 
   download = () => {
     const { transfer } = this.props;
-    window.open('/download/' + transfer.id.toHexString());
+
+    let url = '';
+    if (process.env.NODE_ENV === 'development') {
+      url = 'https://localhost:3000';
+    }
+
+    url += '/download/' + transfer.id.toHexString();
+    window.open(url);
   };
 
   render() {
