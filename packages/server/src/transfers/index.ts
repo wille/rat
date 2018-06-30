@@ -1,15 +1,11 @@
 import { ObjectId, ObjectID } from 'bson';
 import * as fs from 'fs';
-import throttle from 'lodash.throttle';
+import * as throttle from 'lodash.throttle';
 import * as tmp from 'tmp';
 
+import { Recipient, TransferData, TransferState } from 'shared/templates';
 import ControlSocketServer from '../control-socket';
 import { TransferMessage } from '../ws/messages';
-import {
-  Recipient,
-  TransferData,
-  TransferState,
-} from 'shared/templates';
 
 const debug = require('debug')('server:transfer');
 
@@ -51,10 +47,10 @@ class Transfer implements TransferData {
 
   public close() {
     this.state = TransferState.Complete;
-    this.fd = null;
     this.update();
 
     fs.closeSync(this.fd);
+    this.fd = null;
   }
 }
 
