@@ -1,13 +1,8 @@
 import { BSON, ObjectId } from 'bson';
-import geoip from 'geoip-lite';
 import { TLSSocket } from 'tls';
 
 import { Message } from 'shared/messages';
-import {
-  ClientProperties,
-  Monitor,
-  UserOperatingSystem,
-} from 'shared/system';
+import { ClientProperties, Monitor, UserOperatingSystem } from 'shared/system';
 import { ClientUpdateType } from 'shared/templates';
 import ControlSocketServer from '../control-socket';
 import { ClientMessage } from '../ws/messages';
@@ -52,7 +47,7 @@ class Client implements ClientProperties {
   /**
    * Country resolved from
    */
-  private lookup: { country: string };
+  private lookup: { country: string } = { country: 'Unknown' };
 
   constructor(private readonly socket: TLSSocket) {
     this.loop();
@@ -116,16 +111,6 @@ class Client implements ClientProperties {
    * Returns all the client properties
    */
   public getClientProperties(): ClientProperties {
-    if (!this.lookup) {
-      try {
-        this.lookup = geoip.lookup(this.host);
-      } catch (e) {
-        this.lookup = {
-          country: null
-        }
-      }
-    }
-
     return {
       id: this.id,
       host: this.host,
