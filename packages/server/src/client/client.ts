@@ -47,7 +47,7 @@ class Client implements ClientProperties {
   /**
    * Country resolved from
    */
-  private lookup: { country: string } = { country: 'Unknown' };
+  private lookup: { country: string } = { country: null };
 
   constructor(private readonly socket: TLSSocket) {
     this.loop();
