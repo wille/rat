@@ -1,7 +1,7 @@
-import { TransferData } from 'shared/templates';
 import { Action } from '../constants';
+import Transfer from '../lib/transfer';
 
-const initialState: TransferData[] = [];
+const initialState: Transfer[] = [];
 
 export default (state = initialState, action) => {
   switch (action.type) {

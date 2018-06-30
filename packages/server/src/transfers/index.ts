@@ -4,6 +4,7 @@ import * as throttle from 'lodash.throttle';
 import * as tmp from 'tmp';
 
 import { Recipient, TransferData, TransferState } from 'shared/templates';
+import TransferController from 'shared/transfer-controller';
 import ControlSocketServer from '../control-socket';
 import { TransferMessage } from '../ws/messages';
 
@@ -11,7 +12,7 @@ const debug = require('debug')('server:transfer');
 
 export const transfersList: TransferData[] = [];
 
-class Transfer implements TransferData {
+class Transfer implements TransferController {
   public local: string;
   public remote: string;
   public total: number = 0;
@@ -52,6 +53,12 @@ class Transfer implements TransferData {
     fs.closeSync(this.fd);
     this.fd = null;
   }
+
+  public cancel() {}
+
+  public start() {}
+
+  public pause() {}
 }
 
 export function createTransfer(id: ObjectID): Transfer {

@@ -40,10 +40,13 @@ class Handler extends React.Component<Props> {
   }
 }
 
-const ConnectedHandler = connect(null, {
-  subscribe,
-  unsubscribe,
-})(Handler);
+const ConnectedHandler = connect(
+  null,
+  {
+    subscribe,
+    unsubscribe,
+  }
+)(Handler);
 
 const ClientSubscription = withProps({
   type: MessageType.Client,
