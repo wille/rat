@@ -1,9 +1,9 @@
-import { MessageTemplate} from './templates';
+import { MessageTemplate } from './templates';
 import { MessageType } from './types';
 
 export interface Message<T extends MessageTemplate = MessageTemplate> {
-  readonly _type: MessageType,
-  readonly data: T
+  readonly _type: MessageType;
+  readonly data: T;
   _id?: string;
 }
 
@@ -17,5 +17,5 @@ export function createMessage<T extends MessageTemplate>(_type: MessageType) {
       this._type = _type;
       this.data = data;
     }
-  }
+  };
 }
