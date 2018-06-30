@@ -1,27 +1,27 @@
-import MessageTemplate from "./template";
 import { ObjectId } from 'bson';
+import MessageTemplate from './template';
 
 export enum TransferState {
-  InProgress = "In progress",
+  InProgress = 'In progress',
 
   // paused
-  Paused = "Paused",
+  Paused = 'Paused',
 
   // cancelled while in transfer
-  Cancelled = "Cancelled",
+  Cancelled = 'Cancelled',
 
   // completed but later deleted from disk
-  Deleted = "Deleted",
+  Deleted = 'Deleted',
 
   // first data not received
-  Waiting = "Waiting",
+  Waiting = 'Waiting',
 
-  Complete = "Complete",
+  Complete = 'Complete',
 }
 
 export enum Recipient {
   Client,
-  Server
+  Server,
 }
 
 export interface DataTemplate extends MessageTemplate {
@@ -44,6 +44,7 @@ export interface TransferData {
   recv: number;
   recipient: Recipient;
   state: TransferState;
+  bps?: number;
 }
 
 export type TransferTemplate = TransferData;

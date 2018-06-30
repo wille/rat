@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 
 import * as bytes from 'bytes';
 
-import { Recipient, TransferData } from 'shared/templates';
+import { Recipient, TransferData, TransferState } from 'shared/templates';
 import Progressbar from '../Progressbar';
 import { getProgressColor } from './colors';
 
@@ -58,15 +58,15 @@ const Row = ({ transfer }: Props) => {
   const typeIcon =
     transfer.recipient === Recipient.Client ? UploadIcon : DownloadIcon;
 
-  let statusText;
-
-  if (transfer.recipient === Recipient.Client) {
-    statusText = `Uploading ${transfer.local} to ${transfer.remote}`;
-  } else {
-    statusText = `Downloading ${transfer.remote}`;
-  }
+  const statusText =
+    transfer.recipient === Recipient.Client
+      ? `Uploading ${transfer.local} to ${transfer.remote}`
+      : `Downloading ${transfer.remote}`;
 
   const percentage = Math.floor((transfer.recv / transfer.total) * 100);
+  const bps = `${
+    transfer.state !== TransferState.InProgress ? 'avg ' : ''
+  }${bytes(transfer.bps)} /s`;
 
   return (
     <Container>
@@ -77,6 +77,7 @@ const Row = ({ transfer }: Props) => {
           <p>{`${bytes(transfer.recv)} / ${bytes(
             transfer.total
           )} (${percentage}%)`}</p>
+          <p>{bps}</p>
         </Content>
       </ContentContainer>
       <ProgressContainer>

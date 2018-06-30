@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as throttle from 'lodash.throttle';
 import * as tmp from 'tmp';
 
+import AverageCounter from 'shared/average-counter';
 import { Recipient, TransferData, TransferState } from 'shared/templates';
 import TransferController from 'shared/transfer-controller';
 import ControlSocketServer from '../control-socket';
@@ -20,11 +21,19 @@ class Transfer implements TransferController {
   public state: TransferState = TransferState.Waiting;
   public recipient: Recipient;
 
-  public readonly update = throttle(
-    () => ControlSocketServer.broadcast(new TransferMessage(this)),
-    1000
-  );
+  public bps = 0;
 
+  public readonly update = throttle(() => {
+    this.bps = this.counter;
+    this.averageCounter.push(this.bps);
+    this.counter = 0;
+    ControlSocketServer.broadcast(new TransferMessage(this));
+  }, 1000);
+
+  private counter = 0;
+
+  // average bps
+  private averageCounter = new AverageCounter();
   private fd: number;
 
   constructor(readonly id: ObjectId = new ObjectId()) {}
@@ -40,18 +49,25 @@ class Transfer implements TransferController {
 
   public write(data: Buffer) {
     this.recv += data.length;
+    this.counter += data.length;
     this.state = TransferState.InProgress;
     this.update();
 
     fs.writeFileSync(this.fd, data);
   }
 
-  public close() {
+  public finish() {
     this.state = TransferState.Complete;
-    this.update();
 
-    fs.closeSync(this.fd);
+    try {
+      fs.closeSync(this.fd);
+    } catch (e) {
+      debug('failed to finish()', e);
+    }
     this.fd = null;
+
+    this.bps = this.averageCounter.calculate();
+    this.update();
   }
 
   public cancel() {}
