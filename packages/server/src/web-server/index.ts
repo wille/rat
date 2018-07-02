@@ -9,8 +9,6 @@ import * as path from 'path';
 import generateCert from './cert-generator';
 
 import downloadRoute from './download';
-import csp from './middlewares/content-security-policy';
-import spa from './middlewares/spa';
 
 let cert;
 let key;
@@ -43,10 +41,20 @@ const server = https.createServer(
   app
 );
 
-app.use('*', csp);
+app.use((req, res, next) => {
+  res.setHeader('Referrer-Policy', 'same-origin');
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; style-src 'unsafe-inline' 'self'; connect-src 'self' wss://*:*; img-src 'self' data:; frame-ancestors 'none'"
+  );
+  next();
+});
+
 app.get('/download/:id', downloadRoute);
 app.use(express.static(path.resolve(__dirname, 'app')));
-app.get('*', spa);
+app.get('*', (req, res, next) =>
+  res.sendFile(path.resolve(__dirname, 'app', 'index.html'))
+);
 
 const port = 3000;
 
