@@ -11,12 +11,15 @@ async function upload(
   client: Client
 ) {
   const reader = new FileReader();
-  const b = 0;
+  let b = 0;
 
   const filePath = path.join(baseDir, file.name);
 
   reader.onprogress = e => {
     const data = reader.result as ArrayBuffer;
+
+    const buffer = new Buffer(data.slice(b));
+    b += buffer.byteLength;
 
     client.send(
       new UploadToClientMessage({
@@ -24,7 +27,7 @@ async function upload(
         file: filePath,
         total: file.size,
         final: false,
-        data: new Buffer(data.slice(b)),
+        data: buffer,
       })
     );
   };
@@ -46,7 +49,7 @@ async function upload(
 export function requestFile(
   client: Client,
   baseDir: string,
-  onFile: (id: ObjectId, name: string) => void
+  onFile: (id: ObjectId, name: string, total: number) => void
 ) {
   const input = document.createElement('input');
   input.setAttribute('type', 'file');
@@ -60,7 +63,7 @@ export function requestFile(
       const file = input.files[i];
       const id = new ObjectId();
       upload(id, file, baseDir, client);
-      onFile(id, file.name);
+      onFile(id, file.name, file.size);
     }
   };
   input.click();

@@ -1,4 +1,4 @@
-import { ObjectID } from 'bson';
+import { Binary, ObjectID } from 'bson';
 import { transfersList } from 'server/src/transfers/download-to-server';
 import ServerTransferController from 'server/src/transfers/server-transfer-controller';
 import { Recipient, TransferState } from 'shared/templates';
@@ -11,10 +11,11 @@ class ServerUpload extends ServerTransferController {
 
   public start() {}
 
-  public passthrough(data: Buffer) {
-    this.recv += data.length;
-    this.counter += data.length;
+  public passthrough(data: Binary) {
+    this.recv += data.buffer.byteLength;
+    this.counter += data.buffer.byteLength;
     this.state = TransferState.InProgress;
+
     this.update();
   }
 

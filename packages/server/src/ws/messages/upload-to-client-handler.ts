@@ -12,6 +12,7 @@ export default (data: UploadTemplate, _, client: Client) => {
   if (data.file) {
     transfer.remote = data.file;
     transfer.local = data.local;
+    transfer.total = data.total;
   }
 
   if (data.data) {
@@ -25,15 +26,13 @@ export default (data: UploadTemplate, _, client: Client) => {
   const packet = {
     file: data.file,
     data: data.data,
-    total: 0,
+    total: transfer.total,
     final: data.final,
   };
 
   if (!data.data) {
     delete packet.data;
   }
-
-  console.log(packet);
 
   client.send(new UploadPacket(packet));
 };

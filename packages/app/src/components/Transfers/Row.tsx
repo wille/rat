@@ -102,6 +102,14 @@ class Row extends React.Component<Props> {
         ? `Uploading ${transfer.local} to ${transfer.remote}`
         : `Downloading ${transfer.remote}`;
 
+    console.log(
+      'recv',
+      transfer.recv,
+      typeof transfer.recv,
+      'total',
+      transfer.total
+    );
+
     const percentage = Math.floor((transfer.recv / transfer.total) * 100);
     const bps = `${
       transfer.state !== TransferState.InProgress ? 'avg ' : ''
