@@ -1,5 +1,6 @@
 import { UploadToClientMessage } from 'app/src/messages';
 import * as path from 'path';
+import { file } from 'tmp';
 import Client from '../client';
 
 async function upload(file: File, baseDir: string, client: Client) {
@@ -34,7 +35,12 @@ async function upload(file: File, baseDir: string, client: Client) {
   reader.readAsArrayBuffer(file);
 }
 
-export function requestFile(client: Client, baseDir: string) {
+export function requestFile(
+  client: Client,
+  baseDir: string,
+  onFile: (name) => void,
+  onUpload?: () => void
+) {
   const input = document.createElement('input');
   input.setAttribute('type', 'file');
   input.setAttribute('name', 'file');
@@ -44,7 +50,13 @@ export function requestFile(client: Client, baseDir: string) {
     e.preventDefault();
 
     for (let i = 0; i < input.files.length; i++) {
-      upload(input.files[i], baseDir, client);
+      const file = input.files[i];
+      upload(file, baseDir, client);
+      onFile(file.name);
+    }
+
+    if (onUpload && input.files.length > 0) {
+      onUpload();
     }
   };
   input.click();

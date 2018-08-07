@@ -125,21 +125,22 @@ class FileSystem extends React.Component<Props, State> {
   upload = () => {
     const { createPlaceholderTransfer, history, currentDirectory } = this.props;
 
-    const id = new ObjectId();
-
-    createPlaceholderTransfer({
-      id,
-      local: '',
-      remote: currentDirectory,
-      total: 0,
-      recv: 0,
-      state: TransferState.Waiting,
-      recipient: Recipient.Server,
-    });
-
-    requestFile(this.props.client, currentDirectory);
-
-    history.push('/transfers');
+    requestFile(
+      this.props.client,
+      currentDirectory,
+      name => {
+        createPlaceholderTransfer({
+          id: new ObjectId(),
+          local: name,
+          remote: currentDirectory + name,
+          total: 0,
+          recv: 0,
+          state: TransferState.Waiting,
+          recipient: Recipient.Server,
+        });
+      },
+      () => history.push('/transfers')
+    );
   };
 
   download = (file: FileEntry) => {
