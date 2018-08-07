@@ -4,7 +4,7 @@ import ServerTransferController from 'server/src/transfers/server-transfer-contr
 import { Recipient, TransferState } from 'shared/templates';
 
 class ServerUpload extends ServerTransferController {
-  constructor(id) {
+  constructor(id = new ObjectID()) {
     super(id, Recipient.Client);
   }
   public pause() {}

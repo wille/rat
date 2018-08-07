@@ -60,10 +60,6 @@ class FileSystem extends React.Component<Props, State> {
     this.browse();
   }
 
-  upload = () => {
-    requestFile(this.props.client);
-  };
-
   splitPath = () => {
     const { client, currentDirectory } = this.props;
 
@@ -125,6 +121,26 @@ class FileSystem extends React.Component<Props, State> {
       </DirectorySubscription>
     );
   }
+
+  upload = () => {
+    const { createPlaceholderTransfer, history, currentDirectory } = this.props;
+
+    const id = new ObjectId();
+
+    createPlaceholderTransfer({
+      id,
+      local: '',
+      remote: currentDirectory,
+      total: 0,
+      recv: 0,
+      state: TransferState.Waiting,
+      recipient: Recipient.Server,
+    });
+
+    requestFile(this.props.client, currentDirectory);
+
+    history.push('/transfers');
+  };
 
   download = (file: FileEntry) => {
     const { client, history, createPlaceholderTransfer } = this.props;
