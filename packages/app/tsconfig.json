@@ -13,5 +13,9 @@
         "src/assets/*"
       ]
     }
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "../shared/**/*.ts"
+  ]
 }

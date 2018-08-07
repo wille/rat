@@ -1,8 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2017"
+    "target": "es6"
   },
+  "include": [
+    "src/**/*.ts",
+    "../shared/**/*.ts"
+  ],
   "exclude": [
     "src/**/*.test.ts"
   ]

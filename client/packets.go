@@ -19,10 +19,10 @@ func init() {
 	packets[header.MouseMoveHeader] = reflect.TypeOf(MouseMovePacket{})
 	packets[header.KeyHeader] = reflect.TypeOf(KeyPacket{})
 	packets[header.DownloadToServerHeader] = reflect.TypeOf(UploadPacket{})
+	packets[header.UploadToClientHeader] = reflect.TypeOf(DownloadPacket{})
 
 	/*
 		packets[header.SysHeader] = SysPacket{}
-		packets[header.PutFileHeader] = DownloadPacket{}
 		packets[header.FileHeader] = FilePacket{}
 		packets[header.ShellHeader] = ShellPacket{}
 		packets[header.WindowsHeader] = WindowsPacket{}

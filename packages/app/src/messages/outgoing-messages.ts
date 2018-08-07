@@ -2,6 +2,7 @@ import { createMessage } from 'shared/messages';
 
 import {
   BrowseTemplate,
+  DataTemplate,
   KeyTemplate,
   MouseMotionTemplate,
   MouseTemplate,
@@ -31,6 +32,9 @@ export const MouseMoveMessage = createMessage<MouseMotionTemplate>(
 );
 export const DownloadToServerMessage = createMessage<RequestDownloadTemplate>(
   MessageType.DownloadToServer
+);
+export const UploadToClientMessage = createMessage<DataTemplate>(
+  MessageType.UploadToClient
 );
 export const TransferActionMessage = createMessage<TransferActionTemplate>(
   MessageType.TransferAction

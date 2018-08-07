@@ -9,7 +9,7 @@ import { clientServer } from './index';
 import { ClientMessage, TransferMessage } from './ws/messages';
 import WebClient from './ws/webClient';
 
-import * as Transfers from './transfers';
+import * as Transfers from './transfers/download-to-server';
 
 const debug = require('debug')('server:ws');
 

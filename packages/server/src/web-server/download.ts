@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as path from 'path';
 
-import { transfersList } from '../transfers';
+import { transfersList } from '../transfers/download-to-server';
 
 export default (req: Request, res: Response) => {
   const id = req.params.id;

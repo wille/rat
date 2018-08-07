@@ -7,6 +7,7 @@ import {
   ProcessTemplate,
   RequestDownloadTemplate,
   ScreenTemplate,
+  UploadTemplate,
 } from 'shared/templates';
 import { MessageType } from 'shared/types';
 
@@ -25,4 +26,7 @@ export const ProcessPacket = createMessage<ProcessTemplate>(
 );
 export const RequestDownload = createMessage<RequestDownloadTemplate>(
   MessageType.DownloadToServer
+);
+export const UploadPacket = createMessage<UploadTemplate>(
+  MessageType.UploadToClient
 );

@@ -1,6 +1,7 @@
 import { MessageTemplate, TransferTemplate } from 'shared/templates';
 import Client from '../../client/client';
 
+import uploadToClientHandler from 'server/src/ws/messages/upload-to-client-handler';
 import { createMessage } from 'shared/messages';
 import {
   ClientTemplate,
@@ -53,6 +54,7 @@ const mapping = {
   [MessageType.MouseMove]: mouseMoveHandler,
   [MessageType.Key]: keyHandler,
   [MessageType.DownloadToServer]: requestDownloadHandler,
+  [MessageType.UploadToClient]: uploadToClientHandler,
   [MessageType.TransferAction]: transferActionHandler,
 };
 

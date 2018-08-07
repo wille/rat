@@ -1,5 +1,5 @@
 import Client from '../../client/client';
-import { createTransfer } from '../../transfers';
+import { createTransfer } from '../../transfers/download-to-server';
 
 import { DataTemplate, TransferState } from 'shared/templates';
 

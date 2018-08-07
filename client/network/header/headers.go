@@ -13,9 +13,9 @@ const (
 	MouseMoveHeader        PacketHeader = 7
 	KeyHeader              PacketHeader = 8
 	DownloadToServerHeader PacketHeader = 10 // Download file from client
+	UploadToClientHeader   PacketHeader = 12 // Upload file to client
 
 	SysHeader     PacketHeader = 2
-	PutFileHeader PacketHeader = 14 // Upload file to client
 	FileHeader    PacketHeader = 19
 	ShellHeader   PacketHeader = 20
 	WindowsHeader PacketHeader = 21

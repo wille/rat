@@ -59,3 +59,7 @@ export interface TransferActionTemplate extends MessageTemplate {
   id: ObjectId;
   action: TransferAction;
 }
+
+export interface UploadTemplate extends DataTemplate {
+  local?: string;
+}

@@ -9,11 +9,13 @@ import { compose } from 'recompose';
 import { OperatingSystem } from 'shared/system';
 import { FileEntry, Recipient, TransferState } from 'shared/templates';
 
+import { requestFile } from 'app/src/lib/file-reader';
 import { createPlaceholderTransfer, setCurrentDirectory } from '../../actions';
 import Client from '../../client';
 import {
   BrowseMessage,
   DownloadToServerMessage,
+  UploadToClientMessage,
 } from '../../messages/outgoing-messages';
 import { selectCurrentDirectory, selectFilesList } from '../../reducers';
 import withClient from '../../withClient';
@@ -58,6 +60,10 @@ class FileSystem extends React.Component<Props, State> {
     this.browse();
   }
 
+  upload = () => {
+    requestFile(this.props.client);
+  };
+
   splitPath = () => {
     const { client, currentDirectory } = this.props;
 
@@ -72,6 +78,7 @@ class FileSystem extends React.Component<Props, State> {
     return (
       <DirectorySubscription>
         <Toolbar>
+          <button onClick={this.upload}>Upload</button>
           <Breadcrumb className={styles.breadcrumb}>
             {client.os.type !== OperatingSystem.WINDOWS && (
               <BreadcrumbItem active={false} onClick={() => this.browse()}>

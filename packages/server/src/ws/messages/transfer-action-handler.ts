@@ -1,9 +1,7 @@
 import debug from 'debug';
-
 import { TransferAction, TransferActionTemplate } from 'shared/templates';
 
-import { BrowsePacket } from '../../client/packets';
-import { transfersList } from '../../transfers';
+import { transfersList } from '../../transfers/download-to-server';
 
 const log = debug('server:transfer');
 
