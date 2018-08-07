@@ -134,9 +134,10 @@ class Row extends React.Component<Props> {
                 Resume
               </Action>
             )}
-            {transfer.state === TransferState.Complete && (
-              <Action onClick={() => this.download()}>Download</Action>
-            )}
+            {transfer.recipient === Recipient.Server &&
+              transfer.state === TransferState.Complete && (
+                <Action onClick={() => this.download()}>Download</Action>
+              )}
           </Actions>
         </ContentContainer>
         <ProgressContainer>
