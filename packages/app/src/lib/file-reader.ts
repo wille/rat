@@ -1,9 +1,15 @@
 import { UploadToClientMessage } from 'app/src/messages';
+import { ObjectId } from 'bson';
 import * as path from 'path';
 import { file } from 'tmp';
 import Client from '../client';
 
-async function upload(file: File, baseDir: string, client: Client) {
+async function upload(
+  id: ObjectId,
+  file: File,
+  baseDir: string,
+  client: Client
+) {
   const reader = new FileReader();
   const b = 0;
 
@@ -14,6 +20,7 @@ async function upload(file: File, baseDir: string, client: Client) {
 
     client.send(
       new UploadToClientMessage({
+        id,
         file: filePath,
         total: file.size,
         final: false,
@@ -25,6 +32,7 @@ async function upload(file: File, baseDir: string, client: Client) {
   reader.onloadend = () =>
     client.send(
       new UploadToClientMessage({
+        id,
         file: filePath,
         total: file.size,
         final: true,
@@ -38,8 +46,7 @@ async function upload(file: File, baseDir: string, client: Client) {
 export function requestFile(
   client: Client,
   baseDir: string,
-  onFile: (name) => void,
-  onUpload?: () => void
+  onFile: (id: ObjectId, name: string) => void
 ) {
   const input = document.createElement('input');
   input.setAttribute('type', 'file');
@@ -51,12 +58,9 @@ export function requestFile(
 
     for (let i = 0; i < input.files.length; i++) {
       const file = input.files[i];
-      upload(file, baseDir, client);
-      onFile(file.name);
-    }
-
-    if (onUpload && input.files.length > 0) {
-      onUpload();
+      const id = new ObjectId();
+      upload(id, file, baseDir, client);
+      onFile(id, file.name);
     }
   };
   input.click();

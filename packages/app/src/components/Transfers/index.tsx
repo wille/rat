@@ -12,7 +12,6 @@ const ListContainer = styled('div')`
 
 const Transfers = ({ transfers }) => (
   <ListContainer>
-    {console.log(transfers)}
     {transfers.map(transfer => (
       <TransferRow key={transfer.id.toHexString()} transfer={transfer} />
     ))}
