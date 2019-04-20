@@ -5,12 +5,12 @@ import (
 )
 
 type KeyMessage struct {
-	Key   int `json:"keyCode"`
-	Event int `json:"state"`
+	KeyCode int
+	State   int
 }
 
 func (m KeyMessage) Handle(ws *websocket.Conn, client *Client) error {
-	client.Queue <- &KeyPacket{m.Key, m.Event}
+	client.Queue <- &KeyPacket{m.KeyCode, m.State}
 
 	return nil
 }

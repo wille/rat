@@ -1,9 +1,9 @@
-import MessageTemplate from "./template";
+import MessageTemplate from './template';
 
 export interface FileEntry {
-  directory: boolean;
+  dir: boolean;
   name: string;
-  size: string;
+  size: number;
   time: string;
 
   // is generated client side

@@ -5,13 +5,13 @@ import (
 )
 
 type MouseMoveMessage struct {
-	X       float32 `json:"x"`
-	Y       float32 `json:"y"`
-	Monitor int     `json:"id"`
+	MonitorID int
+	X         int
+	Y         int
 }
 
 func (m MouseMoveMessage) Handle(ws *websocket.Conn, client *Client) error {
-	client.Queue <- &MouseMovePacket{m.Monitor, int(m.X), int(m.Y)}
+	client.Queue <- &MouseMovePacket{m.MonitorID, m.X, m.Y}
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"rat/shared/network/header"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type DownloadMessage struct {
-	File string `json:"file"`
+	File string
 }
 
 func (d DownloadMessage) Handle(ws *websocket.Conn, client *Client) error {
@@ -16,6 +17,8 @@ func (d DownloadMessage) Handle(ws *websocket.Conn, client *Client) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("requesting", d)
 
 	client.Listeners[header.DownloadToServerHeader] = ws
 	Transfers[d.File] = &Transfer{file, d.File, 0, 0}

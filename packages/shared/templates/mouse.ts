@@ -1,14 +1,14 @@
-import { InputState, MouseButton } from "../display";
-import MessageTemplate from "./template";
+import { InputState, MouseButton } from '../display';
+import MessageTemplate from './template';
 
 export interface MouseTemplate extends MessageTemplate {
-    monitor: number;
-    button: MouseButton;
-    state: InputState;
+  monitorId: number;
+  button: MouseButton;
+  state: InputState;
 }
 
 export interface MouseMotionTemplate extends MessageTemplate {
-    monitor: number;
-    x: number;
-    y: number;
+  monitorId: number;
+  x: number;
+  y: number;
 }

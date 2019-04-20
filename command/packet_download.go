@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"rat/shared/network/header"
 
@@ -29,7 +30,8 @@ func init() {
 }
 
 type DownloadPacket struct {
-	File  string `network:"send,receive"`
+	File string `network:"send,receive"`
+
 	Total int64  `network:"receive"`
 	Final bool   `network:"receive"`
 	Part  []byte `network:"receive"`
@@ -45,6 +47,8 @@ func (packet DownloadPacket) Init(c *Client) {
 
 func (packet DownloadPacket) OnReceive(c *Client) error {
 	transfer := Transfers[packet.File]
+
+	fmt.Println("received", packet)
 
 	if transfer == nil {
 		return nil

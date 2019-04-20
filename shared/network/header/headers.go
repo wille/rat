@@ -6,14 +6,15 @@ type PacketHeader uint16
 const (
 	PingHeader             PacketHeader = 0
 	ComputerInfoHeader     PacketHeader = 2
-	ScreenHeader           PacketHeader = 3
-	DirectoryHeader        PacketHeader = 4
+	ScreenHeader           PacketHeader = 4
+	DirectoryHeader        PacketHeader = 3 // swapped
 	ProcessHeader          PacketHeader = 5
-	MouseHeader            PacketHeader = 6
-	MouseMoveHeader        PacketHeader = 7
-	KeyHeader              PacketHeader = 8
 	DownloadToServerHeader PacketHeader = 10 // Download file from client
 	UploadToClientHeader   PacketHeader = 12 // Upload file to client
+
+	MouseHeader     PacketHeader = 41
+	MouseMoveHeader PacketHeader = 42
+	KeyHeader       PacketHeader = 43
 
 	SysHeader     PacketHeader = 2
 	FileHeader    PacketHeader = 19

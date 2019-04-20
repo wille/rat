@@ -168,6 +168,7 @@ func (c *Client) GetClientData() ClientData {
 		Host:     c.GetDisplayHost(),
 		Hostname: c.Computer.GetDisplayName(),
 		Username: "ss",
+		Monitors: c.Monitors,
 		OperatingSystem: OperatingSystem{
 			Type:    c.OperatingSystemType,
 			Display: c.Computer.OperatingSystem,

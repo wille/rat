@@ -1,5 +1,9 @@
 package main
 
+import (
+	"rat/shared"
+)
+
 type UpdateType int
 
 const (
@@ -36,6 +40,7 @@ type ClientData struct {
 	Hostname        string `bson:"hostname,omitempty"`
 	Username        string `bson:"username,omitempty"`
 	OperatingSystem `bson:"os,omitempty"`
+	Monitors        []shared.Monitor "monitors"
 }
 
 func NewClientEvent(t UpdateType, client *Client, data interface{}) ClientMessage {

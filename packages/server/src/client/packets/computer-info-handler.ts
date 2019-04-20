@@ -16,7 +16,7 @@ export default (data: ComputerInfoTemplate, client: Client) => {
   ControlSocketServer.broadcast(
     new ClientMessage({
       type: ClientUpdateType.UPDATE,
-      ...client.getSystemProperties(),
+      data: client.getSystemProperties(),
     }),
     true
   );

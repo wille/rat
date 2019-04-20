@@ -53,7 +53,11 @@ class Screen extends React.Component<Props, State> {
           <Nav>
             <NavItem>Close</NavItem>
             <NavDropdown
-              title={'Monitor ' + selectedMonitor.id}
+              title={
+                selectedMonitor
+                  ? 'Monitor ' + selectedMonitor.id
+                  : 'none selected'
+              }
               id={'dropdown-size-medium'}
             >
               {this.props.client.monitors.map(monitor => (

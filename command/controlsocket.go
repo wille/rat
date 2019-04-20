@@ -13,10 +13,10 @@ import (
 // Event incoming message data
 type Event struct {
 	// Event code
-	Event MessageHeader `bson:"eventId",json:"eventId"`
+	Event int `bson:"eventId" json:"eventId"`
 
 	// ClientID
-	ClientID int `bson:"clientId",json:"clientId"`
+	ClientID int `bson:"clientId" json:"clientId"`
 }
 
 var (
@@ -44,16 +44,8 @@ func sendMessage(ws *websocket.Conn, c *Client, message OutgoingMessage) error {
 		Data: message,
 	}
 
-	fmt.Println("Sending", message, message.Header())
-
 	b, err := bson.Marshal(asdf)
 	err = websocket.Message.Send(ws, b)
-	return err
-}
-
-func readMessage(ws *websocket.Conn, s interface{}) error {
-	err := websocket.JSON.Receive(ws, s)
-
 	return err
 }
 
@@ -113,11 +105,10 @@ func incomingWebSocket(ws *websocket.Conn) {
 	updateAll()
 
 	for {
+		var bbb []byte
+		err := websocket.Message.Receive(ws, &bbb)
 		var event Event
-
-		err := websocket.JSON.Receive(ws, &event)
-
-		fmt.Println("unmarshal", event)
+		bson.Unmarshal(bbb, &event)
 
 		if err != nil {
 			disconnect(err)
@@ -126,9 +117,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 		client := get(event.ClientID)
 
-		if handler, ok := Messages[event.Event]; ok {
-			log.Println(event)
-
+		if handler, ok := Messages[MessageHeader(event.Event)]; ok {
 			i := reflect.New(reflect.TypeOf(handler)).Interface()
 
 			err = websocket.JSON.Receive(ws, &i)

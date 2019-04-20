@@ -22,8 +22,9 @@ func (packet ComputerInfoPacket) OnReceive(c *Client) error {
 	c.Computer.Hostname = packet.Hostname
 	c.Computer.OperatingSystemType = packet.OperatingSystem.Type
 	c.Computer.OperatingSystem = packet.OperatingSystem.Display
+	c.Monitors = packet.Monitors
 
-	fmt.Println(c.Computer, packet)
+	fmt.Println("received monitors", c.Monitors)
 
 	if !c.Authenticated {
 		add(c)

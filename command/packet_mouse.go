@@ -5,9 +5,9 @@ import (
 )
 
 type MousePacket struct {
-	Monitor int `network:"send"`
-	Button  int `network:"send"`
-	Event   int `network:"send"`
+	MonitorID int
+	Button    int
+	State     int
 }
 
 func (packet MousePacket) Header() header.PacketHeader {

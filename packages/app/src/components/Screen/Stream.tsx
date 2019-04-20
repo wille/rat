@@ -41,8 +41,9 @@ class Stream extends React.Component<Props> {
 
   public render() {
     const { data } = this.props;
+
     const encoded = data
-      ? 'data:image/jpeg;base64,' + data.data.toString('base64')
+      ? 'data:image/jpeg;base64,' + data.buffer.buffer.toString('base64')
       : null;
 
     return (
@@ -78,7 +79,7 @@ class Stream extends React.Component<Props> {
     if (this.mouse) {
       this.props.client.send(
         new MouseMessage({
-          monitor: this.monitor,
+          monitorId: this.monitor,
           button: event.button,
           state: InputState.PRESS,
         })
@@ -90,7 +91,7 @@ class Stream extends React.Component<Props> {
     if (this.mouse) {
       this.props.client.send(
         new MouseMessage({
-          monitor: this.monitor,
+          monitorId: this.monitor,
           button: event.button,
           state: InputState.RELEASE,
         })
@@ -104,7 +105,7 @@ class Stream extends React.Component<Props> {
     if (this.mouse) {
       this.props.client.send(
         new MouseMoveMessage({
-          monitor: this.monitor,
+          monitorId: this.monitor,
           x: event.nativeEvent.offsetX / (scale / 100),
           y: event.nativeEvent.offsetY / (scale / 100),
         })

@@ -11,10 +11,12 @@ type ProcessQueryMessage struct {
 	PIDs []int `json:"pids,omitempty"`
 }
 
-type ProcessMessage struct {
-	PID  int    `json:"pid"`
-	Path string `json:"path"`
+type Process struct {
+	PID  int    "pid"
+	Path string "path"
 }
+
+type ProcessMessage []Process
 
 func (m ProcessMessage) Header() MessageHeader {
 	return ProcessQueryEvent

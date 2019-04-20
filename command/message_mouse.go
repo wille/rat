@@ -5,13 +5,13 @@ import (
 )
 
 type MouseMessage struct {
-	Monitor int `json:"monitorId"`
-	Button  int `json:"button"`
-	Event   int `json:"state"`
+	MonitorID int
+	Button    int
+	State     int
 }
 
 func (m MouseMessage) Handle(ws *websocket.Conn, client *Client) error {
-	client.Queue <- &MousePacket{m.Monitor, m.Button, m.Event}
+	client.Queue <- &MousePacket{m.MonitorID, m.Button, m.State}
 
 	return nil
 }

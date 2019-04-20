@@ -1,19 +1,17 @@
-import MessageTemplate from "./template";
+import MessageTemplate from './template';
 
 export const enum ProcessType {
-    Query,
-    Kill
+  Query,
+  Kill,
 }
 
 export interface Process {
-    path: string;
-    pid: number;
+  path: string;
+  pid: number;
 }
 
-export interface ProcessListTemplate extends MessageTemplate {
-    processes: Process[];
-}
+export type ProcessListTemplate = Process[];
 
 export interface ProcessTemplate extends MessageTemplate {
-    action: ProcessType;
+  action: ProcessType;
 }

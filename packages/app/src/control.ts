@@ -24,8 +24,9 @@ class ControlSocket {
 
   public send(m: Message) {
     if (this.socket.readyState === WebSocket.OPEN) {
+      console.log('writing', m);
       this.socket.send(
-        JSON.stringify({
+        this.bson.serialize({
           eventId: m._type,
           clientId: m._id,
         })

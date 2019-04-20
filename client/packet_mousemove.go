@@ -8,7 +8,7 @@ import (
 )
 
 type MouseMovePacket struct {
-	MonitorID int "monitor"
+	MonitorID int
 	X         int
 	Y         int
 }

@@ -7,18 +7,21 @@ import (
 type MessageHeader int
 
 const (
+	DirectoryQueryEvent MessageHeader = 3
+	ScreenUpdateEvent   MessageHeader = 4
+	ProcessQueryEvent   MessageHeader = 8
+
+	Mouse     MessageHeader = 41
+	MouseMove MessageHeader = 42
+	Key       MessageHeader = 43
+
+	DownloadQueryHeader MessageHeader = 10
+
 	ClientUpdateEvent           MessageHeader = 1
 	ClientSysEvent              MessageHeader = 2
-	DirectoryQueryEvent         MessageHeader = 3
-	DownloadQueryHeader         MessageHeader = 4
 	TransfersEvent              MessageHeader = 5
 	DownloadProgressUpdateEvent MessageHeader = 6
-	ScreenUpdateEvent           MessageHeader = 7
-	ProcessQueryEvent           MessageHeader = 8
 	MonitorQueryEvent           MessageHeader = 9
-	MouseMove                   MessageHeader = 10
-	Mouse                       MessageHeader = 11
-	Key                         MessageHeader = 12
 	Build                       MessageHeader = 13
 	Shell                       MessageHeader = 14
 	ModifyFileEvent             MessageHeader = 15

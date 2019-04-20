@@ -12,10 +12,10 @@ import (
 )
 
 type FileData struct {
-	Dir    bool   "directory"
-	Name   string "name"
-	Edited string "time"
-	Size   int64
+	Dir  bool
+	Name string
+	Time string
+	Size int64
 }
 
 type DirectoryPacket struct {

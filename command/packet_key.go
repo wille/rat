@@ -5,8 +5,8 @@ import (
 )
 
 type KeyPacket struct {
-	Button int `network:"send"`
-	Event  int `network:"send"`
+	KeyCode int
+	State   int
 }
 
 func (packet KeyPacket) Header() header.PacketHeader {

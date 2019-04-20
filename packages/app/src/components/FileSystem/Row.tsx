@@ -24,8 +24,8 @@ interface Props {
 const fileDisplayName = (file: FileEntry) => file.name;
 
 const Row = ({ file, onClick }: Props) => {
-  const fileSize = file.directory ? '' : file.size;
-  const icon = requireFileIcon(file.path, file.directory);
+  const fileSize = file.dir ? '' : file.size;
+  const icon = requireFileIcon(file.path, file.dir);
 
   return (
     <StyledRow onClick={e => onClick(file, e)}>

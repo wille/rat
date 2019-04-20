@@ -3,20 +3,12 @@ package main
 import (
 	"rat/shared/network/header"
 
-	humanize "github.com/dustin/go-humanize"
 	"gopkg.in/mgo.v2/bson"
 )
 
-type FileData struct {
-	Dir    bool
-	Name   string
-	Edited string
-	Size   int64
-}
-
 type DirectoryPacket struct {
-	Path  string     `network:"send,receive"`
-	Files []FileData `network:"receive"`
+	Path  string
+	Files []File
 }
 
 func (packet DirectoryPacket) Header() header.PacketHeader {
@@ -28,10 +20,10 @@ func (packet DirectoryPacket) Init(c *Client) {
 }
 
 type File struct {
-	Dir  bool   `json:"directory"`
-	Path string `json:"path"`
-	Size string `json:"size"`
-	Time string `json:"time"`
+	Dir  bool
+	Name string
+	Size int64
+	Time string
 }
 
 func (packet DirectoryPacket) OnReceive(c *Client) error {
@@ -39,7 +31,7 @@ func (packet DirectoryPacket) OnReceive(c *Client) error {
 	files := make([]File, 0)
 
 	for _, file := range packet.Files {
-		file := File{file.Dir, file.Name, humanize.Bytes(uint64(file.Size)), file.Edited}
+		file := File{file.Dir, file.Name, file.Size, file.Time}
 
 		if file.Dir {
 			dirs = append(dirs, file)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"rat/shared/network/header"
 	"reflect"
 )
@@ -31,5 +32,8 @@ func init() {
 
 func GetIncomingPacket(header header.PacketHeader) IncomingPacket {
 	val := packets[header]
+	if val == nil {
+		fmt.Println("missing header", header)
+	}
 	return reflect.New(val).Elem().Interface().(IncomingPacket)
 }

@@ -171,7 +171,7 @@ class FileSystem extends React.Component<Props, State> {
 
     if (typeof file === 'string') {
       path = file;
-    } else if (file && file.directory) {
+    } else if (file && file.dir) {
       path = file ? file.path + client.separator + file.name : '';
     } else if (file) {
       this.download(file as FileEntry);

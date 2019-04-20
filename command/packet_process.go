@@ -6,14 +6,9 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type Process struct {
-	Path string `network:"send"`
-	PID  int    `network:"send,receive"`
-}
-
 type ProcessPacket struct {
-	Action    int       `network:"send,receive"`
-	Processes []Process `network:"send,receive"`
+	Action    int
+	Processes []Process
 }
 
 func (packet ProcessPacket) Header() header.PacketHeader {
@@ -25,19 +20,15 @@ func (packet ProcessPacket) Init(c *Client) {
 }
 
 func (packet ProcessPacket) OnReceive(c *Client) error {
-	for _, proc := range packet.Processes {
-		if ws, ok := c.Listeners[header.ProcessHeader]; ok {
-			err := sendMessage(ws, c, ProcessMessage{proc.PID, proc.Path})
+	var err error
 
-			if err != nil {
-				return err
-			}
-		}
+	if ws, ok := c.Listeners[header.ProcessHeader]; ok {
+		err = sendMessage(ws, c, ProcessMessage(packet.Processes))
 	}
 
 	delete(c.Listeners, header.ProcessHeader)
 
-	return nil
+	return err
 }
 
 func (packet ProcessPacket) Decode(buf []byte) (IncomingPacket, error) {
