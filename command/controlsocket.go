@@ -1,21 +1,22 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"rat/command/log"
 	"reflect"
-	"strconv"
 
 	"golang.org/x/net/websocket"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // Event incoming message data
 type Event struct {
 	// Event code
-	Event MessageHeader `json:"event"`
+	Event MessageHeader `bson:"eventId",json:"eventId"`
 
 	// ClientID
-	ClientID int `json:"id"`
+	ClientID int `bson:"clientId",json:"clientId"`
 }
 
 var (
@@ -33,14 +34,20 @@ func sendMessage(ws *websocket.Conn, c *Client, message OutgoingMessage) error {
 		id = c.Id
 	}
 
-	event := Event{message.Header(), id}
-
-	err := websocket.JSON.Send(ws, &event)
-	if err != nil {
-		return err
+	asdf := struct {
+		Id   int
+		Type MessageHeader
+		Data interface{}
+	}{
+		Id:   id,
+		Type: message.Header(),
+		Data: message,
 	}
 
-	err = websocket.JSON.Send(ws, message)
+	fmt.Println("Sending", message, message.Header())
+
+	b, err := bson.Marshal(asdf)
+	err = websocket.Message.Send(ws, b)
 	return err
 }
 
@@ -74,26 +81,26 @@ func incomingWebSocket(ws *websocket.Conn) {
 	disconnect := func(reason interface{}) {
 		log.Ferror("%s: %s", ws.Request().RemoteAddr, reason)
 	}
+	/*
+		var auth LoginMessage
+		err := readMessage(ws, &auth)
+		if err != nil {
+			disconnect(err)
+			return
+		}
 
-	var auth LoginMessage
-	err := readMessage(ws, &auth)
-	if err != nil {
-		disconnect(err)
-		return
-	}
+		authenticated := Authenticate(auth.Key)
 
-	authenticated := Authenticate(auth.Key)
+		err = sendMessage(ws, nil, LoginResultMessage{authenticated})
+		if err != nil {
+			disconnect(err)
+			return
+		}
 
-	err = sendMessage(ws, nil, LoginResultMessage{authenticated})
-	if err != nil {
-		disconnect(err)
-		return
-	}
-
-	if !authenticated {
-		disconnect("authentication failure")
-		return
-	}
+		if !authenticated {
+			disconnect("authentication failure")
+			return
+		} */
 
 	log.Fgreen("%s: connected\n", ws.Request().RemoteAddr)
 
@@ -107,7 +114,10 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 	for {
 		var event Event
+
 		err := websocket.JSON.Receive(ws, &event)
+
+		fmt.Println("unmarshal", event)
 
 		if err != nil {
 			disconnect(err)
@@ -134,7 +144,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 				return
 			}
 		} else {
-			disconnect("unknown message: " + strconv.Itoa(int(event.Event)))
+			fmt.Println("missing", event.Event)
 		}
 	}
 }

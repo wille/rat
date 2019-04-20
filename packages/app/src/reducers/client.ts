@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
     case Action.CLIENT_UPDATE:
       state.list
         .filter(c => c.id === action.payload.id)
-        .forEach(c => c.update(action.payload));
+        .forEach(c => c.update(action.payload.data));
 
       return {
         ...state,

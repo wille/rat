@@ -1,6 +1,8 @@
-package main
+package shared
 
-import "rat/client/installpath"
+import (
+	"rat/shared/installpath"
+)
 
 // BinaryConfig is written to the built binary
 type BinaryConfig struct {

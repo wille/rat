@@ -2,6 +2,8 @@ package main
 
 import (
 	"rat/shared/network/header"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type UploadPacket struct {
@@ -11,7 +13,7 @@ type UploadPacket struct {
 }
 
 func (packet UploadPacket) Header() header.PacketHeader {
-	return header.PutFileHeader
+	return header.UploadToClientHeader
 }
 
 func (packet UploadPacket) Init(c *Client) {
@@ -20,4 +22,9 @@ func (packet UploadPacket) Init(c *Client) {
 
 func (packet UploadPacket) OnReceive(c *Client) error {
 	return nil
+}
+
+func (packet UploadPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

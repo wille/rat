@@ -162,12 +162,15 @@ func (c *Client) GetEncodedScreen() string {
 
 func (c *Client) GetClientData() ClientData {
 	return ClientData{
-		Ping:                c.Ping.Current,
-		Country:             c.GetCountry(),
-		Flag:                c.GetFlagName(),
-		Host:                c.GetDisplayHost(),
-		ComputerName:        c.Computer.GetDisplayName(),
-		OperatingSystemType: c.OperatingSystemType,
-		OperatingSystem:     c.Computer.OperatingSystem,
+		Ping:     c.Ping.Current,
+		Country:  c.GetCountry(),
+		Flag:     c.GetFlagName(),
+		Host:     c.GetDisplayHost(),
+		Hostname: c.Computer.GetDisplayName(),
+		Username: "ss",
+		OperatingSystem: OperatingSystem{
+			Type:    c.OperatingSystemType,
+			Display: c.Computer.OperatingSystem,
+		},
 	}
 }

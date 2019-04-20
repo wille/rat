@@ -5,13 +5,11 @@ import {
   updateClient,
 } from '..//actions';
 
+import { ClientTemplate, ClientUpdateType } from 'shared/templates';
 import store from '../';
-import {
-  ClientTemplate,
-  ClientUpdateType,
-} from 'shared/templates';
 
 export default (data: ClientTemplate) => {
+  console.log(data);
   switch (data.type) {
     case ClientUpdateType.ADD:
       store.dispatch(addClients(data));

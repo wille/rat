@@ -11,48 +11,14 @@ import (
 	"encoding/base64"
 	"image"
 	"image/png"
-
+	"rat/shared"
 	"unsafe"
 
 	"github.com/disintegration/imaging"
 )
 
-const (
-	Reload = iota
-	Show
-	Minimize
-)
-
-// Desktop window dimensions
-type Rect struct {
-	X      int `json:"x"`
-	Y      int `json:"y"`
-	Width  int `json:"w"`
-	Height int `json:"h"`
-}
-
-// A desktop window
-type Window struct {
-	// Window handle, identifier for window
-	Handle int `json:"handle"`
-
-	// Window title
-	Title string `json:"title,omitempty"`
-
-	Visible bool `json:"visible"`
-
-	// Window dimensions
-	Rect Rect `json:"rect,omitempty"`
-
-	Icon string `json:"icon,omitempty"`
-}
-
-func (w Window) HasIcon() bool {
-	return w.Icon != ""
-}
-
 // Windows array, will be populated after call to QueryWindows()
-var Windows []Window
+var Windows []shared.Window
 
 const MaxIconWidth = 16
 
@@ -61,11 +27,11 @@ const MaxIconWidth = 16
 func WindowCallback(w C.Frame) {
 	title := C.GoString(w.title)
 
-	window := Window{
+	window := shared.Window{
 		Handle:  int(w.handle),
 		Title:   title,
 		Visible: bool(w.visible),
-		Rect: Rect{
+		Rect: shared.Rect{
 			X:      int(w.rect.x),
 			Y:      int(w.rect.y),
 			Width:  int(w.rect.width),
@@ -78,7 +44,7 @@ func WindowCallback(w C.Frame) {
 }
 
 func QueryWindows() {
-	Windows = make([]Window, 1)
+	Windows = make([]shared.Window, 1)
 
 	C.QueryWindows()
 }

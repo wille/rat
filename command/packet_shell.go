@@ -2,6 +2,8 @@ package main
 
 import (
 	"rat/shared/network/header"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type ShellPacket struct {
@@ -23,4 +25,9 @@ func (packet ShellPacket) OnReceive(c *Client) error {
 	}
 
 	return nil
+}
+
+func (packet ShellPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

@@ -2,6 +2,8 @@ package main
 
 import (
 	"rat/shared/network/header"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Process struct {
@@ -36,4 +38,9 @@ func (packet ProcessPacket) OnReceive(c *Client) error {
 	delete(c.Listeners, header.ProcessHeader)
 
 	return nil
+}
+
+func (packet ProcessPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }

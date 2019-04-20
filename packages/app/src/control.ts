@@ -24,7 +24,13 @@ class ControlSocket {
 
   public send(m: Message) {
     if (this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(this.bson.serialize(m));
+      this.socket.send(
+        JSON.stringify({
+          eventId: m._type,
+          clientId: m._id,
+        })
+      );
+      this.socket.send(JSON.stringify(m.data));
     } else {
       console.warn(
         '[ws] sending data in invalid state:',
@@ -60,7 +66,7 @@ class ControlSocket {
 
   private emit(message: Message) {
     selectSubscriptions(store.getState())
-      .filter(event => event.type === message._type)
+      .filter(event => event.type === message.type)
       .forEach(event => event.handler(message.data));
   }
 
@@ -100,4 +106,4 @@ class ControlSocket {
   }
 }
 
-export default new ControlSocket('wss://localhost:3000');
+export default new ControlSocket('wss://localhost:7777/control');

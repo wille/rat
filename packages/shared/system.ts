@@ -27,7 +27,7 @@ export interface UserOperatingSystem {
  * All system information exposed by a client
  */
 export interface ClientProperties {
-  id: string;
+  id: number;
   host?: string;
   flag?: string;
   country?: string;

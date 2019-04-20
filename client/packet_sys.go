@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"rat/client/computer"
-	"rat/client/system"
+	"rat/shared/system"
 	"strconv"
 )
 

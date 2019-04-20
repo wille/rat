@@ -17,6 +17,7 @@ import theme from './theme';
 ControlSocket.connect();
 
 const store = createStore(reducers);
+
 export default store;
 
 fpsCounter(store);

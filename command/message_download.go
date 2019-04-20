@@ -17,7 +17,7 @@ func (d DownloadMessage) Handle(ws *websocket.Conn, client *Client) error {
 		return err
 	}
 
-	client.Listeners[header.GetFileHeader] = ws
+	client.Listeners[header.DownloadToServerHeader] = ws
 	Transfers[d.File] = &Transfer{file, d.File, 0, 0}
 	client.Queue <- &DownloadPacket{File: d.File}
 

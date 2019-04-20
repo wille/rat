@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"oslib"
 	"rat/client/drives"
-	"rat/client/network/header"
-	"rat/client/os"
+	"rat/shared/network/header"
 
 	"gopkg.in/mgo.v2/bson"
 )

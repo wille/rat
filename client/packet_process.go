@@ -1,9 +1,9 @@
 package main
 
 import (
-	"rat/client/network/header"
 	"rat/client/process"
-	"rat/client/processes"
+	"rat/shared/network/header"
+	"rat/shared/processes"
 
 	"gopkg.in/mgo.v2/bson"
 )

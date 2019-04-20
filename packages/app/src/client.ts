@@ -20,9 +20,9 @@ class Client implements ClientProperties {
   private updateListeners: Array<() => void> = [];
 
   constructor(
-    public readonly id: string,
+    public readonly id: number,
     public readonly host: string,
-    data?: ClientTemplate
+    data?: ClientProperties
   ) {
     if (data) {
       this.update(data);

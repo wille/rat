@@ -1,5 +1,5 @@
-import { ClientProperties } from "../system";
-import MessageTemplate from "./template";
+import { ClientProperties } from '../system';
+import MessageTemplate from './template';
 
 export enum ClientUpdateType {
   // Add client, on server connect or web panel open
@@ -9,10 +9,11 @@ export enum ClientUpdateType {
   UPDATE,
 
   // Remove client
-  REMOVE
+  REMOVE,
 }
 
-export interface ClientTemplate extends ClientProperties, MessageTemplate {
+export interface ClientTemplate extends MessageTemplate {
   type: ClientUpdateType;
+  data: ClientProperties;
   initial?: true;
 }

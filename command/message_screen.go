@@ -1,8 +1,6 @@
 package main
 
 import (
-	"rat/shared/network/header"
-
 	"golang.org/x/net/websocket"
 )
 
@@ -23,8 +21,6 @@ func (m ScreenUpdateMessage) Handle(ws *websocket.Conn, client *Client) error {
 			return err
 		}
 	}
-
-	client.Listeners[header.MonitorsHeader] = ws
 
 	packet := ScreenPacket{
 		Activate: stream,

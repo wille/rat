@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"rat/client/network/header"
+	"rat/shared/network/header"
 	"reflect"
 	"testing"
 )

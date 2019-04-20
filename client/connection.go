@@ -5,8 +5,9 @@ import (
 	"io"
 	"log"
 	"net"
-	"rat/client/network"
-	"rat/client/network/header"
+	"rat/shared"
+	"rat/shared/network"
+	"rat/shared/network/header"
 )
 
 type Connection struct {
@@ -29,13 +30,13 @@ func (c *Connection) Close() {
 
 func (c *Connection) ReadHeader() (header.PacketHeader, error) {
 	var h header.PacketHeader
-	err := binary.Read(c, network.ByteOrder, &h)
+	err := binary.Read(c, shared.ByteOrder, &h)
 
 	return h, err
 }
 
 func (c *Connection) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.Conn, network.ByteOrder, header)
+	return binary.Write(c.Conn, shared.ByteOrder, header)
 }
 
 func (c *Connection) WritePacket(packet OutgoingPacket) error {
@@ -65,7 +66,7 @@ func (c Connection) ReadPacket() (IncomingPacket, error) {
 	}
 
 	var n int32
-	err = binary.Read(c.Reader.Reader, network.ByteOrder, &n)
+	err = binary.Read(c.Reader.Reader, shared.ByteOrder, &n)
 	buf := make([]byte, n)
 	io.ReadFull(c.Reader.Reader, buf)
 

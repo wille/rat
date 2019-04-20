@@ -14,23 +14,28 @@ const (
 )
 
 type ClientMessage struct {
-	Type UpdateType  `json:"type"`
-	ID   int         `json:"id"`
-	Data interface{} `json:"data,omitempty"`
+	Type UpdateType  `bson:"type"`
+	ID   int         `bson:"id"`
+	Data interface{} `bson:"data,omitempty"`
 }
 
 func (m ClientMessage) Header() MessageHeader {
 	return ClientUpdateEvent
 }
 
+type OperatingSystem struct {
+	Type    string `bson:"type"`
+	Display string `bson:"display"`
+}
+
 type ClientData struct {
-	Ping                int    `json:"ping"`
-	Country             string `json:"country,omitempty"`
-	Flag                string `json:"flag,omitempty"`
-	Host                string `json:"host,omitempty"`
-	ComputerName        string `json:"computerName,omitempty"`
-	OperatingSystemType string `json:"osType,omitempty"`
-	OperatingSystem     string `json:"operatingSystem,omitempty"`
+	Ping            int    `bson:"ping"`
+	Country         string `bson:"country,omitempty"`
+	Flag            string `bson:"flag,omitempty"`
+	Host            string `bson:"host,omitempty"`
+	Hostname        string `bson:"hostname,omitempty"`
+	Username        string `bson:"username,omitempty"`
+	OperatingSystem `bson:"os,omitempty"`
 }
 
 func NewClientEvent(t UpdateType, client *Client, data interface{}) ClientMessage {

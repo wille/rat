@@ -13,7 +13,7 @@ import "C"
 
 import (
 	"image"
-
+	"rat/shared"
 	"unsafe"
 	"fmt"
 )
@@ -21,13 +21,13 @@ import (
 func CaptureWindow(handle int) image.Image {
 	cap := C.CaptureWindow(C.int(handle))
 	fmt.Println("Handled capture", cap.width, cap.height)
-
+	
 	defer C.Release()
 
 	return handleCapture(cap)
 }
 
-func Capture(monitor Monitor) image.Image {
+func Capture(monitor shared.Monitor) image.Image {
 	m := cMonitor(monitor)
 
 	cap := C.CaptureMonitor(m)

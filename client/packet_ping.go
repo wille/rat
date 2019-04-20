@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/client/network/header"
+	"rat/shared/network/header"
 
 	"gopkg.in/mgo.v2/bson"
 )

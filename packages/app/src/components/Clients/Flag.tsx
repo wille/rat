@@ -8,9 +8,12 @@ interface Props {
 
 const FlagIcon = ({ client }: Props) => {
   const fileName = client.flag || '_unknown';
-  const flag = require('flag-icons/flags/flags-iso/flat/24/' +
-    fileName +
-    '.png');
+  let flag;
+  try {
+    require('flag-icons/flags/flags-iso/flat/24/' + fileName + '.png');
+  } catch {
+    flag = '';
+  }
 
   return <StaticImage size="24px" src={flag} />;
 };

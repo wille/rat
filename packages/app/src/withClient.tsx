@@ -31,7 +31,9 @@ function withClient<
             },
           } = this.props;
 
-          const client = list.find(client => client.id === id);
+          const client = list.find(client => client.id === Number(id));
+
+          console.log(list, id);
 
           return <Component client={client} {...this.props} />;
         }

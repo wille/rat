@@ -5,6 +5,8 @@ import (
 	"rat/shared/network/header"
 
 	"path/filepath"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Transfer struct {
@@ -34,7 +36,7 @@ type DownloadPacket struct {
 }
 
 func (packet DownloadPacket) Header() header.PacketHeader {
-	return header.GetFileHeader
+	return header.DownloadToServerHeader
 }
 
 func (packet DownloadPacket) Init(c *Client) {
@@ -56,7 +58,7 @@ func (packet DownloadPacket) OnReceive(c *Client) error {
 		return err
 	}
 
-	if ws, ok := c.Listeners[header.GetFileHeader]; ok {
+	if ws, ok := c.Listeners[header.DownloadToServerHeader]; ok {
 		e := DownloadProgressEvent{packet.File, transfer.Read, transfer.Total, ""}
 
 		if packet.Final {
@@ -78,7 +80,7 @@ func (packet DownloadPacket) OnReceive(c *Client) error {
 
 	if packet.Final {
 		defer delete(Transfers, packet.File)
-		defer delete(c.Listeners, header.GetFileHeader)
+		defer delete(c.Listeners, header.DownloadToServerHeader)
 
 		err = transfer.Local.Sync()
 		if err != nil {
@@ -94,4 +96,9 @@ func (packet DownloadPacket) OnReceive(c *Client) error {
 	}
 
 	return err
+}
+
+func (packet DownloadPacket) Decode(buf []byte) (IncomingPacket, error) {
+	err := bson.Unmarshal(buf, &packet)
+	return packet, err
 }
