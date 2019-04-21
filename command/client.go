@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/xtaci/smux"
 	"golang.org/x/net/websocket"
 )
 
@@ -22,7 +23,8 @@ type Client struct {
 	network.Writer
 	network.Reader
 
-	Conn net.Conn
+	Conn   net.Conn
+	stream *smux.Stream
 
 	Id int
 
@@ -136,13 +138,13 @@ func (c *Client) Heartbeat() {
 
 func (c *Client) ReadHeader() (header.PacketHeader, error) {
 	var h header.PacketHeader
-	err := binary.Read(c.Conn, shared.ByteOrder, &h)
+	err := binary.Read(c.stream, shared.ByteOrder, &h)
 
 	return h, err
 }
 
 func (c *Client) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.Conn, shared.ByteOrder, header)
+	return binary.Write(c.stream, shared.ByteOrder, header)
 }
 
 func (c *Client) WritePacket(packet OutgoingPacket) error {

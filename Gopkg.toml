@@ -25,3 +25,7 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[[constraint]]
+  name = "github.com/xtaci/smux"
+  version = "1.2.6"
