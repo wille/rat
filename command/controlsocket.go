@@ -96,11 +96,11 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 	log.Fgreen("%s: connected\n", ws.Request().RemoteAddr)
 
-	if len(DisplayTransfers) > 0 {
+	/* 	if len(DisplayTransfers) > 0 {
 		sendMessage(ws, nil, DisplayTransferMessage{
 			DisplayTransfers,
 		})
-	}
+	} */
 
 	updateAll()
 

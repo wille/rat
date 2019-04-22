@@ -26,13 +26,13 @@ func init() {
 	packets = make(PacketMap)
 	packets[header.PingHeader] = reflect.TypeOf(Ping{})
 	packets[header.ComputerInfoHeader] = reflect.TypeOf(ComputerInfoPacket{})
-	packets[header.ScreenHeader] = reflect.TypeOf(ScreenPacket{})
-	packets[header.ProcessHeader] = reflect.TypeOf(ProcessPacket{})
-	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
-	packets[header.UploadToClientHeader] = reflect.TypeOf(UploadPacket{})
-	packets[header.DownloadToServerHeader] = reflect.TypeOf(DownloadPacket{})
-	packets[header.ShellHeader] = reflect.TypeOf(ShellPacket{})
-	packets[header.WindowsHeader] = reflect.TypeOf(WindowsPacket{})
+	/* 	packets[header.ScreenHeader] = reflect.TypeOf(ScreenPacket{})
+	   	packets[header.ProcessHeader] = reflect.TypeOf(ProcessPacket{})
+	   	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
+	   	packets[header.UploadToClientHeader] = reflect.TypeOf(UploadPacket{})
+	   	packets[header.DownloadToServerHeader] = reflect.TypeOf(DownloadPacket{})
+	   	packets[header.ShellHeader] = reflect.TypeOf(ShellPacket{})
+	   	packets[header.WindowsHeader] = reflect.TypeOf(WindowsPacket{}) */
 }
 
 func GetIncomingPacket(header header.PacketHeader) IncomingPacket {

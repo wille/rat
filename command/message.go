@@ -46,7 +46,7 @@ var Messages MessageMap
 
 func init() {
 	Messages = make(MessageMap)
-	Messages[TransfersEvent] = DisplayTransferMessage{}
+	/* Messages[TransfersEvent] = DisplayTransferMessage{}
 	Messages[ClientSysEvent] = SysMessage{}
 	Messages[MouseMove] = MouseMoveMessage{}
 	Messages[DownloadQueryHeader] = DownloadMessage{}
@@ -55,9 +55,9 @@ func init() {
 	Messages[ScreenUpdateEvent] = ScreenUpdateMessage{}
 	Messages[Mouse] = MouseMessage{}
 	Messages[Key] = KeyMessage{}
-	Messages[Build] = BuildMessage{}
-	Messages[Shell] = ShellMessage{}
-	Messages[ModifyFileEvent] = FileMessage{}
-	Messages[Exit] = ExitMessage{}
-	Messages[Windows] = WindowMessage{}
+	Messages[Build] = BuildMessage{} */
+	/* 	Messages[Shell] = ShellMessage{}
+	   	Messages[ModifyFileEvent] = FileMessage{}
+	   	Messages[Exit] = ExitMessage{}
+	   	Messages[Windows] = WindowMessage{} */
 }

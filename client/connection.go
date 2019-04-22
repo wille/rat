@@ -25,8 +25,6 @@ func (c *Connection) Init() {
 }
 
 func (c *Connection) Close() {
-	screenStream = false
-
 	c.Conn.Close()
 }
 
