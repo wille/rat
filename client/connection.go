@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/binary"
+	"errors"
 	"rat/shared"
 	"rat/shared/network"
 	"rat/shared/network/header"
@@ -46,30 +47,38 @@ type OutgoingPacket interface {
 }
 
 func (c *Connection) recvLoop() {
+	var err error
 	for {
 		var h header.PacketHeader
-		err := binary.Read(c.control, shared.ByteOrder, &h)
-		if err != nil {
-			panic(err)
-		}
+		binary.Read(c.control, shared.ByteOrder, &h)
 
 		var channel bool
 		err = binary.Read(c.control, shared.ByteOrder, &channel)
 		if err != nil {
-			panic(err)
+			break
 		}
 
 		if channel {
-			channel := GetIncomingChannel(h)
+			channel, is := handlerMap[h].(Channel)
+			if !is {
+				err = errors.New("invalid channel header " + string(h))
+				break
+			}
+
 			stream, _ := c.Conn.AcceptStream()
 			go channel.Open(stream, c)
 		} else {
-			packet := GetIncomingPacket(h)
-			err = packet.Read(c.control)
+			packet, is := handlerMap[h].(Incoming)
+			if !is {
+				err = errors.New("invalid packet header " + string(h))
+				break
+			}
+
+			err = packet.Read(c.control, c)
 		}
 
 		if err != nil {
-			panic(err)
+			break
 		}
 	}
 }

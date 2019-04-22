@@ -17,7 +17,7 @@ func (packet *PingPacket) Init() {
 
 }
 
-func (packet PingPacket) Read(io.ReadWriteCloser) error {
+func (packet PingPacket) Read(w io.ReadWriter, c *Connection) error {
 	Queue <- &PingPacket{}
 	fmt.Println("recv ping")
 	return nil
