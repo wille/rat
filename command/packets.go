@@ -10,11 +10,6 @@ type PacketMap map[header.PacketHeader]reflect.Type
 
 var packets PacketMap
 
-type OutgoingPacket interface {
-	Header() header.PacketHeader
-	Init(c *Client)
-}
-
 type IncomingPacket interface {
 	OnReceive(c *Client) error
 	Decode(buf []byte) (IncomingPacket, error)

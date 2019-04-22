@@ -1,18 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"rat/network2"
 	"rat/shared/network/header"
-	"reflect"
 )
 
-type PacketMap map[header.PacketHeader]reflect.Type
+type PacketMap map[header.PacketHeader]interface{}
 
 var packets PacketMap
 
 func init() {
 	packets = make(PacketMap)
-	packets[header.PingHeader] = reflect.TypeOf(PingPacket{})
+	packets[header.PingHeader] = PingPacket{}
+	packets[header.ChannelImplHeader] = ChannelImpl{}
 	/* packets[header.ScreenHeader] = reflect.TypeOf(RecvScreenPacket{})
 	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
 	packets[header.ProcessHeader] = reflect.TypeOf(ProcessPacket{})
@@ -30,10 +30,10 @@ func init() {
 	*/
 }
 
-func GetIncomingPacket(header header.PacketHeader) IncomingPacket {
-	val := packets[header]
-	if val == nil {
-		fmt.Println("missing header", header)
-	}
-	return reflect.New(val).Elem().Interface().(IncomingPacket)
+func GetIncomingPacket(header header.PacketHeader) network2.Incoming {
+	return packets[header].(network2.Incoming)
+}
+
+func GetIncomingChannel(header header.PacketHeader) Channel {
+	return packets[header].(Channel)
 }

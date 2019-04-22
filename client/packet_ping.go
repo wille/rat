@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"rat/shared/network/header"
-
-	"gopkg.in/mgo.v2/bson"
 )
 
 type PingPacket struct {
@@ -17,12 +17,8 @@ func (packet *PingPacket) Init() {
 
 }
 
-func (packet PingPacket) OnReceive() error {
+func (packet PingPacket) Read(io.ReadWriteCloser) error {
 	Queue <- &PingPacket{}
+	fmt.Println("recv ping")
 	return nil
-}
-
-func (packet PingPacket) Decode(buf []byte) (IncomingPacket, error) {
-	err := bson.Unmarshal(buf, &packet)
-	return packet, err
 }
