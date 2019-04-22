@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/base64"
 	"encoding/binary"
-	"io"
+	"fmt"
 	"math/rand"
 	"net"
 	"rat/command/log"
@@ -45,6 +45,7 @@ type Client struct {
 
 	Queue      chan Outgoing
 	streamChan chan Channel
+	die        chan struct{}
 
 	Listeners listenerMap
 
@@ -58,6 +59,7 @@ func NewClient(conn net.Conn) *Client {
 
 	client.Queue = make(chan Outgoing)
 	client.streamChan = make(chan Channel)
+	client.die = make(chan struct{})
 
 	client.Conn = conn
 	client.Id = int(rand.Int31())
@@ -72,26 +74,20 @@ func NewClient(conn net.Conn) *Client {
 func (c *Client) recvLoop() {
 	var err error
 	for {
-		h, err := c.ReadHeader()
+		var h header.PacketHeader
+		err = binary.Read(c.stream, shared.ByteOrder, &h)
 
 		if err != nil {
 			break
 		}
 
-		var n int32
-		err = binary.Read(c.stream, shared.ByteOrder, &n)
-		buf := make([]byte, n)
-		io.ReadFull(c.stream, buf)
-
-		packet := GetIncomingPacket(h)
-
-		packet, err = packet.Decode(buf)
-
-		if err != nil {
+		packet, is := incomingPackets[h]
+		if !is {
+			err = fmt.Errorf("missing packet", h)
 			break
 		}
 
-		packet.OnReceive(c)
+		packet.Read(c.stream, c)
 	}
 
 	log.Println("remove", err.Error())
@@ -107,7 +103,9 @@ func (c *Client) writeLoop() {
 			go ch.Open(stream, c)
 		case p := <-c.Queue:
 			c.WriteHeader(p.Header(), false)
-			p.Write(c)
+			p.Write(c.stream, c)
+		case <-c.die:
+			return
 		}
 	}
 }

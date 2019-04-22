@@ -7,7 +7,11 @@ import (
 
 type Outgoing interface {
 	Header() header.PacketHeader
-	Write(*Client) error
+	Write(io.ReadWriter, *Client) error
+}
+
+type Incoming interface {
+	Read(io.ReadWriter, *Client) error
 }
 
 type Channel interface {

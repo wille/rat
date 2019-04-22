@@ -5,6 +5,11 @@ import (
 	"rat/shared/network/header"
 )
 
+type Outgoing interface {
+	Header() header.PacketHeader
+	Write(io.ReadWriter, *Connection) error
+}
+
 type Incoming interface {
 	Read(io.ReadWriter, *Connection) error
 }
