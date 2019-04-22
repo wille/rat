@@ -12,12 +12,29 @@ import (
 type Connection struct {
 	Conn    *smux.Session
 	control *smux.Stream
+
+	packets chan Outgoing
+	die     chan struct{}
 }
 
-var Queue chan Outgoing
+func NewConnection(Conn *smux.Session) (*Connection, error) {
+	control, err := Conn.AcceptStream()
+
+	if err != nil {
+		return nil, err
+	}
+
+	c := &Connection{}
+	c.Conn = Conn
+	c.control = control
+	c.packets = make(chan Outgoing)
+	c.die = make(chan struct{})
+
+	return c, nil
+}
 
 func (c *Connection) Init() {
-	Queue <- &ComputerInfoPacket{}
+	c.packets <- &ComputerInfoPacket{}
 }
 
 func (c *Connection) Close() {
@@ -28,7 +45,7 @@ func (c *Connection) writeLoop() {
 	var err error
 	for {
 		select {
-		case p := <-Queue:
+		case p := <-c.packets:
 			err = binary.Write(c.control, shared.ByteOrder, p.Header())
 			if err != nil {
 				break
@@ -37,7 +54,10 @@ func (c *Connection) writeLoop() {
 			err = p.Write(c.control, c)
 			if err != nil {
 				break
+
 			}
+		case <-c.die:
+			break
 		}
 	}
 

