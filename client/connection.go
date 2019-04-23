@@ -14,6 +14,7 @@ type Connection struct {
 	control *smux.Stream
 
 	packets chan Outgoing
+	err     chan error
 	die     chan struct{}
 }
 
@@ -28,6 +29,7 @@ func NewConnection(Conn *smux.Session) (*Connection, error) {
 	c.Conn = Conn
 	c.control = control
 	c.packets = make(chan Outgoing)
+	c.err = make(chan error, 1)
 	c.die = make(chan struct{})
 
 	return c, nil
@@ -38,6 +40,8 @@ func (c *Connection) Init() {
 }
 
 func (c *Connection) Close() {
+	close(c.die)
+	close(c.err)
 	c.Conn.Close()
 }
 
@@ -54,14 +58,15 @@ func (c *Connection) writeLoop() {
 			err = p.Write(c.control, c)
 			if err != nil {
 				break
-
 			}
 		case <-c.die:
-			break
+			return
 		}
 	}
 
-	c.Close()
+	if err != nil {
+		c.err <- err
+	}
 }
 
 func (c *Connection) recvLoop() {
@@ -97,6 +102,14 @@ func (c *Connection) recvLoop() {
 
 		if err != nil {
 			break
+		}
+	}
+
+	select {
+	case <-c.die:
+	default:
+		if err != nil {
+			c.err <- err
 		}
 	}
 }

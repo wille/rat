@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"rat/shared/network/header"
 )
@@ -13,6 +14,7 @@ func (packet PingPacket) Header() header.PacketHeader {
 }
 
 func (packet *PingPacket) Write(io.ReadWriter, *Connection) error {
+	fmt.Println("writing ping")
 	return nil
 }
 

