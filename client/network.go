@@ -15,7 +15,7 @@ type Incoming interface {
 }
 
 type Channel interface {
-	Open(io.ReadWriteCloser, *Connection)
+	Open(io.ReadWriteCloser, *Connection) error
 }
 
 type handlerMapT map[header.PacketHeader]interface{}

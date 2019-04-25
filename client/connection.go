@@ -42,6 +42,7 @@ func (c *Connection) Init() {
 func (c *Connection) Close() {
 	close(c.die)
 	close(c.err)
+	close(c.packets)
 	c.Conn.Close()
 }
 
@@ -89,7 +90,16 @@ func (c *Connection) recvLoop() {
 			}
 
 			stream, _ := c.Conn.AcceptStream()
-			go channel.Open(stream, c)
+			go func() {
+				err := channel.Open(stream, c)
+				select {
+				case <-c.die:
+				default:
+					if err != nil {
+						c.err <- err
+					}
+				}
+			}()
 		} else {
 			packet, is := handlerMap[h].(Incoming)
 			if !is {

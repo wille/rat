@@ -62,10 +62,7 @@ func connect(config shared.BinaryConfig) error {
 		return err
 	}
 
-	session, err := smux.Client(conn, nil)
-	if err != nil {
-		return err
-	}
+	session, _ := smux.Client(conn, nil)
 
 	con, err := NewConnection(session)
 	if err != nil {
