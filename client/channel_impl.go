@@ -16,7 +16,7 @@ func (ChannelImpl) Open(r io.ReadWriteCloser, c *Connection) error {
 
 		fmt.Println("read stream", b, n)
 		if err != nil {
-			return fmt.Errorf("channel crashed", err.Error())
+			break
 		}
 	}
 

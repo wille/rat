@@ -45,7 +45,7 @@ func main() {
 	}
 
 	for {
-		fmt.Println(connect(Config))
+		fmt.Println("disconnect", connect(Config))
 		time.Sleep(time.Second * time.Duration(Config.Delay))
 	}
 }
@@ -74,9 +74,6 @@ func connect(config shared.BinaryConfig) error {
 
 	time.Sleep(2 * time.Second)
 	con.Init()
-
-	err = <-con.err
-	con.Close()
 
 	return err
 }

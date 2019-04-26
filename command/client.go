@@ -82,7 +82,7 @@ func (c *Client) Close(err error) {
 	default:
 		close(c.die)
 		c.Conn.Close()
-		log.Println("disconnect", err.Error())
+		log.Println("disconnect", err)
 		removeClient(c)
 	}
 }
@@ -112,9 +112,7 @@ func (c *Client) recvLoop() {
 	select {
 	case <-c.die:
 	default:
-		if err != nil {
-			c.Close(err)
-		}
+		c.Close(err)
 	}
 }
 
@@ -135,8 +133,12 @@ func (c *Client) writeLoop() {
 			}
 			go func() {
 				err := ch.Open(stream, c)
-				if err != nil {
-					c.Close(err)
+				select {
+				case <-c.die:
+				default:
+					if err != nil {
+						c.Close(err)
+					}
 				}
 			}()
 		case p := <-c.Queue:
