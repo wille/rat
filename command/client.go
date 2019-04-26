@@ -9,6 +9,7 @@ import (
 	"rat/command/log"
 	"rat/shared"
 	"rat/shared/network/header"
+	"sync"
 
 	"strconv"
 	"strings"
@@ -46,6 +47,7 @@ type Client struct {
 	Queue      chan Outgoing
 	streamChan chan Channel
 	die        chan struct{}
+	dieLock    sync.Mutex
 
 	Listeners listenerMap
 
@@ -72,12 +74,17 @@ func NewClient(conn net.Conn) *Client {
 }
 
 func (c *Client) Close(err error) {
-	close(c.die)
-	close(c.Queue)
-	close(c.streamChan)
-	c.Conn.Close()
-	log.Println("disconnect", err.Error())
-	removeClient(c)
+	c.dieLock.Lock()
+	defer c.dieLock.Unlock()
+
+	select {
+	case <-c.die:
+	default:
+		close(c.die)
+		c.Conn.Close()
+		log.Println("disconnect", err.Error())
+		removeClient(c)
+	}
 }
 
 func (c *Client) recvLoop() {
@@ -96,19 +103,24 @@ func (c *Client) recvLoop() {
 			break
 		}
 
-		packet.Read(c.stream, c)
+		err = packet.Read(c.stream, c)
+		if err != nil {
+			break
+		}
 	}
 
 	select {
 	case <-c.die:
 	default:
-		c.Close(err)
+		if err != nil {
+			c.Close(err)
+		}
 	}
 }
 
 func (c *Client) writeLoop() {
 	var err error
-	for {
+	for err == nil {
 		select {
 		case <-c.die:
 			return
@@ -136,15 +148,10 @@ func (c *Client) writeLoop() {
 			if err != nil {
 				break
 			}
-
 		}
 	}
 
-	select {
-	case <-c.die:
-	default:
-		c.Close(err)
-	}
+	c.Close(err)
 }
 
 func (c *Client) GetDisplayHost() string {
@@ -207,6 +214,7 @@ func (c *Client) Heartbeat() {
 	for {
 		select {
 		case <-c.die:
+			return
 		default:
 			c.Queue <- &Ping{}
 
