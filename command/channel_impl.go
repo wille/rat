@@ -13,7 +13,7 @@ func (ChannelImpl) Header() header.PacketHeader {
 	return header.ChannelImplHeader
 }
 
-func (ChannelImpl) Open(r io.ReadWriteCloser, c *Client) {
+func (ChannelImpl) Open(r io.ReadWriteCloser, c *Client) error {
 	defer r.Close()
 
 	ticker := time.NewTicker(1 * time.Second)
@@ -32,4 +32,6 @@ func (ChannelImpl) Open(r io.ReadWriteCloser, c *Client) {
 			timer.Stop()
 		}
 	}
+
+	return nil
 }

@@ -71,6 +71,15 @@ func NewClient(conn net.Conn) *Client {
 	return client
 }
 
+func (c *Client) Close(err error) {
+	close(c.die)
+	close(c.Queue)
+	close(c.streamChan)
+	c.Conn.Close()
+	log.Println("disconnect", err.Error())
+	removeClient(c)
+}
+
 func (c *Client) recvLoop() {
 	var err error
 	for {
@@ -83,38 +92,59 @@ func (c *Client) recvLoop() {
 
 		packet, is := incomingPackets[h]
 		if !is {
-			err = fmt.Errorf("missing packet", h)
+			err = fmt.Errorf("invalid packet header", h)
 			break
 		}
 
 		packet.Read(c.stream, c)
 	}
 
-	log.Println("remove", err.Error())
-	removeClient(c)
-}
-
-func (c *Client) writeLoop() {
-	for {
-		select {
-		case ch := <-c.streamChan:
-			stream, _ := c.session.OpenStream()
-			c.WriteHeader(ch.Header(), true)
-			go ch.Open(stream, c)
-		case p := <-c.Queue:
-			c.WriteHeader(p.Header(), false)
-			p.Write(c.stream, c)
-		case <-c.die:
-			return
-		}
+	select {
+	case <-c.die:
+	default:
+		c.Close(err)
 	}
 }
 
-func (c Client) Close() error {
-	close(c.Queue)
-	close(c.streamChan)
-	c.stream.Close()
-	return c.Conn.Close()
+func (c *Client) writeLoop() {
+	var err error
+	for {
+		select {
+		case <-c.die:
+			return
+		case ch := <-c.streamChan:
+			stream, err := c.session.OpenStream()
+			if err != nil {
+				break
+			}
+			err = c.WriteHeader(ch.Header(), true)
+			if err != nil {
+				break
+			}
+			go func() {
+				err := ch.Open(stream, c)
+				if err != nil {
+					c.Close(err)
+				}
+			}()
+		case p := <-c.Queue:
+			err = c.WriteHeader(p.Header(), false)
+			if err != nil {
+				break
+			}
+			err = p.Write(c.stream, c)
+			if err != nil {
+				break
+			}
+
+		}
+	}
+
+	select {
+	case <-c.die:
+	default:
+		c.Close(err)
+	}
 }
 
 func (c *Client) GetDisplayHost() string {
@@ -175,13 +205,17 @@ func (c *Client) GetPathSep() string {
 // Heartbeat pings the client and waits
 func (c *Client) Heartbeat() {
 	for {
-		c.Queue <- &Ping{}
+		select {
+		case <-c.die:
+		default:
+			c.Queue <- &Ping{}
 
-		for !c.Ping.Received {
-			time.Sleep(time.Millisecond)
+			for !c.Ping.Received {
+				time.Sleep(time.Millisecond)
+			}
+
+			time.Sleep(time.Second * 2)
 		}
-
-		time.Sleep(time.Second * 2)
 	}
 }
 

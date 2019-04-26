@@ -16,5 +16,5 @@ type Incoming interface {
 
 type Channel interface {
 	Header() header.PacketHeader
-	Open(io.ReadWriteCloser, *Client)
+	Open(io.ReadWriteCloser, *Client) error
 }
