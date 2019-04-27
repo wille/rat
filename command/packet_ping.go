@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"rat/command/utils"
 	"rat/shared/network/header"
@@ -19,7 +18,6 @@ func (packet Ping) Header() header.PacketHeader {
 func (Ping) Write(w io.ReadWriter, c *Client) error {
 	c.Ping.Start = time.Now()
 	c.Ping.Received = false
-	fmt.Println("write ping", c.Ping.Start)
 	return nil
 }
 
@@ -30,8 +28,6 @@ func (Ping) Read(r io.ReadWriter, c *Client) error {
 	broadcast(NewClientEvent(Update, c, ClientData{
 		Ping: c.Ping.Current,
 	}))
-
-	fmt.Println("recv ping", c.Ping.Current)
 
 	return nil
 }
