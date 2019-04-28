@@ -126,6 +126,12 @@ func incomingWebSocket(ws *websocket.Conn) {
 				return
 			}
 
+			if client != nil {
+				for listener := range client.Listeners {
+					listener.C <- i
+				}
+			}
+
 			err = i.(IncomingMessage).Handle(ws, client)
 
 			if err != nil {

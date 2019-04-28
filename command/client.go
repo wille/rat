@@ -16,10 +16,17 @@ import (
 	"time"
 
 	"github.com/xtaci/smux"
-	"golang.org/x/net/websocket"
 )
 
-type listenerMap map[header.PacketHeader]*websocket.Conn
+type EventListener struct {
+	C      chan interface{}
+	client *Client
+}
+
+func (e *EventListener) Unlisten() {
+	delete(e.client.Listeners, e)
+	close(e.C)
+}
 
 type Client struct {
 	session *smux.Session
@@ -49,7 +56,7 @@ type Client struct {
 	die        chan struct{}
 	dieLock    sync.Mutex
 
-	Listeners listenerMap
+	Listeners map[*EventListener]bool
 
 	Monitors []shared.Monitor
 
@@ -67,10 +74,19 @@ func NewClient(conn net.Conn) *Client {
 	client.Id = int(rand.Int31())
 	client.Computer = shared.Computer{}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
-	client.Listeners = make(map[header.PacketHeader]*websocket.Conn)
+	client.Listeners = make(map[*EventListener]bool)
 	client.Monitors = make([]shared.Monitor, 0)
 
 	return client
+}
+
+func (c *Client) Listen() *EventListener {
+	l := &EventListener{
+		C:      make(chan interface{}),
+		client: c,
+	}
+	c.Listeners[l] = true
+	return l
 }
 
 func (c *Client) Close(err error) {

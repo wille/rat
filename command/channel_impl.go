@@ -16,6 +16,9 @@ func (ChannelImpl) Header() header.PacketHeader {
 func (ChannelImpl) Open(r io.ReadWriteCloser, c *Client) error {
 	defer r.Close()
 
+	listener := c.Listen()
+	defer listener.Unlisten()
+
 	ticker := time.NewTicker(1 * time.Second)
 	timer := time.NewTimer(5 * time.Second)
 
@@ -24,6 +27,8 @@ func (ChannelImpl) Open(r io.ReadWriteCloser, c *Client) error {
 
 	for {
 		select {
+		case event := <-listener.C:
+			fmt.Println("received control socket event", event)
 		case <-ticker.C:
 			_, err := r.Write([]byte("hello"))
 			if err != nil {

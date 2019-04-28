@@ -72,8 +72,8 @@ func connect(config shared.BinaryConfig) error {
 	go con.writeLoop()
 	go con.recvLoop()
 
-	time.Sleep(2 * time.Second)
 	con.Init()
+	<-con.die
 
 	return err
 }
