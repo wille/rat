@@ -13,6 +13,11 @@ func (m ShellMessage) Handle(ws *websocket.Conn, client *Client) error {
 	//client.Listeners[header.ShellHeader] = ws
 	//client.Queue <- &ShellPacket{m.Action, m.Command}
 
-	client.streamChan <- ShellChannel{}
+	switch m.Action {
+	case 1:
+	default:
+		client.streamChan <- ShellChannel{ws}
+	}
+
 	return nil
 }

@@ -40,4 +40,7 @@ export const TransferActionMessage = createMessage<TransferActionTemplate>(
   MessageType.TransferAction
 );
 
-export const ShellMessage = createMessage<{}>(MessageType.Shell);
+export const ShellMessage = createMessage<{
+  action?: number;
+  command?: string;
+}>(MessageType.Shell);

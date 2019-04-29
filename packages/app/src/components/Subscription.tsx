@@ -74,6 +74,7 @@ const TransferSubscription = withProps({
 })(ConnectedHandler);
 
 export {
+  ConnectedHandler as Subscriber,
   ClientSubscription,
   DirectorySubscription,
   ScreenSubscription,

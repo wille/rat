@@ -23,6 +23,7 @@ func (packet ShellPacket) Open(channel io.ReadWriteCloser, c *Connection) error 
 	current.process = exec.Command(shell.GetDefault())
 	current.stdin, _ = current.process.StdinPipe()
 	current.stdout, _ = current.process.StdoutPipe()
+	current.process.Stderr = current.process.Stdout
 	current.process.Start()
 
 	current.stdin.Write([]byte("echo hello world\n"))
@@ -35,7 +36,7 @@ func (packet ShellPacket) Open(channel io.ReadWriteCloser, c *Connection) error 
 		b := make([]byte, 1024)
 		for {
 			n, err := r.Read(b)
-			fmt.Println("stdin", n, err, string(b[:n]))
+			fmt.Println("client > command", n, err, string(b[:n]))
 			if err != nil {
 				break
 			}
@@ -51,7 +52,7 @@ func (packet ShellPacket) Open(channel io.ReadWriteCloser, c *Connection) error 
 	b := make([]byte, 1024)
 	for {
 		n, err := r.Read(b)
-		fmt.Println("channel in", n, err, string(b[:n]))
+		fmt.Println("command > client", err, string(b[:n]), b[:n])
 		if err != nil {
 			break
 		}

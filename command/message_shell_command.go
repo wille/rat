@@ -4,6 +4,6 @@ type ShellCommandMessage struct {
 	Line string `json:"line"`
 }
 
-func (m ShellCommandMessage) Header() MessageHeader {
-	return Shell
+func (ShellCommandMessage) Header() MessageHeader {
+	return ShellEvent
 }
