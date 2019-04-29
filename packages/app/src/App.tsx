@@ -13,6 +13,7 @@ import Client404 from './components/Clients/404';
 import FileSystem from './components/FileSystem';
 import Process from './components/Process';
 import Screen from './components/Screen';
+import Shell from './components/Shell';
 import Transfers from './components/Transfers';
 
 import styled from 'react-emotion';
@@ -35,6 +36,8 @@ const Views = ({ client }) => (
         <Route path="/client/:id/screen" component={Screen} />
         <Route path="/client/:id/process" component={Process} />
         <Route path="/client/:id/fs" component={FileSystem} />
+        <Route path="/client/:id/shell" component={Shell} />
+
         <Route component={Client404} />
       </Switch>
     )}

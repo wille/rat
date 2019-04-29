@@ -25,6 +25,6 @@ var handlerMap handlerMapT
 func init() {
 	handlerMap = make(handlerMapT)
 	handlerMap[header.PingHeader] = PingPacket{}
-
 	handlerMap[header.ChannelImplHeader] = ChannelImpl{}
+	handlerMap[header.ShellChannelHeader] = ShellPacket{}
 }

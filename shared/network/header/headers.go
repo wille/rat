@@ -4,9 +4,11 @@ package header
 type PacketHeader uint16
 
 const (
-	PingHeader             PacketHeader = 0
-	ChannelImplHeader      PacketHeader = 1
-	ComputerInfoHeader     PacketHeader = 2
+	PingHeader         PacketHeader = 0
+	ChannelImplHeader  PacketHeader = 1
+	ComputerInfoHeader PacketHeader = 2
+	ShellChannelHeader PacketHeader = 20
+
 	ScreenHeader           PacketHeader = 4
 	DirectoryHeader        PacketHeader = 3 // swapped
 	ProcessHeader          PacketHeader = 5
@@ -19,6 +21,5 @@ const (
 
 	SysHeader     PacketHeader = 2
 	FileHeader    PacketHeader = 19
-	ShellHeader   PacketHeader = 20
 	WindowsHeader PacketHeader = 21
 )

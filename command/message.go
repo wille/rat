@@ -7,6 +7,8 @@ import (
 type MessageHeader int
 
 const (
+	ShellEvent MessageHeader = 5
+
 	DirectoryQueryEvent MessageHeader = 3
 	ScreenUpdateEvent   MessageHeader = 4
 	ProcessQueryEvent   MessageHeader = 8
@@ -46,6 +48,7 @@ var Messages MessageMap
 
 func init() {
 	Messages = make(MessageMap)
+	Messages[ShellEvent] = ShellMessage{}
 	/* Messages[TransfersEvent] = DisplayTransferMessage{}
 	Messages[ClientSysEvent] = SysMessage{}
 	Messages[MouseMove] = MouseMoveMessage{}

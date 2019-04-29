@@ -77,6 +77,7 @@ const ClientHome = ({ client }: Props) => {
           </Item>
           <Item to={link('fs')}>Browse files</Item>
           <Item to={link('process')}>Manage processes</Item>
+          <Item to={link('shell')}>Shell</Item>
         </Navigation>
       </Content>
     </Container>

@@ -39,3 +39,5 @@ export const UploadToClientMessage = createMessage<DataTemplate>(
 export const TransferActionMessage = createMessage<TransferActionTemplate>(
   MessageType.TransferAction
 );
+
+export const ShellMessage = createMessage<{}>(MessageType.Shell);
