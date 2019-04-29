@@ -31,6 +31,10 @@ const config = {
         options: {
           limit: 10000
         }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader','css-loader'],
       }
     ]
   },
