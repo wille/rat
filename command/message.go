@@ -1,9 +1,5 @@
 package main
 
-import (
-	"golang.org/x/net/websocket"
-)
-
 type MessageHeader int
 
 const (
@@ -37,7 +33,7 @@ type OutgoingMessage interface {
 }
 
 type IncomingMessage interface {
-	Handle(ws *websocket.Conn, client *Client) error
+	Handle(*Controller, *Client) error
 }
 
 // MessageMap is a map with event handlers and their codes

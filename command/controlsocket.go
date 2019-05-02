@@ -10,6 +10,50 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+type EventListener struct {
+	C          chan interface{}
+	controller *Controller
+
+	client *Client
+	mh     MessageHeader
+}
+
+func (e *EventListener) Unlisten() {
+	delete(e.controller.Listeners, e)
+	select {
+	case <-e.C:
+	default:
+		close(e.C)
+	}
+}
+
+type Controller struct {
+	ws  *websocket.Conn
+	die chan struct{}
+
+	Listeners map[*EventListener]bool
+}
+
+func NewController(ws *websocket.Conn) *Controller {
+	return &Controller{
+		ws:        ws,
+		die:       make(chan struct{}),
+		Listeners: make(map[*EventListener]bool),
+	}
+}
+
+func (c *Controller) Listen(mh MessageHeader, client *Client) *EventListener {
+	l := &EventListener{
+		C:          make(chan interface{}),
+		controller: c,
+		mh:         mh,
+		client:     client,
+	}
+
+	c.Listeners[l] = true
+	return l
+}
+
 // Event incoming message data
 type Event struct {
 	// Event code
@@ -20,14 +64,14 @@ type Event struct {
 }
 
 var (
-	WebSockets []*websocket.Conn
+	WebSockets []*Controller
 )
 
 func init() {
-	WebSockets = make([]*websocket.Conn, 0)
+	WebSockets = make([]*Controller, 0)
 }
 
-func sendMessage(ws *websocket.Conn, c *Client, message OutgoingMessage) error {
+func sendMessage(controller *Controller, c *Client, message OutgoingMessage) error {
 	id := 0
 
 	if c != nil {
@@ -45,7 +89,7 @@ func sendMessage(ws *websocket.Conn, c *Client, message OutgoingMessage) error {
 	}
 
 	b, err := bson.Marshal(asdf)
-	err = websocket.Message.Send(ws, b)
+	err = websocket.Message.Send(controller.ws, b)
 	return err
 }
 
@@ -56,13 +100,19 @@ func broadcast(message OutgoingMessage) {
 }
 
 func incomingWebSocket(ws *websocket.Conn) {
-	WebSockets = append(WebSockets, ws)
+	controller := NewController(ws)
+	WebSockets = append(WebSockets, controller)
 
 	close := func() {
 		ws.Close()
 
 		for k, v := range WebSockets {
-			if v == ws {
+			if v == controller {
+				for listener := range v.Listeners {
+					listener.Unlisten()
+					fmt.Println("unlistening to", listener)
+				}
+				close(v.die)
 				WebSockets = append(WebSockets[:k], WebSockets[k+1:]...)
 				break
 			}
@@ -126,13 +176,16 @@ func incomingWebSocket(ws *websocket.Conn) {
 				return
 			}
 
-			if client != nil {
-				for listener := range client.Listeners {
+			for listener := range controller.Listeners {
+				clientOk := listener.client == nil || listener.client == client
+				headerOk := listener.mh == 0 || listener.mh == MessageHeader(event.Event)
+
+				if clientOk && headerOk {
 					listener.C <- i
 				}
 			}
 
-			err = i.(IncomingMessage).Handle(ws, client)
+			err = i.(IncomingMessage).Handle(controller, client)
 
 			if err != nil {
 				disconnect(err)
