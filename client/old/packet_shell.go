@@ -31,7 +31,7 @@ func (packet *ShellPacket) Init() {
 
 func (packet ShellPacket) OnReceive() error {
 	switch packet.Action {
-	case shared.StartShell:
+	case shared.ShellStart:
 		current.process = exec.Command(shell.GetDefault())
 		current.stdin, _ = current.process.StdinPipe()
 		current.stdout, _ = current.process.StdoutPipe()
@@ -51,10 +51,10 @@ func (packet ShellPacket) OnReceive() error {
 				Queue <- &ShellPacket{Data: s}
 			}
 		}()
-	case shared.StopShell:
+	case shared.ShellStop:
 		current.process.Process.Kill()
 		current.process = nil
-	case shared.WriteShell:
+	case shared.ShellWrite:
 		current.stdin.Write([]byte(packet.Data + shell.LineEnd))
 	}
 

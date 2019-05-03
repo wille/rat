@@ -11,4 +11,4 @@ export * from './outgoing-messages';
 /**
  * Incoming websocket message handler
  */
-export type MessageHandler = <T extends MessageTemplate>(data: T) => void;
+export type MessageHandler = (data: any) => void;

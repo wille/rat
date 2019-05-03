@@ -3,13 +3,17 @@ package main
 import "rat/shared"
 
 type ShellMessage struct {
-	Action int    `json:"action"`
-	Data   string `json:"data"`
+	Action shared.ShellAction `json:"action"`
+	Data   string             `json:"data"`
+}
+
+func (ShellMessage) Header() MessageHeader {
+	return ShellEvent
 }
 
 func (m ShellMessage) Handle(controller *Controller, client *Client) error {
 	switch m.Action {
-	case shared.StartShell:
+	case shared.ShellStart:
 		client.streamChan <- ShellChannel{controller}
 	}
 

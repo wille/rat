@@ -1,5 +1,9 @@
 import { Subscriber } from 'app/src/components/Subscription';
-import { ShellCommand, ShellMessage } from 'app/src/messages/shell';
+import {
+  ShellAction,
+  ShellMessage,
+  ShellMessageTemplate,
+} from 'app/src/messages/shell';
 import * as React from 'react';
 import { MessageType } from 'shared/types';
 import { Terminal } from 'xterm';
@@ -18,7 +22,7 @@ class Shell extends React.Component<Props, any> {
   componentDidMount() {
     this.props.client.send(
       new ShellMessage({
-        action: ShellCommand.Start,
+        action: ShellAction.Start,
       })
     );
 
@@ -32,17 +36,17 @@ class Shell extends React.Component<Props, any> {
   componentWillUnmount() {
     this.props.client.send(
       new ShellMessage({
-        action: ShellCommand.Stop,
+        action: ShellAction.Stop,
       })
     );
   }
 
-  onTerminalInput = data => {
+  onTerminalInput = (data: string) => {
     this.t.write(data);
 
     this.props.client.send(
       new ShellMessage({
-        action: ShellCommand.Write,
+        action: ShellAction.Write,
 
         // seems like xterm gives us a carriage return instead of newline
         data: data.replace(/\r/g, '\n'),
@@ -50,10 +54,15 @@ class Shell extends React.Component<Props, any> {
     );
   };
 
-  onReceive = data => {
-    console.log(data);
-    // xterm wants both cr and lf
-    this.t.write(data.line.replace(/\n/g, '\n\r'));
+  onReceive = (message: ShellMessageTemplate) => {
+    switch (message.action) {
+      case ShellAction.Write:
+        // xterm wants both cr and lf
+        this.t.write(message.data.replace(/\n/g, '\n\r'));
+        break;
+      default:
+        throw new Error(`Shell action ${message.action} not implemented`);
+    }
   };
 
   render() {

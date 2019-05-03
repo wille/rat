@@ -1,7 +1,7 @@
 import { createMessage } from 'shared/messages';
 import { MessageType } from 'shared/types';
 
-export enum ShellCommand {
+export enum ShellAction {
   Start = 0,
   Stop = 1,
   Write = 2,
@@ -11,7 +11,7 @@ export interface ShellMessageTemplate {
   /**
    * command action
    */
-  action: ShellCommand;
+  action: ShellAction;
 
   /**
    * command payload

