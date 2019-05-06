@@ -1,4 +1,4 @@
-//+build !windows,!darwin
+//+build !windows,!darwin,x11
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -11,30 +11,6 @@
 #include "bitmap.h"
 #include "screen.h"
 #include "screen_x11.h"
-
-void QueryMonitors(void) {
-	Display *display;
-    display = XOpenDisplay(NULL);
-
-    XRRScreenResources *screen = XRRGetScreenResources(display, DefaultRootWindow(display));
-
-	int i;
-	for (i = 0; i < screen->ncrtc; i++) {
-        XRRCrtcInfo *crtc_info = XRRGetCrtcInfo(display, screen, screen->crtcs[i]);
-
-		Monitor m;
-
-		m.id = i;
-		m.coordinates.x = crtc_info->x;
-		m.coordinates.y = crtc_info->y;
-		m.coordinates.width = crtc_info->width;
-		m.coordinates.height = crtc_info->height;
-
-		MonitorCallback(m);
-	}
-
-	XCloseDisplay(display);
-}
 
 Capture CaptureWindow(int handle) {
     Capture cap;

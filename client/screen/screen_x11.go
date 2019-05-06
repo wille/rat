@@ -1,4 +1,4 @@
-//+build !windows,!darwin
+//+build !windows,!darwin,x11
 
 package screen
 
