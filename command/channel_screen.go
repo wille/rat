@@ -2,11 +2,30 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"rat/shared/network/header"
-
-	"gopkg.in/mgo.v2/bson"
 )
 
+type ScreenChannel struct {
+	controller *Controller
+}
+
+func (ScreenChannel) Header() header.PacketHeader {
+	return header.ScreenHeader
+}
+
+func (sc ScreenChannel) Open(r io.ReadWriteCloser, c *Client) error {
+	defer r.Close()
+
+	listener := sc.controller.Listen(ScreenEvent, c)
+	defer listener.Unlisten()
+
+	fmt.Println("channel open")
+
+	return nil
+}
+
+/*
 type ScreenPacket struct {
 	Active bool    `network:"send"`
 	Scale  float32 `network:"send"`
@@ -53,3 +72,4 @@ func (packet ScreenPacket) Decode(buf []byte) (IncomingPacket, error) {
 	err := bson.Unmarshal(buf, &packet)
 	return packet, err
 }
+*/

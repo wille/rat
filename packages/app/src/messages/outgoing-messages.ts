@@ -8,7 +8,6 @@ import {
   MouseTemplate,
   ProcessTemplate,
   RequestDownloadTemplate,
-  ScreenTemplate,
   SubscribeTemplate,
   TransferActionTemplate,
 } from 'shared/templates';
@@ -21,7 +20,6 @@ export const BrowseMessage = createMessage<BrowseTemplate>(
 export const ProcessMessage = createMessage<ProcessTemplate>(
   MessageType.Process
 );
-export const StreamMessage = createMessage<ScreenTemplate>(MessageType.Screen);
 export const SubscribeMessage = createMessage<SubscribeTemplate>(
   MessageType.Subscribe
 );

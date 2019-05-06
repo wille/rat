@@ -27,4 +27,5 @@ func init() {
 	handlerMap[header.PingHeader] = PingPacket{}
 	handlerMap[header.ChannelImplHeader] = ChannelImpl{}
 	handlerMap[header.ShellChannelHeader] = ShellChannel{}
+	handlerMap[header.ScreenHeader] = ScreenChannel{}
 }
