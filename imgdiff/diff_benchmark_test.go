@@ -26,6 +26,13 @@ func BenchmarkDiff(b *testing.B) {
 
 	cmp := NewComparer(c, r, w, h)
 
+	run := true
+	go func() {
+		for run {
+			<-cmp.C
+		}
+	}()
+
 	for i := 0; i < b.N; i++ {
 		rgba := image.NewRGBA(image.Rectangle{
 			Min: image.Point{0, 0},
@@ -35,6 +42,8 @@ func BenchmarkDiff(b *testing.B) {
 		y := rand.Int31n(h)
 		color := randomColor()
 		rgba.Set(int(x), int(y), color)
-		cmp.diff(rgba)
+		cmp.Run(rgba)
 	}
+
+	run = false
 }

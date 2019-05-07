@@ -19,25 +19,24 @@ func TestDiff(t *testing.T) {
 		Max: image.Point{w, h},
 	})
 
-	var offset int
-	sums := make([]uint32, c*r)
-
 	cmp := NewComparer(c, r, w, h)
-	cmp.diff(rgba)
-	copy(sums, cmp.Sums)
-
-	rgba.Set(0, 0, color.RGBA{255, 0, 0, 255})
-	cmp.diff(rgba)
-	offset = cmp.ChunkOffset(0, 0)
-	if sums[offset] == cmp.Sums[offset] {
-		t.Fatal()
+	go cmp.Run(rgba)
+	// initial image, all chunks are updated
+	for i := 0; i < c*r; i++ {
+		<-cmp.C
 	}
 
-	copy(sums, cmp.Sums)
-	rgba.Set(8, 8, color.RGBA{255, 255, 255, 255})
-	cmp.diff(rgba)
-	offset = cmp.ChunkOffset(1, 1)
-	if sums[offset] == cmp.Sums[offset] {
-		t.Fatal()
+	rgba.Set(0, 0, color.RGBA{255, 0, 0, 255})
+	go cmp.Run(rgba)
+	change := <-cmp.C
+	if change.Bounds.Min.X != 0 && change.Bounds.Min.Y != 0 {
+		t.Fatal("did not detect first chunk change")
+	}
+
+	rgba.Set(8, 8, color.RGBA{0, 255, 0, 255})
+	go cmp.Run(rgba)
+	change = <-cmp.C
+	if change.Bounds.Min.X != 8 && change.Bounds.Min.Y != 8 {
+		t.Fatal("did not detect second chunk change")
 	}
 }

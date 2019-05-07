@@ -1,14 +1,28 @@
 package imgdiff
 
 import (
-	"fmt"
 	"hash/crc32"
 	"image"
 )
 
+// ChangedChunk contains the data of a chunk update
+type ChangedChunk struct {
+	// Bounds of the chunk on the source image
+	Bounds image.Rectangle
+
+	// Chunk rgba data
+	Data []uint8
+}
+
+// Cmp implements functions for concurrent diffs of images
 type Cmp struct {
+	// Sums is the crc32's of previous image chunks
 	Sums []uint32
+
+	// Data is the rgba data for each chunk
 	Data [][]uint8
+
+	C chan ChangedChunk
 
 	columns int
 	rows    int
@@ -29,6 +43,7 @@ func NewComparer(c, r, w, h int) *Cmp {
 	return &Cmp{
 		Sums:    make([]uint32, length),
 		Data:    data,
+		C:       make(chan ChangedChunk),
 		columns: c,
 		rows:    r,
 		w:       w,
@@ -36,12 +51,14 @@ func NewComparer(c, r, w, h int) *Cmp {
 	}
 }
 
-// ChunkOffset returns the index in Data of chunk c,r
-func (cmp *Cmp) ChunkOffset(c, r int) int {
+func (cmp *Cmp) chunkOffset(c, r int) int {
 	return cmp.columns*c + r
 }
 
-func (cmp *Cmp) diff(rgba *image.RGBA) {
+// Run starts comparing image and sends updated chunks to channel C
+// comparing for the first time will send all chunks as updated
+// good for asynchronous rendering on the receiver side
+func (cmp *Cmp) Run(rgba *image.RGBA) {
 	cw := cmp.w / cmp.columns
 	rh := cmp.h / cmp.rows
 
@@ -50,8 +67,8 @@ func (cmp *Cmp) diff(rgba *image.RGBA) {
 
 		for r := 0; r < cmp.rows; r++ {
 			y := r * rh
-
-			buf := cmp.Data[cmp.ChunkOffset(c, r)]
+			co := cmp.chunkOffset(c, r)
+			buf := cmp.Data[co]
 
 			for s := 0; s < rh; s++ {
 				offset := s * cw
@@ -63,9 +80,18 @@ func (cmp *Cmp) diff(rgba *image.RGBA) {
 				copy(buf[offset:offset+cw], line)
 			}
 
-			cmp.Sums[cmp.ChunkOffset(c, r)] = crc32.ChecksumIEEE([]byte(buf))
+			sum := crc32.ChecksumIEEE([]byte(buf))
+			if sum != cmp.Sums[co] {
+				cmp.Sums[co] = sum
+
+				cmp.C <- ChangedChunk{
+					Bounds: image.Rectangle{
+						Min: image.Point{x, y},
+						Max: image.Point{cw, rh},
+					},
+					Data: buf,
+				}
+			}
 		}
 	}
-
-	fmt.Println(cmp.Sums)
 }
