@@ -3,27 +3,41 @@ package imgdiff
 import (
 	"image"
 	"image/color"
-	"image/png"
-	"os"
 	"testing"
 )
 
 func TestDiff(t *testing.T) {
-	file, _ := os.Open("bitmap.png")
-	defer file.Close()
-	png, err := png.Decode(file)
-	if err != nil {
-		t.Fatal(err)
+	const (
+		c = 2
+		r = 2
+		w = 16
+		h = 16
+	)
+
+	rgba := image.NewRGBA(image.Rectangle{
+		Min: image.Point{0, 0},
+		Max: image.Point{w, h},
+	})
+
+	var offset int
+	sums := make([]uint32, c*r)
+
+	cmp := NewComparer(c, r, w, h)
+	cmp.diff(rgba)
+	copy(sums, cmp.Sums)
+
+	rgba.Set(0, 0, color.RGBA{255, 0, 0, 255})
+	cmp.diff(rgba)
+	offset = cmp.ChunkOffset(0, 0)
+	if sums[offset] == cmp.Sums[offset] {
+		t.Fatal()
 	}
 
-	rgba := png.(*image.RGBA)
-	c := NewComparer(2, 2, 16, 16)
-	c.diff(rgba)
-
-	rgba.Set(8, 0, color.RGBA{255, 0, 0, 255})
-	c.diff(rgba)
-
-	rgba.Set(8, 0, color.RGBA{255, 255, 255, 255})
-
-	c.diff(rgba)
+	copy(sums, cmp.Sums)
+	rgba.Set(8, 8, color.RGBA{255, 255, 255, 255})
+	cmp.diff(rgba)
+	offset = cmp.ChunkOffset(1, 1)
+	if sums[offset] == cmp.Sums[offset] {
+		t.Fatal()
+	}
 }
