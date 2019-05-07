@@ -17,7 +17,7 @@ func TestDiff(t *testing.T) {
 	}
 
 	rgba := png.(*image.RGBA)
-	c := Cmp{}
+	c := NewComparer(2, 2, 16, 16)
 	c.diff(rgba)
 
 	rgba.Set(8, 0, color.RGBA{255, 0, 0, 255})

@@ -6,32 +6,52 @@ import (
 	"image"
 )
 
-const (
-	rows    = 2
-	columns = 2
-)
-
 type Cmp struct {
-	Sums [columns][rows]uint32
-	Data [columns][rows][8 * 8]uint8
+	Sums []uint32
+	Data [][]uint8
+
+	columns int
+	rows    int
+	w       int
+	h       int
 }
 
-func (c *Cmp) Init() {}
+// NewComparer returns a new comparer instance initialized with specified width, height and chunk size
+func NewComparer(c, r, w, h int) *Cmp {
+	length := r * c
+	chunklen := w / c * h / r
 
-func (cmp Cmp) diff(rgba *image.RGBA) {
-	w := rgba.Bounds().Max.X
-	h := rgba.Bounds().Max.Y
+	data := make([][]uint8, length)
+	for i := 0; i < length; i++ {
+		data[i] = make([]uint8, chunklen)
+	}
 
-	cw := w / columns
-	rh := h / rows
+	return &Cmp{
+		Sums:    make([]uint32, length),
+		Data:    data,
+		columns: c,
+		rows:    r,
+		w:       w,
+		h:       h,
+	}
+}
 
-	for c := 0; c < columns; c++ {
+// ChunkOffset returns the index in Data of chunk c,r
+func (cmp *Cmp) ChunkOffset(c, r int) int {
+	return cmp.columns*c + r
+}
+
+func (cmp *Cmp) diff(rgba *image.RGBA) {
+	cw := cmp.w / cmp.columns
+	rh := cmp.h / cmp.rows
+
+	for c := 0; c < cmp.columns; c++ {
 		x := c * cw
 
-		for r := 0; r < rows; r++ {
+		for r := 0; r < cmp.rows; r++ {
 			y := r * rh
 
-			buf := cmp.Data[c][r]
+			buf := cmp.Data[cmp.ChunkOffset(c, r)]
 
 			for s := 0; s < rh; s++ {
 				offset := s * cw
@@ -43,7 +63,7 @@ func (cmp Cmp) diff(rgba *image.RGBA) {
 				copy(buf[offset:offset+cw], line)
 			}
 
-			cmp.Sums[c][r] = crc32.ChecksumIEEE([]byte(buf[:]))
+			cmp.Sums[cmp.ChunkOffset(c, r)] = crc32.ChecksumIEEE([]byte(buf))
 		}
 	}
 

@@ -18,11 +18,13 @@ func randomColor() color.RGBA {
 
 func BenchmarkDiff(b *testing.B) {
 	const (
+		c = 2
+		r = 2
 		w = 16
 		h = 16
 	)
 
-	c := Cmp{}
+	cmp := NewComparer(c, r, w, h)
 
 	for i := 0; i < b.N; i++ {
 		rgba := image.NewRGBA(image.Rectangle{
@@ -33,6 +35,6 @@ func BenchmarkDiff(b *testing.B) {
 		y := rand.Int31n(h)
 		color := randomColor()
 		rgba.Set(int(x), int(y), color)
-		c.diff(rgba)
+		cmp.diff(rgba)
 	}
 }
