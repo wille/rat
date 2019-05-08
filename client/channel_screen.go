@@ -2,39 +2,88 @@ package main
 
 import (
 	"bytes"
+	"encoding/binary"
+	"fmt"
 	"image"
 	"image/jpeg"
 	"io"
 	"rat/client/screen"
+	"rat/imgdiff"
 )
 
 type ScreenChannel struct {
 	Active  bool
 	Scale   float32
 	Monitor bool
-	Handle  int
+	Handle  int32
 }
 
 func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 	monitor := screen.Monitors[sc.Handle]
 
 	var err error
+	err = binary.Read(channel, binary.LittleEndian, &sc.Monitor)
+	if err != nil {
+		return err
+	}
+
+	err = binary.Read(channel, binary.LittleEndian, &sc.Handle)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("opts", sc)
+
+	cmp := imgdiff.NewComparer(4, 4, monitor.Width, monitor.Height)
+
+	go func() {
+		for {
+			select {
+			case chunk := <-cmp.C:
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Min.X))
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Min.Y))
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Max.X))
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Max.Y))
+
+				rgba := &image.RGBA{
+					Pix:    chunk.Data,
+					Stride: chunk.Bounds.Dx() * 4,
+					Rect: image.Rectangle{
+						Min: image.Point{0, 0},
+						Max: chunk.Bounds.Size(),
+					},
+				}
+
+				if rgba.Stride < 0 {
+					fmt.Println(chunk.Bounds, chunk.Bounds.Dx())
+
+				}
+
+				var buf bytes.Buffer
+				err = jpeg.Encode(&buf, rgba, &jpeg.Options{
+					Quality: 75,
+				})
+				if err != nil {
+					return
+				}
+
+				binary.Write(channel, binary.LittleEndian, int32(buf.Len()))
+				io.Copy(channel, &buf)
+			}
+		}
+	}()
 
 	for err == nil {
 		var capture image.Image
 		if sc.Monitor {
 			capture = screen.Capture(monitor)
 		} else {
-			capture = screen.CaptureWindow(sc.Handle)
+			capture = screen.CaptureWindow(int(sc.Handle))
 		}
 
 		rgba := capture.(*image.RGBA)
 
-		var buf bytes.Buffer
-
-		jpeg.Encode(&buf, rgba, &jpeg.Options{
-			Quality: 75,
-		})
+		cmp.Run(rgba)
 	}
 
 	return err

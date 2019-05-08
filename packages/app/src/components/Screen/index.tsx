@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Monitor } from 'shared/system';
 import { ScreenFrameTemplate } from 'shared/templates';
-import { StreamMessage } from '../../messages/outgoing-messages';
 
+import { ScreenChunkTemplate, StreamMessage } from 'app/src/messages/screen';
+import { MessageType } from 'shared/types';
 import Client from '../../client';
 import { selectFps, selectScreenBuffer } from '../../reducers';
 import withClient from '../../withClient';
-import { ScreenSubscription } from '../Subscription';
+import { ScreenSubscription, Subscriber } from '../Subscription';
 import Stream from './Stream';
 
 interface Props {
@@ -25,6 +26,8 @@ interface State {
 }
 
 class Screen extends React.Component<Props, State> {
+  canvas = React.createRef<HTMLCanvasElement>();
+
   constructor(props) {
     super(props);
 
@@ -43,12 +46,25 @@ class Screen extends React.Component<Props, State> {
     this.stop();
   }
 
+  onReceive = async (message: ScreenChunkTemplate) => {
+    const ctx = this.canvas.current.getContext('2d');
+
+    console.log('incoming chunk', message);
+
+    const blob = new Blob([message.buffer.buffer], {
+      type: 'image/jpeg',
+    });
+    const image = await createImageBitmap(blob);
+
+    ctx.drawImage(image, message.x, message.y, message.width, message.height);
+  };
+
   render() {
     const { frame, fps } = this.props;
     const { scale, running, selectedMonitor } = this.state;
 
     return (
-      <ScreenSubscription>
+      <Subscriber type={MessageType.Screen} handler={this.onReceive}>
         <Navbar>
           <Nav>
             <NavItem>Close</NavItem>
@@ -84,14 +100,19 @@ class Screen extends React.Component<Props, State> {
             <NavItem>{fps} FPS</NavItem>
           </Nav>
         </Navbar>
-        <Stream
+        {/* <Stream
           mouse
           keyboard
           data={frame}
           scale={scale}
           client={this.props.client}
+        /> */}
+        <canvas
+          ref={this.canvas}
+          width={selectedMonitor.width}
+          height={selectedMonitor.height}
         />
-      </ScreenSubscription>
+      </Subscriber>
     );
   }
 

