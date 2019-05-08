@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"image"
 	"image/jpeg"
 	"io"
@@ -19,48 +18,32 @@ type ScreenChannel struct {
 }
 
 func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
+	defer channel.Close()
 	monitor := screen.Monitors[sc.Handle]
 
 	var err error
-	err = binary.Read(channel, binary.LittleEndian, &sc.Monitor)
-	if err != nil {
-		return err
-	}
 
+	binary.Read(channel, binary.LittleEndian, &sc.Monitor)
 	err = binary.Read(channel, binary.LittleEndian, &sc.Handle)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("opts", sc)
-
-	cmp := imgdiff.NewComparer(4, 4, monitor.Width, monitor.Height)
+	cmp := imgdiff.NewComparer(6, 6, monitor.Width, monitor.Height)
 
 	go func() {
 		for {
 			select {
+			case <-c.die:
+				return
 			case chunk := <-cmp.C:
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Min.X))
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Min.Y))
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Max.X))
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds.Max.Y))
-
-				rgba := &image.RGBA{
-					Pix:    chunk.Data,
-					Stride: chunk.Bounds.Dx() * 4,
-					Rect: image.Rectangle{
-						Min: image.Point{0, 0},
-						Max: chunk.Bounds.Size(),
-					},
-				}
-
-				if rgba.Stride < 0 {
-					fmt.Println(chunk.Bounds, chunk.Bounds.Dx())
-
-				}
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Min.X))
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Min.Y))
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Max.X))
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Max.Y))
 
 				var buf bytes.Buffer
-				err = jpeg.Encode(&buf, rgba, &jpeg.Options{
+				err = jpeg.Encode(&buf, chunk, &jpeg.Options{
 					Quality: 75,
 				})
 				if err != nil {
@@ -68,7 +51,10 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 				}
 
 				binary.Write(channel, binary.LittleEndian, int32(buf.Len()))
-				io.Copy(channel, &buf)
+				_, err = io.Copy(channel, &buf)
+				if err != nil {
+					return
+				}
 			}
 		}
 	}()
@@ -81,9 +67,13 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			capture = screen.CaptureWindow(int(sc.Handle))
 		}
 
-		rgba := capture.(*image.RGBA)
+		cmp.Run(capture.(*image.RGBA))
 
-		cmp.Run(rgba)
+		select {
+		case <-c.die:
+			return nil
+		default:
+		}
 	}
 
 	return err

@@ -4,6 +4,7 @@ package screen
 
 import (
 	"image"
+	"math/rand"
 	"rat/shared"
 )
 
@@ -15,20 +16,15 @@ func mockImage(w, h int) *image.RGBA {
 		Max: image.Point{w, h},
 	})
 
-	y := (h / 10) * cursor
-
-	color := []uint8{255, 0, 0, 255}
-	for ry := 0; ry < h/10; ry++ {
-		offset := img.PixOffset(0, y+ry)
-
-		for row := 0; row < w; row++ {
-			copy(img.Pix[offset+row*4:], color)
-		}
+	color := []uint8{
+		uint8(rand.Int31n(255)),
+		uint8(rand.Int31n(255)),
+		uint8(rand.Int31n(255)),
+		255,
 	}
 
-	cursor++
-	if cursor > 9 {
-		cursor = 0
+	for i := 0; i < w*h; i++ {
+		copy(img.Pix[i*4:], color)
 	}
 
 	return img

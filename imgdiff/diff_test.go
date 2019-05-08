@@ -29,14 +29,15 @@ func TestDiff(t *testing.T) {
 	rgba.Set(0, 0, color.RGBA{255, 0, 0, 255})
 	go cmp.Run(rgba)
 	change := <-cmp.C
-	if change.Bounds.Min.X != 0 && change.Bounds.Min.Y != 0 {
+	if change.Bounds().Min.X != 0 && change.Bounds().Min.Y != 0 {
 		t.Fatal("did not detect first chunk change")
 	}
 
 	rgba.Set(8, 8, color.RGBA{0, 255, 0, 255})
 	go cmp.Run(rgba)
 	change = <-cmp.C
-	if change.Bounds.Min.X != 8 && change.Bounds.Min.Y != 8 {
+
+	if change.Bounds().Min.X != 8 && change.Bounds().Min.Y != 8 {
 		t.Fatal("did not detect second chunk change")
 	}
 }

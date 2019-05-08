@@ -60,6 +60,11 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			Height: int(height),
 		})
 
+		select {
+		case <-sc.controller.die:
+			return nil
+		default:
+		}
 	}
 
 	return err

@@ -5,24 +5,12 @@ import (
 	"image"
 )
 
-// ChangedChunk contains the data of a chunk update
-type ChangedChunk struct {
-	// Bounds of the chunk on the source image
-	Bounds image.Rectangle
-
-	// Chunk rgba data
-	Data []uint8
-}
-
 // Cmp implements functions for concurrent diffs of images
 type Cmp struct {
 	// Sums is the crc32's of previous image chunks
 	Sums []uint32
 
-	// Data is the rgba data for each chunk
-	Data [][]uint8
-
-	C chan ChangedChunk
+	C chan *image.RGBA
 
 	columns int
 	rows    int
@@ -32,18 +20,9 @@ type Cmp struct {
 
 // NewComparer returns a new comparer instance initialized with specified width, height and chunk size
 func NewComparer(c, r, w, h int) *Cmp {
-	length := r * c
-	chunklen := w / c * h / r
-
-	data := make([][]uint8, length)
-	for i := 0; i < length; i++ {
-		data[i] = make([]uint8, chunklen*4)
-	}
-
 	return &Cmp{
-		Sums:    make([]uint32, length),
-		Data:    data,
-		C:       make(chan ChangedChunk),
+		Sums:    make([]uint32, r*c),
+		C:       make(chan *image.RGBA),
 		columns: c,
 		rows:    r,
 		w:       w,
@@ -68,29 +47,19 @@ func (cmp *Cmp) Run(rgba *image.RGBA) {
 		for r := 0; r < cmp.rows; r++ {
 			y := r * rh
 			co := cmp.chunkOffset(c, r)
-			buf := cmp.Data[co]
 
-			for s := 0; s < rh; s++ {
-				offset := s * cw
-
-				los := rgba.PixOffset(x, s+y)
-				loe := rgba.PixOffset(x+cw, s+y)
-				line := rgba.Pix[los:loe]
-
-				copy(buf[offset:offset+cw], line)
+			rect := image.Rectangle{
+				Min: image.Point{x, y},
+				Max: image.Point{x + cw, y + rh},
 			}
 
-			sum := crc32.ChecksumIEEE([]byte(buf))
+			part := rgba.SubImage(rect).(*image.RGBA)
+
+			sum := crc32.ChecksumIEEE([]byte(part.Pix[:4])) // todo first pix
 			if sum != cmp.Sums[co] {
 				cmp.Sums[co] = sum
 
-				cmp.C <- ChangedChunk{
-					Bounds: image.Rectangle{
-						Min: image.Point{x, y},
-						Max: image.Point{x + cw, y + rh},
-					},
-					Data: buf,
-				}
+				cmp.C <- part
 			}
 		}
 	}
