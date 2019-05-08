@@ -37,7 +37,7 @@ func NewComparer(c, r, w, h int) *Cmp {
 
 	data := make([][]uint8, length)
 	for i := 0; i < length; i++ {
-		data[i] = make([]uint8, chunklen)
+		data[i] = make([]uint8, chunklen*4)
 	}
 
 	return &Cmp{
@@ -87,7 +87,7 @@ func (cmp *Cmp) Run(rgba *image.RGBA) {
 				cmp.C <- ChangedChunk{
 					Bounds: image.Rectangle{
 						Min: image.Point{x, y},
-						Max: image.Point{cw, rh},
+						Max: image.Point{x + cw, y + rh},
 					},
 					Data: buf,
 				}
