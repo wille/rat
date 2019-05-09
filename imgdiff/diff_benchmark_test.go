@@ -2,48 +2,57 @@ package imgdiff
 
 import (
 	"image"
-	"image/color"
+	"image/jpeg"
+	"io/ioutil"
 	"math/rand"
 	"testing"
 )
 
-func randomColor() color.RGBA {
-	return color.RGBA{
-		R: uint8(rand.Int31n(255)),
-		G: uint8(rand.Int31n(255)),
-		B: uint8(rand.Int31n(255)),
-		A: 255,
+// BenchmarkDiff tests comparison algorithm
+func BenchmarkDiff(b *testing.B) {
+	const (
+		c = 6
+		r = 6
+		w = 1920
+		h = 1080
+	)
+
+	rgba := image.NewRGBA(image.Rectangle{
+		Min: image.Point{0, 0},
+		Max: image.Point{w, h},
+	})
+	rand.Read(rgba.Pix)
+
+	for i := 0; i < b.N; i++ {
+		cmp := NewComparer(c, r, w, h)
+		go cmp.Run(rgba)
+
+		for j := 0; j < c*r; j++ {
+			<-cmp.C
+		}
 	}
 }
 
-func BenchmarkDiff(b *testing.B) {
+// BenchmarkEncoding tests for comparing and encoding chunks
+func BenchmarkEncoding(b *testing.B) {
 	const (
-		c = 2
-		r = 2
-		w = 16
-		h = 16
+		c = 6
+		r = 6
+		w = 1920
+		h = 1080
 	)
-
-	cmp := NewComparer(c, r, w, h)
-
-	run := true
-	go func() {
-		for run {
-			<-cmp.C
-		}
-	}()
+	rgba := image.NewRGBA(image.Rectangle{
+		Min: image.Point{0, 0},
+		Max: image.Point{w, h},
+	})
+	rand.Read(rgba.Pix)
 
 	for i := 0; i < b.N; i++ {
-		rgba := image.NewRGBA(image.Rectangle{
-			Min: image.Point{0, 0},
-			Max: image.Point{w, h},
-		})
-		x := rand.Int31n(w)
-		y := rand.Int31n(h)
-		color := randomColor()
-		rgba.Set(int(x), int(y), color)
-		cmp.Run(rgba)
-	}
+		cmp := NewComparer(c, r, w, h)
+		go cmp.Run(rgba)
 
-	run = false
+		for j := 0; j < c*r; j++ {
+			jpeg.Encode(ioutil.Discard, <-cmp.C, nil)
+		}
+	}
 }
