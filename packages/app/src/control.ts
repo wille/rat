@@ -17,6 +17,7 @@ class ControlSocket {
 
   public connect() {
     this.socket = new WebSocket(this.url);
+    this.socket.binaryType = 'arraybuffer';
     this.socket.onmessage = (e: MessageEvent) => this.handleMessage(e);
     this.socket.onclose = (e: CloseEvent) => this.onClose(e);
     this.socket.onopen = () => this.onOpen();
@@ -72,13 +73,8 @@ class ControlSocket {
   }
 
   private handleMessage(e: MessageEvent) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const bson = this.bson.deserialize(Buffer.from(reader.result));
-      this.emit(bson);
-    };
-
-    reader.readAsArrayBuffer(e.data);
+    const bson = this.bson.deserialize(Buffer.from(e.data));
+    this.emit(bson);
   }
 
   private onClose(e: CloseEvent) {
