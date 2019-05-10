@@ -9,8 +9,6 @@ import App from './App';
 import ControlSocket from './control';
 import reducers from './reducers';
 
-import fpsCounter from './fps-counter';
-
 import { ThemeProvider } from 'emotion-theming';
 import theme from './theme';
 
@@ -19,8 +17,6 @@ ControlSocket.connect();
 const store = createStore(reducers);
 
 export default store;
-
-fpsCounter(store);
 
 ReactDOM.render(
   <BrowserRouter>

@@ -1,22 +1,14 @@
+import { ScreenChunkTemplate, StreamMessage } from 'app/src/messages/screen';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { Monitor } from 'shared/system';
-import { ScreenFrameTemplate } from 'shared/templates';
-
-import { ScreenChunkTemplate, StreamMessage } from 'app/src/messages/screen';
 import { MessageType } from 'shared/types';
 import Client from '../../client';
-import { selectFps, selectScreenBuffer } from '../../reducers';
 import withClient from '../../withClient';
-import { ScreenSubscription, Subscriber } from '../Subscription';
-import Stream from './Stream';
+import { Subscriber } from '../Subscription';
 
 interface Props {
   client: Client;
-  frame: ScreenFrameTemplate;
-  fps: number;
 }
 
 interface State {
@@ -49,18 +41,17 @@ class Screen extends React.Component<Props, State> {
   onReceive = async (message: ScreenChunkTemplate) => {
     const ctx = this.canvas.current.getContext('2d');
 
-    console.log('incoming chunk', message);
-
     const blob = new Blob([message.buffer.buffer], {
       type: 'image/jpeg',
     });
     const image = await createImageBitmap(blob);
 
-    ctx.drawImage(image, message.x, message.y, message.width, message.height);
+    requestAnimationFrame(() =>
+      ctx.drawImage(image, message.x, message.y, message.width, message.height)
+    );
   };
 
   render() {
-    const { frame, fps } = this.props;
     const { scale, running, selectedMonitor } = this.state;
 
     return (
@@ -97,7 +88,6 @@ class Screen extends React.Component<Props, State> {
             <NavItem onClick={() => this.toggle()}>
               {running ? 'Pause' : 'Start'}
             </NavItem>
-            <NavItem>{fps} FPS</NavItem>
           </Nav>
         </Navbar>
         {/* <Stream
@@ -176,10 +166,4 @@ class Screen extends React.Component<Props, State> {
   }
 }
 
-export default compose(
-  connect(state => ({
-    frame: selectScreenBuffer(state),
-    fps: selectFps(state),
-  })),
-  withClient
-)(Screen);
+export default withClient(Screen);

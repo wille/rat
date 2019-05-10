@@ -9,7 +9,6 @@ import {
   directoryHandler,
   MessageHandler,
   processHandler,
-  screenHandler,
   transfersHandler,
 } from '../messages';
 
@@ -58,11 +57,6 @@ const DirectorySubscription = withProps({
   handler: directoryHandler,
 })(ConnectedHandler);
 
-const ScreenSubscription = withProps({
-  type: MessageType.Screen,
-  handler: screenHandler,
-})(ConnectedHandler);
-
 const ProcessSubscription = withProps({
   type: MessageType.Process,
   handler: processHandler,
@@ -77,7 +71,6 @@ export {
   ConnectedHandler as Subscriber,
   ClientSubscription,
   DirectorySubscription,
-  ScreenSubscription,
   ProcessSubscription,
   TransferSubscription,
 };
