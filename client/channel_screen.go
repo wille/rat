@@ -11,25 +11,41 @@ import (
 )
 
 type ScreenChannel struct {
-	Active  bool
-	Scale   float32
+	Active bool
+	Scale  float32
+
+	// monitor or window
 	Monitor bool
-	Handle  int32
+
+	// monitor/window handle
+	Handle int32
+}
+
+// reset reads new config from controller
+func (sc *ScreenChannel) reset(channel io.Reader) (err error) {
+	binary.Read(channel, binary.LittleEndian, &sc.Monitor)
+	err = binary.Read(channel, binary.LittleEndian, &sc.Handle)
+
+	return
 }
 
 func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 	defer channel.Close()
-	monitor := screen.Monitors[sc.Handle]
-
 	var err error
 
-	binary.Read(channel, binary.LittleEndian, &sc.Monitor)
-	err = binary.Read(channel, binary.LittleEndian, &sc.Handle)
-	if err != nil {
-		return err
-	}
+	err = sc.reset(channel)
 
-	cmp := imgdiff.NewComparer(6, 6, monitor.Width, monitor.Height)
+	go func() {
+		for {
+			err = sc.reset(channel)
+			if err != nil {
+				channel.Close()
+				return
+			}
+		}
+	}()
+
+	cmp := imgdiff.NewComparer(6, 6)
 
 	go func() {
 		for {
@@ -62,7 +78,7 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 	for err == nil {
 		var capture image.Image
 		if sc.Monitor {
-			capture = screen.Capture(monitor)
+			capture = screen.Capture(screen.Monitors[sc.Handle])
 		} else {
 			capture = screen.CaptureWindow(int(sc.Handle))
 		}

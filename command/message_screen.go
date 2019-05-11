@@ -8,11 +8,12 @@ type ScreenMessage struct {
 }
 
 func (m ScreenMessage) Handle(controller *Controller, client *Client) error {
-	client.streamChan <- &ScreenChannel{
-		controller: controller,
-		Monitor:    m.Monitor,
-		ID:         m.ID,
+	if m.Active {
+		client.streamChan <- &ScreenChannel{
+			controller: controller,
+			Monitor:    m.Monitor,
+			ID:         m.ID,
+		}
 	}
-
 	return nil
 }

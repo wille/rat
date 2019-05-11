@@ -17,6 +17,13 @@ func (ScreenChannel) Header() header.PacketHeader {
 	return header.ScreenHeader
 }
 
+func (sc *ScreenChannel) init(channel io.Writer) (err error) {
+	binary.Write(channel, binary.LittleEndian, sc.Monitor)
+	err = binary.Write(channel, binary.LittleEndian, sc.ID)
+
+	return
+}
+
 func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 	defer channel.Close()
 
@@ -24,16 +31,34 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 	defer listener.Unlisten()
 
 	var err error
-	err = binary.Write(channel, binary.LittleEndian, sc.Monitor)
-	if err != nil {
-		return err
-	}
 
-	err = binary.Write(channel, binary.LittleEndian, sc.ID)
+	err = sc.init(channel)
 
 	go func() {
-		<-sc.controller.die
-		channel.Close()
+		for {
+			select {
+			case mi := <-listener.C:
+				if mi == nil {
+					channel.Close()
+					return
+				}
+
+				msg := mi.(*ScreenMessage)
+
+				if msg.Active {
+					sc.init(channel)
+				} else {
+					channel.Close()
+					return
+				}
+			case <-sc.controller.die:
+				channel.Close()
+				return
+			case <-c.die:
+				channel.Close()
+				return
+			}
+		}
 	}()
 
 	for err == nil {
