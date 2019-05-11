@@ -34,6 +34,22 @@ func (cmp *Cmp) chunkOffset(c, r int) int {
 	return cmp.columns*c + r
 }
 
+func sum(p *image.RGBA) uint32 {
+	var sum uint32
+
+	i0 := 0
+	i1 := p.Rect.Dx() * 4
+
+	for y := p.Rect.Min.Y; y < p.Rect.Max.Y; y++ {
+		sum = crc32.Update(sum, crc32.IEEETable, p.Pix[i0:i1])
+
+		i0 += p.Stride
+		i1 += p.Stride
+	}
+
+	return sum
+}
+
 // Run starts comparing image and sends updated chunks to channel C
 // comparing for the first time will send all chunks as updated
 // good for asynchronous rendering on the receiver side
@@ -55,7 +71,7 @@ func (cmp *Cmp) Run(rgba *image.RGBA) {
 
 			part := rgba.SubImage(rect).(*image.RGBA)
 
-			sum := crc32.ChecksumIEEE([]byte(part.Pix[:4])) // todo first pix
+			sum := sum(part)
 			if sum != cmp.Sums[co] {
 				cmp.Sums[co] = sum
 
