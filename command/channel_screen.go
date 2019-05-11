@@ -31,6 +31,11 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 
 	err = binary.Write(channel, binary.LittleEndian, sc.ID)
 
+	go func() {
+		<-sc.controller.die
+		channel.Close()
+	}()
+
 	for err == nil {
 		var left, top, width, height int32
 
@@ -59,12 +64,6 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			Width:  int(width),
 			Height: int(height),
 		})
-
-		select {
-		case <-sc.controller.die:
-			return nil
-		default:
-		}
 	}
 
 	return err
