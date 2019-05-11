@@ -125,16 +125,7 @@ func (c *Client) writeLoop() {
 			if err != nil {
 				break
 			}
-			go func() {
-				err := ch.Open(stream, c)
-				select {
-				case <-c.die:
-				default:
-					if err != nil {
-						c.Close(err)
-					}
-				}
-			}()
+			go ch.Open(stream, c)
 		case p := <-c.Queue:
 			err = c.WriteHeader(p.Header(), false)
 			if err != nil {

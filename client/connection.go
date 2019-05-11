@@ -95,16 +95,7 @@ func (c *Connection) recvLoop() {
 			}
 
 			stream, _ := c.Conn.AcceptStream()
-			go func() {
-				err := channel.Open(stream, c)
-				select {
-				case <-c.die:
-				default:
-					if err != nil {
-						c.Close(err)
-					}
-				}
-			}()
+			go channel.Open(stream, c)
 		} else {
 			packet, is := handlerMap[h].(Incoming)
 			if !is {
