@@ -98,9 +98,10 @@ class Screen extends React.Component<Props, State> {
           client={this.props.client}
         /> */}
         <canvas
+          style={{ width: '100%' }}
           ref={this.canvas}
-          width={selectedMonitor.width}
-          height={selectedMonitor.height}
+          width={Math.round(selectedMonitor.width * scale)}
+          height={Math.round(selectedMonitor.height * scale)}
         />
       </Subscriber>
     );

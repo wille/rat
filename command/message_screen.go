@@ -13,6 +13,7 @@ func (m ScreenMessage) Handle(controller *Controller, client *Client) error {
 			controller: controller,
 			Monitor:    m.Monitor,
 			ID:         m.ID,
+			Scale:      m.Scale,
 		}
 	}
 	return nil

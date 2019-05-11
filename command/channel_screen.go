@@ -9,6 +9,7 @@ import (
 type ScreenChannel struct {
 	Monitor bool
 	ID      int32
+	Scale   float32
 
 	controller *Controller
 }
@@ -19,6 +20,7 @@ func (ScreenChannel) Header() header.PacketHeader {
 
 func (sc *ScreenChannel) init(channel io.Writer) (err error) {
 	binary.Write(channel, binary.LittleEndian, sc.Monitor)
+	binary.Write(channel, binary.LittleEndian, sc.Scale)
 	err = binary.Write(channel, binary.LittleEndian, sc.ID)
 
 	return
