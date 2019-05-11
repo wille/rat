@@ -29,8 +29,8 @@ func (packet ComputerInfoPacket) Write(w io.ReadWriter, c *Connection) error {
 
 	packet.Username = u.Username
 	packet.Hostname = u.Hostname
-	packet.OperatingSystem.Type = oslib.Name
-	packet.OperatingSystem.Display = oslib.GetDisplay()
+	packet.OperatingSystem.Type = osutil.Name
+	packet.OperatingSystem.Display = osutil.GetDisplay()
 
 	screen.QueryMonitors()
 	packet.Monitors = screen.Monitors

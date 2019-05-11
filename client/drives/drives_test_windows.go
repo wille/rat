@@ -7,7 +7,7 @@ import (
 )
 
 func TestDrives(t *testing.T) {
-	if oslib.Name != oslib.Windows {
+	if osutil.Name != osutil.Windows {
 		t.Fail()
 		return
 	}

