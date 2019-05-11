@@ -8,7 +8,7 @@ import (
 
 type ScreenChannel struct {
 	Monitor bool
-	Handle  int32
+	ID      int32
 
 	controller *Controller
 }
@@ -29,7 +29,7 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 		return err
 	}
 
-	err = binary.Write(channel, binary.LittleEndian, sc.Handle)
+	err = binary.Write(channel, binary.LittleEndian, sc.ID)
 
 	for err == nil {
 		var left, top, width, height int32

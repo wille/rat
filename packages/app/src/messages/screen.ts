@@ -6,7 +6,7 @@ export interface ScreenTemplate {
   active: boolean;
   scale?: number;
   monitor?: true;
-  handle?: number;
+  id?: number;
 }
 
 export interface ScreenChunkTemplate {

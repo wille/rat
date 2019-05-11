@@ -144,7 +144,7 @@ class Screen extends React.Component<Props, State> {
         active: true,
         scale,
         monitor: true,
-        handle: selectedMonitor.id,
+        id: selectedMonitor.id,
       })
     );
 
