@@ -19,7 +19,7 @@ func TestDiff(t *testing.T) {
 		Max: image.Point{w, h},
 	})
 
-	cmp := NewComparer(c, r, w, h)
+	cmp := NewComparer(c, r)
 	go cmp.Run(rgba)
 	// initial image, all chunks are updated
 	for i := 0; i < c*r; i++ {

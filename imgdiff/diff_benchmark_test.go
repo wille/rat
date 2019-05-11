@@ -24,7 +24,7 @@ func BenchmarkDiff(b *testing.B) {
 	rand.Read(rgba.Pix)
 
 	for i := 0; i < b.N; i++ {
-		cmp := NewComparer(c, r, w, h)
+		cmp := NewComparer(c, r)
 		go cmp.Run(rgba)
 
 		for j := 0; j < c*r; j++ {
@@ -48,7 +48,7 @@ func BenchmarkEncoding(b *testing.B) {
 	rand.Read(rgba.Pix)
 
 	for i := 0; i < b.N; i++ {
-		cmp := NewComparer(c, r, w, h)
+		cmp := NewComparer(c, r)
 		go cmp.Run(rgba)
 
 		for j := 0; j < c*r; j++ {

@@ -14,19 +14,15 @@ type Cmp struct {
 
 	columns int
 	rows    int
-	w       int
-	h       int
 }
 
 // NewComparer returns a new comparer instance initialized with specified width, height and chunk size
-func NewComparer(c, r, w, h int) *Cmp {
+func NewComparer(c, r int) *Cmp {
 	return &Cmp{
-		Sums:    make([]uint32, r*c),
+		Sums:    make([]uint32, c*r),
 		C:       make(chan *image.RGBA),
 		columns: c,
 		rows:    r,
-		w:       w,
-		h:       h,
 	}
 }
 
@@ -54,8 +50,8 @@ func sum(p *image.RGBA) uint32 {
 // comparing for the first time will send all chunks as updated
 // good for asynchronous rendering on the receiver side
 func (cmp *Cmp) Run(rgba *image.RGBA) {
-	cw := cmp.w / cmp.columns
-	rh := cmp.h / cmp.rows
+	cw := rgba.Rect.Dx() / cmp.columns
+	rh := rgba.Rect.Dy() / cmp.rows
 
 	for c := 0; c < cmp.columns; c++ {
 		x := c * cw
