@@ -41,14 +41,18 @@ class Screen extends React.Component<Props, State> {
   onReceive = async (message: ScreenChunkTemplate) => {
     const ctx = this.canvas.current.getContext('2d');
 
-    const blob = new Blob([message.buffer.buffer], {
-      type: 'image/jpeg',
-    });
-    const image = await createImageBitmap(blob);
+    const w = message.width - message.x;
+    const h = message.height - message.y;
 
-    requestAnimationFrame(() =>
-      ctx.drawImage(image, message.x, message.y, message.width, message.height)
-    );
+    const imageData = ctx.getImageData(message.x, message.y, w, h);
+    const prevData = new Uint32Array(imageData.data.buffer);
+    const xorData = new Uint32Array(message.buffer.buffer.buffer);
+
+    for (let i = 0; i < xorData.length; i++) {
+      prevData[i] ^= xorData[i];
+    }
+
+    ctx.putImageData(imageData, message.x, message.y);
   };
 
   render() {

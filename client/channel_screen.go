@@ -1,15 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"encoding/binary"
 	"image"
-	"image/jpeg"
 	"io"
 	"rat/client/screen"
 	"rat/imgdiff"
-
-	"github.com/disintegration/imaging"
 )
 
 type ScreenChannel struct {
@@ -58,7 +54,7 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			case chunk := <-cmp.C:
 				rect := chunk.Rect
 
-				if sc.Scale > 0 && sc.Scale < 1.0 {
+				/* if sc.Scale > 0 && sc.Scale < 1.0 {
 					width := float32(chunk.Rect.Dx()) * sc.Scale
 					height := float32(chunk.Rect.Dy()) * sc.Scale
 
@@ -68,23 +64,17 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 						Stride: nrgba.Stride,
 						Rect:   nrgba.Rect,
 					}
-				}
+				} */
 
 				binary.Write(channel, binary.LittleEndian, int32(rect.Min.X))
 				binary.Write(channel, binary.LittleEndian, int32(rect.Min.Y))
 				binary.Write(channel, binary.LittleEndian, int32(rect.Max.X))
 				binary.Write(channel, binary.LittleEndian, int32(rect.Max.Y))
 
-				var buf bytes.Buffer
-				err = jpeg.Encode(&buf, chunk, &jpeg.Options{
-					Quality: 75,
-				})
-				if err != nil {
-					return
-				}
+				binary.Write(channel, binary.LittleEndian, int32(rect.Dx()*rect.Dy()*4))
 
-				binary.Write(channel, binary.LittleEndian, int32(buf.Len()))
-				_, err = io.Copy(channel, &buf)
+				err = imgdiff.Write(channel, chunk)
+
 				if err != nil {
 					return
 				}
@@ -100,7 +90,7 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			capture = screen.CaptureWindow(int(sc.Handle))
 		}
 
-		cmp.Run(capture.(*image.RGBA))
+		cmp.Update(capture.(*image.RGBA))
 
 		select {
 		case <-c.die:
