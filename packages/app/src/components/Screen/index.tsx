@@ -112,15 +112,17 @@ class Screen extends React.Component<Props, State> {
   }
 
   private setScale(scale: number) {
-    this.setState(
-      {
-        scale: scale / 100,
-      },
-      () => {
-        this.stop();
-        this.stream();
-      }
-    );
+    this.stop();
+
+    const canvas = this.canvas.current;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    this.stream();
+
+    this.setState({
+      scale: scale / 100,
+    });
   }
 
   selectMonitor = (monitor: Monitor) =>
