@@ -43,7 +43,10 @@ const config = {
       inject: true,
       template: './src/index.html'
     }),
-  ]
+  ],
+  node: {
+    fs: "empty"
+  }
 };
 
 module.exports = config;

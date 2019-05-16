@@ -1,13 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"encoding/binary"
+	"fmt"
 	"image"
 	"io"
 	"rat/client/screen"
 	"rat/imgdiff"
 
 	"github.com/disintegration/imaging"
+	"github.com/pierrec/lz4"
 )
 
 type ScreenChannel struct {
@@ -78,9 +81,15 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 				binary.Write(channel, binary.LittleEndian, x1)
 				binary.Write(channel, binary.LittleEndian, y1)
 
-				binary.Write(channel, binary.LittleEndian, int32(chunk.Rect.Dx()*chunk.Rect.Dy()*4))
+				var imgdata bytes.Buffer
+				ll := lz4.NewWriter(&imgdata)
+				imgdiff.Write(ll, chunk)
+				ll.Flush()
+				ll.Close()
 
-				err = imgdiff.Write(channel, chunk)
+
+				binary.Write(channel, binary.LittleEndian, int32(imgdata.Len()))
+				_, err = channel.Write(imgdata.Bytes())
 
 				if err != nil {
 					return

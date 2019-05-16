@@ -50,6 +50,17 @@
   version = "v1.3.0"
 
 [[projects]]
+  digest = "1:259f9b7645983a7a823318d78aa96dec68af8891f706493ac1ec04d819cb977c"
+  name = "github.com/pierrec/lz4"
+  packages = [
+    ".",
+    "internal/xxh32",
+  ]
+  pruneopts = "UT"
+  revision = "d705d4371bfccdf47f10e45584e896026c83616f"
+  version = "v2.2.3"
+
+[[projects]]
   digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
   name = "github.com/pkg/errors"
   packages = ["."]
@@ -114,6 +125,7 @@
     "github.com/disintegration/imaging",
     "github.com/fatih/color",
     "github.com/oschwald/geoip2-golang",
+    "github.com/pierrec/lz4",
     "github.com/xtaci/smux",
     "golang.org/x/net/websocket",
     "gopkg.in/mgo.v2/bson",

@@ -1,4 +1,5 @@
 import { ScreenChunkTemplate, StreamMessage } from 'app/src/messages/screen';
+import * as lz4 from 'lz4-asm';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { Monitor } from 'shared/system';
@@ -41,12 +42,13 @@ class Screen extends React.Component<Props, State> {
   onReceive = async (message: ScreenChunkTemplate) => {
     const ctx = this.canvas.current.getContext('2d');
 
+    const uncomp = lz4.decompress(message.buffer.buffer);
     const w = message.width - message.x;
     const h = message.height - message.y;
 
     const imageData = ctx.getImageData(message.x, message.y, w, h);
     const prevData = new Uint32Array(imageData.data.buffer);
-    const xorData = new Uint32Array(message.buffer.buffer.buffer);
+    const xorData = new Uint32Array(uncomp.buffer);
 
     for (let i = 0; i < xorData.length; i++) {
       prevData[i] ^= xorData[i];
