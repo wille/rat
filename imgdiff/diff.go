@@ -3,7 +3,6 @@ package imgdiff
 import (
 	"hash/crc32"
 	"image"
-	"time"
 	"unsafe"
 )
 
@@ -109,7 +108,6 @@ func (cmp *Cmp) Update(rgba *image.RGBA) {
 			curr := rgba.SubImage(rect).(*image.RGBA)
 
 			if cmp.diff(prev, curr) {
-				time.Sleep(time.Second / 2)
 				cmp.C <- cmp.xor.SubImage(rect).(*image.RGBA)
 			}
 		}

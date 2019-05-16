@@ -115,11 +115,6 @@ class Screen extends React.Component<Props, State> {
 
   private setScale(scale: number) {
     this.stop();
-
-    const canvas = this.canvas.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     this.stream();
 
     this.setState({
@@ -147,6 +142,11 @@ class Screen extends React.Component<Props, State> {
 
   private stream() {
     const { scale, selectedMonitor } = this.state;
+
+    // reset canvas before initializing a new stream
+    const canvas = this.canvas.current;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     this.props.client.send(
       new StreamMessage({
