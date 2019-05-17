@@ -83,7 +83,6 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 				var imgdata bytes.Buffer
 				ll := lz4.NewWriter(&imgdata)
 				imgdiff.Write(ll, chunk)
-				ll.Flush()
 				ll.Close()
 
 				binary.Write(channel, binary.LittleEndian, int32(imgdata.Len()))

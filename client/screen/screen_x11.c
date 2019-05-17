@@ -53,7 +53,15 @@ Capture CaptureMonitor(Monitor monitor) {
 
     XImage *img = XGetImage(display, root, monitor.coordinates.x, monitor.coordinates.y, monitor.coordinates.width, monitor.coordinates.height, AllPlanes, ZPixmap);
 
-    PixelSwap(img->data, monitor.coordinates.width * monitor.coordinates.height * 4);
+    // not using bitmap.c:PixelSwap here, need to do more testing on windows and macos
+    // ensure alpha is 255 and swap R,B
+    for (int i = 0; i < monitor.coordinates.width * monitor.coordinates.height * 4; i += 4) {
+        unsigned int *p = (unsigned int*) &img->data[i];
+        *p = (0xff << 24) |   
+            ((*p & 0x00FF0000) >>  16) |
+            ((*p & 0x000000FF) <<  16) |
+            ((*p & 0x0000FF00));
+    }
 
     XCloseDisplay(display);
 
