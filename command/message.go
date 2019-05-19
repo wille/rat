@@ -1,24 +1,25 @@
 package main
 
-import (
-	"golang.org/x/net/websocket"
-)
-
 type MessageHeader int
 
 const (
+	ShellEvent  MessageHeader = 5
+	ScreenEvent MessageHeader = 4
+
+	DirectoryQueryEvent MessageHeader = 3
+	ProcessQueryEvent   MessageHeader = 8
+
+	Mouse     MessageHeader = 41
+	MouseMove MessageHeader = 42
+	Key       MessageHeader = 43
+
+	DownloadQueryHeader MessageHeader = 10
+
 	ClientUpdateEvent           MessageHeader = 1
 	ClientSysEvent              MessageHeader = 2
-	DirectoryQueryEvent         MessageHeader = 3
-	DownloadQueryHeader         MessageHeader = 4
 	TransfersEvent              MessageHeader = 5
 	DownloadProgressUpdateEvent MessageHeader = 6
-	ScreenUpdateEvent           MessageHeader = 7
-	ProcessQueryEvent           MessageHeader = 8
 	MonitorQueryEvent           MessageHeader = 9
-	MouseMove                   MessageHeader = 10
-	Mouse                       MessageHeader = 11
-	Key                         MessageHeader = 12
 	Build                       MessageHeader = 13
 	Shell                       MessageHeader = 14
 	ModifyFileEvent             MessageHeader = 15
@@ -32,7 +33,7 @@ type OutgoingMessage interface {
 }
 
 type IncomingMessage interface {
-	Handle(ws *websocket.Conn, client *Client) error
+	Handle(*Controller, *Client) error
 }
 
 // MessageMap is a map with event handlers and their codes
@@ -43,7 +44,10 @@ var Messages MessageMap
 
 func init() {
 	Messages = make(MessageMap)
-	Messages[TransfersEvent] = DisplayTransferMessage{}
+	Messages[ShellEvent] = ShellMessage{}
+	Messages[ScreenEvent] = ScreenMessage{}
+
+	/* Messages[TransfersEvent] = DisplayTransferMessage{}
 	Messages[ClientSysEvent] = SysMessage{}
 	Messages[MouseMove] = MouseMoveMessage{}
 	Messages[DownloadQueryHeader] = DownloadMessage{}
@@ -52,9 +56,9 @@ func init() {
 	Messages[ScreenUpdateEvent] = ScreenUpdateMessage{}
 	Messages[Mouse] = MouseMessage{}
 	Messages[Key] = KeyMessage{}
-	Messages[Build] = BuildMessage{}
-	Messages[Shell] = ShellMessage{}
-	Messages[ModifyFileEvent] = FileMessage{}
-	Messages[Exit] = ExitMessage{}
-	Messages[Windows] = WindowMessage{}
+	Messages[Build] = BuildMessage{} */
+	/* 	Messages[Shell] = ShellMessage{}
+	   	Messages[ModifyFileEvent] = FileMessage{}
+	   	Messages[Exit] = ExitMessage{}
+	   	Messages[Windows] = WindowMessage{} */
 }

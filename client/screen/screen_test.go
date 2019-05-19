@@ -10,6 +10,7 @@ import (
 )
 
 func TestScreenshot(t *testing.T) {
+	QueryMonitors()
 	for _, monitor := range Monitors {
 		fmt.Println("Capturing monitor", monitor.ID)
 		img := Capture(monitor)
@@ -17,8 +18,7 @@ func TestScreenshot(t *testing.T) {
 		file, err := os.Create("test" + strconv.Itoa(monitor.ID) + ".jpg")
 
 		if err != nil {
-			fmt.Println("error", err.Error())
-			continue
+			t.Fatal(err)
 		}
 		jpeg.Encode(file, img, &jpeg.Options{
 			Quality: 75,

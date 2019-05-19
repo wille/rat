@@ -1,22 +1,25 @@
 {
-    "defaultSeverity": "warn",
-    "extends": [
-        "tslint:recommended"
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:latest",
+    "tslint-plugin-prettier",
+    "tslint-config-prettier"
+  ],
+  "jsRules": {},
+  "rules": {
+    "prettier": [
+      true,
+      {
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
     ],
-    "jsRules": {},
-    "rules": {
-        "no-reference": false,
-        "no-namespace": false,
-        "trailing-comma": false,
-        "prefer-const": false,
-        "object-literal-sort-keys": false,
-        "align": false,
-        "max-classes-per-file": false,
-        "prefer-for-of": false,
-        "no-console": false,
-        "array-type": false,
-        "interface-name": false,
-        "no-empty": false
-    },
-    "rulesDirectory": []
+    "object-literal-sort-keys": false,
+    "member-access": false,
+    "interface-name": false,
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false,
+    "no-var-requires": false
+  },
+  "rulesDirectory": []
 }

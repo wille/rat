@@ -14,6 +14,7 @@ var Config shared.BinaryConfig
 
 func ParseConfig() error {
 	this := os.Args[0]
+	ByteOrder := binary.LittleEndian
 
 	f, err := os.Open(this)
 	if err != nil {

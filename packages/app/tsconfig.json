@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "assets/*": [
+        "src/assets/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "../shared/**/*.ts"
+  ]
+}

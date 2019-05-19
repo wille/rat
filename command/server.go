@@ -5,12 +5,6 @@ var (
 	Clients []*Client
 )
 
-type ClientListener interface {
-	Listen() error
-	ReadRoutine(client *Client)
-	WriteRoutine(client *Client)
-}
-
 func add(client *Client) {
 	Clients = append(Clients, client)
 

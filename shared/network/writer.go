@@ -2,11 +2,11 @@ package network
 
 import (
 	"encoding/binary"
-	"fmt"
 	"io"
+	"log"
 	"rat/shared"
-	"reflect"
-	"strings"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Writer struct {
@@ -48,78 +48,11 @@ func (w Writer) writeBytes(b []byte) error {
 }
 
 func (w Writer) WritePacket(packet interface{}) error {
-	return w.serialize(packet, unknown)
-}
-
-func (w Writer) serialize(data interface{}, parentTag tagType) error {
-	pstruct := reflect.Indirect(reflect.ValueOf(data))
-	ptype := pstruct.Type()
-
-	var err error
-
-	for i := 0; i < pstruct.NumField(); i++ {
-		field := pstruct.Field(i)
-		fieldType := ptype.Field(i)
-
-		if parentTag != send {
-			t := fieldType.Tag.Get(tag)
-			tags := strings.Split(t, ",")
-
-			for _, tag := range tags {
-				if tag == "send" {
-					parentTag = send
-					goto run
-				} else if tag == "" {
-					fmt.Println("empty tag for field", fieldType.Name)
-				}
-			}
-		}
-
-	run:
-		err = w.serializeField(field, fieldType.Type, parentTag)
-
-		if err != nil {
-			break
-		}
+	data, err := bson.Marshal(packet)
+	if err != nil {
+		log.Fatal(err.Error())
 	}
-
-	return err
-}
-
-func (w Writer) serializeField(field reflect.Value, d reflect.Type, parentTag tagType) error {
-	var err error
-
-	switch d.Kind() {
-	case reflect.Bool:
-		w.writeBool(field.Bool())
-	case reflect.String:
-		w.writeString(field.String())
-	case reflect.Int:
-		fallthrough
-	case reflect.Int32:
-		w.writeInt32(int32(field.Int()))
-	case reflect.Int64:
-		w.writeInt64(field.Int())
-	case reflect.Float32:
-		w.writeFloat32(float32(field.Float()))
-	case reflect.Float64:
-		w.writeFloat64(field.Float())
-	case reflect.Struct:
-		err = w.serialize(field.Interface(), parentTag)
-	case reflect.Array:
-		fallthrough
-	case reflect.Slice:
-		w.writeInt32(int32(field.Len()))
-
-		if b, ok := field.Interface().([]byte); ok {
-			w.writeBytes(b)
-		} else {
-			for i := 0; i < field.Len(); i++ {
-				w.serializeField(field.Index(i), field.Index(i).Type(), parentTag)
-			}
-		}
-
-	}
-
+	w.writeInt32(int32(len(data)))
+	w.writeBytes(data)
 	return err
 }

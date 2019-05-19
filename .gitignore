@@ -29,3 +29,9 @@ command/web/static/third/
 
 # generated css
 command/web/static/css/
+
+dist/
+node_modules/
+
+client/bin/
+vendor/

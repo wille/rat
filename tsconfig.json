@@ -1,18 +1,10 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "alwaysStrict": true,
-        "pretty": true,
-        "noImplicitAny": false,
-        "sourceMap": true,
-		"outFile": "command/web/static/lib.js",
-		"removeComments": true
-    },
-    "include": [
-        "command/web/**/*"
-    ],
-    "exclude": [
-        "command/web/api/*",
-        "command/web/static/**/*"
-    ]
+  "compilerOptions": {
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+  },
+  "include": [
+    "packages/shared/**/*.ts"
+  ]
 }

@@ -4,35 +4,21 @@ import (
 	"rat/shared/network/header"
 )
 
-type PacketMap map[header.PacketHeader]IncomingPacket
+type incomingPacketMapT map[header.PacketHeader]Incoming
 
-var packets PacketMap
-
-type OutgoingPacket interface {
-	Header() header.PacketHeader
-	Init(c *Client)
-}
-
-type IncomingPacket interface {
-	OnReceive(c *Client) error
-}
+var incomingPackets incomingPacketMapT
 
 type Packet struct{}
 
 func init() {
-	packets = make(PacketMap)
-	packets[header.PingHeader] = Ping{}
-	packets[header.ComputerInfoHeader] = ComputerInfoPacket{}
-	packets[header.ScreenHeader] = ScreenPacket{}
-	packets[header.ProcessHeader] = ProcessPacket{}
-	packets[header.MonitorsHeader] = MonitorsPacket{}
-	packets[header.DirectoryHeader] = DirectoryPacket{}
-	packets[header.PutFileHeader] = UploadPacket{}
-	packets[header.GetFileHeader] = DownloadPacket{}
-	packets[header.ShellHeader] = ShellPacket{}
-	packets[header.WindowsHeader] = WindowsPacket{}
-}
-
-func GetIncomingPacket(header header.PacketHeader) IncomingPacket {
-	return packets[header]
+	incomingPackets = make(incomingPacketMapT)
+	incomingPackets[header.PingHeader] = Ping{}
+	incomingPackets[header.ComputerInfoHeader] = ComputerInfoPacket{}
+	/* 	packets[header.ScreenHeader] = reflect.TypeOf(ScreenPacket{})
+	   	packets[header.ProcessHeader] = reflect.TypeOf(ProcessPacket{})
+	   	packets[header.DirectoryHeader] = reflect.TypeOf(DirectoryPacket{})
+	   	packets[header.UploadToClientHeader] = reflect.TypeOf(UploadPacket{})
+	   	packets[header.DownloadToServerHeader] = reflect.TypeOf(DownloadPacket{})
+	   	packets[header.ShellHeader] = reflect.TypeOf(ShellPacket{})
+	   	packets[header.WindowsHeader] = reflect.TypeOf(WindowsPacket{}) */
 }

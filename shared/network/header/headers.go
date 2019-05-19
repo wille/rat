@@ -5,18 +5,21 @@ type PacketHeader uint16
 
 const (
 	PingHeader         PacketHeader = 0
-	SysHeader          PacketHeader = 2
-	ComputerInfoHeader PacketHeader = 5
-	ScreenHeader       PacketHeader = 10
-	ProcessHeader      PacketHeader = 11
-	MonitorsHeader     PacketHeader = 12
-	DirectoryHeader    PacketHeader = 13
-	PutFileHeader      PacketHeader = 14 // Upload file to client
-	GetFileHeader      PacketHeader = 15 // Download file from client
-	MouseMoveHeader    PacketHeader = 16
-	MouseHeader        PacketHeader = 17
-	KeyHeader          PacketHeader = 18
-	FileHeader         PacketHeader = 19
-	ShellHeader        PacketHeader = 20
-	WindowsHeader      PacketHeader = 21
+	ChannelImplHeader  PacketHeader = 1
+	ComputerInfoHeader PacketHeader = 2
+	ShellChannelHeader PacketHeader = 20
+	ScreenHeader       PacketHeader = 4
+
+	DirectoryHeader        PacketHeader = 3 // swapped
+	ProcessHeader          PacketHeader = 5
+	DownloadToServerHeader PacketHeader = 10 // Download file from client
+	UploadToClientHeader   PacketHeader = 12 // Upload file to client
+
+	MouseHeader     PacketHeader = 41
+	MouseMoveHeader PacketHeader = 42
+	KeyHeader       PacketHeader = 43
+
+	SysHeader     PacketHeader = 2
+	FileHeader    PacketHeader = 19
+	WindowsHeader PacketHeader = 21
 )

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"rat/command/utils"
 	"rat/shared/network/header"
 
@@ -14,12 +15,13 @@ func (packet Ping) Header() header.PacketHeader {
 	return header.PingHeader
 }
 
-func (packet Ping) Init(c *Client) {
+func (Ping) Write(w io.ReadWriter, c *Client) error {
 	c.Ping.Start = time.Now()
 	c.Ping.Received = false
+	return nil
 }
 
-func (packet Ping) OnReceive(c *Client) error {
+func (Ping) Read(r io.ReadWriter, c *Client) error {
 	c.Ping.Current = int(utils.GetMilliseconds(time.Now()) - utils.GetMilliseconds(c.Ping.Start))
 	c.Ping.Received = true
 

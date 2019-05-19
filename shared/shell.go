@@ -1,7 +1,9 @@
 package shared
 
+type ShellAction int
+
 const (
-	StartShell = 0
-	StopShell  = 1
-	WriteShell = 2
+	ShellStart ShellAction = iota
+	ShellStop
+	ShellWrite
 )

