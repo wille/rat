@@ -104,7 +104,10 @@ class Screen extends React.Component<Props, State> {
           client={this.props.client}
         /> */}
         <canvas
-          style={{ width: '100%' }}
+          style={{
+            width: '100%',
+            maxWidth: `${Math.round(selectedMonitor.width * scale)}px`,
+          }}
           ref={this.canvas}
           width={Math.round(selectedMonitor.width * scale)}
           height={Math.round(selectedMonitor.height * scale)}
@@ -115,20 +118,22 @@ class Screen extends React.Component<Props, State> {
 
   private setScale(scale: number) {
     this.stop();
-    this.stream();
-
-    this.setState({
-      scale: scale / 100,
-    });
+    this.setState(
+      {
+        scale: scale / 100,
+      },
+      this.stream
+    );
   }
 
-  selectMonitor = (monitor: Monitor) =>
+  private selectMonitor(monitor: Monitor) {
     this.setState(
       {
         selectedMonitor: monitor,
       },
-      () => this.stream()
+      this.stream
     );
+  }
 
   private toggle() {
     const { running } = this.state;
