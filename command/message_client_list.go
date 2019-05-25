@@ -40,7 +40,7 @@ type ClientData struct {
 	Hostname        string `bson:"hostname,omitempty"`
 	Username        string `bson:"username,omitempty"`
 	OperatingSystem `bson:"os,omitempty"`
-	Monitors        []shared.Monitor "monitors"
+	Monitors        []shared.Monitor `bson:"monitors,omitempty"`
 }
 
 func NewClientEvent(t UpdateType, client *Client, data interface{}) ClientMessage {
