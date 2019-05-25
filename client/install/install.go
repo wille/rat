@@ -3,11 +3,12 @@ package install
 import (
 	"io"
 	"os"
-	"osutil"
 	"path/filepath"
 	"rat/client/computer"
 	"rat/shared/installpath"
 	"strings"
+
+	"github.com/wille/osutil"
 )
 
 func getPath(p installpath.Path) (path string) {
