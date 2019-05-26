@@ -39,7 +39,11 @@ class Screen extends React.Component<Props, State> {
     this.stop();
   }
 
-  onReceive = async (message: ScreenChunkTemplate) => {
+  onReceive = (message: ScreenChunkTemplate) => {
+    if (!this.state.running) {
+      return;
+    }
+
     const ctx = this.canvas.current.getContext('2d');
 
     const uncomp = lz4.decompress(message.buffer.buffer);
