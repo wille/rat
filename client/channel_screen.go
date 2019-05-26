@@ -58,27 +58,10 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			case chunk := <-cmp.C:
 				rect := chunk.Rect
 
-				x := int32(float32(rect.Min.X) * sc.Scale)
-				y := int32(float32(rect.Min.Y) * sc.Scale)
-				x1 := int32(float32(rect.Max.X) * sc.Scale)
-				y1 := int32(float32(rect.Max.Y) * sc.Scale)
-
-				if sc.Scale > 0 && sc.Scale < 1.0 {
-					width := int(float32(chunk.Rect.Dx()) * sc.Scale)
-					height := int(float32(chunk.Rect.Dy()) * sc.Scale)
-
-					nrgba := imaging.Resize(chunk, width, height, imaging.NearestNeighbor)
-					chunk = &image.RGBA{
-						Pix:    nrgba.Pix,
-						Stride: nrgba.Stride,
-						Rect:   nrgba.Rect,
-					}
-				}
-
-				binary.Write(channel, binary.LittleEndian, x)
-				binary.Write(channel, binary.LittleEndian, y)
-				binary.Write(channel, binary.LittleEndian, x1)
-				binary.Write(channel, binary.LittleEndian, y1)
+				binary.Write(channel, binary.LittleEndian, int32(rect.Min.X))
+				binary.Write(channel, binary.LittleEndian, int32(rect.Min.Y))
+				binary.Write(channel, binary.LittleEndian, int32(rect.Max.X))
+				binary.Write(channel, binary.LittleEndian, int32(rect.Max.Y))
 
 				var imgdata bytes.Buffer
 				ll := lz4.NewWriter(&imgdata)
@@ -99,6 +82,20 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			capture = screen.Capture(screen.Monitors[sc.Handle])
 		} else {
 			capture = screen.CaptureWindow(int(sc.Handle))
+		}
+
+		rect := capture.Bounds()
+
+		if sc.Scale > 0 && sc.Scale < 1.0 {
+			width := int(float32(rect.Dx()) * sc.Scale)
+			height := int(float32(rect.Dy()) * sc.Scale)
+
+			nrgba := imaging.Resize(capture, width, height, imaging.NearestNeighbor)
+			capture = &image.RGBA{
+				Pix:    nrgba.Pix,
+				Stride: nrgba.Stride,
+				Rect:   nrgba.Rect,
+			}
 		}
 
 		cmp.Update(capture.(*image.RGBA))
