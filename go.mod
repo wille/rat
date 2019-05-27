@@ -12,7 +12,7 @@ require (
 	github.com/oschwald/maxminddb-golang v1.3.0 // indirect
 	github.com/pierrec/lz4 v0.0.0-20190501090746-d705d4371bfc
 	github.com/pkg/errors v0.8.1 // indirect
-	github.com/wille/osutil v0.0.0-20190511094215-0a3995bcd11f
+	github.com/wille/osutil v0.0.0-20190526221756-e91b8656e290
 	github.com/xtaci/smux v1.3.3
 	golang.org/x/image v0.0.0-20190523035834-f03afa92d3ff // indirect
 	golang.org/x/net v0.0.0-20190522155817-f3200d17e092

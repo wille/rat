@@ -4,10 +4,11 @@ import (
 	"encoding/gob"
 	"io"
 	"rat/client/computer"
-	"rat/client/os"
 	"rat/client/screen"
 	"rat/shared"
 	"rat/shared/network/header"
+
+	"github.com/wille/osutil"
 )
 
 type ComputerInfoPacket struct {
