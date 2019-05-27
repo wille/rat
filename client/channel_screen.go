@@ -90,7 +90,7 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			width := int(float32(rect.Dx()) * sc.Scale)
 			height := int(float32(rect.Dy()) * sc.Scale)
 
-			nrgba := imaging.Resize(capture, width, height, imaging.NearestNeighbor)
+			nrgba := imaging.Resize(capture, width, height, imaging.Linear)
 			capture = &image.RGBA{
 				Pix:    nrgba.Pix,
 				Stride: nrgba.Stride,
