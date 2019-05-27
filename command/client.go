@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/base64"
 	"encoding/binary"
 	"fmt"
 	"math/rand"
@@ -231,19 +230,14 @@ func (c *Client) WriteHeader(header header.PacketHeader, channel bool) error {
 	return binary.Write(c.stream, shared.ByteOrder, channel)
 }
 
-// GetEncodedScreen returns a base64 encoded version of the most recent screenshot
-func (c *Client) GetEncodedScreen() string {
-	return base64.StdEncoding.EncodeToString(c.Screen.Buffer)
-}
-
 func (c *Client) GetClientData() ClientData {
 	return ClientData{
 		Ping:     c.Ping.Current,
 		Country:  c.GetCountry(),
 		Flag:     c.GetFlagName(),
 		Host:     c.GetDisplayHost(),
-		Hostname: c.Computer.GetDisplayName(),
-		Username: "ss",
+		Hostname: c.Computer.Hostname,
+		Username: c.Computer.Username,
 		Monitors: c.Monitors,
 		OperatingSystem: OperatingSystem{
 			Type:    c.OperatingSystemType,
