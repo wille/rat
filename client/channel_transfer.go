@@ -15,6 +15,8 @@ type ChannelTransfer struct {
 }
 
 func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Connection) error {
+	defer r.Close()
+
 	var fp *os.File
 	var err error
 
@@ -52,7 +54,7 @@ func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Connection) error {
 			}
 		}
 
-		_, _ = io.Copy(fp, r)
+		io.Copy(fp, r)
 	}
 
 	fp.Sync()

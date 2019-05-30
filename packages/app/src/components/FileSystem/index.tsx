@@ -9,7 +9,7 @@ import { compose } from 'recompose';
 import { OperatingSystem } from 'shared/system';
 import { Recipient, TransferState } from 'shared/templates';
 
-import { requestFile } from 'app/src/lib/file-reader';
+import { uploadFiles } from 'app/src/lib/file-reader';
 import { MessageType } from 'shared/types';
 import { createPlaceholderTransfer } from '../../actions';
 import Client from '../../client';
@@ -87,7 +87,7 @@ class FileSystem extends React.Component<Props, State> {
     return (
       <Subscriber type={MessageType.Directory} handler={this.onReceive}>
         <Toolbar>
-          {/* <button onClick={this.upload}>Upload</button> */}
+          <button onClick={this.upload}>Upload</button>
           <Breadcrumb className={styles.breadcrumb}>
             {client.os.type !== OperatingSystem.WINDOWS && (
               <BreadcrumbItem active={false} onClick={() => this.browse()}>
@@ -135,23 +135,13 @@ class FileSystem extends React.Component<Props, State> {
     );
   }
 
-  /*  upload = () => {
-    const { createPlaceholderTransfer, history, currentDirectory } = this.props;
+  upload = () => {
+    const { history, client } = this.props;
+    const { current } = this.state;
 
-    requestFile(this.props.client, currentDirectory, (id, name, total) =>
-      createPlaceholderTransfer({
-        id,
-        local: name,
-        remote: currentDirectory + name,
-        total,
-        recv: 0,
-        state: TransferState.Waiting,
-        recipient: Recipient.Server,
-      })
-    );
+    uploadFiles(client, current);
     history.push('/transfers');
   };
- */
 
   download = (file: FileEntry) => {
     const { client, history } = this.props;
@@ -167,7 +157,6 @@ class FileSystem extends React.Component<Props, State> {
 
   browse = (file?: FileEntry | string) => {
     const { client } = this.props;
-    const { current } = this.state;
 
     let path = '';
 

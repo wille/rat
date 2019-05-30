@@ -7,6 +7,7 @@ const (
 	ScreenEvent         MessageHeader = 4
 	DirectoryQueryEvent MessageHeader = 3
 	RequestTransfers    MessageHeader = 10
+	UploadToClient      MessageHeader = 12
 
 	ProcessQueryEvent MessageHeader = 8
 
@@ -47,6 +48,7 @@ func init() {
 	Messages[ScreenEvent] = ScreenMessage{}
 	Messages[DirectoryQueryEvent] = DirectoryQueryMessage("")
 	Messages[RequestTransfers] = TransferMessage{}
+	Messages[UploadToClient] = UploadMessage{}
 
 	/* Messages[TransfersEvent] = DisplayTransferMessage{}
 	Messages[ClientSysEvent] = SysMessage{}

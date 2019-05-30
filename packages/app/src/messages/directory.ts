@@ -1,6 +1,6 @@
 import { createMessage } from 'shared/messages';
 
-import { RequestDownloadTemplate } from 'shared/templates/transfers';
+import { Binary } from 'bson';
 import { MessageType } from 'shared/types';
 
 export interface FileEntry {
@@ -23,4 +23,19 @@ interface TransferTemplate {
 
 export const RequestTransfersMessage = createMessage<TransferTemplate>(
   MessageType.RequestTransfers
+);
+
+interface UploadTemplate {
+  dest: string;
+  name: string;
+  size: number;
+}
+
+interface UploadDataTemplate {
+  // temporary until we can handle buffers correctly
+  data: number[];
+}
+
+export const UploadMessage = createMessage<UploadTemplate | UploadDataTemplate>(
+  MessageType.UploadToClient
 );

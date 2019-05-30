@@ -18,6 +18,8 @@ func (ChannelTransfer) Header() header.PacketHeader {
 }
 
 func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
+	defer r.Close()
+
 	var fp *os.File
 	var err error
 
@@ -52,7 +54,7 @@ func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 			fmt.Println(err)
 		}
 	} else {
-		fp, err = os.Open(ch.Transfer.Remote)
+		fp, err = os.Open(ch.Transfer.Local)
 		if err != nil {
 			panic(err)
 		}
@@ -68,7 +70,10 @@ func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 		for err == nil {
 			var n int
 			n, err = fp.Read(b)
-			fp.Write(b[:n])
+
+			if err == nil {
+				r.Write(b[:n])
+			}
 		}
 	}
 

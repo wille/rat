@@ -45,3 +45,16 @@ func NewDownload(remote string, len int64) *Transfer {
 		Offset:   0,
 	}
 }
+
+func NewUpload(remote string, len int64) *Transfer {
+	dir, _ := ioutil.TempDir("", "downloads")
+	tmpf := filepath.Join(dir, filepath.Base(remote))
+
+	return &Transfer{
+		Local:    tmpf,
+		Remote:   remote,
+		Download: false,
+		Len:      len,
+		Offset:   0,
+	}
+}

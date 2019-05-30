@@ -6,13 +6,15 @@ export const enum MessageType {
   Screen = 4,
   Directory = 3,
   Process = 8,
-  RequestTransfers = 10,
 
+  RequestTransfers = 10,
+  UploadToClient = 12,
+
+  ///////////////////////////
   Mouse = 41,
   MouseMove = 42,
   Key = 43,
 
   Transfers = 9,
   TransferAction = 11,
-  UploadToClient = 12,
 }
