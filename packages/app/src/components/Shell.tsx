@@ -8,6 +8,7 @@ import * as React from 'react';
 import { MessageType } from 'shared/types';
 import { Terminal } from 'xterm';
 import 'xterm/dist/xterm.css';
+import { fit } from 'xterm/lib/addons/fit/fit';
 import Client from '../client';
 import withClient from '../withClient';
 
@@ -20,17 +21,18 @@ class Shell extends React.Component<Props, any> {
   ref = React.createRef<HTMLDivElement>();
 
   componentDidMount() {
+    const t = new Terminal();
+    t.open(this.ref.current);
+    fit(t);
+    t.on('data', this.onTerminalInput);
+
+    this.t = t;
+
     this.props.client.send(
       new ShellMessage({
         action: ShellAction.Start,
       })
     );
-
-    const t = new Terminal();
-    t.open(this.ref.current);
-    t.on('data', this.onTerminalInput);
-
-    this.t = t;
   }
 
   componentWillUnmount() {
@@ -42,8 +44,6 @@ class Shell extends React.Component<Props, any> {
   }
 
   onTerminalInput = (data: string) => {
-    this.t.write(data);
-
     this.props.client.send(
       new ShellMessage({
         action: ShellAction.Write,

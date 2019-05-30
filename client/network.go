@@ -28,4 +28,7 @@ func init() {
 	handlerMap[header.ChannelImplHeader] = ChannelImpl{}
 	handlerMap[header.ShellChannelHeader] = ShellChannel{}
 	handlerMap[header.ScreenHeader] = ScreenChannel{}
+	handlerMap[header.ChannelQueryFilesHeader] = ChannelQueryFiles{}
+	handlerMap[header.ChannelTransferHeader] = ChannelTransfer{}
+	handlerMap[header.DirectoryHeader] = ChannelQueryDirectory{}
 }

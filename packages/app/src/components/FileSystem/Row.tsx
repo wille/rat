@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'react-emotion';
 
-import { FileEntry } from 'shared/templates';
 import StaticImage from '../Clients/StaticImage';
 
+import { FileEntry } from 'src/messages/directory';
 import { requireFileIcon } from '../../icons-utils';
 import AlignChildren from '../AlignChildren';
 
@@ -21,7 +21,7 @@ interface Props {
   ) => void;
 }
 
-const fileDisplayName = (file: FileEntry) => file.name;
+const fileDisplayName = (file: FileEntry) => file.path;
 
 const Row = ({ file, onClick }: Props) => {
   const fileSize = file.dir ? '' : file.size;

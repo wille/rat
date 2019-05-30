@@ -7,32 +7,33 @@ import { connect } from 'react-redux';
 import { BrowserHistory, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { OperatingSystem } from 'shared/system';
-import { FileEntry, Recipient, TransferState } from 'shared/templates';
+import { Recipient, TransferState } from 'shared/templates';
 
 import { requestFile } from 'app/src/lib/file-reader';
-import { createPlaceholderTransfer, setCurrentDirectory } from '../../actions';
+import { MessageType } from 'shared/types';
+import { createPlaceholderTransfer } from '../../actions';
 import Client from '../../client';
 import {
   BrowseMessage,
-  DownloadToServerMessage,
-  UploadToClientMessage,
-} from '../../messages/outgoing-messages';
-import { selectCurrentDirectory, selectFilesList } from '../../reducers';
+  DirectoryContentTemplate,
+  FileEntry,
+  RequestTransfersMessage,
+} from '../../messages/directory';
+import { UploadToClientMessage } from '../../messages/outgoing-messages';
 import withClient from '../../withClient';
-import { DirectorySubscription } from '../Subscription';
+import { Subscriber } from '../Subscription';
 import Toolbar from '../Toolbar';
 import Row from './Row';
 
 interface Props {
   client: Client;
-  filesList: FileEntry[];
-  currentDirectory: string;
   history: BrowserHistory;
-  setCurrentDirectory: typeof setCurrentDirectory;
   createPlaceholderTransfer: typeof createPlaceholderTransfer;
 }
 
 interface State {
+  files: FileEntry[];
+  current?: string;
   utils: any;
 }
 
@@ -53,6 +54,7 @@ class FileSystem extends React.Component<Props, State> {
         props.client.os.type === OperatingSystem.WINDOWS
           ? path.win32
           : path.posix,
+      files: [],
     };
   }
 
@@ -61,20 +63,31 @@ class FileSystem extends React.Component<Props, State> {
   }
 
   splitPath = () => {
-    const { client, currentDirectory } = this.props;
+    const { client } = this.props;
+    const { current } = this.state;
 
-    return currentDirectory.split(client.separator).filter(x => x.length > 0);
+    return current
+      ? current.split(client.separator).filter(x => x.length > 0)
+      : [];
+  };
+
+  onReceive = (data: DirectoryContentTemplate) => {
+    console.log('recv', data);
+    this.setState({
+      files: data,
+    });
   };
 
   render() {
-    const { filesList, client } = this.props;
+    const { client } = this.props;
+    const { files } = this.state;
 
     const paths = this.splitPath();
 
     return (
-      <DirectorySubscription>
+      <Subscriber type={MessageType.Directory} handler={this.onReceive}>
         <Toolbar>
-          <button onClick={this.upload}>Upload</button>
+          {/* <button onClick={this.upload}>Upload</button> */}
           <Breadcrumb className={styles.breadcrumb}>
             {client.os.type !== OperatingSystem.WINDOWS && (
               <BreadcrumbItem active={false} onClick={() => this.browse()}>
@@ -109,20 +122,20 @@ class FileSystem extends React.Component<Props, State> {
             </tr>
           </thead>
           <tbody>
-            {filesList.map(file => (
+            {files.map(file => (
               <Row
-                key={file.path + file.name}
+                key={file.path}
                 file={file}
                 onClick={() => this.browse(file)}
               />
             ))}
           </tbody>
         </Table>
-      </DirectorySubscription>
+      </Subscriber>
     );
   }
 
-  upload = () => {
+  /*  upload = () => {
     const { createPlaceholderTransfer, history, currentDirectory } = this.props;
 
     requestFile(this.props.client, currentDirectory, (id, name, total) =>
@@ -138,26 +151,14 @@ class FileSystem extends React.Component<Props, State> {
     );
     history.push('/transfers');
   };
+ */
 
   download = (file: FileEntry) => {
-    const { client, history, createPlaceholderTransfer } = this.props;
-
-    const id = new ObjectId();
-
-    createPlaceholderTransfer({
-      id,
-      local: '',
-      remote: file.path + client.separator + file.name,
-      total: 0,
-      recv: 0,
-      state: TransferState.Waiting,
-      recipient: Recipient.Server,
-    });
+    const { client, history } = this.props;
 
     client.send(
-      new DownloadToServerMessage({
-        id,
-        file: file.path + client.separator + file.name,
+      new RequestTransfersMessage({
+        paths: [file],
       })
     );
 
@@ -165,14 +166,15 @@ class FileSystem extends React.Component<Props, State> {
   };
 
   browse = (file?: FileEntry | string) => {
-    const { client, setCurrentDirectory } = this.props;
+    const { client } = this.props;
+    const { current } = this.state;
 
     let path = '';
 
     if (typeof file === 'string') {
       path = file;
     } else if (file && file.dir) {
-      path = file ? file.path + client.separator + file.name : '';
+      path = file.path;
     } else if (file) {
       this.download(file as FileEntry);
       return;
@@ -182,28 +184,15 @@ class FileSystem extends React.Component<Props, State> {
       path = '/' + path;
     }
 
-    setCurrentDirectory(path);
+    this.setState({
+      current: path,
+    });
 
-    this.props.client.send(
-      new BrowseMessage({
-        id: this.props.client.id,
-        path,
-      })
-    );
+    this.props.client.send(new BrowseMessage(path));
   };
 }
 
 export default compose(
-  connect(
-    state => ({
-      filesList: selectFilesList(state),
-      currentDirectory: selectCurrentDirectory(state),
-    }),
-    {
-      setCurrentDirectory,
-      createPlaceholderTransfer,
-    }
-  ),
   withRouter,
   withClient
 )(FileSystem);

@@ -1,6 +1,4 @@
-export * from './browse';
 export * from './client';
-export * from './directory';
 export * from './key';
 export * from './mouse';
 export * from './process';

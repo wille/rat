@@ -3,17 +3,16 @@ package main
 type MessageHeader int
 
 const (
-	ShellEvent  MessageHeader = 5
-	ScreenEvent MessageHeader = 4
-
+	ShellEvent          MessageHeader = 5
+	ScreenEvent         MessageHeader = 4
 	DirectoryQueryEvent MessageHeader = 3
-	ProcessQueryEvent   MessageHeader = 8
+	RequestTransfers    MessageHeader = 10
+
+	ProcessQueryEvent MessageHeader = 8
 
 	Mouse     MessageHeader = 41
 	MouseMove MessageHeader = 42
 	Key       MessageHeader = 43
-
-	DownloadQueryHeader MessageHeader = 10
 
 	ClientUpdateEvent           MessageHeader = 1
 	ClientSysEvent              MessageHeader = 2
@@ -46,6 +45,8 @@ func init() {
 	Messages = make(MessageMap)
 	Messages[ShellEvent] = ShellMessage{}
 	Messages[ScreenEvent] = ScreenMessage{}
+	Messages[DirectoryQueryEvent] = DirectoryQueryMessage("")
+	Messages[RequestTransfers] = TransferMessage{}
 
 	/* Messages[TransfersEvent] = DisplayTransferMessage{}
 	Messages[ClientSysEvent] = SysMessage{}

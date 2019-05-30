@@ -1,5 +1,4 @@
 export { default as clientHandler } from './client-handler';
-export { default as directoryHandler } from './directory-handler';
 export { default as processHandler } from './process-handler';
 export { default as transfersHandler } from './transfer-handler';
 

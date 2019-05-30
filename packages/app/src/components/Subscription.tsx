@@ -6,7 +6,6 @@ import { MessageType } from 'shared/types';
 import { subscribe, unsubscribe } from '../actions/subscription';
 import {
   clientHandler,
-  directoryHandler,
   MessageHandler,
   processHandler,
   transfersHandler,
@@ -52,11 +51,6 @@ const ClientSubscription = withProps({
   handler: clientHandler,
 })(ConnectedHandler);
 
-const DirectorySubscription = withProps({
-  type: MessageType.Directory,
-  handler: directoryHandler,
-})(ConnectedHandler);
-
 const ProcessSubscription = withProps({
   type: MessageType.Process,
   handler: processHandler,
@@ -70,7 +64,6 @@ const TransferSubscription = withProps({
 export {
   ConnectedHandler as Subscriber,
   ClientSubscription,
-  DirectorySubscription,
   ProcessSubscription,
   TransferSubscription,
 };
