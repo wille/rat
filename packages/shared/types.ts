@@ -9,6 +9,7 @@ export const enum MessageType {
 
   RequestTransfers = 10,
   UploadToClient = 12,
+  TransferUpdateEvent = 13,
 
   ///////////////////////////
   Mouse = 41,

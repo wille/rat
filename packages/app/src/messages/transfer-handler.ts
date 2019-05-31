@@ -1,9 +1,8 @@
-import { TransferTemplate } from 'shared/templates';
 import { setTransferList } from '../actions';
 
 import store from '../';
-import Transfer from '../lib/transfer';
+import { Transfer } from './transfers';
 
-export default (data: TransferTemplate) => {
-  store.dispatch(setTransferList(new Transfer(data)));
+export default (data: Transfer) => {
+  store.dispatch(setTransferList(data));
 };

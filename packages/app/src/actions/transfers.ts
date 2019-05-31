@@ -1,12 +1,10 @@
 import { createAction } from 'redux-actions';
 
-import { TransferData } from 'shared/templates';
+import { Transfer } from 'src/messages/transfers';
 import { Action } from '../constants';
 
-export const setTransferList = createAction<TransferData>(
-  Action.TRANSFER_UPDATE
-);
+export const setTransferList = createAction<Transfer>(Action.TRANSFER_UPDATE);
 
-export const createPlaceholderTransfer = createAction<TransferData>(
+export const createPlaceholderTransfer = createAction<Transfer>(
   Action.TRANSFER_CREATE_PLACEHOLDER
 );

@@ -28,6 +28,8 @@ async function upload(client: Client, file: File, remoteDestination: string) {
     b += e.loaded;
   };
 
+  reader.onerror = e => console.error(e);
+
   // reader.onloadend = () => client.send();
 
   reader.readAsArrayBuffer(file);

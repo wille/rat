@@ -3,24 +3,16 @@ import styled from 'react-emotion';
 
 import * as bytes from 'bytes';
 
-import { compose, withProps } from 'recompose';
-import {
-  Recipient,
-  TransferAction,
-  TransferData,
-  TransferState,
-} from 'shared/templates';
 import Client from '../../client';
-import { TransferActionMessage } from '../../messages';
+import { Transfer, TransferState } from '../../messages/transfers';
 import withClient from '../../withClient';
 import Progressbar from '../Progressbar';
-import { getProgressColor } from './colors';
 
 const DownloadIcon = require('assets/download.svg');
 const UploadIcon = require('assets/upload.svg');
 
 interface Props {
-  transfer: TransferData;
+  transfer: Transfer;
   client?: Client;
 }
 
@@ -74,10 +66,10 @@ const Action = styled('p')`
 `;
 
 class Row extends React.Component<Props> {
-  update = (action: TransferAction) =>
+  /*  update = (action: TransferAction) =>
     this.props.client.send(
       new TransferActionMessage({ action, id: this.props.transfer.id })
-    );
+    ); */
 
   download = () => {
     const { transfer } = this.props;
@@ -87,30 +79,20 @@ class Row extends React.Component<Props> {
       url = 'https://localhost:3000';
     }
 
-    url += '/download/' + transfer.id.toHexString();
+    url += '/download/' + transfer.id;
     window.open(url);
   };
 
   render() {
     const { transfer } = this.props;
 
-    const typeIcon =
-      transfer.recipient === Recipient.Client ? UploadIcon : DownloadIcon;
+    const typeIcon = transfer.download ? DownloadIcon : UploadIcon;
 
-    const statusText =
-      transfer.recipient === Recipient.Client
-        ? `Uploading ${transfer.local} to ${transfer.remote}`
-        : `Downloading ${transfer.remote}`;
+    const statusText = transfer.download
+      ? `Downloading ${transfer.remote}`
+      : `Uploading ${transfer.local} to ${transfer.remote}`;
 
-    console.log(
-      'recv',
-      transfer.recv,
-      typeof transfer.recv,
-      'total',
-      transfer.total
-    );
-
-    const percentage = Math.floor((transfer.recv / transfer.total) * 100);
+    const percentage = Math.floor((transfer.offset / transfer.len) * 100);
     const bps = `${
       transfer.state !== TransferState.InProgress ? 'avg ' : ''
     }${bytes(transfer.bps)} /s`;
@@ -121,13 +103,13 @@ class Row extends React.Component<Props> {
           <Icon src={typeIcon} />
           <Content>
             <p>{statusText}</p>
-            <p>{`${bytes(transfer.recv)} / ${bytes(
-              transfer.total
+            <p>{`${bytes(transfer.offset)} / ${bytes(
+              transfer.len
             )} (${percentage}%)`}</p>
             <p>{bps}</p>
           </Content>
           <Actions>
-            {transfer.state === TransferState.InProgress && (
+            {/* transfer.state === TransferState.InProgress && (
               <Action onClick={() => this.update(TransferAction.CANCEL)}>
                 Cancel
               </Action>
@@ -141,19 +123,15 @@ class Row extends React.Component<Props> {
               <Action onClick={() => this.update(TransferAction.RESUME)}>
                 Resume
               </Action>
-            )}
-            {transfer.recipient === Recipient.Server &&
+            ) */}
+            {transfer.download &&
               transfer.state === TransferState.Complete && (
                 <Action onClick={() => this.download()}>Download</Action>
               )}
           </Actions>
         </ContentContainer>
         <ProgressContainer>
-          <Progressbar
-            value={50}
-            max={100}
-            color={getProgressColor(transfer.state)}
-          />
+          <Progressbar value={50} max={100} color="green" />
         </ProgressContainer>
       </Container>
     );

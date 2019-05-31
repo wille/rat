@@ -8,6 +8,7 @@ const (
 	DirectoryQueryEvent MessageHeader = 3
 	RequestTransfers    MessageHeader = 10
 	UploadToClient      MessageHeader = 12
+	TransferUpdateEvent MessageHeader = 13
 
 	ProcessQueryEvent MessageHeader = 8
 

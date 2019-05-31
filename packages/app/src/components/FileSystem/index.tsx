@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { BrowserHistory, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { OperatingSystem } from 'shared/system';
-import { Recipient, TransferState } from 'shared/templates';
 
 import { uploadFiles } from 'app/src/lib/file-reader';
 import { MessageType } from 'shared/types';
@@ -19,7 +18,6 @@ import {
   FileEntry,
   RequestTransfersMessage,
 } from '../../messages/directory';
-import { UploadToClientMessage } from '../../messages/outgoing-messages';
 import withClient from '../../withClient';
 import { Subscriber } from '../Subscription';
 import Toolbar from '../Toolbar';

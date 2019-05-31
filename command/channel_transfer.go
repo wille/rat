@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/binary"
-	"fmt"
 	"io"
 	"rat/shared"
 	"rat/shared/network/header"
@@ -35,7 +34,6 @@ func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 			var n int
 			n, err = r.Read(b)
 			ch.Transfer.Write(b[:n])
-			fmt.Println(err)
 		}
 	} else {
 		b := make([]byte, 1024<<3)

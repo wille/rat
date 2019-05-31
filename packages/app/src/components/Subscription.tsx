@@ -56,8 +56,11 @@ const ProcessSubscription = withProps({
   handler: processHandler,
 })(ConnectedHandler);
 
+/**
+ * @deprecated
+ */
 const TransferSubscription = withProps({
-  type: MessageType.Transfers,
+  type: MessageType.TransferUpdateEvent,
   handler: transfersHandler,
 })(ConnectedHandler);
 
