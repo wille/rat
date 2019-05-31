@@ -192,7 +192,6 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 				if clientOk && headerOk {
 					listener.C <- i
-					return
 				}
 			}
 
