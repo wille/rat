@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"time"
 )
@@ -57,7 +56,7 @@ func (upload UploadMessage) Handle(controller *Controller, client *Client) error
 
 	t := NewUpload(filepath.Join(upload.Dest, upload.Name), upload.Size)
 
-	fp, _ := os.Create(t.Local)
+	fp, _ := t.Open()
 
 	go func() {
 		defer listener.Unlisten()

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 )
 
@@ -29,6 +30,19 @@ func (t *Transfer) Start(c *Client) {
 	c.streamChan <- ChannelTransfer{
 		t,
 	}
+}
+
+// Open the local file for reading or writing
+func (t *Transfer) Open() (*os.File, error) {
+	var mode int
+
+	if t.Download {
+		mode = os.O_RDWR | os.O_CREATE
+	} else {
+		mode = os.O_RDONLY
+	}
+
+	return os.OpenFile(t.Local, mode, 0666)
 }
 
 func NewDownload(remote string, len int64) *Transfer {
