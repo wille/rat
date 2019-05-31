@@ -56,12 +56,11 @@ func (upload UploadMessage) Handle(controller *Controller, client *Client) error
 
 	t := NewTransfer(filepath.Join(upload.Dest, upload.Name), upload.Size, false)
 
-	fp, _ := t.Open()
+	err := t.Open(true)
 
 	go func() {
 		defer listener.Unlisten()
-		defer fp.Sync()
-		defer fp.Close()
+		defer t.Close()
 		var recv int64
 
 		for {
@@ -79,13 +78,13 @@ func (upload UploadMessage) Handle(controller *Controller, client *Client) error
 				if msgi != nil {
 					fmt.Println(msgi)
 					msg := msgi.(*UploadMessage)
-					fp.Write(msg.Data)
+					t.Write(msg.Data)
 					recv += int64(len(msg.Data))
 
 					if recv >= upload.Size {
 						fmt.Println("starting upload to client")
-						fp.Sync()
-						fp.Close()
+						t.Close()
+						t.Offset = 0
 						t.Start(client)
 						return
 					}
@@ -97,5 +96,5 @@ func (upload UploadMessage) Handle(controller *Controller, client *Client) error
 		}
 	}()
 
-	return nil
+	return err
 }

@@ -19,7 +19,7 @@ func (ChannelTransfer) Header() header.PacketHeader {
 func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 	defer r.Close()
 
-	fp, err := ch.Transfer.Open()
+	err := ch.Transfer.Open(ch.Transfer.Download)
 
 	if err != nil {
 		panic(err)
@@ -29,26 +29,19 @@ func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 	binary.Write(r, binary.LittleEndian, ch.Transfer.Offset)
 	shared.WriteString(r, ch.Transfer.Remote)
 
-	if ch.Transfer.Offset > 0 {
-		_, err = fp.Seek(ch.Transfer.Offset, io.SeekStart)
-		if err != nil {
-			panic(err)
-		}
-	}
-
 	if ch.Transfer.Download {
 		b := make([]byte, 1024<<3)
 		for err == nil {
 			var n int
 			n, err = r.Read(b)
-			fp.Write(b[:n])
+			ch.Transfer.Write(b[:n])
 			fmt.Println(err)
 		}
 	} else {
 		b := make([]byte, 1024<<3)
 		for err == nil {
 			var n int
-			n, err = fp.Read(b)
+			n, err = ch.Transfer.Read(b)
 
 			if err == nil {
 				r.Write(b[:n])
@@ -56,8 +49,7 @@ func (ch ChannelTransfer) Open(r io.ReadWriteCloser, c *Client) error {
 		}
 	}
 
-	fp.Sync()
-	fp.Close()
+	ch.Transfer.Close()
 
 	return nil
 }
