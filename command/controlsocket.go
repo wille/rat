@@ -163,6 +163,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 	updateAll()
 
+cont:
 	for {
 		var bbb []byte
 		_, bbb, err := ws.ReadMessage()
@@ -192,6 +193,7 @@ func incomingWebSocket(ws *websocket.Conn) {
 
 				if clientOk && headerOk {
 					listener.C <- i
+					goto cont
 				}
 			}
 
