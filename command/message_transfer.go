@@ -26,7 +26,7 @@ func (m TransferMessage) Handle(controller *Controller, client *Client) error {
 		} else {
 			fmt.Println("Download", r)
 
-			t := NewDownload(r.Path, r.Size)
+			t := NewTransfer(r.Path, r.Size, true)
 			t.Start(client)
 		}
 	}
@@ -54,7 +54,7 @@ func (upload UploadMessage) Handle(controller *Controller, client *Client) error
 
 	fmt.Println("Uploading", upload)
 
-	t := NewUpload(filepath.Join(upload.Dest, upload.Name), upload.Size)
+	t := NewTransfer(filepath.Join(upload.Dest, upload.Name), upload.Size, false)
 
 	fp, _ := t.Open()
 

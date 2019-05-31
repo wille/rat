@@ -32,7 +32,7 @@ func (ch ChannelQueryFiles) Open(r io.ReadWriteCloser, c *Client) error {
 		binary.Read(r, binary.LittleEndian, &len)
 		_, _ = shared.ReadString(r)
 
-		t := NewDownload(abspath, len)
+		t := NewTransfer(abspath, len, true)
 		t.Start(c)
 	}
 

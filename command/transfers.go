@@ -45,29 +45,16 @@ func (t *Transfer) Open() (*os.File, error) {
 	return os.OpenFile(t.Local, mode, 0666)
 }
 
-func NewDownload(remote string, len int64) *Transfer {
-	dir, _ := ioutil.TempDir("", "downloads")
+func NewTransfer(remote string, len int64, download bool) *Transfer {
+	dir, _ := ioutil.TempDir("", "transfers")
 	tmpf := filepath.Join(dir, filepath.Base(remote))
 
-	fmt.Println("downloading", remote, "to", tmpf)
+	fmt.Println("downloading", download, "remote", remote, "to", tmpf)
 
 	return &Transfer{
 		Local:    tmpf,
 		Remote:   remote,
-		Download: true,
-		Len:      len,
-		Offset:   0,
-	}
-}
-
-func NewUpload(remote string, len int64) *Transfer {
-	dir, _ := ioutil.TempDir("", "downloads")
-	tmpf := filepath.Join(dir, filepath.Base(remote))
-
-	return &Transfer{
-		Local:    tmpf,
-		Remote:   remote,
-		Download: false,
+		Download: download,
 		Len:      len,
 		Offset:   0,
 	}
