@@ -33,7 +33,7 @@ func (ch ChannelQueryFiles) Open(r io.ReadWriteCloser, c *Client) error {
 		_, _ = shared.ReadString(r)
 
 		t := NewTransfer(abspath, len, true)
-		t.Start(c)
+		t.Start(c, nil)
 	}
 
 	return err

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"path/filepath"
-	"time"
 )
 
 type Req struct {
@@ -27,7 +26,7 @@ func (m TransferMessage) Handle(controller *Controller, client *Client) error {
 			fmt.Println("Download", r)
 
 			t := NewTransfer(r.Path, r.Size, true)
-			t.Start(client)
+			t.Start(client, nil)
 		}
 	}
 
@@ -50,51 +49,8 @@ type UploadMessage struct {
 }
 
 func (upload UploadMessage) Handle(controller *Controller, client *Client) error {
-	listener := controller.Listen(UploadToClient, client)
-
-	fmt.Println("Uploading", upload)
-
 	t := NewTransfer(filepath.Join(upload.Dest, upload.Name), upload.Size, false)
+	t.Start(client, controller)
 
-	err := t.Open(true)
-
-	go func() {
-		defer listener.Unlisten()
-		defer t.Close()
-		var recv int64
-
-		for {
-			select {
-			case <-time.After(time.Second * 10):
-				fmt.Println("timeout")
-				return
-			case <-controller.die:
-				fmt.Println("controller die")
-				return
-			case <-client.die:
-				fmt.Println("client die")
-				return
-			case msgi := <-listener.C:
-				if msgi != nil {
-					fmt.Println(msgi)
-					msg := msgi.(*UploadMessage)
-					t.Write(msg.Data)
-					recv += int64(len(msg.Data))
-
-					if recv >= upload.Size {
-						fmt.Println("starting upload to client")
-						t.Close()
-						t.Offset = 0
-						t.Start(client)
-						return
-					}
-				} else {
-					fmt.Println("is nul")
-					return
-				}
-			}
-		}
-	}()
-
-	return err
+	return nil
 }

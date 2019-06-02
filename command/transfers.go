@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"time"
 )
@@ -31,7 +29,8 @@ type Transfer struct {
 	// bytes per second counter
 	counter int64
 	ts      time.Time
-	fp      *os.File
+	reader  io.ReadCloser
+	writer  io.WriteCloser
 }
 
 var Transfers = make([]*Transfer, 0)
@@ -61,29 +60,15 @@ func (t *Transfer) calcRate() {
 	t.counter = 0
 }
 
-func (t *Transfer) Start(c *Client) {
-	c.streamChan <- ChannelTransfer{
+func (t *Transfer) Start(client *Client, controller *Controller) {
+	client.streamChan <- ChannelTransfer{
 		t,
+		controller,
 	}
-}
-
-// Open the local file for reading or writing
-func (t *Transfer) Open(write bool) error {
-	fp, err := os.OpenFile(t.Local, os.O_RDWR|os.O_CREATE, 0666)
-	t.fp = fp
-
-	if t.Offset > 0 {
-		_, err = fp.Seek(t.Offset, io.SeekStart)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	return err
 }
 
 func (t *Transfer) Write(b []byte) (int, error) {
-	n, err := t.fp.Write(b)
+	n, err := t.writer.Write(b)
 
 	if err == nil {
 		t.Offset += int64(n)
@@ -94,7 +79,7 @@ func (t *Transfer) Write(b []byte) (int, error) {
 }
 
 func (t *Transfer) Read(b []byte) (int, error) {
-	n, err := t.fp.Read(b)
+	n, err := t.reader.Read(b)
 
 	if err == nil {
 		t.Offset += int64(n)
@@ -105,16 +90,21 @@ func (t *Transfer) Read(b []byte) (int, error) {
 }
 
 func (t *Transfer) Close() error {
-	t.fp.Sync()
-	return t.fp.Close()
+	if t.reader != nil {
+		return t.reader.Close()
+	}
+
+	if t.writer != nil {
+		return t.writer.Close()
+	}
+
+	return nil
 }
 
 // NewTransfer creates a new transfer stored in a temporary file
 func NewTransfer(remote string, len int64, download bool) *Transfer {
 	dir, _ := ioutil.TempDir("", "transfers")
 	tmpf := filepath.Join(dir, filepath.Base(remote))
-
-	fmt.Println("transferring", download, "remote", remote, "to", tmpf)
 
 	t := &Transfer{
 		Local:    tmpf,
