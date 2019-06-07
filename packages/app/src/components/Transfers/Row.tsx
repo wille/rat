@@ -66,10 +66,11 @@ const Action = styled('p')`
 `;
 
 class Row extends React.Component<Props> {
-  /*  update = (action: TransferAction) =>
-    this.props.client.send(
+  update = (/* action: TransferAction */) => {
+    /* this.props.client.send(
       new TransferActionMessage({ action, id: this.props.transfer.id })
     ); */
+  };
 
   download = () => {
     const { transfer } = this.props;
@@ -109,21 +110,21 @@ class Row extends React.Component<Props> {
             <p>{bps}</p>
           </Content>
           <Actions>
-            {/* transfer.state === TransferState.InProgress && (
-              <Action onClick={() => this.update(TransferAction.CANCEL)}>
+            {transfer.state === TransferState.InProgress && (
+              <Action onClick={() => this.update(/* TransferAction.CANCEL */)}>
                 Cancel
               </Action>
             )}
             {transfer.state === TransferState.InProgress && (
-              <Action onClick={() => this.update(TransferAction.PAUSE)}>
+              <Action onClick={() => this.update(/* TransferAction.PAUSE */)}>
                 Pause
               </Action>
             )}
             {transfer.state === TransferState.Paused && (
-              <Action onClick={() => this.update(TransferAction.RESUME)}>
+              <Action onClick={() => this.update(/* TransferAction.RESUME */)}>
                 Resume
               </Action>
-            ) */}
+            )}
             {transfer.download &&
               transfer.state === TransferState.Complete && (
                 <Action onClick={() => this.download()}>Download</Action>

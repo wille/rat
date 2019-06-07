@@ -7,6 +7,18 @@ import (
 	"time"
 )
 
+type TransferState uint8
+
+const (
+	StateInProgress TransferState = iota
+	StatePaused
+	StateCancelled
+	StateDeleted
+	StateWaiting
+	StateComplete
+	StateError
+)
+
 type Transfer struct {
 	// Local file on server
 	Local string
@@ -25,6 +37,9 @@ type Transfer struct {
 
 	// Bps bytes per second
 	Bps int64
+
+	State TransferState
+	Error error
 
 	// bytes per second counter
 	counter int64

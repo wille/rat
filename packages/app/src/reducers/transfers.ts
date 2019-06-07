@@ -4,6 +4,7 @@ import { Action } from '../constants';
 const initialState: Transfer[] = [];
 
 export default (state = initialState, action) => {
+  console.log(action.payload);
   switch (action.type) {
     case Action.TRANSFER_UPDATE:
       const index = state.findIndex(data => data.id === action.payload.id);

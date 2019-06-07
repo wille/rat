@@ -19,6 +19,7 @@ func (ChannelTransfer) Header() header.PacketHeader {
 
 func (ch ChannelTransfer) Open(rwc io.ReadWriteCloser, c *Client) error {
 	defer rwc.Close()
+	defer ch.Transfer.Close()
 
 	binary.Write(rwc, binary.LittleEndian, ch.Transfer.Download)
 	binary.Write(rwc, binary.LittleEndian, ch.Transfer.Offset)
@@ -27,15 +28,24 @@ func (ch ChannelTransfer) Open(rwc io.ReadWriteCloser, c *Client) error {
 	if ch.Transfer.Download {
 		fp, err := os.OpenFile(ch.Transfer.Local, os.O_RDWR|os.O_CREATE, 0666)
 
+		if err != nil {
+			ch.Transfer.State = StateError
+			ch.Transfer.Error = err
+			return err
+		}
+
 		if ch.Transfer.Offset > 0 {
 			_, err = fp.Seek(ch.Transfer.Offset, io.SeekStart)
 			if err != nil {
-				panic(err)
+				ch.Transfer.State = StateError
+				ch.Transfer.Error = err
+				return err
 			}
 		}
 
 		ch.Transfer.writer = fp
 		io.Copy(ch.Transfer, rwc)
+		ch.Transfer.State = StateComplete
 	} else {
 		r, w := io.Pipe()
 		ch.Transfer.reader = r
@@ -55,6 +65,7 @@ func (ch ChannelTransfer) Open(rwc io.ReadWriteCloser, c *Client) error {
 						msg := msgi.(*UploadMessage)
 						w.Write(msg.Data)
 						if ch.Transfer.Offset >= ch.Transfer.Len {
+							ch.Transfer.State = StateComplete
 							return
 						}
 					} else {
@@ -66,8 +77,6 @@ func (ch ChannelTransfer) Open(rwc io.ReadWriteCloser, c *Client) error {
 
 		io.Copy(rwc, ch.Transfer)
 	}
-
-	ch.Transfer.Close()
 
 	return nil
 }

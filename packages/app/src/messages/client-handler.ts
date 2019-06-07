@@ -9,7 +9,6 @@ import { ClientTemplate, ClientUpdateType } from 'shared/templates';
 import store from '../';
 
 export default (data: ClientTemplate) => {
-  console.log(data);
   switch (data.type) {
     case ClientUpdateType.ADD:
       store.dispatch(addClients(data));
