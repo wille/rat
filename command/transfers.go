@@ -20,6 +20,9 @@ const (
 )
 
 type Transfer struct {
+	// Unique transfer ID
+	ID string
+
 	// Local file on server
 	Local string
 
@@ -122,6 +125,7 @@ func NewTransfer(remote string, len int64, download bool) *Transfer {
 	tmpf := filepath.Join(dir, filepath.Base(remote))
 
 	t := &Transfer{
+		ID:       randomPassword(),
 		Local:    tmpf,
 		Remote:   remote,
 		Download: download,
