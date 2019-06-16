@@ -63,8 +63,18 @@ func (ch ChannelTransfer) Open(rwc io.ReadWriteCloser, c *Client) error {
 				case msgi := <-listener.C:
 					if msgi != nil {
 						msg := msgi.(*UploadMessage)
+						recv := ch.Transfer.Offset + int64(len(msg.Data))
+						done := false
+
+						if recv == ch.Transfer.Len {
+							done = true
+						} else if recv > ch.Transfer.Len {
+							// err
+						}
+
 						w.Write(msg.Data)
-						if ch.Transfer.Offset >= ch.Transfer.Len {
+
+						if done {
 							ch.Transfer.State = StateComplete
 							return
 						}
