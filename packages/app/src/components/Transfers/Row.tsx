@@ -132,7 +132,7 @@ class Row extends React.Component<Props> {
           </Actions>
         </ContentContainer>
         <ProgressContainer>
-          <Progressbar value={50} max={100} color="green" />
+          <Progressbar value={percentage} max={100} color="green" />
         </ProgressContainer>
       </Container>
     );
