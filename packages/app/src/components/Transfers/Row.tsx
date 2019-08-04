@@ -77,7 +77,7 @@ class Row extends React.Component<Props> {
 
     let url = '';
     if (process.env.NODE_ENV === 'development') {
-      url = 'https://localhost:3000';
+      url = 'https://localhost:7777';
     }
 
     url += '/download/' + transfer.id;

@@ -51,18 +51,21 @@ type Transfer struct {
 	writer  io.WriteCloser
 }
 
-var Transfers = make([]*Transfer, 0)
-var TransferChannel = make(chan *Transfer)
+// transfers mapped with their ID
+var transfers = make(map[string]*Transfer, 0)
+
+// newTransferChanenl to register new transfers
+var newTransferChannel = make(chan *Transfer)
 
 func init() {
 	go func() {
 		for {
 			select {
-			case t := <-TransferChannel:
-				Transfers = append(Transfers, t)
+			case t := <-newTransferChannel:
+				transfers[t.ID] = t
 				broadcast(TransferUpdateMessage(*t))
 			case <-time.After(time.Second):
-				for _, t := range Transfers {
+				for _, t := range transfers {
 					t.calcRate()
 					broadcast(TransferUpdateMessage(*t))
 				}
@@ -133,6 +136,6 @@ func NewTransfer(remote string, len int64, download bool) *Transfer {
 		Offset:   0,
 	}
 
-	TransferChannel <- t
+	newTransferChannel <- t
 	return t
 }

