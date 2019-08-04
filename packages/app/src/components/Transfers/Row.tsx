@@ -80,7 +80,7 @@ class Row extends React.Component<Props> {
       url = 'https://localhost:7777';
     }
 
-    url += '/download/' + transfer.id;
+    url += '/download/?key=' + transfer.id;
     window.open(url);
   };
 
