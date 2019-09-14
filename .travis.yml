@@ -1,0 +1,14 @@
+language: go
+matrix:
+  include:
+    - os: "windows"
+    - os: "osx"
+    - os: "linux"
+
+env:
+  global:
+    - GO111MODULE=on
+
+script:
+  - make test
+  - make

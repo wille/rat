@@ -11,7 +11,7 @@ else
 	EXT=.bin
 endif
 
-default: web client
+default: client
 	cd command && $(DEFAULT) -o ../command$(EXT)
 
 client:
