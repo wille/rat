@@ -31,7 +31,7 @@ func mockImage(w, h int) *image.RGBA {
 }
 
 func CaptureWindow(handle int) image.Image {
-	panic("CaptureWindow: not implemented")
+	return nil
 }
 
 func Capture(monitor shared.Monitor) image.Image {

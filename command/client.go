@@ -92,7 +92,7 @@ func (c *Client) recvLoop() {
 
 		packet, is := incomingPackets[h]
 		if !is {
-			err = fmt.Errorf("invalid packet header", h)
+			err = fmt.Errorf("invalid packet header %v", h)
 			break
 		}
 

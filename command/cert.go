@@ -72,7 +72,7 @@ func GenerateCertificate(hosts ...string) error {
 	certOut, err := os.Create("cert.pem")
 	defer certOut.Close()
 	if err != nil {
-		log.Println("failed to open cert.pem for writing: %s", err)
+		log.Println("failed to open cert.pem for writing", err)
 	}
 
 	pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes})
