@@ -1,14 +1,44 @@
-language: go
 matrix:
   include:
     - os: "windows"
+      language: go
+      env: GO111MODULE=on
+      install:
+        - choco install make
+        - go mod download
+      script:
+        - make test
+        - make client
+        - make controller
+
     - os: "osx"
+      language: go
+      env: GO111MODULE=on
+      install: go mod download
+      script:
+        - make test
+        - make client
+        - make controller
+
     - os: "linux"
+      language: go
+      env: GO111MODULE=on
+      install:
+        - go mod download
+      script:
+        - make test
+        - make client
+        - make controller
+      addons:
+        apt:
+          packages:
+            - libxrandr-dev
+            - libx11-dev
 
-env:
-  global:
-    - GO111MODULE=on
-
-script:
-  - make test
-  - make
+    - os: "linux"
+      language: node_js
+      node_js: node
+      install: cd packages/app && yarn
+      script:
+        - cd packages/app && yarn test
+        - cd packages/app && yarn build

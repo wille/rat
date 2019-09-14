@@ -5,17 +5,25 @@ PROD_WIN32=$(BUILD) $(GCFLAGS) -ldflags="-w -s -H windowsgui" --tags="prod"
 LIB=command/web/static/lib.js
 UPX=-upx -9
 
+ldflags = -ldflags="-w -s"
+
 ifdef SYSTEMROOT # windows
 	EXT=.exe
 else
 	EXT=.bin
 endif
 
-default: client
-	cd command && $(DEFAULT) -o ../command$(EXT)
+default: client controller
+
+controller:
+	cd command && go build $(ldflags) -o ../command$(EXT)
 
 client:
-	cd client && $(DEFAULT) -o ../client$(EXT)
+	cd client && go build $(ldflags) -o ../client$(EXT)
+
+install:
+	cd packages/app && yarn
+	go mod download
 
 web:
 	tsc
@@ -27,10 +35,6 @@ ugly: web
 cert:
 	cd command && openssl genrsa -out private.key 1024
 	cd command && openssl req -new -x509 -key private.key -out cert.pem -days 365
-
-controller: web ugly
-	cd command && $(PROD) -o ../command$(EXT)
-	$(UPX) command$(EXT)
 
 windows:
 	# controller
