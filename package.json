@@ -7,7 +7,7 @@
   "scripts": {
     "start": "webpack-dev-server --config packages/app/webpack.dev.js",
     "build": "webpack --config packages/app/webpack.prod.js",
-    "test": "jest",
+    "test": "cd packages/app && jest",
     "lint": "tslint --fix ./packages/app/src/**/*.ts"
   },
   "keywords": [],
