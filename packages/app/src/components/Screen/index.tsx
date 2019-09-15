@@ -1,10 +1,10 @@
-import { ScreenChunkTemplate, StreamMessage } from 'app/src/messages/screen';
 import * as lz4 from 'lz4-asm';
 import * as React from 'react';
 import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { Monitor } from 'shared/system';
 import { MessageType } from 'shared/types';
 import Client from '../../client';
+import { ScreenChunkTemplate, StreamMessage } from '../../messages/screen';
 import withClient from '../../withClient';
 import { Subscriber } from '../Subscription';
 

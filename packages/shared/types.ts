@@ -1,4 +1,4 @@
-export const enum MessageType {
+export enum MessageType {
   Ping = 0,
   Shell = 5,
   Subscribe = -1,

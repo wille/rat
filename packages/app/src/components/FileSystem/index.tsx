@@ -8,10 +8,10 @@ import { BrowserHistory, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { OperatingSystem } from 'shared/system';
 
-import { uploadFiles } from 'app/src/lib/file-reader';
 import { MessageType } from 'shared/types';
 import { createPlaceholderTransfer } from '../../actions';
 import Client from '../../client';
+import { uploadFiles } from '../../lib/file-reader';
 import {
   BrowseMessage,
   DirectoryContentTemplate,

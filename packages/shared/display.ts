@@ -1,9 +1,9 @@
-export const enum InputState {
-    PRESS,
-    RELEASE
+export enum InputState {
+  PRESS,
+  RELEASE,
 }
 
-export const enum MouseButton {
-    LEFT,
-    RIGHT
+export enum MouseButton {
+  LEFT,
+  RIGHT,
 }
