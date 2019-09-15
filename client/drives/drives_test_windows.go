@@ -2,8 +2,9 @@ package drives
 
 import (
 	"fmt"
-	"rat/client/os"
 	"testing"
+
+	"github.com/wille/osutil"
 )
 
 func TestDrives(t *testing.T) {
