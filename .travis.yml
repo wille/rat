@@ -38,7 +38,7 @@ matrix:
     - os: "linux"
       language: node_js
       node_js: node
-      install: cd packages/app && yarn
+      install: npm i
       script:
-        - cd packages/app && yarn test
-        - cd packages/app && yarn build
+        - npm run test
+        - npm run build
