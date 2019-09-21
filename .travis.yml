@@ -7,7 +7,7 @@ matrix:
         - choco install make
         - go mod download
       script:
-        #- make test
+        - make test
         - make client
         - make controller
 
@@ -16,7 +16,7 @@ matrix:
       env: GO111MODULE=on
       install: go mod download
       script:
-        #- make test
+        - make test
         - make client
         - make controller
 
@@ -26,7 +26,7 @@ matrix:
       install:
         - go mod download
       script:
-        #- make test
+        - make test
         - make client
         - make controller
       addons:
