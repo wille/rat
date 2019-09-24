@@ -1,4 +1,4 @@
-//+build headless,!windows,!darwin
+//+build headless
 
 package startup
 
