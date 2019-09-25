@@ -1,4 +1,4 @@
-//+build darwin
+//+build !headless,darwin
 
 package startup
 

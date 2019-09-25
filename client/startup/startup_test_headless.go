@@ -1,4 +1,4 @@
-//+build headless
+//+build headless,!windows
 
 package startup
 
