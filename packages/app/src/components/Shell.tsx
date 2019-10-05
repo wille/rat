@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { MessageType } from 'shared/types';
 import { Terminal } from 'xterm';
-import 'xterm/dist/xterm.css';
-import { fit } from 'xterm/lib/addons/fit/fit';
+import { FitAddon } from 'xterm-addon-fit';
+import 'xterm/css/xterm.css';
 import Client from '../client';
 import {
   ShellAction,
@@ -22,8 +22,12 @@ class Shell extends React.Component<Props, any> {
 
   componentDidMount() {
     const t = new Terminal();
+    const fitAddon = new FitAddon();
+    t.loadAddon(fitAddon);
     t.open(this.ref.current);
-    fit(t);
+    fitAddon.fit();
+
+    // @ts-ignore TODO
     t.on('data', this.onTerminalInput);
 
     this.t = t;
