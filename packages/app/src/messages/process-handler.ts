@@ -1,4 +1,4 @@
-import { ProcessListTemplate } from 'shared/templates';
+import { ProcessListTemplate } from 'app/types';
 import store from '../';
 import { setProcessList } from '..//actions/processes';
 

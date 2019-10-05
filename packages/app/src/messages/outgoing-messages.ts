@@ -6,7 +6,7 @@ import {
   MouseTemplate,
   ProcessTemplate,
   SubscribeTemplate,
-} from 'shared/templates';
+} from 'app/types';
 
 import { MessageType } from 'shared/types';
 

@@ -5,7 +5,7 @@ import {
   OperatingSystem,
   UserOperatingSystem,
 } from 'shared/system';
-import { ClientTemplate } from 'shared/templates';
+import { ClientTemplate } from 'app/types';
 import ControlSocket from './control';
 
 class Client implements ClientProperties {

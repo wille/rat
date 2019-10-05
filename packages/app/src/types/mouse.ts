@@ -1,4 +1,4 @@
-import { InputState, MouseButton } from '../display';
+import { InputState, MouseButton } from '../../../shared/display';
 import MessageTemplate from './template';
 
 export interface MouseTemplate extends MessageTemplate {

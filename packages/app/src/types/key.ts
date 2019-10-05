@@ -1,4 +1,4 @@
-import { InputState } from '../display';
+import { InputState } from '../../../shared/display';
 import MessageTemplate from './template';
 
 export interface KeyTemplate extends MessageTemplate {

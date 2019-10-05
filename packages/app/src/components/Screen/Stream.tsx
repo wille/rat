@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'react-emotion';
 
 import { InputState } from 'shared/display';
-import { ScreenFrameTemplate } from 'shared/templates';
+import { ScreenFrameTemplate } from 'app/types';
 import Client from '../../client';
 import {
   KeyMessage,

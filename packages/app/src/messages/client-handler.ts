@@ -5,7 +5,7 @@ import {
   updateClient,
 } from '..//actions';
 
-import { ClientTemplate, ClientUpdateType } from 'shared/templates';
+import { ClientTemplate, ClientUpdateType } from 'app/types';
 import store from '../';
 
 export default (data: ClientTemplate) => {

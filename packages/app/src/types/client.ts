@@ -1,4 +1,4 @@
-import { ClientProperties } from '../system';
+import { ClientProperties } from '../../../shared/system';
 import MessageTemplate from './template';
 
 export enum ClientUpdateType {

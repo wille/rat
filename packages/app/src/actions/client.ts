@@ -1,4 +1,4 @@
-import { ClientTemplate } from 'shared/templates';
+import { ClientTemplate } from 'app/types';
 import Client from '..//client';
 import { Action } from '../constants';
 

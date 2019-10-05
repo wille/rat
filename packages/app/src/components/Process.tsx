@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Process, ProcessType } from 'shared/templates';
+import { Process, ProcessType } from 'app/types';
 import Client from '..//client';
 import { selectProcessList } from '..//reducers';
 import withClient from '..//withClient';

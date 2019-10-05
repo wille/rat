@@ -1,4 +1,4 @@
-import { MessageTemplate } from './templates';
+import { MessageTemplate } from '../app/src/types';
 import { MessageType } from './types';
 
 export interface Message<T = any> {
