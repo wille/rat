@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const convertPathsToAliases = require('convert-tsconfig-paths-to-webpack-aliases').default;
 const tsconfig = require('./tsconfig.json');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const config = {
   entry: [
@@ -43,6 +44,7 @@ const config = {
       inject: true,
       template: './src/index.html'
     }),
+    new ForkTsCheckerWebpackPlugin(),
   ],
   node: {
     fs: "empty"

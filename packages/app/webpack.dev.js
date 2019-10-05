@@ -8,19 +8,10 @@ module.exports = merge(common, {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              babelrc: true,
-              plugins: [
-                //'react-hot-loader/babel'
-              ]
-            }
-          },
-          'ts-loader'
-        ]
+        test: /\.(tsx?|js)$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: require('./babel.config'),
       }
     ]
   },
