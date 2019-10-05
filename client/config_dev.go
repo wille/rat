@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"rat/shared"
+	"rat/internal"
 )
 
 var ConfigFiles = [...]string{

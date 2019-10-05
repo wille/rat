@@ -1,6 +1,6 @@
 package main
 
-import "rat/shared"
+import "rat/internal"
 
 type ShellMessage struct {
 	Action shared.ShellAction `json:"action"`

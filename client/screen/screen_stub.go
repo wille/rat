@@ -5,7 +5,7 @@ package screen
 import (
 	"image"
 	"math/rand"
-	"rat/shared"
+	"rat/internal"
 )
 
 var cursor int

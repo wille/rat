@@ -6,7 +6,7 @@ package screen
 import "C"
 
 import (
-	"rat/shared"
+	"rat/internal"
 )
 
 var (

@@ -3,7 +3,7 @@ package main
 import (
 	"io"
 	"rat/command/utils"
-	"rat/shared/network/header"
+	"rat/internal/network/header"
 
 	"time"
 )

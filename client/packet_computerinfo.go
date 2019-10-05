@@ -5,8 +5,8 @@ import (
 	"io"
 	"rat/client/computer"
 	"rat/client/screen"
-	"rat/shared"
-	"rat/shared/network/header"
+	"rat/internal"
+	"rat/internal/network/header"
 
 	"github.com/wille/osutil"
 )

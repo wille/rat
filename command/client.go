@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"net"
 	"rat/command/log"
-	"rat/shared"
-	"rat/shared/network/header"
+	"rat/internal"
+	"rat/internal/network/header"
 	"sync"
 
 	"strconv"

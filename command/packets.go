@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/shared/network/header"
+	"rat/internal/network/header"
 )
 
 type incomingPacketMapT map[header.PacketHeader]Incoming

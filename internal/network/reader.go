@@ -3,7 +3,7 @@ package network
 import (
 	"encoding/binary"
 	"io"
-	"rat/shared"
+	"rat/internal"
 
 	"gopkg.in/mgo.v2/bson"
 )

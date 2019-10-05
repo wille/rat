@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"io"
-	"rat/shared"
-	"rat/shared/network/header"
+	"rat/internal"
+	"rat/internal/network/header"
 )
 
 type ShellChannel struct {

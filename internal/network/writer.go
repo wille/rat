@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"io"
 	"log"
-	"rat/shared"
+	"rat/internal"
 
 	"gopkg.in/mgo.v2/bson"
 )

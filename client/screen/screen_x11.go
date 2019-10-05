@@ -13,7 +13,7 @@ import "C"
 import (
 	"image"
 	"rat/client/log"
-	"rat/shared"
+	"rat/internal"
 	"unsafe"
 )
 

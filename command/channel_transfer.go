@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"io"
 	"os"
-	"rat/shared"
-	"rat/shared/network/header"
+	"rat/internal"
+	"rat/internal/network/header"
 )
 
 type ChannelTransfer struct {

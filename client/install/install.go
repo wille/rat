@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"rat/client/computer"
-	"rat/shared/installpath"
+	"rat/internal/installpath"
 	"strings"
 
 	"github.com/wille/osutil"

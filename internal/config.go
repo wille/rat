@@ -1,7 +1,7 @@
 package shared
 
 import (
-	"rat/shared/installpath"
+	"rat/internal/installpath"
 )
 
 // BinaryConfig is written to the built binary

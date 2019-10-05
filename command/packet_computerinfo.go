@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"rat/command/log"
-	"rat/shared"
+	"rat/internal"
 )
 
 type ComputerInfoPacket struct {

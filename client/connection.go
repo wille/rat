@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"rat/shared"
-	"rat/shared/network/header"
+	"rat/internal"
+	"rat/internal/network/header"
 	"sync"
 
 	"github.com/xtaci/smux"

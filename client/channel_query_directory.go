@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"rat/client/drives"
-	"rat/shared"
+	"rat/internal"
 
 	"github.com/wille/osutil"
 )

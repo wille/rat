@@ -11,7 +11,7 @@ import (
 	"encoding/base64"
 	"image"
 	"image/png"
-	"rat/shared"
+	"rat/internal"
 	"unsafe"
 
 	"github.com/disintegration/imaging"

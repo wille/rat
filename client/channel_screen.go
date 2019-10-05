@@ -6,7 +6,7 @@ import (
 	"image"
 	"io"
 	"rat/client/screen"
-	"rat/imgdiff"
+	"rat/internal/imgdiff"
 
 	"github.com/disintegration/imaging"
 	"github.com/pierrec/lz4"

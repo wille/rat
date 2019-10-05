@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/binary"
 	"io"
-	"rat/shared"
-	"rat/shared/network/header"
+	"rat/internal"
+	"rat/internal/network/header"
 )
 
 type File struct {

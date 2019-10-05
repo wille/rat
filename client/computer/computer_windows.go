@@ -9,7 +9,7 @@ import "C"
 import (
 	"os/exec"
 	"rat/client/utils"
-	"rat/shared"
+	"rat/internal"
 	"unsafe"
 )
 

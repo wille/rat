@@ -10,7 +10,7 @@ import "C"
 
 import (
 	"image"
-	"rat/shared"
+	"rat/internal"
 	"unsafe"
 )
 

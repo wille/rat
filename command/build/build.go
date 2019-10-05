@@ -9,9 +9,9 @@ import (
 	"io/ioutil"
 	"os"
 	"rat/command/log"
-	"rat/shared"
-	"rat/shared/crypto"
-	"rat/shared/installpath"
+	"rat/internal"
+	"rat/internal/crypto"
+	"rat/internal/installpath"
 )
 
 // Config is received from the websocket

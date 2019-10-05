@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
-	"rat/shared"
+	"rat/internal"
 )
 
 func GetComputerInformation() shared.Computer {

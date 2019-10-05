@@ -1,7 +1,7 @@
 package main
 
 import (
-	"rat/shared"
+	"rat/internal"
 )
 
 type UpdateType int

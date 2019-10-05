@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"rat/shared"
+	"rat/internal"
 )
 
 type ChannelTransfer struct {

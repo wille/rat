@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"rat/shared"
+	"rat/internal"
 )
 
 type T struct {

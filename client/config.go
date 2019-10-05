@@ -6,8 +6,8 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"os"
-	"rat/shared"
-	"rat/shared/crypto"
+	"rat/internal"
+	"rat/internal/crypto"
 )
 
 var Config shared.BinaryConfig

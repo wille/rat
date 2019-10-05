@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"io"
-	"rat/shared/network/header"
+	"rat/internal/network/header"
 )
 
 type ScreenChannel struct {

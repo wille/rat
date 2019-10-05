@@ -2,7 +2,7 @@ package main
 
 import (
 	"rat/command/log"
-	"rat/shared"
+	"rat/internal"
 )
 
 func main() {
