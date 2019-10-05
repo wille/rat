@@ -22,15 +22,8 @@ client:
 	cd client && go build $(ldflags) -o ../client$(EXT)
 
 install:
-	cd packages/app && yarn
 	go mod download
-
-web:
-	tsc
-	node-sass command/web/sass/index.scss -o command/web/static/css
-
-ugly: web
-	-uglifyjs --compress --mangle -o $(LIB) -- $(LIB)
+	npm i
 
 cert:
 	cd command && openssl genrsa -out private.key 1024
@@ -71,19 +64,6 @@ linux:
 	cd client && GOOS=linux GOARCH=386 $(PROD) -o ../command/bin/linux_x86
 	$(UPX) command/bin/linux_x86
 
-prod:
-	rm -rf prod
-	mkdir prod
-	cp command/GeoLite2-Country.mmdb prod/
-	cp command/config.json prod/
-	mkdir prod/bin
-	cp command/bin/* prod/bin/
-	mkdir prod/web
-	cp command/web/*.template.html prod/web/
-	cp -R command/web/static prod/web
-	cp command/bin/* prod/bin/
-	cp command/command* prod/
-
 fakebin:
 	touch command/bin/windows_amd64.exe
 	touch command/bin/windows_x86.exe
@@ -92,19 +72,8 @@ fakebin:
 	touch command/bin/linux_x86
 
 test:
-	go test \
-	rat/internal/network \
-	rat/internal/crypto \
-	rat/command \
-	rat/client \
-	rat/client/computer \
-	rat/client/drives \
-	rat/client/install \
-	rat/client/process \
-	rat/client/shell \
-	rat/client/startup \
-	rat/client/screen \
-	rat/client/windows
+	go test ./...
+	npm run test
 
 clean:
 	cd client/screen/ && rm -f *.bmp *.jpg
