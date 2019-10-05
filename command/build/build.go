@@ -40,7 +40,7 @@ func Build(c *Config) (string, string, error) {
 	log.Println("Starting build...")
 	log.Println("Target OS:", c.TargetOS)
 	log.Println("Target Arch:", c.TargetArch)
-	log.Println("%#v", *c)
+	//log.Println("%#v", *c)
 
 	var oss []string
 	var archs []string
@@ -164,12 +164,12 @@ func Build(c *Config) (string, string, error) {
 	for _, file := range files {
 		f, err := z.Create(file.Name)
 		if err != nil {
-			log.Println("%s", err)
+			panic(err)
 		}
 		tt, _ := os.Open(file.Path)
 		_, err = io.Copy(f, tt)
 		if err != nil {
-			log.Println("%s", err)
+			panic(err)
 		}
 	}
 

@@ -1,7 +1,10 @@
-//+build headless,!windows,!darwin
+//+build headless
 
 package startup
 
+var ctr = 0
+
 func Check(name string) bool {
-	return true
+	ctr++
+	return ctr == 1
 }

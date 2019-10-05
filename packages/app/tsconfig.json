@@ -1,21 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
     "target": "es2017",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "jsx": "react",
     "baseUrl": ".",
     "paths": {
-      "assets/*": [
-        "src/assets/*"
-      ]
+      "assets/*": ["src/assets/*"],
+      "app/*": ["src/*"],
+      "shared/*": ["../shared/*"]
     }
-  },
-  "include": [
-    "src/**/*.ts",
-    "../shared/**/*.ts"
-  ]
+  }
 }

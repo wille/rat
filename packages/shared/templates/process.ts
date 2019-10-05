@@ -1,6 +1,6 @@
 import MessageTemplate from './template';
 
-export const enum ProcessType {
+export enum ProcessType {
   Query,
   Kill,
 }

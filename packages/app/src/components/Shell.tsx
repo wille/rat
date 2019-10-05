@@ -1,16 +1,16 @@
-import { Subscriber } from 'app/src/components/Subscription';
-import {
-  ShellAction,
-  ShellMessage,
-  ShellMessageTemplate,
-} from 'app/src/messages/shell';
 import * as React from 'react';
 import { MessageType } from 'shared/types';
 import { Terminal } from 'xterm';
 import 'xterm/dist/xterm.css';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import Client from '../client';
+import {
+  ShellAction,
+  ShellMessage,
+  ShellMessageTemplate,
+} from '../messages/shell';
 import withClient from '../withClient';
+import { Subscriber } from './Subscription';
 
 interface Props {
   client: Client;
