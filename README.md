@@ -1,7 +1,11 @@
 # Remote Administration Tool
 
-[**Building**](BUILDING.md) **|** [**Manifest**](MANIFEST.md)
+[![Travis](https://img.shields.io/travis/com/wille/rat?label=travis)](https://godoc.org/github.com/wille/rat)
+[![GoDoc](https://godoc.org/github.com/wille/rat?status.svg)](https://godoc.org/github.com/wille/rat)
+[![Go Report Card](https://goreportcard.com/badge/github.com/wille/rat)](https://goreportcard.com/report/github.com/wille/rat)
+[![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/wille/rat)](https://github.com/wille/rat)
 
+[**Building**](BUILDING.md)
 
 # GeoIP database
 
