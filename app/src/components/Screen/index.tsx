@@ -1,8 +1,14 @@
+import { MessageType } from 'app/messages/types';
+import { Monitor } from 'app/types/system';
 import * as lz4 from 'lz4-asm';
 import * as React from 'react';
-import { MenuItem, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
-import { Monitor } from 'app/types/system';
-import { MessageType } from 'app/messages/types';
+import {
+  DropdownButton,
+  Nav,
+  Navbar,
+  NavDropdown,
+  NavItem,
+} from 'react-bootstrap';
 import Client from '../../client';
 import { ScreenChunkTemplate, StreamMessage } from '../../messages/screen';
 import withClient from '../../withClient';
@@ -78,12 +84,14 @@ class Screen extends React.Component<Props, State> {
               id={'dropdown-size-medium'}
             >
               {this.props.client.monitors.map(monitor => (
-                <MenuItem
+                <DropdownButton
+                  id={`monitor-${monitor.id}`}
                   key={monitor.id}
                   onClick={() => this.selectMonitor(monitor)}
+                  title="Test"
                 >
                   {monitor.id + ': ' + monitor.width + 'x' + monitor.height}
-                </MenuItem>
+                </DropdownButton>
               ))}
             </NavDropdown>
             <NavItem>

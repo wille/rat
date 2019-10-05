@@ -1,5 +1,5 @@
 import { Message } from 'app/types/messages';
-import { BSON } from 'bson';
+import bson from 'bson';
 
 import store from '../src';
 import { resetClients } from './actions';
@@ -7,7 +7,6 @@ import { SubscribeMessage } from './messages/outgoing-messages';
 import { selectSubscriptions } from './reducers';
 
 class ControlSocket {
-  private readonly bson = new BSON();
   private socket: WebSocket;
   private queue: Message[] = [];
 
@@ -27,7 +26,7 @@ class ControlSocket {
     if (this.socket.readyState === WebSocket.OPEN) {
       console.log('writing', m);
       this.socket.send(
-        this.bson.serialize({
+        bson.serialize({
           eventId: m._type,
           clientId: m._id,
         })
@@ -73,8 +72,8 @@ class ControlSocket {
   }
 
   private handleMessage(e: MessageEvent) {
-    const bson = this.bson.deserialize(Buffer.from(e.data));
-    this.emit(bson);
+    const message = bson.deserialize(Buffer.from(e.data));
+    this.emit(message);
   }
 
   private onClose(e: CloseEvent) {

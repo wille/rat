@@ -16,6 +16,7 @@ interface Props {
   handler: MessageHandler;
   subscribe: typeof subscribe;
   unsubscribe: typeof unsubscribe;
+  children: any;
 }
 
 class Handler extends React.Component<Props> {
