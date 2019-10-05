@@ -5,10 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd packages/app && webpack-dev-server --config webpack.dev.js",
-    "build": "cd packages/app && webpack --config webpack.prod.js",
-    "test": "cd packages/app && jest",
-    "lint": "cd packages/app && tslint --fix ./src/**/*.ts"
+    "start": "cd app && webpack-dev-server --config webpack.dev.js",
+    "build": "cd app && webpack --config webpack.prod.js",
+    "test": "jest",
+    "lint": "tslint --fix app/src/**/*.ts"
   },
   "keywords": [],
   "author": "",

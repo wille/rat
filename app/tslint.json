@@ -1,0 +1,31 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:latest",
+    "tslint-plugin-prettier",
+    "tslint-config-prettier",
+    "tslint-react"
+  ],
+  "jsRules": {},
+  "rules": {
+    "prettier": [
+      true,
+      {
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
+    ],
+    "object-literal-sort-keys": false,
+    "member-access": false,
+    "interface-name": false,
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false,
+    "no-var-requires": false,
+    "jsx-boolean-value": false,
+    "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false,
+    "no-shadowed-variable": false,
+    "no-bitwise": false
+  },
+  "rulesDirectory": []
+}
