@@ -7,7 +7,7 @@ export interface FileEntry {
   dir: boolean;
   path: string;
   size: number;
-  time: string;
+  time: number;
 }
 
 export type DirectoryContentTemplate = FileEntry[];
