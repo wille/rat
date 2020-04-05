@@ -1,31 +1,22 @@
-import { ObjectId } from 'bson';
-import * as path from 'path';
-import * as React from 'react';
-import { Breadcrumb, Table } from 'react-bootstrap';
-import { css } from 'react-emotion';
-import { connect } from 'react-redux';
-import { BrowserHistory, withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { OperatingSystem } from 'app/types/system';
+import { ObjectId } from "bson";
+import * as path from "path";
+import * as React from "react";
+import { Breadcrumb, Table } from "react-bootstrap";
+import { css } from "react-emotion";
+import { connect } from "react-redux";
+import { BrowserHistory, withRouter } from "react-router-dom";
+import { compose } from "recompose";
+import { OperatingSystem } from "app/types/system";
 
-<<<<<<< HEAD:app/src/components/FileSystem/index.tsx
-import { MessageType } from 'app/messages/types';
-=======
-import { MessageType } from 'shared/types';
->>>>>>> travis:packages/app/src/components/FileSystem/index.tsx
-import { createPlaceholderTransfer } from '../../actions';
-import Client from '../../client';
-import { uploadFiles } from '../../lib/file-reader';
-import {
-  BrowseMessage,
-  DirectoryContentTemplate,
-  FileEntry,
-  RequestTransfersMessage,
-} from '../../messages/directory';
-import withClient from '../../withClient';
-import { Subscriber } from '../Subscription';
-import Toolbar from '../Toolbar';
-import Row from './Row';
+import { MessageType } from "app/messages/types";
+import { createPlaceholderTransfer } from "../../actions";
+import Client from "../../client";
+import { uploadFiles } from "../../lib/file-reader";
+import { BrowseMessage, DirectoryContentTemplate, FileEntry, RequestTransfersMessage } from "../../messages/directory";
+import withClient from "../../withClient";
+import { Subscriber } from "../Subscription";
+import Toolbar from "../Toolbar";
+import Row from "./Row";
 
 interface Props {
   client: Client;
@@ -52,10 +43,7 @@ class FileSystem extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      utils:
-        props.client.os.type === OperatingSystem.WINDOWS
-          ? path.win32
-          : path.posix,
+      utils: props.client.os.type === OperatingSystem.WINDOWS ? path.win32 : path.posix,
       files: [],
     };
   }
@@ -68,13 +56,11 @@ class FileSystem extends React.Component<Props, State> {
     const { client } = this.props;
     const { current } = this.state;
 
-    return current
-      ? current.split(client.separator).filter(x => x.length > 0)
-      : [];
+    return current ? current.split(client.separator).filter((x) => x.length > 0) : [];
   };
 
   onReceive = (data: DirectoryContentTemplate) => {
-    console.log('recv', data);
+    console.log("recv", data);
     this.setState({
       files: data,
     });
@@ -102,11 +88,7 @@ class FileSystem extends React.Component<Props, State> {
                 <BreadcrumbItem
                   key={part}
                   active={index === paths.length - 1}
-                  onClick={() =>
-                    this.browse(
-                      paths.slice(0, index + 1).join(client.separator)
-                    )
-                  }
+                  onClick={() => this.browse(paths.slice(0, index + 1).join(client.separator))}
                 >
                   {part}
                 </BreadcrumbItem>
@@ -124,12 +106,8 @@ class FileSystem extends React.Component<Props, State> {
             </tr>
           </thead>
           <tbody>
-            {files.map(file => (
-              <Row
-                key={file.path}
-                file={file}
-                onClick={() => this.browse(file)}
-              />
+            {files.map((file) => (
+              <Row key={file.path} file={file} onClick={() => this.browse(file)} />
             ))}
           </tbody>
         </Table>
@@ -142,7 +120,7 @@ class FileSystem extends React.Component<Props, State> {
     const { current } = this.state;
 
     uploadFiles(client, current);
-    history.push('/transfers');
+    history.push("/transfers");
   };
 
   download = (file: FileEntry) => {
@@ -154,15 +132,15 @@ class FileSystem extends React.Component<Props, State> {
       })
     );
 
-    history.push('/transfers');
+    history.push("/transfers");
   };
 
   browse = (file?: FileEntry | string) => {
     const { client } = this.props;
 
-    let path = '';
+    let path = "";
 
-    if (typeof file === 'string') {
+    if (typeof file === "string") {
       path = file;
     } else if (file && file.dir) {
       path = file.path;
@@ -171,8 +149,8 @@ class FileSystem extends React.Component<Props, State> {
       return;
     }
 
-    if (client.os.type !== OperatingSystem.WINDOWS && path[0] !== '/') {
-      path = '/' + path;
+    if (client.os.type !== OperatingSystem.WINDOWS && path[0] !== "/") {
+      path = "/" + path;
     }
 
     this.setState({
