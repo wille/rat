@@ -68,7 +68,6 @@
     "flag-icons": "^2.0.0",
     "hoist-non-react-statics": "^3.3.2",
     "javascript-time-ago": "^2.0.2",
-    "lz4-asm": "^0.3.3",
     "path-browserify": "^1.0.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0-beta.14",

@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"encoding/binary"
 	"io"
+	"io/ioutil"
 	"rat/internal/network/header"
+
+	"github.com/pierrec/lz4"
 )
 
 type ScreenChannel struct {
@@ -74,18 +78,25 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			break
 		}
 
-		var len int32
-		err = binary.Read(channel, binary.LittleEndian, &len)
+		var clen int32
+		err = binary.Read(channel, binary.LittleEndian, &clen)
 
 		if err != nil {
 			break
 		}
 
-		buf := make([]byte, len)
+		buf := make([]byte, clen)
 		_, err = io.ReadFull(channel, buf)
 
+		ll := lz4.NewReader(bytes.NewReader(buf))
+		decompressed, err := ioutil.ReadAll(ll)
+
+		if err != nil {
+			break
+		}
+
 		sendMessage(sc.controller, c, ScreenChunkMessage{
-			Buffer: buf,
+			Buffer: decompressed,
 			X:      int(left),
 			Y:      int(top),
 			Width:  int(width),
