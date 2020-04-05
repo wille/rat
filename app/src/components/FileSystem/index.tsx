@@ -8,7 +8,11 @@ import { BrowserHistory, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { OperatingSystem } from 'app/types/system';
 
+<<<<<<< HEAD:app/src/components/FileSystem/index.tsx
 import { MessageType } from 'app/messages/types';
+=======
+import { MessageType } from 'shared/types';
+>>>>>>> travis:packages/app/src/components/FileSystem/index.tsx
 import { createPlaceholderTransfer } from '../../actions';
 import Client from '../../client';
 import { uploadFiles } from '../../lib/file-reader';

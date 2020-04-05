@@ -1,5 +1,3 @@
-import { MessageType } from 'app/messages/types';
-import { Monitor } from 'app/types/system';
 import * as lz4 from 'lz4-asm';
 import * as React from 'react';
 import {
@@ -13,6 +11,7 @@ import Client from '../../client';
 import { ScreenChunkTemplate, StreamMessage } from '../../messages/screen';
 import withClient from '../../withClient';
 import { Subscriber } from '../Subscription';
+import { Monitor } from 'app/types/system';
 
 interface Props {
   client: Client;
