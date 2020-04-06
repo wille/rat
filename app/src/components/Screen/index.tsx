@@ -48,15 +48,19 @@ class Screen extends React.Component<Props, State> {
     const w = message.width - message.x;
     const h = message.height - message.y;
 
-    const imageData = ctx.getImageData(message.x, message.y, w, h);
-    const prevData = new Uint32Array(imageData.data.buffer);
-    const xorData = new Uint32Array(message.buffer.buffer.buffer);
+    // const imageData = ctx.getImageData(message.x, message.y, w, h);
+    // const prevData = new Uint32Array(imageData.data.buffer);
+    // const xorData = new Uint32Array(message.buffer.buffer.buffer);
 
-    for (let i = 0; i < xorData.length; i++) {
-      prevData[i] ^= xorData[i];
-    }
+    // for (let i = 0; i < xorData.length; i++) {
+    //   prevData[i] ^= xorData[i];
+    // }
 
+    const imageData = new ImageData(new Uint8ClampedArray(message.buffer.buffer), w, h);
     ctx.putImageData(imageData, message.x, message.y);
+    ctx.strokeStyle = "#f00";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(message.x, message.y, w, h);
   };
 
   render() {
