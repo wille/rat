@@ -1,11 +1,17 @@
-import * as React from "react";
-import { DropdownButton, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
-import Client from "../../client";
-import { ScreenChunkTemplate, StreamMessage } from "../../messages/screen";
-import withClient from "../../withClient";
-import { Subscriber } from "../Subscription";
-import { Monitor } from "app/types/system";
-import { MessageType } from "app/messages/types";
+import { MessageType } from 'app/messages/types';
+import { Monitor } from 'app/types/system';
+import * as React from 'react';
+import {
+  DropdownButton,
+  Nav,
+  Navbar,
+  NavDropdown,
+  NavItem,
+} from 'react-bootstrap';
+import Client from '../../client';
+import { ScreenChunkTemplate, StreamMessage } from '../../messages/screen';
+import withClient from '../../withClient';
+import { Subscriber } from '../Subscription';
 
 interface Props {
   client: Client;
@@ -19,12 +25,13 @@ interface State {
 
 class Screen extends React.Component<Props, State> {
   canvas = React.createRef<HTMLCanvasElement>();
+  canvas2 = React.createRef<HTMLCanvasElement>();
 
   constructor(props) {
     super(props);
 
     this.state = {
-      scale: 0.1,
+      scale: 1,
       running: true,
       selectedMonitor: props.client.monitors[0],
     };
@@ -43,7 +50,8 @@ class Screen extends React.Component<Props, State> {
       return;
     }
 
-    const ctx = this.canvas.current.getContext("2d");
+    const ctx = this.canvas.current.getContext('2d');
+    const ctx2 = this.canvas2.current.getContext('2d');
 
     const w = message.width - message.x;
     const h = message.height - message.y;
@@ -56,11 +64,21 @@ class Screen extends React.Component<Props, State> {
     //   prevData[i] ^= xorData[i];
     // }
 
-    const imageData = new ImageData(new Uint8ClampedArray(message.buffer.buffer), w, h);
+    const imageData = new ImageData(
+      new Uint8ClampedArray(message.buffer.buffer),
+      w,
+      h
+    );
     ctx.putImageData(imageData, message.x, message.y);
-    ctx.strokeStyle = "#f00";
-    ctx.lineWidth = 4;
-    ctx.strokeRect(message.x, message.y, w, h);
+    ctx2.clearRect(
+      0,
+      0,
+      this.canvas2.current.width,
+      this.canvas2.current.height
+    );
+    ctx2.strokeStyle = '#f00';
+    ctx2.lineWidth = 4;
+    ctx2.strokeRect(message.x, message.y, w, h);
   };
 
   render() {
@@ -72,17 +90,21 @@ class Screen extends React.Component<Props, State> {
           <Nav>
             <NavItem>Close</NavItem>
             <NavDropdown
-              title={selectedMonitor ? "Monitor " + selectedMonitor.id : "none selected"}
-              id={"dropdown-size-medium"}
+              title={
+                selectedMonitor
+                  ? 'Monitor ' + selectedMonitor.id
+                  : 'none selected'
+              }
+              id={'dropdown-size-medium'}
             >
-              {this.props.client.monitors.map((monitor) => (
+              {this.props.client.monitors.map(monitor => (
                 <DropdownButton
                   id={`monitor-${monitor.id}`}
                   key={monitor.id}
                   onClick={() => this.selectMonitor(monitor)}
                   title="Test"
                 >
-                  {monitor.id + ": " + monitor.width + "x" + monitor.height}
+                  {monitor.id + ': ' + monitor.width + 'x' + monitor.height}
                 </DropdownButton>
               ))}
             </NavDropdown>
@@ -92,10 +114,12 @@ class Screen extends React.Component<Props, State> {
                 min={1}
                 value={scale * 100}
                 max={100}
-                onChange={(e) => this.setScale(e.target.valueAsNumber)}
+                onChange={e => this.setScale(e.target.valueAsNumber)}
               />
             </NavItem>
-            <NavItem onClick={() => this.toggle()}>{running ? "Pause" : "Start"}</NavItem>
+            <NavItem onClick={() => this.toggle()}>
+              {running ? 'Pause' : 'Start'}
+            </NavItem>
           </Nav>
         </Navbar>
         {/* <Stream
@@ -105,15 +129,28 @@ class Screen extends React.Component<Props, State> {
           scale={scale}
           client={this.props.client}
         /> */}
-        <canvas
-          style={{
-            width: "100%",
-            maxWidth: `${Math.round(selectedMonitor.width * scale)}px`,
-          }}
-          ref={this.canvas}
-          width={Math.round(selectedMonitor.width * scale)}
-          height={Math.round(selectedMonitor.height * scale)}
-        />
+        <div style={{ position: 'relative' }}>
+          <canvas
+            style={{
+              position: 'absolute',
+              width: '100%',
+              maxWidth: `${Math.round(selectedMonitor.width * scale)}px`,
+            }}
+            ref={this.canvas}
+            width={Math.round(selectedMonitor.width * scale)}
+            height={Math.round(selectedMonitor.height * scale)}
+          />
+          <canvas
+            style={{
+              position: 'absolute',
+              width: '100%',
+              maxWidth: `${Math.round(selectedMonitor.width * scale)}px`,
+            }}
+            ref={this.canvas2}
+            width={Math.round(selectedMonitor.width * scale)}
+            height={Math.round(selectedMonitor.height * scale)}
+          />
+        </div>
       </Subscriber>
     );
   }
@@ -152,7 +189,7 @@ class Screen extends React.Component<Props, State> {
 
     // reset canvas before initializing a new stream
     const canvas = this.canvas.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     this.props.client.send(

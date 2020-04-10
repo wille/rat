@@ -21,3 +21,20 @@ func Write(w io.Writer, img *image.RGBA) error {
 
 	return nil
 }
+
+func Bytes(image *image.RGBA) []byte {
+	i0 := 0
+	i1 := image.Rect.Dx() * 4
+
+	buf := make([]byte, image.Rect.Dx()*image.Rect.Dy()*4)
+
+	for y := image.Rect.Min.Y; y < image.Rect.Max.Y; y++ {
+		copy(buf[i0:], image.Pix[i0:i1])
+
+		i0 += image.Stride
+		i1 += image.Stride
+	}
+
+	return buf
+}
+

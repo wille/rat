@@ -3,8 +3,10 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"image"
 	"io"
 	"io/ioutil"
+	"rat/internal/imgdiff"
 	"rat/internal/network/header"
 
 	"github.com/pierrec/lz4"
@@ -67,13 +69,15 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 		}
 	}()
 
-	for err == nil {
-		var left, top, width, height int32
+	cmp := imgdiff.NewComparer()
 
-		binary.Read(channel, binary.LittleEndian, &left)
-		binary.Read(channel, binary.LittleEndian, &top)
-		binary.Read(channel, binary.LittleEndian, &width)
-		err = binary.Read(channel, binary.LittleEndian, &height)
+	for err == nil {
+		var x, y, x1, x2 int32
+
+		binary.Read(channel, binary.LittleEndian, &x)
+		binary.Read(channel, binary.LittleEndian, &y)
+		binary.Read(channel, binary.LittleEndian, &x1)
+		err = binary.Read(channel, binary.LittleEndian, &x2)
 		if err != nil {
 			break
 		}
@@ -85,22 +89,37 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			break
 		}
 
-		buf := make([]byte, clen)
-		_, err = io.ReadFull(channel, buf)
+		compressed := make([]byte, clen)
+		_, err = io.ReadFull(channel, compressed)
+		if err != nil {
+			break
+		}
 
-		ll := lz4.NewReader(bytes.NewReader(buf))
+		ll := lz4.NewReader(bytes.NewBuffer(compressed))
 		decompressed, err := ioutil.ReadAll(ll)
 
 		if err != nil {
 			break
 		}
 
+		// rect of changed values
+		rect := image.Rect(int(x), int(y), int(x1), int(x2))
+		chunk := cmp.Decode(&image.RGBA{
+			Pix:    decompressed,
+			Rect:   rect,
+			Stride: rect.Dx() * 4,
+		})
+
+		var imgdata bytes.Buffer
+		imgdata.Grow(rect.Dx() * rect.Dy() * 4)
+		imgdiff.Write(&imgdata, chunk)
+
 		sendMessage(sc.controller, c, ScreenChunkMessage{
-			Buffer: decompressed,
-			X:      int(left),
-			Y:      int(top),
-			Width:  int(width),
-			Height: int(height),
+			Buffer: imgdata.Bytes(),
+			X:      int(x),
+			Y:      int(y),
+			Width:  int(x1),
+			Height: int(x2),
 		})
 	}
 
