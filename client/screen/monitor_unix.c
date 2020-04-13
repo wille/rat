@@ -21,6 +21,13 @@ void QueryMonitors(void) {
 		m.coordinates.width = crtc_info->width;
 		m.coordinates.height = crtc_info->height;
 
+		unsigned int width = crtc_info->width;
+		unsigned int height = crtc_info->height;
+		if (width == 0 || height == 0) {
+			continue;
+		}
+		
+
 		MonitorCallback(m);
 	}
 
