@@ -10,6 +10,7 @@ Capture *init_capture() {
 
   Capture *capture = malloc(sizeof(Capture));
   capture->cursor = NULL;
+  capture->image = NULL;
   capture->dpy = XOpenDisplay(NULL);
   capture->root = DefaultRootWindow(capture->dpy);
 
@@ -99,20 +100,33 @@ void capture(Capture *capture) {
   if (XQueryPointer(capture->dpy, capture->root, &window_returned,
                     &window_returned, &root_x, &root_y, &win_x, &win_y,
                     &mask_return)) {
-    printf("cursor pos %dx%d %dx%d\n", root_x, root_y, win_x, win_y);
     capture->cursor->x = root_x;
     capture->cursor->y = root_y;
   }
 
   if (capture->use_shm) {
-    return XShmGetImage(capture->dpy, capture->root, capture->image, 0, 0,
-                        AllPlanes);
+    XShmGetImage(capture->dpy, capture->root, capture->image, 0, 0, AllPlanes);
+    bgra_to_rgba(capture->image);
   } else {
     if (capture->image)
       XDestroyImage(capture->image);
 
-    return capture->image = XGetImage(capture->dpy, capture->root, 0, 0, 2560,
-                                      1440, AllPlanes, ZPixmap);
+    capture->image = XGetImage(capture->dpy, capture->root, 0, 0, 2560, 1440,
+                               AllPlanes, ZPixmap);
+
+    if (capture->image) {
+      bgra_to_rgba(capture->image);
+    }
+  }
+}
+
+void bgra_to_rgba(XImage *image) {
+  unsigned int *src = image->data;
+  unsigned int *dst_end = src + image->width * image->height;
+
+  while (src < dst_end) {
+    *src++ = (0x000000FF << 24) | ((*src & 0x00FF0000) >> 16) |
+             ((*src & 0x000000FF) << 16) | ((*src & 0x0000FF00));
   }
 }
 
