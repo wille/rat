@@ -1,24 +1,32 @@
 #ifndef _SCREEN_WINDOWS_H
 #define _SCREEN_WINDOWS_H
 
+#include <windows.h>
 #include "screen.h"
 
-typedef struct {
-	int width;
-	int height;
+typedef struct Capture {
+	int x, y, width, height;
     char *data;
-    HDC hDC;
-    HDC cHDC;
+    HDC srcDC;
+    HDC dstDC;
     HBITMAP bitmap;
     HGDIOBJ o;
+
+    CURSORINFO ci;
+    char *cursor_data;
 } Capture;
 
-// Captures monitor screenshot 
-Capture CaptureMonitor(Monitor m);
-Capture CaptureWindow(int hwnd);
 
-// Releases all resources
-void Release(Capture);
+Capture *init_capture();
+void destroy_capture(Capture*);
+void capture_monitor(Capture*, int, int, int, int);
+DWORD QueryCursor(Capture*);
+// Captures monitor screenshot 
+// Capture CaptureMonitor(Monitor m);
+// Capture CaptureWindow(int hwnd);
+
+// // Releases all resources
+// void Release(Capture);
 
 
 #endif

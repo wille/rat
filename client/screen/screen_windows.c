@@ -1,11 +1,10 @@
 #include <windows.h>
+#include <wingdi.h>
 #include <stdio.h>
 
 #include "screen.h"
 #include "screen_windows.h"
 #include "bitmap.h"
-
-static int monitor = 0;
 
 BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) {
 	Monitor m;
@@ -18,7 +17,7 @@ BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMoni
 	m.coordinates.y = y;
 	m.coordinates.width = w;
 	m.coordinates.height = h;
-	m.id = monitor++;
+	m.id = *(int*)dwData++;
 
 	MonitorCallback(m);
 
@@ -26,101 +25,110 @@ BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMoni
 }
 
 void QueryMonitors(void) {
-	monitor = 0;
+	int monitor = 0;
 	HDC hdc = GetDC(NULL);
-	EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, 0);
+	EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, &monitor);
 	ReleaseDC(NULL, hdc);
 }
 
-static HDC hDC;
-static HDC m_HDC;
-static HBITMAP m_hBmp;
-static HGDIOBJ o;
+Capture *init_capture() {
+    Capture *capture = malloc(sizeof(Capture));
+    capture->data = NULL;
+    capture->cursor_data = NULL;
+    capture->ci.cbSize = sizeof(CURSORINFO);
 
-Capture CaptureWindow(int hwnd) {
+    return capture;
+}
+
+void ccc(Capture *capture, HWND hwnd, int x, int y, int width, int height) {
+     BITMAPINFO bt;
+	bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bt.bmiHeader.biWidth = width;
+	bt.bmiHeader.biHeight = -height;
+	bt.bmiHeader.biPlanes = 1;
+	bt.bmiHeader.biBitCount = 32;
+    bt.bmiHeader.biCompression = BI_RGB;
+    
+    HDC hDC = GetDC(hwnd);
+    HDC dstDC = CreateCompatibleDC(hDC);
+    HBITMAP bitmap = CreateDIBSection(dstDC, &bt, DIB_RGB_COLORS, &capture->data, 0, 0);
+    HGDIOBJ obj = SelectObject(dstDC, bitmap);
+
+    BitBlt(dstDC, 0, 0, width, height, hDC, x, y, SRCCOPY);
+
+    //ReleaseDC(0, hDC);
+    //DeleteDC(dstDC);
+    //DeleteObject(bitmap);
+    //DeleteObject(obj);
+}
+
+void capture_monitor(Capture *capture, int x, int y, int width, int height) {
+    return ccc(capture, 0, x, y, width, height);
+}
+
+void capture_window(Capture *capture, HWND hwnd) {
     RECT rect;
     GetWindowRect(hwnd, &rect);
 
-    int x = rect.left;
-    int y = rect.top;
     int width = rect.right - rect.left;
     int height = rect.bottom - rect.top;
 
-    Capture cap;
-    cap.width = width;
-    cap.height = height;
-
-    BITMAPINFO bt;
-	bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bt.bmiHeader.biWidth = width;
-	bt.bmiHeader.biHeight = -height;
-	bt.bmiHeader.biPlanes = 1;
-	bt.bmiHeader.biBitCount = 32;
-    bt.bmiHeader.biCompression = BI_RGB;
-    
-    void *ptr = NULL;
-
-    hDC = GetDC(hwnd);
-    m_HDC = CreateCompatibleDC(hDC);
-    m_hBmp = CreateDIBSection(m_HDC, &bt, DIB_RGB_COLORS, &ptr, 0, 0);
-    o = SelectObject(m_HDC, m_hBmp);
-
-    BitBlt(m_HDC, 0, 0, width, height, hDC, 0, 0, SRCCOPY);
-    
-    int len = width * height * 4;
-    PixelSwap((char*) ptr, width * height * 4);
-
-    cap.hDC = hDC;
-    cap.cHDC = m_HDC;
-    cap.bitmap = m_hBmp;
-    cap.o = o;
-    cap.data = (char*) ptr;
-
-    return cap;
+    return ccc(capture, hwnd, rect.left, rect.top, width, height);
 }
 
-Capture CaptureMonitor(Monitor monitor) {
-    int x = monitor.coordinates.x;
-    int y = monitor.coordinates.y;
-    int width = monitor.coordinates.width;
-    int height = monitor.coordinates.height;
-
-    Capture cap;
-    cap.width = width;
-    cap.height = height;
-
-    BITMAPINFO bt;
-	bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bt.bmiHeader.biWidth = width;
-	bt.bmiHeader.biHeight = -height;
-	bt.bmiHeader.biPlanes = 1;
-	bt.bmiHeader.biBitCount = 32;
-    bt.bmiHeader.biCompression = BI_RGB;
-    
-    void *ptr = NULL;
-
-    hDC = GetDC(0);
-    m_HDC = CreateCompatibleDC(hDC);
-    m_hBmp = CreateDIBSection(m_HDC, &bt, DIB_RGB_COLORS, &ptr, 0, 0);
-    o = SelectObject(m_HDC, m_hBmp);
-
-    BitBlt(m_HDC, 0, 0, width, height, hDC, x, y, SRCCOPY);
-    
-    int len = width * height * 4;
-    PixelSwap((char*) ptr, width * height * 4);
-
-    cap.hDC = hDC;
-    cap.cHDC = m_HDC;
-    cap.bitmap = m_hBmp;
-    cap.o = o;
-    cap.data = (char*) ptr;
-
-    return cap;
+void destroy_capture(Capture *capture) {
+    //ReleaseDC(0, cap.hDC);
+    //DeleteDC(cap.cHDC);
+    //DeleteObject(cap.bitmap);
+    //DeleteObject(cap.o);
+    free(capture);
 }
 
-void Release(Capture cap) {
-    ReleaseDC(0, cap.hDC);
-    DeleteDC(cap.cHDC);
-    DeleteObject(cap.bitmap);
-    DeleteObject(cap.o);
+DWORD QueryCursor(Capture *capture) {
+    HCURSOR prev_cur = capture->ci.hCursor;
+
+    // set this to avoid a 87
+    capture->ci.cbSize = sizeof(CURSORINFO);
+    if (!GetCursorInfo(&capture->ci)) {
+        return GetLastError();
+    }
+
+    if (prev_cur != capture->ci.hCursor) {
+        // Get your device contexts.
+        HDC hdcScreen = GetDC(NULL);
+        HDC dstDC = CreateCompatibleDC(hdcScreen);
+
+        int w = 24;
+        int h = 24;
+
+        BITMAPINFO bt;
+        bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        bt.bmiHeader.biWidth = w;
+        bt.bmiHeader.biHeight = -h;
+        bt.bmiHeader.biPlanes = 1;
+        bt.bmiHeader.biBitCount = 32;
+        bt.bmiHeader.biCompression = BI_RGB;
+      
+        char *pCursorData;
+        
+        HBITMAP bitmap = CreateDIBSection(dstDC, &bt, DIB_RGB_COLORS, &pCursorData, 0, 0);
+        HGDIOBJ obj = SelectObject(dstDC, bitmap);
+        HGDIOBJ hbmOld = SelectObject(dstDC, bitmap);
+        DrawIconEx(dstDC, 0, 0, capture->ci.hCursor, 0, 0, 0, NULL, DI_NORMAL);
+
+        char *pPrevCursorData = capture->cursor_data;
+        char *pCursorDataCopy = malloc(w*h*4);
+        memcpy(pCursorDataCopy, pCursorData, w*h*4);
+        capture->cursor_data = pCursorDataCopy;
+
+        if (pPrevCursorData) {
+            free(pPrevCursorData);
+        }
+        SelectObject(dstDC, hbmOld);
+        DeleteObject(bitmap);
+        DeleteDC(dstDC);
+        ReleaseDC(0, hdcScreen);
+    }
+
+    return 1;
 }

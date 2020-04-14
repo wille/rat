@@ -18,25 +18,25 @@ import (
 	"unsafe"
 )
 
-type ScreenCapture struct {
+type X11ScreenCapture struct {
 	instance  *C.Capture
 	cursorImg *image.RGBA
 }
 
-func NewScreenCapture() *ScreenCapture {
-	return &ScreenCapture{}
+func NewScreenCapture() ScreenCapture {
+	return &X11ScreenCapture{}
 }
 
-func (cp *ScreenCapture) Start() error {
+func (cp *X11ScreenCapture) Start() error {
 	cp.instance = C.init_capture()
 	return nil
 }
 
-func (cp *ScreenCapture) Destroy() {
+func (cp *X11ScreenCapture) Destroy() {
 	C.destroy_capture(cp.instance)
 }
 
-func (cp *ScreenCapture) CaptureMonitor(monitor shared.Monitor) (*image.RGBA, error) {
+func (cp *X11ScreenCapture) CaptureMonitor(monitor shared.Monitor) (*image.RGBA, error) {
 	prev_cursor := cp.instance.cursor
 	C.capture(cp.instance)
 
@@ -58,13 +58,13 @@ func (cp *ScreenCapture) CaptureMonitor(monitor shared.Monitor) (*image.RGBA, er
 
 // hasCursorChanged checks if the cursor icon has changed
 // simce the last call
-func (sc *ScreenCapture) hasCursorChanged() bool {
+func (sc *X11ScreenCapture) hasCursorChanged() bool {
 	prev_cursor := sc.instance.cursor
 	C.query_cursor(sc.instance)
 	return prev_cursor != sc.instance.cursor
 }
 
-func (sc *ScreenCapture) GetCursor() *Cursor {
+func (sc *X11ScreenCapture) GetCursor() *Cursor {
 	if sc.hasCursorChanged() {
 		sc.cursorImg = sc.getCursorImage()
 	}
@@ -79,7 +79,7 @@ func (sc *ScreenCapture) GetCursor() *Cursor {
 	}
 }
 
-func (sc *ScreenCapture) getCursorImage() *image.RGBA {
+func (sc *X11ScreenCapture) getCursorImage() *image.RGBA {
 	w := sc.instance.cursor.width
 	h := sc.instance.cursor.height
 
@@ -103,6 +103,6 @@ func (sc *ScreenCapture) getCursorImage() *image.RGBA {
 	}
 }
 
-func (sc *ScreenCapture) CaptureWindow(handle int) (*image.RGBA, error) {
+func (sc *X11ScreenCapture) CaptureWindow(handle int) (*image.RGBA, error) {
 	return nil, nil
 }

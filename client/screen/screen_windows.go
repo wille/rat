@@ -9,33 +9,69 @@ package screen
 import "C"
 
 import (
+	"fmt"
 	"image"
-	"rat/internal"
+	shared "rat/internal"
 	"unsafe"
 )
 
-func Capture(monitor shared.Monitor) image.Image {
-	m := cMonitor(monitor)
-
-	cap := C.CaptureMonitor(m)
-	defer C.Release(cap)
-
-	return handleCapture(cap)
+type WindowsScreenCapture struct {
+	c_struct      *C.Capture
+	lastCursorPtr C.HICON
 }
 
-func CaptureWindow(handle int) image.Image {
-	cap := C.CaptureWindow(C.int(handle))
-	defer C.Release(cap)
-
-	return handleCapture(cap)
+func NewScreenCapture() ScreenCapture {
+	return &WindowsScreenCapture{}
 }
 
-func handleCapture(data C.Capture) image.Image {
-	width := int(data.width)
-	height := int(data.height)
-	size := width * height * 4
+func (sc *WindowsScreenCapture) Start() error {
+	sc.c_struct = C.init_capture()
+	return nil
+}
 
-	buf := C.GoBytes(unsafe.Pointer(data.data), C.int(size))
+func (cp *WindowsScreenCapture) CaptureMonitor(monitor shared.Monitor) (*image.RGBA, error) {
+	C.capture_monitor(cp.c_struct, C.int(monitor.X), C.int(monitor.Y), C.int(monitor.Width), C.int(monitor.Height))
 
-	return imageFromBitmap(buf, width, height)
+	img := cp.c_struct.data
+
+	len := monitor.Width * monitor.Height * 4
+	buf := C.GoBytes(unsafe.Pointer(img), C.int(len))
+
+	return &image.RGBA{
+		Pix:    buf,
+		Stride: int(monitor.Width) * 4,
+		Rect:   image.Rect(0, 0, int(monitor.Width), int(monitor.Height)),
+	}, nil
+}
+
+func (cp *WindowsScreenCapture) CaptureWindow(handle int) (*image.RGBA, error) {
+	return nil, nil
+}
+
+func (cp *WindowsScreenCapture) Destroy() {
+
+}
+
+func (sc *WindowsScreenCapture) GetCursor() *Cursor {
+	r := C.QueryCursor(sc.c_struct)
+	fmt.Println(r)
+
+	icon := &image.RGBA{
+		Pix:    C.GoBytes(unsafe.Pointer(sc.c_struct.cursor_data), 24*24*4),
+		Stride: 24 * 4,
+		Rect:   image.Rect(0, 0, 24, 24),
+	}
+
+	//fmt.Println(icon)
+	fmt.Println(int(sc.c_struct.ci.ptScreenPos.x), int(sc.c_struct.ci.ptScreenPos.y))
+
+	return &Cursor{
+		Icon:       icon,
+		IconWidth:  24,
+		IconHeight: 24,
+		X:          int(sc.c_struct.ci.ptScreenPos.x),
+		Y:          int(sc.c_struct.ci.ptScreenPos.y),
+		HotX:       0,
+		HotY:       0,
+	}
 }
