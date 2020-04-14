@@ -84,25 +84,28 @@ void ProcessPendingXEvents(Capture *capture) {
     if (e.type == capture->xfixes_event_base + XFixesCursorNotify) {
       XFixesCursorNotifyEvent *cne = (XFixesCursorNotifyEvent *)&e;
       if (cne->subtype == XFixesDisplayCursorNotify) {
-        // Recapture cursor
         CaptureCursor(capture);
       }
     }
   }
 }
 
-void capture(Capture *capture) {
+void query_cursor(Capture *capture) {
   ProcessPendingXEvents(capture);
 
-  Window window_returned;
   int root_x, root_y, win_x, win_y;
   unsigned int mask_return;
+  Window window_returned;
   if (XQueryPointer(capture->dpy, capture->root, &window_returned,
                     &window_returned, &root_x, &root_y, &win_x, &win_y,
                     &mask_return)) {
     capture->cursor->x = root_x;
     capture->cursor->y = root_y;
   }
+}
+
+void capture(Capture *capture) {
+  ProcessPendingXEvents(capture);
 
   if (capture->use_shm) {
     XShmGetImage(capture->dpy, capture->root, capture->image, 0, 0, AllPlanes);
@@ -117,16 +120,6 @@ void capture(Capture *capture) {
     if (capture->image) {
       bgra_to_rgba(capture->image);
     }
-  }
-}
-
-void bgra_to_rgba(XImage *image) {
-  unsigned int *src = image->data;
-  unsigned int *dst_end = src + image->width * image->height;
-
-  while (src < dst_end) {
-    *src++ = (0x000000FF << 24) | ((*src & 0x00FF0000) >> 16) |
-             ((*src & 0x000000FF) << 16) | ((*src & 0x0000FF00));
   }
 }
 
@@ -145,89 +138,19 @@ void destroy_capture(Capture *capture) {
     XDestroyImage(capture->image);
     capture->image = NULL;
   }
+  if (capture->cursor) {
+    XFree(capture->cursor);
+    capture->cursor = NULL;
+  }
   free(capture);
 }
 
-// //+build !windows,!darwin,x11
+void bgra_to_rgba(XImage *image) {
+  unsigned int *src = image->data;
+  unsigned int *dst_end = src + image->width * image->height;
 
-// #include <X11/Xlib.h>
-// #include <X11/Xutil.h>
-// #include <X11/extensions/Xrandr.h>
-
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-
-// #include "bitmap.h"
-// #include "screen.h"
-// #include "screen_x11.h"
-
-// Capture CaptureWindow(int handle) {
-//     Capture cap;
-//     cap.error = 0;
-//     cap.image = NULL;
-
-//     Display *display = XOpenDisplay(NULL);
-//     Window window = (Window) handle;
-
-//     XWindowAttributes attr;
-//     if (cap.error = XGetWindowAttributes(display, window, &attr) != Success)
-//     {
-//         return cap;
-//     }
-
-//     int x = attr.x;
-//     int y = attr.y;
-//     int width = attr.width;
-//     int height = attr.height;
-
-//     XImage *img = XGetImage(display, window, x, y, width, height, AllPlanes,
-//     ZPixmap);
-
-//     PixelSwap(img->data, width * height * 4);
-
-//     XCloseDisplay(display);
-
-//     cap.width = width;
-//     cap.height = height;
-//     cap.image = img;
-
-// end:
-//     return cap;
-// }
-
-// Capture CaptureMonitor(Monitor monitor) {
-//     Capture cap;
-//     cap.error = 0;
-
-//     Display *display = XOpenDisplay(NULL);
-//     Window root = DefaultRootWindow(display);
-
-//     XImage *img = XGetImage(display, root, monitor.coordinates.x,
-//     monitor.coordinates.y, monitor.coordinates.width,
-//     monitor.coordinates.height, AllPlanes, ZPixmap);
-
-//     // not using bitmap.c:PixelSwap here, need to do more testing on windows
-//     and macos
-//     // ensure alpha is 255 and swap R,B
-//     for (int i = 0; i < monitor.coordinates.width *
-//     monitor.coordinates.height * 4; i += 4) {
-//         unsigned int *p = (unsigned int*) &img->data[i];
-//         *p = (0xff << 24) |
-//             ((*p & 0x00FF0000) >>  16) |
-//             ((*p & 0x000000FF) <<  16) |
-//             ((*p & 0x0000FF00));
-//     }
-
-//     XCloseDisplay(display);
-
-//     cap.width = monitor.coordinates.width;
-//     cap.height = monitor.coordinates.height;
-//     cap.image = img;
-
-//     return cap;
-// }
-
-// void DestroyImage(Capture cap) {
-//     XDestroyImage(cap.image);
-// }
+  while (src < dst_end) {
+    *src++ = (0x000000FF << 24) | ((*src & 0x00FF0000) >> 16) |
+             ((*src & 0x000000FF) << 16) | ((*src & 0x0000FF00));
+  }
+}

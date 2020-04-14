@@ -28,4 +28,5 @@ typedef struct Capture {
 Capture *init_capture();
 void capture(Capture *);
 void destroy_capture(Capture *);
+void query_cursor(Capture *);
 #endif

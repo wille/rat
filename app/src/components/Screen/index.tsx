@@ -45,7 +45,7 @@ class Screen extends React.Component<Props, State> {
     this.stop();
   }
 
-  onReceive = (message: ScreenChunkTemplate) => {
+  onReceive = async (message: ScreenChunkTemplate) => {
     if (!this.state.running) {
       return;
     }
@@ -55,14 +55,6 @@ class Screen extends React.Component<Props, State> {
 
     const w = message.width - message.x;
     const h = message.height - message.y;
-
-    // const imageData = ctx.getImageData(message.x, message.y, w, h);
-    // const prevData = new Uint32Array(imageData.data.buffer);
-    // const xorData = new Uint32Array(message.buffer.buffer.buffer);
-
-    // for (let i = 0; i < xorData.length; i++) {
-    //   prevData[i] ^= xorData[i];
-    // }
 
     const imageData = new ImageData(
       new Uint8ClampedArray(message.buffer.buffer),
@@ -79,6 +71,16 @@ class Screen extends React.Component<Props, State> {
     ctx2.strokeStyle = '#f00';
     ctx2.lineWidth = 4;
     ctx2.strokeRect(message.x, message.y, w, h);
+    ctx2.fillRect(message.cursorx, message.cursory, 12, 12);
+
+    const cursorImageData = new ImageData(
+      new Uint8ClampedArray(message.cursoricon.buffer),
+      message.cursorwidth,
+      message.cursorheight
+    );
+    console.log(cursorImageData, message.cursoricon);
+
+    ctx2.putImageData(cursorImageData, message.cursorx, message.cursory);
   };
 
   render() {

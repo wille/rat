@@ -19,7 +19,12 @@ import (
 )
 
 type ScreenCapture struct {
-	instance *C.Capture
+	instance  *C.Capture
+	cursorImg *image.RGBA
+}
+
+func NewScreenCapture() *ScreenCapture {
+	return &ScreenCapture{}
 }
 
 func (cp *ScreenCapture) Start() error {
@@ -32,7 +37,12 @@ func (cp *ScreenCapture) Destroy() {
 }
 
 func (cp *ScreenCapture) CaptureMonitor(monitor shared.Monitor) (*image.RGBA, error) {
+	prev_cursor := cp.instance.cursor
 	C.capture(cp.instance)
+
+	if prev_cursor != cp.instance.cursor {
+		fmt.Println("cursor has updated", cp.instance.cursor)
+	}
 
 	img := cp.instance.image
 
@@ -46,7 +56,30 @@ func (cp *ScreenCapture) CaptureMonitor(monitor shared.Monitor) (*image.RGBA, er
 	}, nil
 }
 
-func (sc *ScreenCapture) Cursor() *Cursor {
+// hasCursorChanged checks if the cursor icon has changed
+// simce the last call
+func (sc *ScreenCapture) hasCursorChanged() bool {
+	prev_cursor := sc.instance.cursor
+	C.query_cursor(sc.instance)
+	return prev_cursor != sc.instance.cursor
+}
+
+func (sc *ScreenCapture) GetCursor() *Cursor {
+	if sc.hasCursorChanged() {
+		sc.cursorImg = sc.getCursorImage()
+	}
+	return &Cursor{
+		Icon:       sc.cursorImg,
+		IconWidth:  int(sc.instance.cursor.width),
+		IconHeight: int(sc.instance.cursor.height),
+		X:          int(sc.instance.cursor.x),
+		Y:          int(sc.instance.cursor.y),
+		HotX:       int(sc.instance.cursor.xhot),
+		HotY:       int(sc.instance.cursor.yhot),
+	}
+}
+
+func (sc *ScreenCapture) getCursorImage() *image.RGBA {
 	w := sc.instance.cursor.width
 	h := sc.instance.cursor.height
 
@@ -63,22 +96,10 @@ func (sc *ScreenCapture) Cursor() *Cursor {
 		dst32[i] = uint32(src64[i])
 	}
 
-	// fmt.Println(src)
-	// fmt.Println(dst)
-	fmt.Println()
-
-	bitmap := &image.RGBA{
+	return &image.RGBA{
 		Pix:    dst,
 		Stride: int(sc.instance.cursor.width * 4),
 		Rect:   image.Rect(0, 0, int(w), int(h)),
-	}
-
-	return &Cursor{
-		Bitmap: bitmap,
-		X:      int(sc.instance.cursor.x),
-		Y:      int(sc.instance.cursor.y),
-		HotX:   int(sc.instance.cursor.xhot),
-		HotY:   int(sc.instance.cursor.yhot),
 	}
 }
 

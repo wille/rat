@@ -5,9 +5,11 @@ import (
 )
 
 type Cursor struct {
-	Bitmap *image.RGBA
-	HotX   int
-	HotY   int
-	X      int
-	Y      int
+	Icon       *image.RGBA
+	IconWidth  int
+	IconHeight int
+	HotX       int
+	HotY       int
+	X          int
+	Y          int
 }

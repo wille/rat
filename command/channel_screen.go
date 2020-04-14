@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"image"
 	"io"
 	"io/ioutil"
@@ -70,6 +71,8 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 	}()
 
 	cmp := imgdiff.NewComparer()
+	var lastCursor []byte
+	var cw, ch, hotx, hoty uint32
 
 	for err == nil {
 		var x, y, x1, x2 int32
@@ -102,6 +105,28 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			break
 		}
 
+		// TODO shared cursor struct between packages
+		var cx, cy, curlen int32
+		binary.Read(channel, binary.LittleEndian, &cx)
+		binary.Read(channel, binary.LittleEndian, &cy)
+
+		var cursorIconChanged bool
+		binary.Read(channel, binary.LittleEndian, &cursorIconChanged)
+
+		if cursorIconChanged {
+			binary.Read(channel, binary.LittleEndian, &cw)
+			binary.Read(channel, binary.LittleEndian, &ch)
+			binary.Read(channel, binary.LittleEndian, &hotx)
+			binary.Read(channel, binary.LittleEndian, &hoty)
+			binary.Read(channel, binary.LittleEndian, &curlen)
+			lastCursor = make([]byte, curlen)
+			_, err = io.ReadFull(channel, lastCursor)
+			if err != nil {
+				break
+			}
+			fmt.Println("cursor icon changed")
+		}
+
 		// rect of changed values
 		rect := image.Rect(int(x), int(y), int(x1), int(x2))
 		chunk := cmp.Decode(&image.RGBA{
@@ -109,17 +134,29 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Client) error {
 			Rect:   rect,
 			Stride: rect.Dx() * 4,
 		})
+		// cursorimage := &image.RGBA{
+		// 	Pix:    cursorbuffer,
+		// 	Stride: 24,
+		// 	Rect:   image.Rect(0, 0, 24, 24),
+		// }
 
 		var imgdata bytes.Buffer
 		imgdata.Grow(rect.Dx() * rect.Dy() * 4)
 		imgdiff.Write(&imgdata, chunk)
 
+		fmt.Println(cx, cy, curlen)
+
 		sendMessage(sc.controller, c, ScreenChunkMessage{
-			Buffer: imgdata.Bytes(),
-			X:      int(x),
-			Y:      int(y),
-			Width:  int(x1),
-			Height: int(x2),
+			Buffer:       imgdata.Bytes(),
+			X:            int(x),
+			Y:            int(y),
+			Width:        int(x1),
+			Height:       int(x2),
+			CursorX:      int(cx),
+			CursorY:      int(cy),
+			CursorWidth:  int(cw),
+			CursorHeight: int(ch),
+			CursorIcon:   lastCursor,
 		})
 	}
 

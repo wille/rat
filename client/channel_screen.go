@@ -50,7 +50,9 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 	cmp := imgdiff.NewComparer()
 	cmp.Mask = 0xf0f0f0ff
 
-	capturer := &screen.ScreenCapture{}
+	var lastCursorImage *image.RGBA
+
+	capturer := screen.NewScreenCapture()
 	capturer.Start()
 	defer capturer.Destroy()
 
@@ -93,6 +95,21 @@ func (sc ScreenChannel) Open(channel io.ReadWriteCloser, c *Connection) error {
 		binary.Write(channel, binary.LittleEndian, int32(imgdata.Len()))
 		if _, err = channel.Write(imgdata.Bytes()); err != nil {
 			return err
+		}
+
+		cursor := capturer.GetCursor()
+		binary.Write(channel, binary.LittleEndian, int32(cursor.X))
+		binary.Write(channel, binary.LittleEndian, int32(cursor.Y))
+
+		cursorIconChanged := lastCursorImage != cursor.Icon
+		binary.Write(channel, binary.LittleEndian, cursorIconChanged)
+		if cursorIconChanged {
+			binary.Write(channel, binary.LittleEndian, int32(cursor.IconWidth))
+			binary.Write(channel, binary.LittleEndian, int32(cursor.IconHeight))
+			binary.Write(channel, binary.LittleEndian, int32(cursor.HotX))
+			binary.Write(channel, binary.LittleEndian, int32(cursor.HotY))
+			binary.Write(channel, binary.LittleEndian, int32(len(cursor.Icon.Pix)))
+			binary.Write(channel, binary.LittleEndian, cursor.Icon.Pix)
 		}
 
 		select {

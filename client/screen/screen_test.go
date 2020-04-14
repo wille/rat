@@ -14,7 +14,7 @@ import (
 func TestScreenshot(t *testing.T) {
 	QueryMonitors()
 
-	sc := &ScreenCapture{}
+	sc := NewScreenCapture()
 	sc.Start()
 
 	for _, monitor := range Monitors {
@@ -44,7 +44,7 @@ func TestScreenshot(t *testing.T) {
 func TestWindows(t *testing.T) {
 	windows.QueryWindows()
 
-	sc := &ScreenCapture{}
+	sc := NewScreenCapture()
 	sc.Start()
 
 	for _, window := range windows.Windows {

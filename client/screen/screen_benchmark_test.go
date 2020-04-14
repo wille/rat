@@ -7,7 +7,7 @@ import (
 func BenchmarkScreenshot(b *testing.B) {
 	monitor := Monitors[0]
 
-	sc := ScreenCapture{}
+	sc := NewScreenCapture()
 	sc.Start()
 
 	for i := 0; i < b.N; i++ {
