@@ -5,8 +5,18 @@ package screen
 */
 import "C"
 import (
-	"rat/internal"
+	"image"
+	shared "rat/internal"
 )
+
+type ScreenCapture interface {
+	Start() error
+	Destroy()
+	CaptureMonitor(shared.Monitor) (*image.RGBA, error)
+	CaptureWindow(handle int) (*image.RGBA, error)
+
+	GetCursor() *Cursor
+}
 
 //export MonitorCallback
 func MonitorCallback(cm C.Monitor) {

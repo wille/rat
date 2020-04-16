@@ -2,22 +2,31 @@
 #define _SCREEN_X11_H
 
 #include <X11/Xlib.h>
+#include <X11/extensions/XShm.h>
+#include <X11/extensions/Xfixes.h>
 
-#include "screen.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
-typedef struct {
-    int error;
-    XImage *image;
-    int width;
-    int height;
+typedef struct Capture {
+  Display *dpy;
+  Window root;
+  XImage *image;
+
+  int xfixes_event_base, xfixes_error_base;
+
+  XFixesCursorImage *cursor;
+
+  bool use_shm;
+  XShmSegmentInfo shminfo;
+  int x, y, width, height;
 } Capture;
 
-// Destroy XImage after being processed
-void DestroyImage(Capture cap);
-
-Capture CaptureWindow(int handle);
-
-// Captures monitor screenshot 
-Capture CaptureMonitor(Monitor m);
-
+Capture *init_capture();
+void capture(Capture *);
+void destroy_capture(Capture *);
+void query_cursor(Capture *);
 #endif

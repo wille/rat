@@ -13,11 +13,21 @@ import (
 
 func TestScreenshot(t *testing.T) {
 	QueryMonitors()
+
+	sc := NewScreenCapture()
+	sc.Start()
+
 	for _, monitor := range Monitors {
 		fmt.Println("Capturing monitor", monitor.ID)
-		img := Capture(monitor)
+		img, err := sc.CaptureMonitor(monitor)
+		if err != nil {
+			t.Error(err)
+		}
 
 		file, err := os.Create("test" + strconv.Itoa(monitor.ID) + ".jpg")
+		if err != nil {
+			t.Error(err)
+		}
 
 		if err != nil {
 			t.Fatal(err)
@@ -27,13 +37,21 @@ func TestScreenshot(t *testing.T) {
 		})
 		file.Close()
 	}
+
+	sc.Destroy()
 }
 
 func TestWindows(t *testing.T) {
 	windows.QueryWindows()
 
+	sc := NewScreenCapture()
+	sc.Start()
+
 	for _, window := range windows.Windows {
-		img := CaptureWindow(window.Handle)
+		img, err := sc.CaptureWindow(window.Handle)
+		if err != nil {
+			t.Error(err)
+		}
 
 		if img != nil {
 			file, err := os.Create("window" + strconv.Itoa(window.Handle) + ".jpg")
@@ -48,4 +66,6 @@ func TestWindows(t *testing.T) {
 			file.Close()
 		}
 	}
+
+	sc.Destroy()
 }
