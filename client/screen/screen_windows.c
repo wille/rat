@@ -93,18 +93,40 @@ DWORD QueryCursor(Capture *capture) {
         return GetLastError();
     }
 
+    int cursorWidth = 24;
+    int cursorHeight = 24;
+    int cursorHotX = 0;
+    int cursorHotY = 0;
+
+    // TODO width and height for the default arrow is reported as 32x32
+    // but it doesn't work when extracting the cursor later
+    // ICONINFO ii;
+    // if (GetIconInfo(capture->ci.hCursor, &ii)) {
+    //     BITMAP bm;
+    //     if (GetObject(ii.hbmMask, sizeof(bm), &bm)) {
+    //         cursorHotX = ii.xHotspot;
+    //         cursorHotY = ii.yHotspot;
+    //         cursorWidth = bm.bmWidth;
+    //         cursorHeight = ii.hbmColor ? bm.bmHeight : bm.bmHeight / 2;
+    //         DeleteObject(ii.hbmColor);
+    //         DeleteObject(ii.hbmMask);
+    //     }
+    // }
+
+    capture->cursorWidth = cursorWidth;
+    capture->cursorHeight = cursorHeight;
+    capture->cursorHotX = cursorHotX;
+    capture->cursorHotY = cursorHotY;
+
     if (prev_cur != capture->ci.hCursor) {
         // Get your device contexts.
         HDC hdcScreen = GetDC(NULL);
         HDC dstDC = CreateCompatibleDC(hdcScreen);
 
-        int w = 24;
-        int h = 24;
-
         BITMAPINFO bt;
         bt.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-        bt.bmiHeader.biWidth = w;
-        bt.bmiHeader.biHeight = -h;
+        bt.bmiHeader.biWidth = cursorWidth;
+        bt.bmiHeader.biHeight = -cursorHeight;
         bt.bmiHeader.biPlanes = 1;
         bt.bmiHeader.biBitCount = 32;
         bt.bmiHeader.biCompression = BI_RGB;
@@ -117,8 +139,8 @@ DWORD QueryCursor(Capture *capture) {
         DrawIconEx(dstDC, 0, 0, capture->ci.hCursor, 0, 0, 0, NULL, DI_NORMAL);
 
         char *pPrevCursorData = capture->cursor_data;
-        char *pCursorDataCopy = malloc(w*h*4);
-        memcpy(pCursorDataCopy, pCursorData, w*h*4);
+        char *pCursorDataCopy = malloc(cursorWidth * cursorHeight * 4);
+        memcpy(pCursorDataCopy, pCursorData, cursorWidth * cursorHeight * 4);
         capture->cursor_data = pCursorDataCopy;
 
         if (pPrevCursorData) {

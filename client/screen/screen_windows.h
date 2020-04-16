@@ -14,6 +14,8 @@ typedef struct Capture {
 
     CURSORINFO ci;
     char *cursor_data;
+    int cursorWidth, cursorHeight;
+    int cursorHotX, cursorHotY;
 } Capture;
 
 

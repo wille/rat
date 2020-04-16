@@ -56,22 +56,22 @@ func (sc *WindowsScreenCapture) GetCursor() *Cursor {
 	r := C.QueryCursor(sc.c_struct)
 	fmt.Println(r)
 
+	w := int(sc.c_struct.cursorWidth)
+	h := int(sc.c_struct.cursorHeight)
+
 	icon := &image.RGBA{
 		Pix:    C.GoBytes(unsafe.Pointer(sc.c_struct.cursor_data), 24*24*4),
-		Stride: 24 * 4,
-		Rect:   image.Rect(0, 0, 24, 24),
+		Stride: w * 4,
+		Rect:   image.Rect(0, 0, w, h),
 	}
-
-	//fmt.Println(icon)
-	fmt.Println(int(sc.c_struct.ci.ptScreenPos.x), int(sc.c_struct.ci.ptScreenPos.y))
 
 	return &Cursor{
 		Icon:       icon,
-		IconWidth:  24,
-		IconHeight: 24,
+		IconWidth:  w,
+		IconHeight: h,
 		X:          int(sc.c_struct.ci.ptScreenPos.x),
 		Y:          int(sc.c_struct.ci.ptScreenPos.y),
-		HotX:       0,
-		HotY:       0,
+		HotX:       int(sc.c_struct.cursorHotX),
+		HotY:       int(sc.c_struct.cursorHotY),
 	}
 }
