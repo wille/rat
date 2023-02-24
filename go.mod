@@ -15,8 +15,7 @@ require (
 	github.com/wille/osutil v0.0.0-20190526221756-e91b8656e290
 	github.com/xtaci/smux v1.3.3
 	golang.org/x/image v0.0.0-20190523035834-f03afa92d3ff // indirect
-	golang.org/x/net v0.0.0-20190522155817-f3200d17e092
-	golang.org/x/sys v0.0.0-20190524152521-dbbf3f1254d4 // indirect
+	golang.org/x/sys v0.5.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 	gopkg.in/yaml.v2 v2.2.2 // indirect
